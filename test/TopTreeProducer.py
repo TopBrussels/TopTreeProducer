@@ -35,7 +35,7 @@ process.source = cms.Source("PoolSource",
 # PATAOD
 # PAT
 	#fileNames = cms.untracked.vstring('file:/user/jmmaes/CMSSW/CMSSW_2_2_3/src/Crab/PATSkim1/PATLayer1_Skim1_semilep.root')
-	fileNames = cms.untracked.vstring('file:/user/echabert/CMSSW/CMSSW_2_2_3/src/TopQuarkAnalysis/TopEventProducers/test/toto.root')
+	fileNames = cms.untracked.vstring('file:/user/echabert/CMSSW/CMSSW_2_2_3/src/TopQuarkAnalysis/TopEventProducers/test/toto2.root')
 )
 
 
@@ -55,7 +55,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
  		# 		3 = Liste of high level objects (jetss, muons, ...)
  		# 		4 = List of all  objects 
 		# 		5 = Debug
- 		verbosity = cms.untracked.int32(5),
+ 		verbosity = cms.untracked.int32(0),
 
 		# name of output root file
 		RootFileName = cms.untracked.string('TopTree.root'),
@@ -65,7 +65,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 
 		# What is written to rootuple		    
 		doHLT = cms.untracked.bool(False),
-		doMC = cms.untracked.bool(False),
+		doMC = cms.untracked.bool(True),
 		doPDFInfo = cms.untracked.bool(True),
 #		signalGenerator = cms.untracked.string('PYTHIA'),
 #		signalGenerator = cms.untracked.string('ALPGEN'),
@@ -76,12 +76,12 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		doJetMC = cms.untracked.bool(False),
 		doMETMC = cms.untracked.bool(False),
 		doUnstablePartsMC = cms.untracked.bool(False),
-		doPrimaryVertex = cms.untracked.bool(False),#True
+		doPrimaryVertex = cms.untracked.bool(False),
 		doJet = cms.untracked.bool(False),
 		doMuon = cms.untracked.bool(False),
 		doElectron = cms.untracked.bool(False),
 		doMET = cms.untracked.bool(True),
-		doGenEvent = cms.untracked.bool(False),
+		doGenEvent = cms.untracked.bool(True),
 
 		conversionLikelihoodWeightsFile = cms.untracked.string('RecoEgamma/EgammaTools/data/TMVAnalysis_Likelihood.weights.txt'),
 
@@ -154,7 +154,6 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 	        genEventProducer = cms.InputTag("genEvt")
 	)
  )
-process.load("TopQuarkAnalysis.TopEventProducers.sequences.ttGenEvent_cff")
 
-process.p = cms.Path(process.makeGenEvt + process.analysis)
+process.p = cms.Path(process.analysis)
 

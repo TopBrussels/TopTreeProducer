@@ -163,7 +163,7 @@ void JetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets)
 			localJet.setBCorrection(patJet->jetCorrFactors().correction(patJet->jetCorrFactors().corrStep("PART", "b"),patJet->jetCorrStep()));
 			localJet.setCCorrection(patJet->jetCorrFactors().correction(patJet->jetCorrFactors().corrStep("PART", "c"),patJet->jetCorrStep()));
 			localJet.setUDSCorrection(patJet->jetCorrFactors().correction(patJet->jetCorrFactors().corrStep("PART", "uds"),patJet->jetCorrStep()));
-			localJet.setGCorrection(patJet->jetCorrFactors().correction(patJet->jetCorrFactors().corrStep("PART", "g"),patJet->jetCorrStep()));
+			localJet.setGCorrection(patJet->jetCorrFactors().correction(patJet->jetCorrFactors().corrStep("PART", "glu"),patJet->jetCorrStep()));
 
 			// Use  associated tracks to calculate charged broadness of the jet
 			// FIXME - Check generalTracks collection is present

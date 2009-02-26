@@ -1,4 +1,4 @@
-#include "UserCode/Morgan/interface/MCAnalyzer.h"
+#include "../interface/MCAnalyzer.h"
 
 using namespace std;
 using namespace reco;

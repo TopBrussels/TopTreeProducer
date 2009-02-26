@@ -35,6 +35,7 @@
 #include "../interface/TRootEvent.h"
 #include "../interface/TRootSignalEvent.h"
 #include "../interface/TRootParticle.h"
+#include "../interface/TRootMCParticle.h"
 #include "../interface/TRootJet.h"
 
 #include "TClonesArray.h"
@@ -69,6 +70,7 @@ private:
 	bool doMETMC_;
 
 	std::string signalGenerator_;
+        edm::InputTag genParticlesProducer_;
 };
 
 #endif
