@@ -1,2 +1,24 @@
 
-No additionnal packages needed to run TotoAnalyzer in  2.1.X
+#############################
+# To run the code        ###
+############################
+
+Change booleans & input files if needed in TopTreeProducer.py
+cmsRun TopTreeProducer.py
+
+#############################
+# To run Macro            ###
+############################
+
+root -l 
+.X rootlogon.C
+.L Macro.C++
+Macro()
+
+
+#############################
+# To run code compiled    ###
+############################
+
+g++  -L `pwd`/../src -l Toto -I `root-config --incdir` `root-config --libs` Code.C -o Code
+./Code

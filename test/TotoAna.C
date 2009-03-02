@@ -15,7 +15,7 @@
 	bool doPhotonConversion       = true;
 	bool doPhotonConversionMC     = false;
 
-	TFile* f=new TFile("TotoAna.root");
+	TFile* f=new TFile("TopTree.root");
 	TTree* runTree = (TTree*) f->Get("runTree");
 	TTree* eventTree = (TTree*) f->Get("eventTree");
 

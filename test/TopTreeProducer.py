@@ -35,7 +35,9 @@ process.source = cms.Source("PoolSource",
 # PATAOD
 # PAT
 	#fileNames = cms.untracked.vstring('file:/user/jmmaes/CMSSW/CMSSW_2_2_3/src/Crab/PATSkim1/PATLayer1_Skim1_semilep.root')
-	fileNames = cms.untracked.vstring('file:/user/echabert/CMSSW/CMSSW_2_2_3/src/TopQuarkAnalysis/TopEventProducers/test/toto2.root')
+	#fileNames = cms.untracked.vstring('file:/user/echabert/CMSSW/CMSSW_2_2_3/src/TopQuarkAnalysis/TopEventProducers/test/toto2.root')
+	#fileNames = cms.untracked.vstring('file:/user/echabert/CMSSW/CMSSW_2_2_3/src/CRAB/PATLayer1.root')
+	fileNames = cms.untracked.vstring('dcap:///pnfs/iihe/cms/store/user/ghammad/CMSSW223/Common/PATLayer1/TauolaTTbar/PATLayer1_1.root')
 )
 
 
@@ -55,7 +57,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
  		# 		3 = Liste of high level objects (jetss, muons, ...)
  		# 		4 = List of all  objects 
 		# 		5 = Debug
- 		verbosity = cms.untracked.int32(0),
+ 		verbosity = cms.untracked.int32(1),
 
 		# name of output root file
 		RootFileName = cms.untracked.string('TopTree.root'),
@@ -65,7 +67,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 
 		# What is written to rootuple		    
 		doHLT = cms.untracked.bool(False),
-		doMC = cms.untracked.bool(True),
+		doMC = cms.untracked.bool(False),
 		doPDFInfo = cms.untracked.bool(True),
 #		signalGenerator = cms.untracked.string('PYTHIA'),
 #		signalGenerator = cms.untracked.string('ALPGEN'),
@@ -76,12 +78,12 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		doJetMC = cms.untracked.bool(False),
 		doMETMC = cms.untracked.bool(False),
 		doUnstablePartsMC = cms.untracked.bool(False),
-		doPrimaryVertex = cms.untracked.bool(False),
-		doJet = cms.untracked.bool(False),
-		doMuon = cms.untracked.bool(False),
+		doPrimaryVertex = cms.untracked.bool(True),
+		doJet = cms.untracked.bool(True),
+		doMuon = cms.untracked.bool(True),
 		doElectron = cms.untracked.bool(False),
 		doMET = cms.untracked.bool(True),
-		doGenEvent = cms.untracked.bool(True),
+		doGenEvent = cms.untracked.bool(False),
 
 		conversionLikelihoodWeightsFile = cms.untracked.string('RecoEgamma/EgammaTools/data/TMVAnalysis_Likelihood.weights.txt'),
 
@@ -109,7 +111,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		dataType = cms.untracked.string("RECO"), 
 		hltProducer = cms.InputTag("TriggerResults","","HLT"),
 		genParticlesProducer = cms.InputTag("genParticles"),
-		primaryVertexProducer = cms.InputTag("offlinePrimaryVerticesWithBS"),
+		primaryVertexProducer = cms.InputTag("offlinePrimaryVertices"),
 		jetProducer = cms.InputTag("iterativeCone5CaloJets"),
 		#jetProducer = cms.InputTag("iterativeCone5PFJets"),
 		muonProducer = cms.InputTag("muons"),
@@ -122,7 +124,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		dataType = cms.untracked.string("AOD"), 
 		hltProducer = cms.InputTag("TriggerResults","","HLT"),
 		genParticlesProducer = cms.InputTag("genParticles"),
-		primaryVertexProducer = cms.InputTag("offlinePrimaryVerticesWithBS"),
+		primaryVertexProducer = cms.InputTag("offlinePrimaryVertices"),
 		jetProducer = cms.InputTag("iterativeCone5CaloJets"),
 		muonProducer = cms.InputTag("muons"),
 		electronProducer = cms.InputTag("pixelMatchGsfElectrons"),
@@ -134,7 +136,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		dataType = cms.untracked.string("PATAOD"), 
 		hltProducer = cms.InputTag("TriggerResults","","HLT"),
 		genParticlesProducer = cms.InputTag("genParticles"),
-		primaryVertexProducer = cms.InputTag("offlinePrimaryVerticesWithBS"),
+		primaryVertexProducer = cms.InputTag("offlinePrimaryVertices"),
 		jetProducer = cms.InputTag("selectedLayer1Jets"),
 		muonProducer = cms.InputTag("selectedLayer1Muons"),
 		electronProducer = cms.InputTag("selectedLayer1Electrons"),
@@ -146,7 +148,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		dataType = cms.untracked.string("PAT"), 
 		hltProducer = cms.InputTag("PATALACON"),
 		genParticlesProducer = cms.InputTag("genParticles"),
-		primaryVertexProducer = cms.InputTag("offlinePrimaryVerticesWithBS"),
+		primaryVertexProducer = cms.InputTag("offlinePrimaryVertices"),
 		jetProducer = cms.InputTag("selectedLayer1Jets"),
 		muonProducer = cms.InputTag("selectedLayer1Muons"),
 		electronProducer = cms.InputTag("selectedLayer1Electrons"),
