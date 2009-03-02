@@ -64,7 +64,6 @@ void GenEventAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenEv
 	for(unsigned int i=0;i<genEvent->leptonicDecayTopRadiation().size();i++) 
 	 if(genEvent->leptonicDecayTopRadiation()[i]) 
 	   leptonicDecayTopRadiation.push_back(P4toTLV(genEvent->leptonicDecayTopRadiation()[i]->p4())); 
-	cout<<genEvent->hadronicDecayTopRadiation().size()<<endl;
 	for(unsigned int i=0;i<genEvent->hadronicDecayTopRadiation().size();i++) 
 	 if(genEvent->hadronicDecayTopRadiation()[i])
 	   hadronicDecayTopRadiation.push_back(P4toTLV(genEvent->hadronicDecayTopRadiation()[i]->p4())); 
