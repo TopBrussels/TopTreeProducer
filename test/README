@@ -19,6 +19,6 @@ Macro()
 #############################
 # To run code compiled    ###
 ############################
-
-g++  -L `pwd`/../src -l Toto -I `root-config --incdir` `root-config --libs` Code.C -o Code
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.
+g++  -L `pwd` -l Toto -I `root-config --incdir` `root-config --libs` Code.C -o Code
 ./Code
