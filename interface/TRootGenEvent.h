@@ -5,10 +5,11 @@
 
 #include "Rtypes.h"
 #include "TObject.h"
-#include "vector.h"
 
+#include <vector>
 #include <iostream>
 #include <iomanip>
+
 using namespace std;
 
 class TRootGenEvent : public TObject 
