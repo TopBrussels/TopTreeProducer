@@ -35,7 +35,8 @@ void Macro(){
 	bool doMET                    = true;
 	bool doGenEvent               = false;
 
-	TFile* f=new TFile("TopTree.root");
+	//TFile* f=new TFile("TopTree.root");
+	TFile* f=new TFile("/user/jmmaes/CMSSW/CMSSW_2_2_4_Sanity/CMSSW_2_2_4/src/TopBrussels/TopTreeProducer/test/TopTree.root");
 	TTree* runTree = (TTree*) f->Get("runTree");
 	TTree* eventTree = (TTree*) f->Get("eventTree");
 
@@ -137,6 +138,7 @@ void Macro(){
 
         //Declaration of histograms
         TH1F h_PtJets("PtJets","Pt of jets",50,0,500); 
+	TH1F h_distrib("distrib","",100,-1,1);
 	//
 
 	unsigned int nEvents = (int)eventTree->GetEntries();
@@ -181,6 +183,8 @@ void Macro(){
 		  for(int i=0;i<jets->GetEntriesFast();i++){
 		    jet = (TRootJet*) jets->At(i);
 		    h_PtJets.Fill(jet->Pt());
+		    //h_distrib.Fill(jet->btag_combinedSecondaryVertexBJetTags());
+		    h_distrib.Fill(jet->btag_trackCountingHighEffBJetTags());
 		  }
                 }
 		
@@ -214,6 +218,7 @@ void Macro(){
       fout->cd();
       //Write histograms
       h_PtJets.Write();
+      h_distrib.Write();
       fout->Close();
 
       if(verbosity>1) cout<<"End of the Macro"<<endl;
