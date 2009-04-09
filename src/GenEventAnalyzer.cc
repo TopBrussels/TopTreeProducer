@@ -44,14 +44,14 @@ void GenEventAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenEv
 	TLorentzVector lepton;
 	TLorentzVector leptonicDecayW, leptonicDecayB, leptonicDecayTop;
 	TLorentzVector hadronicDecayW, hadronicDecayB, hadronicDecayTop, hadronicDecayQuark, hadronicDecayQuarkBar;
-	//cerr << "isSemileptonc " << genEvent->isSemiLeptonic() << endl;
+	cerr << "isSemileptonc " << genEvent->isSemiLeptonic() << endl;
 	if( genEvent->isSemiLeptonic()){
 	  if(genEvent->singleNeutrino()) neutrino = P4toTLV(genEvent->singleNeutrino()->p4());
   	  if(genEvent->singleLepton()) lepton = P4toTLV(genEvent->singleLepton()->p4());
 	  if(genEvent->leptonicDecayW() && genEvent->wMinus() && genEvent->wPlus()) leptonicDecayW = P4toTLV(genEvent->leptonicDecayW()->p4());
 	  if(genEvent->leptonicDecayB()) leptonicDecayB = P4toTLV(genEvent->leptonicDecayB()->p4());
 	  if(genEvent->leptonicDecayTop()) leptonicDecayTop = P4toTLV(genEvent->leptonicDecayTop()->p4());
-	  //cerr << "first cout " << endl;
+	  cerr << "first cout " << endl;
 	  //cerr << "Adress of Wminus " << genEvent->wMinus() << " " << genEvent->wMinus()->p4() << endl;
 	  //cerr << "Adress of Wplus " << genEvent->wPlus() << " " << genEvent->wPlus()->p4() << endl;
 
@@ -66,15 +66,17 @@ void GenEventAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenEv
 	}
 	TRootgenEvt.SetTLorentzVector(lepton, neutrino, leptonicDecayW, leptonicDecayB, leptonicDecayTop, hadronicDecayB, hadronicDecayW, hadronicDecayTop, hadronicDecayQuark, hadronicDecayQuarkBar);
 	std::vector<TLorentzVector> ISR, leptonicDecayTopRadiation, hadronicDecayTopRadiation;
-	for(unsigned int i=0;i<genEvent->ISR().size();i++) 
-	 if(genEvent->ISR()[i]) 
-	   ISR.push_back(P4toTLV(genEvent->ISR()[i]->p4())); 
-	for(unsigned int i=0;i<genEvent->leptonicDecayTopRadiation().size();i++) 
-          if(genEvent->leptonicDecayTopRadiation()[i]) 
-	   leptonicDecayTopRadiation.push_back(P4toTLV(genEvent->leptonicDecayTopRadiation()[i]->p4())); 
-	for(unsigned int i=0;i<genEvent->hadronicDecayTopRadiation().size();i++) 
-	 if(genEvent->hadronicDecayTopRadiation()[i])
-	   hadronicDecayTopRadiation.push_back(P4toTLV(genEvent->hadronicDecayTopRadiation()[i]->p4())); 
+	for(unsigned int i=0;i<genEvent->topSisters().size();i++) 
+	 if(genEvent->topSisters()[i]) 
+	   ISR.push_back(P4toTLV(genEvent->topSisters()[i]->p4())); 
+	if( genEvent->isSemiLeptonic()){
+	 for(unsigned int i=0;i<genEvent->radiatedGluons(genEvent->leptonicDecayTop()->pdgId()).size();i++) 
+           if(genEvent->radiatedGluons(genEvent->leptonicDecayTop()->pdgId())[i]) 
+	    leptonicDecayTopRadiation.push_back(P4toTLV(genEvent->radiatedGluons(genEvent->leptonicDecayTop()->pdgId())[i]->p4())); 
+	 for(unsigned int i=0;i<genEvent->radiatedGluons(genEvent->hadronicDecayTop()->pdgId()).size();i++) 
+	  if(genEvent->radiatedGluons(genEvent->hadronicDecayTop()->pdgId())[i])
+	    hadronicDecayTopRadiation.push_back(P4toTLV(genEvent->radiatedGluons(genEvent->hadronicDecayTop()->pdgId())[i]->p4())); 
+	}
 	TRootgenEvt.SetRadiation(leptonicDecayTopRadiation, hadronicDecayTopRadiation, ISR);
 	new( (*rootGenEvent)[0] ) TRootGenEvent(TRootgenEvt);
 }
