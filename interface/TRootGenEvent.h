@@ -21,13 +21,36 @@ public:
 
 public:
 	TRootGenEvent() :
-	        semiLeptonicChannel_(kNone),
+	        TObject(),
+		semiLeptonicChannel_(kNone),
                 isTtBar_(false),
 	        isFullHadronic_(false),
 	        isSemiLeptonic_(false),
 	        isFullLeptonic_(false)	
 		{;}
 
+	TRootGenEvent(const TRootGenEvent& gevt) :
+	        TObject(gevt),
+		semiLeptonicChannel_(gevt.semiLeptonicChannel_),
+                isTtBar_(gevt.isTtBar_),
+	        isFullHadronic_(gevt.isFullHadronic_),
+	        isSemiLeptonic_(gevt.isSemiLeptonic_),
+	        isFullLeptonic_(gevt.isFullLeptonic_),	
+	        lepton_(gevt.lepton_),
+	        neutrino_(gevt.neutrino_),
+	        leptonicDecayW_(gevt.leptonicDecayW_),
+	        leptonicDecayB_(gevt.leptonicDecayB_),
+	        leptonicDecayTop_(gevt.leptonicDecayTop_),
+	        hadronicDecayW_(gevt.hadronicDecayW_),
+	        hadronicDecayB_(gevt.hadronicDecayB_),
+	        hadronicDecayTop_(gevt.hadronicDecayTop_),
+	        hadronicDecayQuark_(gevt.hadronicDecayQuark_),
+	        hadronicDecayQuarkBar_(gevt.hadronicDecayQuarkBar_),
+                ISR_(gevt.ISR_),
+                leptonicDecayTopRadiation_(gevt.leptonicDecayTopRadiation_),
+                hadronicDecayTopRadiation_(gevt.hadronicDecayTopRadiation_)
+	{;}
+	
 	~TRootGenEvent(){;}
 
 	Bool_t isTtBar() const {return isTtBar_;};

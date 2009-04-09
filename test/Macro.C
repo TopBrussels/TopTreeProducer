@@ -18,7 +18,7 @@
 #include <TTree.h>
 
 void Macro(){
-        int verbosity                 = 1;
+        int verbosity                 = 5;
 	//0 muet
 	//1 Main Info
 	//2
@@ -29,14 +29,14 @@ void Macro(){
 	bool isCSA07Soup              = false;
 	bool doHLT                    = false;
 	bool doMC                     = false;
-	bool doJet                    = true;
-	bool doMuon                   = true;
+	bool doJet                    = false;
+	bool doMuon                   = false;
 	bool doElectron               = false;
 	bool doMET                    = true;
-	bool doGenEvent               = false;
+	bool doGenEvent               = true;
 
-	//TFile* f=new TFile("TopTree.root");
-	TFile* f=new TFile("/user/jmmaes/CMSSW/CMSSW_2_2_4_Sanity/CMSSW_2_2_4/src/TopBrussels/TopTreeProducer/test/TopTree.root");
+	TFile* f=new TFile("TopTree.root");
+	//TFile* f=new TFile("/user/jmmaes/CMSSW/CMSSW_2_2_4_Sanity/CMSSW_2_2_4/src/TopBrussels/TopTreeProducer/test/TopTree.root");
 	TTree* runTree = (TTree*) f->Get("runTree");
 	TTree* eventTree = (TTree*) f->Get("eventTree");
 
@@ -182,7 +182,7 @@ void Macro(){
 		  TRootJet* jet;
 		  for(int i=0;i<jets->GetEntriesFast();i++){
 		    jet = (TRootJet*) jets->At(i);
-		    h_PtJets.Fill(jet->Pt());
+		    //h_PtJets.Fill(jet->Pt());
 		    //h_distrib.Fill(jet->btag_combinedSecondaryVertexBJetTags());
 		    h_distrib.Fill(jet->btag_trackCountingHighEffBJetTags());
 		  }
@@ -193,6 +193,9 @@ void Macro(){
 		  if(verbosity>4) cout<<"Access to GenEvent"<<endl;
 		  if(genEvents->GetEntriesFast()>0){
 		    TRootGenEvent* genEvent = (TRootGenEvent*) genEvents->At(0);
+		    if(genEvent->isSemiLeptonic())
+		    h_PtJets.Fill(genEvent->hadronicDecayTop().Pt());
+		    
 		  }
 		  else if(verbosity>0) cout<<" No access to GenEvent in this entry"<<endl;
 		}
