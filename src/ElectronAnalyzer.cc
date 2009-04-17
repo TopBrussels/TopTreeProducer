@@ -81,8 +81,13 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 		reco::GsfTrackRef gsfTrack = electron->gsfTrack();
 		if ( gsfTrack.isNonnull() )
 		{
+			const reco::HitPattern& hit = gsfTrack->hitPattern();
+			localElectron.setPixelLayersWithMeasurement(hit.pixelLayersWithMeasurement());
+			localElectron.setStripLayersWithMeasurement(hit.stripLayersWithMeasurement());
+			// FIXME - replace with double dxy(const Point& myBeamSpot) method ?
 			localElectron.setD0(gsfTrack->d0());
 			localElectron.setD0Error(gsfTrack->d0Error());
+			// FIXME - replace with double dsz(const Point& myBeamSpot) method ?
 			localElectron.setDsz(gsfTrack->dsz());
 			localElectron.setDszError(gsfTrack->dszError());
 			localElectron.setNormalizedChi2(gsfTrack->normalizedChi2());
@@ -179,6 +184,9 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 
 
 			// Electron ID
+			
+			// Old 2.1.X electron ID
+			/*
 			localElectron.setIDPTDRLoose(patElectron->leptonID("ptdrLoose"));
 			localElectron.setIDPTDRMedium(patElectron->leptonID("ptdrMedium"));
 			localElectron.setIDPTDRTight(patElectron->leptonID("ptdrTight"));
@@ -187,6 +195,20 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 			localElectron.setIDCutBasedTight(patElectron->leptonID("tight"));
 			localElectron.setIDLikelihood(patElectron->leptonID("likelihood"));
 			localElectron.setIDNeuralNet(patElectron->leptonID("neuralnet"));
+			*/
+
+			// New 2.2.X electron ID
+			// Only Cut Based ID available by default (4 sequential cuts on H/E, DeltaEta, DeltaPhi, SigmaEtaEta)
+			// "Robust" ids (eidRobustLoose, eidRobustTight, eidRobustHighEnergy) corresponds to fixed threshold
+			// eidLoose and eidTight corresponds to the catagory based identification (E/p, fBrem)
+			localElectron.setIDCutBasedFixedThresholdLoose(int(patElectron->electronID("eidRobustLoose")));
+			localElectron.setIDCutBasedFixedThresholdTight(int(patElectron->electronID("eidRobustTight")));
+			localElectron.setIDCutBasedFixedThresholdHighEnergy(int(patElectron->electronID("eidRobustHighEnergy")));
+			localElectron.setIDCutBasedCategorizedLoose(int(patElectron->electronID("eidLoose")));
+			localElectron.setIDCutBasedCategorizedTight(int(patElectron->electronID("eidTight")));
+			//localElectron.setIDLikelihood(patElectron->leptonID("likelihood"));
+			//localElectron.setIDNeuralNet(patElectron->leptonID("neuralnet"));
+
 
 			// Matched genParticle
 			if(useMC_)

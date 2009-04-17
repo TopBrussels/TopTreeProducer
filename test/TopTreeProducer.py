@@ -75,7 +75,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 
 		doElectronMC = cms.untracked.bool(False),
 		doMuonMC = cms.untracked.bool(False),
-		doJetMC = cms.untracked.bool(False),
+		doJetMC = cms.untracked.bool(True),
 		doMETMC = cms.untracked.bool(False),
 		doUnstablePartsMC = cms.untracked.bool(False),
 		doPrimaryVertex = cms.untracked.bool(True),

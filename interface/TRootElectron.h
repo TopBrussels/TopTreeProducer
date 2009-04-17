@@ -5,9 +5,6 @@
 
 #include "../interface/TRootParticle.h"
 
-#include "Rtypes.h"
-#include "TObject.h"
-
 using namespace std;
 
 class TRootElectron : public TRootParticle
@@ -31,6 +28,8 @@ public:
 		,energySeedClusterOverPout_(-9999.)
 		,energyScaleCorrected_(false)
 		,momentumCorrected_(false)
+		,pixelLayersWithMeasurement_(-1)
+		,stripLayersWithMeasurement_(-1)
 		,d0_(-9999.)
 		,d0Error_(-9999.) 
 		,dsz_(-9999.)
@@ -62,12 +61,11 @@ public:
 		,isoR05_hadEt_(-9999.)
 		,isoR05_sumPt_(-9999.)
 		,isoR05_nTracks_(-9999)
-		,idPTDRLoose_(-9999.)
-		,idPTDRMedium_(-9999.)
-		,idPTDRTight_(-9999.)
-		,idCutBasedLoose_(-9999.)
-		,idCutBasedRobust_(-9999.)
-		,idCutBasedTight_(-9999.)
+		,idCutBasedFixedThresholdLoose_(-1)
+		,idCutBasedFixedThresholdTight_(-1)
+		,idCutBasedFixedThresholdHighEnergy_(-1)
+		,idCutBasedCategorizedLoose_(-1)
+		,idCutBasedCategorizedTight_(-1)
 		,idLikelihood_(-9999.)
 		,idNeuralNet_(-9999.)
 		{;}
@@ -88,6 +86,8 @@ public:
 		,energySeedClusterOverPout_(electron.energySeedClusterOverPout_)
 		,energyScaleCorrected_(electron.energyScaleCorrected_)
 		,momentumCorrected_(electron.momentumCorrected_)
+		,pixelLayersWithMeasurement_(electron.pixelLayersWithMeasurement_)
+		,stripLayersWithMeasurement_(electron.stripLayersWithMeasurement_)
 		,d0_(electron.d0_)
 		,d0Error_(electron.d0Error_) 
 		,dsz_(electron.dsz_)
@@ -119,12 +119,11 @@ public:
 		,isoR05_hadEt_(electron.isoR05_hadEt_)
 		,isoR05_sumPt_(electron.isoR05_sumPt_)
 		,isoR05_nTracks_(electron.isoR05_nTracks_)
-		,idPTDRLoose_(electron.idPTDRLoose_)
-		,idPTDRMedium_(electron.idPTDRMedium_)
-		,idPTDRTight_(electron.idPTDRTight_)
-		,idCutBasedLoose_(electron.idCutBasedLoose_)
-		,idCutBasedRobust_(electron.idCutBasedRobust_)
-		,idCutBasedTight_(electron.idCutBasedTight_)
+		,idCutBasedFixedThresholdLoose_(electron.idCutBasedFixedThresholdLoose_)
+		,idCutBasedFixedThresholdTight_(electron.idCutBasedFixedThresholdTight_)
+		,idCutBasedFixedThresholdHighEnergy_(electron.idCutBasedFixedThresholdHighEnergy_)
+		,idCutBasedCategorizedLoose_(electron.idCutBasedCategorizedLoose_)
+		,idCutBasedCategorizedTight_(electron.idCutBasedCategorizedTight_)
 		,idLikelihood_(electron.idLikelihood_)
 		,idNeuralNet_(electron.idNeuralNet_)
 		{;}
@@ -145,6 +144,8 @@ public:
 		,energySeedClusterOverPout_(-9999.)
 		,energyScaleCorrected_(false)
 		,momentumCorrected_(false)
+		,pixelLayersWithMeasurement_(-1)
+		,stripLayersWithMeasurement_(-1)
 		,d0_(-9999.)
 		,d0Error_(-9999.) 
 		,dsz_(-9999.)
@@ -176,12 +177,11 @@ public:
 		,isoR05_hadEt_(-9999.)
 		,isoR05_sumPt_(-9999.)
 		,isoR05_nTracks_(-9999)
-		,idPTDRLoose_(-9999.)
-		,idPTDRMedium_(-9999.)
-		,idPTDRTight_(-9999.)
-		,idCutBasedLoose_(-9999.)
-		,idCutBasedRobust_(-9999.)
-		,idCutBasedTight_(-9999.)
+		,idCutBasedFixedThresholdLoose_(-1)
+		,idCutBasedFixedThresholdTight_(-1)
+		,idCutBasedFixedThresholdHighEnergy_(-1)
+		,idCutBasedCategorizedLoose_(-1)
+		,idCutBasedCategorizedTight_(-1)
 		,idLikelihood_(-9999.)
 		,idNeuralNet_(-9999.)
 		{;}
@@ -202,6 +202,8 @@ public:
 		,energySeedClusterOverPout_(-9999.)
 		,energyScaleCorrected_(false)
 		,momentumCorrected_(false)
+		,pixelLayersWithMeasurement_(-1)
+		,stripLayersWithMeasurement_(-1)
 		,d0_(-9999.)
 		,d0Error_(-9999.) 
 		,dsz_(-9999.)
@@ -233,12 +235,11 @@ public:
 		,isoR05_hadEt_(-9999.)
 		,isoR05_sumPt_(-9999.)
 		,isoR05_nTracks_(-9999)
-		,idPTDRLoose_(-9999.)
-		,idPTDRMedium_(-9999.)
-		,idPTDRTight_(-9999.)
-		,idCutBasedLoose_(-9999.)
-		,idCutBasedRobust_(-9999.)
-		,idCutBasedTight_(-9999.)
+		,idCutBasedFixedThresholdLoose_(-1)
+		,idCutBasedFixedThresholdTight_(-1)
+		,idCutBasedFixedThresholdHighEnergy_(-1)
+		,idCutBasedCategorizedLoose_(-1)
+		,idCutBasedCategorizedTight_(-1)
 		,idLikelihood_(-9999.)
 		,idNeuralNet_(-9999.)
 		{;}
@@ -259,6 +260,8 @@ public:
 		,energySeedClusterOverPout_(-9999.)
 		,energyScaleCorrected_(false)
 		,momentumCorrected_(false)
+		,pixelLayersWithMeasurement_(-1)
+		,stripLayersWithMeasurement_(-1)
 		,d0_(-9999.)
 		,d0Error_(-9999.) 
 		,dsz_(-9999.)
@@ -290,12 +293,11 @@ public:
 		,isoR05_hadEt_(-9999.)
 		,isoR05_sumPt_(-9999.)
 		,isoR05_nTracks_(-9999)
-		,idPTDRLoose_(-9999.)
-		,idPTDRMedium_(-9999.)
-		,idPTDRTight_(-9999.)
-		,idCutBasedLoose_(-9999.)
-		,idCutBasedRobust_(-9999.)
-		,idCutBasedTight_(-9999.)
+		,idCutBasedFixedThresholdLoose_(-1)
+		,idCutBasedFixedThresholdTight_(-1)
+		,idCutBasedFixedThresholdHighEnergy_(-1)
+		,idCutBasedCategorizedLoose_(-1)
+		,idCutBasedCategorizedTight_(-1)
 		,idLikelihood_(-9999.)
 		,idNeuralNet_(-9999.)
 		{;}
@@ -316,6 +318,8 @@ public:
 		,energySeedClusterOverPout_(-9999.)
 		,energyScaleCorrected_(false)
 		,momentumCorrected_(false)
+		,pixelLayersWithMeasurement_(-1)
+		,stripLayersWithMeasurement_(-1)
 		,d0_(-9999.)
 		,d0Error_(-9999.) 
 		,dsz_(-9999.)
@@ -347,12 +351,11 @@ public:
 		,isoR05_hadEt_(-9999.)
 		,isoR05_sumPt_(-9999.)
 		,isoR05_nTracks_(-9999)
-		,idPTDRLoose_(-9999.)
-		,idPTDRMedium_(-9999.)
-		,idPTDRTight_(-9999.)
-		,idCutBasedLoose_(-9999.)
-		,idCutBasedRobust_(-9999.)
-		,idCutBasedTight_(-9999.)
+		,idCutBasedFixedThresholdLoose_(-1)
+		,idCutBasedFixedThresholdTight_(-1)
+		,idCutBasedFixedThresholdHighEnergy_(-1)
+		,idCutBasedCategorizedLoose_(-1)
+		,idCutBasedCategorizedTight_(-1)
 		,idLikelihood_(-9999.)
 		,idNeuralNet_(-9999.)
 		{;}
@@ -373,6 +376,8 @@ public:
 		,energySeedClusterOverPout_(-9999.)
 		,energyScaleCorrected_(false)
 		,momentumCorrected_(false)
+		,pixelLayersWithMeasurement_(-1)
+		,stripLayersWithMeasurement_(-1)
 		,d0_(-9999.)
 		,d0Error_(-9999.) 
 		,dsz_(-9999.)
@@ -404,12 +409,11 @@ public:
 		,isoR05_hadEt_(-9999.)
 		,isoR05_sumPt_(-9999.)
 		,isoR05_nTracks_(-9999)
-		,idPTDRLoose_(-9999.)
-		,idPTDRMedium_(-9999.)
-		,idPTDRTight_(-9999.)
-		,idCutBasedLoose_(-9999.)
-		,idCutBasedRobust_(-9999.)
-		,idCutBasedTight_(-9999.)
+		,idCutBasedFixedThresholdLoose_(-1)
+		,idCutBasedFixedThresholdTight_(-1)
+		,idCutBasedFixedThresholdHighEnergy_(-1)
+		,idCutBasedCategorizedLoose_(-1)
+		,idCutBasedCategorizedTight_(-1)
 		,idLikelihood_(-9999.)
 		,idNeuralNet_(-9999.)
 		{;}
@@ -431,6 +435,9 @@ public:
 	Float_t energySeedClusterOverPout() const { return energySeedClusterOverPout_ ;}
 	Bool_t energyScaleCorrected() const { return energyScaleCorrected_ ;}
 	Bool_t momentumCorrected() const { return momentumCorrected_ ;}
+	
+	Int_t pixelLayersWithMeasurement() const { return pixelLayersWithMeasurement_; }
+	Int_t stripLayersWithMeasurement() const { return stripLayersWithMeasurement_; }
 	Float_t d0() const { return d0_ ;}
 	Float_t d0Error() const { return d0Error_ ;}
 	Float_t dsz() const { return dsz_ ;}
@@ -439,6 +446,7 @@ public:
 	Float_t ptError() const { return ptError_ ;}
 	Float_t etaError() const { return etaError_ ;}
 	Float_t phiError() const { return phiError_ ;}
+	
 	Int_t nbClusters() const { return nbClusters_ ;}
 	Float_t superClusterRawEnergy() const { return superClusterRawEnergy_ ;}
 	Float_t preshowerEnergy() const { return preshowerEnergy_ ;}
@@ -462,12 +470,11 @@ public:
 	Float_t isoR05_hadEt() const { return isoR05_hadEt_ ;}
 	Float_t isoR05_sumPt() const { return isoR05_sumPt_ ;}
 	Int_t isoR05_nTracks() const { return isoR05_nTracks_ ;}
-	Float_t idPTDRLoose() const { return idPTDRLoose_ ;}
-	Float_t idPTDRMedium() const { return idPTDRMedium_ ;}
-	Float_t idPTDRTight() const { return idPTDRTight_ ;}
-	Float_t idCutBasedLoose() const { return idCutBasedLoose_ ;}
-	Float_t idCutBasedRobust() const { return idCutBasedRobust_ ;}
-	Float_t idCutBasedTight() const { return idCutBasedTight_ ;}
+	Int_t idCutBasedFixedThresholdLoose() const { return idCutBasedFixedThresholdLoose_ ;}
+	Int_t idCutBasedFixedThresholdTight() const { return idCutBasedFixedThresholdTight_ ;}
+	Int_t idCutBasedFixedThresholdHighEnergy() const { return idCutBasedFixedThresholdHighEnergy_ ;}
+	Int_t idCutBasedCategorizedLoose() const { return idCutBasedCategorizedLoose_ ;}
+	Int_t idCutBasedCategorizedTight() const { return idCutBasedCategorizedTight_ ;}
 	Float_t idLikelihood() const { return idLikelihood_ ;}
 	Float_t idNeuralNet() const { return idNeuralNet_ ;}
 
@@ -488,6 +495,9 @@ public:
 	void setEnergySeedClusterOverPout(Float_t energySeedClusterOverPout) { energySeedClusterOverPout_ = energySeedClusterOverPout; }
 	void setEnergyScaleCorrected(Bool_t energyScaleCorrected) { energyScaleCorrected_ = energyScaleCorrected; }
 	void setMomentumCorrected(Bool_t momentumCorrected) { momentumCorrected_ = momentumCorrected; }
+
+	void setPixelLayersWithMeasurement(Int_t pixelLayersWithMeasurement) { pixelLayersWithMeasurement_ = pixelLayersWithMeasurement; }
+	void setStripLayersWithMeasurement(Int_t stripLayersWithMeasurement) { stripLayersWithMeasurement_ = stripLayersWithMeasurement; }
 	void setD0(Float_t d0) { d0_ = d0; }
 	void setD0Error(Float_t d0Error) { d0Error_ = d0Error; }
 	void setDsz(Float_t dsz) { dsz_ = dsz; }
@@ -496,6 +506,7 @@ public:
 	void setPtError(Float_t ptError) { ptError_ = ptError; }
 	void setEtaError(Float_t etaError) { etaError_ = etaError; }
 	void setPhiError(Float_t phiError) { phiError_ = phiError; }
+
 	void setNbClusters(Int_t nbClusters) { nbClusters_ = nbClusters; }
 	void setSuperClusterRawEnergy(Float_t superClusterRawEnergy) { superClusterRawEnergy_ = superClusterRawEnergy; }
 	void setPreshowerEnergy(Float_t preshowerEnergy) { preshowerEnergy_ = preshowerEnergy; }
@@ -520,12 +531,11 @@ public:
 	void setIsoR05_hadEt(Float_t isoR05_hadEt) { isoR05_hadEt_ = isoR05_hadEt; }
 	void setIsoR05_sumPt(Float_t isoR05_sumPt) { isoR05_sumPt_ = isoR05_sumPt; }
 	void setIsoR05_nTracks(Int_t isoR05_nTracks) { isoR05_nTracks_ = isoR05_nTracks; }
-	void setIDPTDRLoose(Float_t idPTDRLoose) { idPTDRLoose_ = idPTDRLoose; }
-	void setIDPTDRMedium(Float_t idPTDRMedium) { idPTDRMedium_ = idPTDRMedium; }
-	void setIDPTDRTight(Float_t idPTDRTight) { idPTDRTight_ = idPTDRTight; }
-	void setIDCutBasedLoose(Float_t idCutBasedLoose) { idCutBasedLoose_ = idCutBasedLoose; }
-	void setIDCutBasedRobust(Float_t idCutBasedRobust) { idCutBasedRobust_ = idCutBasedRobust; }
-	void setIDCutBasedTight(Float_t idCutBasedTight) { idCutBasedTight_ = idCutBasedTight; }
+	void setIDCutBasedFixedThresholdLoose(Int_t idCutBasedFixedThresholdLoose) { idCutBasedFixedThresholdLoose_ = idCutBasedFixedThresholdLoose; }
+	void setIDCutBasedFixedThresholdTight(Int_t idCutBasedFixedThresholdTight) { idCutBasedFixedThresholdTight_ = idCutBasedFixedThresholdTight; }
+	void setIDCutBasedFixedThresholdHighEnergy(Int_t idCutBasedFixedThresholdHighEnergy) { idCutBasedFixedThresholdHighEnergy_ = idCutBasedFixedThresholdHighEnergy; }
+	void setIDCutBasedCategorizedLoose(Int_t idCutBasedCategorizedLoose) { idCutBasedCategorizedLoose_ = idCutBasedCategorizedLoose; }
+	void setIDCutBasedCategorizedTight(Int_t idCutBasedCategorizedTight) { idCutBasedCategorizedTight_ = idCutBasedCategorizedTight; }
 	void setIDLikelihood(Float_t idLikelihood) { idLikelihood_ = idLikelihood; }
 	void setIDNeuralNet(Float_t idNeuralNet) { idNeuralNet_ = idNeuralNet; }
 	
@@ -604,6 +614,9 @@ public:
 		This is usually true for Tracker tracks.
 		- When the track has infinite or extremely high momentum */
 
+	Int_t pixelLayersWithMeasurement_; // Number of pixel layers with at least one valid hit
+	Int_t stripLayersWithMeasurement_; // Number of strip layers with at least one valid hit
+
      Float_t d0_;             // d0=-dxy
      Float_t d0Error_;        // error on d0_
      Float_t dsz_;            // dsz parameter
@@ -653,15 +666,16 @@ public:
 
 
      // pat::Electron ID (cf https://twiki.cern.ch/twiki/bin/view/CMS/SWGuideElectronID)
-     Float_t idPTDRLoose_;
-     Float_t idPTDRMedium_;
-     Float_t idPTDRTight_;
-     Float_t idCutBasedLoose_;
-     Float_t idCutBasedRobust_;
-     Float_t idCutBasedTight_;
-     Float_t idLikelihood_;
-     Float_t idNeuralNet_;
+	// By default in 2.2.X, only cut based identification is available in pat (https://twiki.cern.ch/twiki/bin/view/CMS/SWGuideCutBasedElectronID
+     Int_t idCutBasedFixedThresholdLoose_;      // Simple cut based ID (aka 'robust') - Loose Thresholds on H/E, DeltaEta, DeltaPhi, SigmaEtaEta
+     Int_t idCutBasedFixedThresholdTight_;      // Simple cut based ID (default in EWK group) - Tight Thresholds on H/E, DeltaEta, DeltaPhi, SigmaEtaEta
+     Int_t idCutBasedFixedThresholdHighEnergy_; // Simple cut based ID - Thresholds optimized for high energy electron (~TeV)
+     Int_t idCutBasedCategorizedLoose_;         // Category based ID - Different loose thresholds on H/E, DeltaEta, DeltaPhi, SigmaEtaEta, eSeedOverPin for differents regions in the E/p vs fBrem plane
+     Int_t idCutBasedCategorizedTight_;         // Category based ID - Different tight thresholds on H/E, DeltaEta, DeltaPhi, SigmaEtaEta, eSeedOverPin for differents regions in the E/p vs fBrem plane
+     Float_t idLikelihood_;                       // Lieklihood ID - not activated by default in 2.2.X
+     Float_t idNeuralNet_;                        // NN ID - not activated by default in 2.2.X
 
+	
 	// Matched genParticle
 	TLorentzVector momentumMCElectron_;
 	TVector3 vertexMCElectron_;
@@ -672,7 +686,7 @@ public:
 	//Float_t sigmaPhiPhi_;
 
 	
-	ClassDef (TRootElectron,1);
+	ClassDef (TRootElectron,3);
 };
 
 #endif
