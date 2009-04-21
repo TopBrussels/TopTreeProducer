@@ -17,6 +17,7 @@
 #include "DataFormats/MuonReco/interface/Muon.h"
 #include "DataFormats/MuonReco/interface/MuonFwd.h"
 #include "DataFormats/PatCandidates/interface/Muon.h"
+#include "DataFormats/BeamSpot/interface/BeamSpot.h"
 
 #include "../interface/TRootMuon.h"
 

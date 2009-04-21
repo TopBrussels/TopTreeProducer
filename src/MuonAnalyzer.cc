@@ -47,6 +47,10 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
       nMuons = patMuons->size ();
     }
 
+  edm::Handle<reco::BeamSpot> beamSpotHandle;
+  iEvent.getByLabel("offlineBeamSpot", beamSpotHandle);
+  const TrackBase::Point & beamSpot = beamSpotHandle->position();
+
   unsigned int nJets = 0;
   // reco::CaloJet or reco::PFJet ?
   std::string jetType = "BASIC";
@@ -108,10 +112,10 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
 		       int (muon->isGood (reco::Muon::TMLastStationTight)), int (muon->isGood (reco::Muon::TM2DCompatibilityLoose)), int (muon->isGood (reco::Muon::TM2DCompatibilityTight)));
       if (muon->isGlobalMuon ())
 	{
-	  localMuon.SetD0 (muon->globalTrack ()->d0 ());
-	  localMuon.SetChi2 (muon->globalTrack ()->normalizedChi2 ());
-	  localMuon.SetNofValidHits (muon->innerTrack ()->numberOfValidHits ());
-	  localMuon.SetInnerTrack (TLorentzVector (muon->innerTrack ()->px (), muon->innerTrack ()->py (), muon->innerTrack ()->pz (), muon->innerTrack ()->p ()));
+	  localMuon.SetD0 (muon->innerTrack()->dxy(beamSpot));
+	  localMuon.SetChi2 (muon->globalTrack()->normalizedChi2 ());
+	  localMuon.SetNofValidHits (muon->innerTrack()->numberOfValidHits ());
+	  localMuon.SetInnerTrack (TLorentzVector (muon->innerTrack()->px (), muon->innerTrack ()->py(), muon->innerTrack()->pz (), muon->innerTrack()->p ()));
 	}
 
       const reco::Jet * jet = 0;
