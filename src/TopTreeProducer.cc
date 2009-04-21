@@ -57,6 +57,7 @@ void TopTreeProducer::beginJob(const edm::EventSetup&)
 	rootEvent = 0;
 	eventTree_ = new TTree("eventTree", "Event Infos");
 	eventTree_->Branch ("Event", "TRootEvent", &rootEvent);
+        genEvent = 0;
 
 	if(doHLT)
 	{
@@ -82,9 +83,15 @@ void TopTreeProducer::beginJob(const edm::EventSetup&)
 	
 	if(doGenEvent)
 	{
+		//if(verbosity>0) cout << "GenEvent info will be added to rootuple" << endl;
+		//TRootGenEvent test;
+		//if(verbosity>0) cout << "GenEvent info will be added to rootuple" << endl;
+		//eventTree_->Branch ("GenEvent2", "TRootGenEvent", &test);
 		if(verbosity>0) cout << "GenEvent info will be added to rootuple" << endl;
-		genEvent = new TClonesArray("TRootGenEvent", 1000);
-		eventTree_->Branch ("GenEvent", "TClonesArray", &genEvent);
+		//genEvent = new TClonesArray("TRootGenEvent", 1000);
+		if(verbosity>0) cout << "GenEvent info will be added to rootuple" << endl;
+		eventTree_->Branch ("GenEvent", "TRootGenEvent", &genEvent);
+		if(verbosity>0) cout << "GenEvent info will be added to rootuple" << endl;
 	}
     
 
@@ -218,6 +225,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	// GenEvent
 	if(doGenEvent)
 	{
+		genEvent = new TRootGenEvent();
 		if(verbosity>1) cout << endl << "Analysing GenEvent collection..." << endl;
 		GenEventAnalyzer* myGenEventAnalyzer = new GenEventAnalyzer(producersNames_, myConfig_, verbosity);
 		myGenEventAnalyzer->Process(iEvent, genEvent);
@@ -293,7 +301,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	if(doMuon) (*muons).Delete();
 	if(doElectron) (*electrons).Delete();
 	if(doMET) (*met).Delete();
-	if(doGenEvent) (*genEvent).Delete();
+	if(doGenEvent) delete genEvent;
 	if(verbosity>0) cout << endl;
 }
 

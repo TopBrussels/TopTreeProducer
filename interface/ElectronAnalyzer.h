@@ -39,6 +39,7 @@ private:
 	std::string dataType_ ;
 	edm::InputTag electronProducer_;
 	bool useMC_;
+        bool runSuperCluster_;
 
 };
 

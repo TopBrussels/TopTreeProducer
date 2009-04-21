@@ -117,32 +117,32 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
 	  localMuon.SetNofValidHits (muon->innerTrack()->numberOfValidHits ());
 	  localMuon.SetInnerTrack (TLorentzVector (muon->innerTrack()->px (), muon->innerTrack ()->py(), muon->innerTrack()->pz (), muon->innerTrack()->p ()));
 	}
-
+      
       const reco::Jet * jet = 0;
       float DeltaRMin = 999.;
-
       for (unsigned int k = 0; k < nJets; k++)
 	{
 
 	  if ((dataType_ == "RECO" || dataType_ == "AOD") && jetType == "CALO")
-	    jet = (const reco::Jet *) (&((*recoCaloJets)[j]));
+	    jet = (const reco::Jet *) (&((*recoCaloJets)[k]));
 	  if ((dataType_ == "RECO" || dataType_ == "AOD") && jetType == "PF")
-	    jet = (const reco::Jet *) (&((*recoPFJets)[j]));
+	    jet = (const reco::Jet *) (&((*recoPFJets)[k]));
 	  if (dataType_ == "PAT" || dataType_ == "PATAOD")
 	    {
-	      jet = (const reco::Jet *) (&((*patJets)[j]));
-	      if ((*patJets)[j].isCaloJet ())
+	      jet = (const reco::Jet *) (&((*patJets)[k]));
+	      if ((*patJets)[k].isCaloJet ())
 		jetType = "CALO";
-	      if ((*patJets)[j].isPFJet ())
+	      if ((*patJets)[k].isPFJet ())
 		jetType = "PF";
 	    }
 
-	  float val = ROOT::Math::VectorUtil::DeltaR (jet->p4 (), muon->p4 ());
-	  if (val < DeltaRMin)
-	    DeltaRMin = val;
+	  if(jet && muon){
+	    float val = ROOT::Math::VectorUtil::DeltaR (jet->p4 (), muon->p4 ());
+	    if (val < DeltaRMin)
+	      DeltaRMin = val;
+	  }
 	}
       localMuon.SetDeltaRClosestJet (DeltaRMin);
-
 
       if (dataType_ == "RECO" || dataType_ == "AOD")
 	{

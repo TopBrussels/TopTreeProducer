@@ -24,7 +24,7 @@ public:
 	GenEventAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity);
 	~GenEventAnalyzer();
 	void SetVerbosity(int verbosity) {verbosity_ = verbosity; };
-	void Process(const edm::Event& iEvent, TClonesArray* rootGenEvent);
+	void Process(const edm::Event& iEvent, TRootGenEvent* rootGenEvent);
 
 private:
 	int verbosity_;

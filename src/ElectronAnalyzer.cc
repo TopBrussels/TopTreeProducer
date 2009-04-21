@@ -4,7 +4,7 @@ using namespace std;
 using namespace reco;
 using namespace edm;
 
-ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& producersNames):verbosity_(0),useMC_(false)
+ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& producersNames):verbosity_(0),useMC_(false),runSuperCluster_(false)
 {
 	dataType_ = producersNames.getUntrackedParameter<string>("dataType","unknown");
 	electronProducer_ = producersNames.getParameter<edm::InputTag>("electronProducer");
@@ -15,6 +15,7 @@ ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& producersNames, cons
 	dataType_ = producersNames.getUntrackedParameter<string>("dataType","unknown");
 	electronProducer_ = producersNames.getParameter<edm::InputTag>("electronProducer");
 	useMC_ = myConfig.getUntrackedParameter<bool>("doElectronMC");
+	runSuperCluster_ = myConfig.getUntrackedParameter<bool>("runSuperCluster");
 }
 
 ElectronAnalyzer::~ElectronAnalyzer()
@@ -99,7 +100,7 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 		// Variables from reco::SuperCluster
 		reco::SuperClusterRef superCluster = electron->superCluster();
 		//const reco::SuperCluster* sc = superCluster.get();
-		if ( superCluster.isNonnull() )
+		if ( superCluster.isNonnull() && runSuperCluster_ )
 		{
 			localElectron.setNbClusters(electron->numberOfClusters());
 			localElectron.setSuperClusterRawEnergy(superCluster->rawEnergy());
@@ -117,7 +118,7 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 
 		// Cluster Shape variables
 		// need reco::SuperCluster and reco::BasicCluster
-		if ( superCluster.isNonnull() )
+		if ( superCluster.isNonnull() && runSuperCluster_ )
 		{
 			reco::BasicClusterRef seedBasicCluster = superCluster->seed();
 			if ( seedBasicCluster.isNonnull() ) localElectron.setClusterAlgo(seedBasicCluster->algo());

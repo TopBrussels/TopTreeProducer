@@ -29,7 +29,7 @@ GenEventAnalyzer::~GenEventAnalyzer()
 
 TLorentzVector  P4toTLV(reco::Particle::LorentzVector a){ return TLorentzVector(a.px(), a.py(), a.pz(), a.energy());}
 
-void GenEventAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenEvent){
+void GenEventAnalyzer::Process(const edm::Event& iEvent, TRootGenEvent* TRootgenEvt){
 
 	edm::Handle < TtGenEvent > genEvent;
         iEvent.getByLabel(genEventProducer_, genEvent);
@@ -37,9 +37,8 @@ void GenEventAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenEv
 
 	if(verbosity_>1) std::cout << "   GenEvent  "  << "   Label: " << genEventProducer_.label() << "   Instance: " << genEventProducer_.instance() << std::endl;
 
-	TRootGenEvent TRootgenEvt;
-	TRootgenEvt.SetBoolean(genEvent->isTtBar(), genEvent->isFullHadronic(), genEvent->isSemiLeptonic(), genEvent->isFullLeptonic());
-	TRootgenEvt.SetSemiLeptonicChannel((TRootGenEvent::LeptonType) genEvent->semiLeptonicChannel());
+	TRootgenEvt->SetBoolean(genEvent->isTtBar(), genEvent->isFullHadronic(), genEvent->isSemiLeptonic(), genEvent->isFullLeptonic());
+	TRootgenEvt->SetSemiLeptonicChannel((TRootGenEvent::LeptonType) genEvent->semiLeptonicChannel());
 	TLorentzVector neutrino;
 	TLorentzVector lepton;
 	TLorentzVector leptonicDecayW, leptonicDecayB, leptonicDecayTop;
@@ -64,7 +63,7 @@ void GenEventAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenEv
 	  if(genEvent->hadronicDecayQuark()) hadronicDecayQuark = P4toTLV(genEvent->hadronicDecayQuark()->p4());
 	  if(genEvent->hadronicDecayQuarkBar()) hadronicDecayQuarkBar = P4toTLV(genEvent->hadronicDecayQuarkBar()->p4());
 	}
-	TRootgenEvt.SetTLorentzVector(lepton, neutrino, leptonicDecayW, leptonicDecayB, leptonicDecayTop, hadronicDecayB, hadronicDecayW, hadronicDecayTop, hadronicDecayQuark, hadronicDecayQuarkBar);
+	TRootgenEvt->SetTLorentzVector(lepton, neutrino, leptonicDecayW, leptonicDecayB, leptonicDecayTop, hadronicDecayB, hadronicDecayW, hadronicDecayTop, hadronicDecayQuark, hadronicDecayQuarkBar);
 	std::vector<TLorentzVector> ISR, leptonicDecayTopRadiation, hadronicDecayTopRadiation;
 	for(unsigned int i=0;i<genEvent->topSisters().size();i++) 
 	 if(genEvent->topSisters()[i]) 
@@ -77,6 +76,6 @@ void GenEventAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenEv
 	  if(genEvent->radiatedGluons(genEvent->hadronicDecayTop()->pdgId())[i])
 	    hadronicDecayTopRadiation.push_back(P4toTLV(genEvent->radiatedGluons(genEvent->hadronicDecayTop()->pdgId())[i]->p4())); 
 	}
-	TRootgenEvt.SetRadiation(leptonicDecayTopRadiation, hadronicDecayTopRadiation, ISR);
-	new( (*rootGenEvent)[0] ) TRootGenEvent(TRootgenEvt);
+	TRootgenEvt->SetRadiation(leptonicDecayTopRadiation, hadronicDecayTopRadiation, ISR);
+	//new( (*rootGenEvent)[0] ) TRootGenEvent(TRootgenEvt);
 }

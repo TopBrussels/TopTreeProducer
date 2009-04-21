@@ -24,22 +24,23 @@ process.load("RecoEcal.EgammaClusterProducers.geometryForClustering_cff")
 #process.load("RecoEcal.EgammaClusterProducers.piZeroDiscriminators_cfi")
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(100)
+    input = cms.untracked.int32(-1)
 )
 
 
 process.source = cms.Source("PoolSource",
-        duplicateCheckMode = cms.untracked.string('noDuplicateCheck'),
+#        duplicateCheckMode = cms.untracked.string('noDuplicateCheck'),
 # RECO
 # AOD
 # PATAOD
 # PAT
 	#fileNames = cms.untracked.vstring('file:/user/jmmaes/CMSSW/CMSSW_2_2_3/src/Crab/PATSkim1/PATLayer1_Skim1_semilep.root')
 	#fileNames = cms.untracked.vstring('file:/user/echabert/CMSSW/CMSSW_2_2_3/src/TopQuarkAnalysis/TopEventProducers/test/toto2.root')
-	#fileNames = cms.untracked.vstring('file:/user/echabert/CMSSW/CMSSW_2_2_3/src/CRAB/PATLayer1.root')
-	fileNames = cms.untracked.vstring('dcap:///pnfs/iihe/cms/store/user/ghammad/CMSSW223/Common/PATLayer1/TauolaTTbar/PATLayer1_1.root')
+	fileNames = cms.untracked.vstring('file:/user/echabert/CMSSW/CMSSW_2_2_6/src/NewPhysicsAnalysis/SUSYAnalysis/TopSUSYEvents.root')
+	#fileNames = cms.untracked.vstring('dcap:///pnfs/iihe/cms/store/user/ghammad/CMSSW223/Common/PATLayer1/TauolaTTbar/PATLayer1_1.root')
 )
-
+#process.load("TopBrussels.SanityChecker.PATLayer1_R3_TauolaTTbar_redigi_NoEvtSel_input_cfi")
+#process.load("TopBrussels.SanityChecker.PATLayer1_R3_InclusiveMuPt15_redigi_input_cfi")
 
 process.analysis = cms.EDAnalyzer("TopTreeProducer",
 	myConfig = cms.PSet(
@@ -57,7 +58,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
  		# 		3 = Liste of high level objects (jetss, muons, ...)
  		# 		4 = List of all  objects 
 		# 		5 = Debug
- 		verbosity = cms.untracked.int32(1),
+ 		verbosity = cms.untracked.int32(0),
 
 		# name of output root file
 		RootFileName = cms.untracked.string('TopTree.root'),
@@ -68,7 +69,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		# What is written to rootuple		    
 		doHLT = cms.untracked.bool(False),
 		doMC = cms.untracked.bool(False),
-		doPDFInfo = cms.untracked.bool(True),
+		doPDFInfo = cms.untracked.bool(False),
 #		signalGenerator = cms.untracked.string('PYTHIA'),
 #		signalGenerator = cms.untracked.string('ALPGEN'),
 		signalGenerator = cms.untracked.string('MADGRAPH'),
@@ -81,7 +82,8 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		doPrimaryVertex = cms.untracked.bool(True),
 		doJet = cms.untracked.bool(True),
 		doMuon = cms.untracked.bool(True),
-		doElectron = cms.untracked.bool(False),
+		doElectron = cms.untracked.bool(True),
+		runSuperCluster = cms.untracked.bool(False),#true only if SuperCluster are stored
 		doMET = cms.untracked.bool(True),
 		doGenEvent = cms.untracked.bool(False),
 
