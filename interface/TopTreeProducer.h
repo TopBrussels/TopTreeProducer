@@ -96,7 +96,7 @@ private:
 	TClonesArray* muons;
 	TClonesArray* electrons;
 	TClonesArray* met;
-        TRootGenEvent* genEvent;
+        TClonesArray* genEvent;
 
 };
 
