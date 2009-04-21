@@ -231,15 +231,16 @@ void JetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets)
 					localJet.setGenParticleIndex(-1);
 				}
 
-				// check if jet comes from a top
+				// set the parton flavour
+				localJet.setPartonFlavour(patJet->partonFlavour());
 
+				// check if jet comes from a top
 				// change that ... 
 				// look on TtGenEvent
 				// keep the TRef ...
 				bool IsTopJet =  false;
 				if(patJet->genParton())
 				{
-					localJet.setPartonFlavour(patJet->genParton()->pdgId());
 					const reco::Candidate* gen = patJet->genParton();
 					while(gen->mother())
 					{
