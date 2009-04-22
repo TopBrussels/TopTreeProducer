@@ -68,17 +68,17 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		isCSA07Soup = cms.untracked.bool(False),
 
 		# What is written to rootuple		    
-		doHLT = cms.untracked.bool(False),
-		doMC = cms.untracked.bool(False),
+		doHLT = cms.untracked.bool(True),
+		doMC = cms.untracked.bool(True),
 		doPDFInfo = cms.untracked.bool(False),
 #		signalGenerator = cms.untracked.string('PYTHIA'),
 #		signalGenerator = cms.untracked.string('ALPGEN'),
 		signalGenerator = cms.untracked.string('MADGRAPH'),
 
-		doElectronMC = cms.untracked.bool(False),
-		doMuonMC = cms.untracked.bool(False),
+		doElectronMC = cms.untracked.bool(True),
+		doMuonMC = cms.untracked.bool(True),
 		doJetMC = cms.untracked.bool(True),
-		doMETMC = cms.untracked.bool(False),
+		doMETMC = cms.untracked.bool(True),
 		doUnstablePartsMC = cms.untracked.bool(False),
 		doPrimaryVertex = cms.untracked.bool(True),
 		doJet = cms.untracked.bool(True),
@@ -86,17 +86,17 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		doElectron = cms.untracked.bool(True),
 		runSuperCluster = cms.untracked.bool(False),#true only if SuperCluster are stored
 		doMET = cms.untracked.bool(True),
-		doGenEvent = cms.untracked.bool(True),
+		doGenEvent = cms.untracked.bool(True),#put on False when running non-ttbar
 
 		conversionLikelihoodWeightsFile = cms.untracked.string('RecoEgamma/EgammaTools/data/TMVAnalysis_Likelihood.weights.txt'),
 
 		# Draw MC particle tree
 		drawMCTree = cms.untracked.bool(False),
-		mcTreePrintP4 = cms.untracked.bool(True),
+		mcTreePrintP4 = cms.untracked.bool(False),
 		mcTreePrintPtEtaPhi = cms.untracked.bool(False),
 		mcTreePrintVertex = cms.untracked.bool(False),
-		mcTreePrintStatus = cms.untracked.bool(True),
-		mcTreePrintIndex = cms.untracked.bool(True),
+		mcTreePrintStatus = cms.untracked.bool(False),
+		mcTreePrintIndex = cms.untracked.bool(False),
 		mcTreeStatus = cms.untracked.vint32( 3 ),	# accepted status codes
 
 	
@@ -149,7 +149,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 
 	producersNamesPAT = cms.PSet(
 		dataType = cms.untracked.string("PAT"), 
-		hltProducer = cms.InputTag("PATALACON"),
+		hltProducer = cms.InputTag("TriggerResults","","HLT"),
 		genParticlesProducer = cms.InputTag("genParticles"),
 		primaryVertexProducer = cms.InputTag("offlinePrimaryVertices"),
 		jetProducer = cms.InputTag("selectedLayer1Jets"),
