@@ -35,7 +35,7 @@ int main(){
 	bool doMET                    = true;
 	bool doGenEvent               = false;
 
-	TFile* f=new TFile("TopTree.root");
+	TFile* f = TFile::Open("dcap://maite.iihe.ac.be//pnfs/iihe/cms/store/user/echabert/TopTree.root");
 	TTree* runTree = (TTree*) f->Get("runTree");
 	TTree* eventTree = (TTree*) f->Get("eventTree");
 
