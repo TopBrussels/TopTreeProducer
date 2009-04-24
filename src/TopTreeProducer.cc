@@ -42,6 +42,7 @@ void TopTreeProducer::beginJob(const edm::EventSetup&)
 	doMET = myConfig_.getUntrackedParameter<bool>("doMET",false);
 	drawMCTree = myConfig_.getUntrackedParameter<bool>("drawMCTree",false);
 	doGenEvent = myConfig_.getUntrackedParameter<bool>("doGenEvent",false);
+	doSpinCorrGen = myConfig_.getUntrackedParameter<bool>("doSpinCorrGen",false);
 
 	nTotEvt_ = 0;
 	
@@ -85,6 +86,13 @@ void TopTreeProducer::beginJob(const edm::EventSetup&)
 		if(verbosity>0) cout << "GenEvent info will be added to rootuple" << endl;
 		genEvent = new TClonesArray("TRootGenEvent", 1000);
 		eventTree_->Branch ("GenEvent", "TClonesArray", &genEvent);
+	}
+
+	if(doSpinCorrGen)
+	{
+		if(verbosity>0) cout << "SpinCorrelation Gen info will be added to rootuple" << endl;
+		spinCorrGen = new TClonesArray("TRootSpinCorrGen", 1000);
+		eventTree_->Branch ("SpinCorrGen", "TClonesArray", &spinCorrGen);
 	}
     
 
@@ -224,6 +232,15 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		delete myGenEventAnalyzer;
 	}
 
+	// SpinCorrelation Gen
+	if(doSpinCorrGen)
+	{
+		if(verbosity>1) cout << endl << "Analysing SpinCorrGen collection..." << endl;
+		SpinCorrGenAnalyzer* mySpinCorrGenAnalyzer = new SpinCorrGenAnalyzer(producersNames_, myConfig_, verbosity);
+		mySpinCorrGenAnalyzer->Process(iEvent, spinCorrGen);
+		delete mySpinCorrGenAnalyzer;
+	}
+
 	
 	// Muons
 	if(doMuon)
@@ -294,6 +311,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	if(doElectron) (*electrons).Delete();
 	if(doMET) (*met).Delete();
 	if(doGenEvent) (*genEvent).Delete();
+	if(doSpinCorrGen) (*spinCorrGen).Delete();
 	if(verbosity>0) cout << endl;
 }
 

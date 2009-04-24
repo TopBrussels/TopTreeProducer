@@ -9,6 +9,7 @@
 #include "../interface/TRootSignalEvent.h"
 #include "../interface/TRootMET.h"
 #include "../interface/TRootGenEvent.h"
+#include "../interface/TRootSpinCorrGen.h"
 #else
 #include "../interface/TRootRun.h"
 #include "../interface/TRootEvent.h"
@@ -20,6 +21,7 @@
 #include "../interface/TRootSignalEvent.h"
 #include "../interface/TRootMET.h"
 #include "../interface/TRootGenEvent.h"
+#include "../interface/TRootSpinCorrGen.h"
 #endif
 
 #ifdef __CINT__
@@ -37,5 +39,6 @@
 #pragma link C++ class TRootSignalEvent;
 #pragma link C++ class TRootMET;
 #pragma link C++ class TRootGenEvent;
+#pragma link C++ class TRootSpinCorrGen;
 
 #endif
