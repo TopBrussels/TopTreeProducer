@@ -33,6 +33,7 @@
 #include "../interface/ElectronAnalyzer.h"
 #include "../interface/METAnalyzer.h"
 #include "../interface/GenEventAnalyzer.h"
+#include "../interface/NPGenEventAnalyzer.h"
 #include "../interface/SpinCorrGenAnalyzer.h"
 
 #include "../interface/TRootRun.h"
@@ -45,6 +46,7 @@
 #include "../interface/TRootElectron.h"
 #include "../interface/TRootMET.h"
 #include "../interface/TRootGenEvent.h"
+#include "../interface/TRootNPGenEvent.h"
 #include "../interface/TRootSpinCorrGen.h"
 
 #include "TFile.h"
@@ -85,6 +87,7 @@ private:
 	bool doElectron;
 	bool doMET;
 	bool doGenEvent;
+	bool doNPGenEvent;
 	bool doSpinCorrGen;
 	bool drawMCTree;
 	
@@ -100,6 +103,7 @@ private:
 	TClonesArray* electrons;
 	TClonesArray* met;
 	TClonesArray* genEvent;
+        TClonesArray* NPgenEvent;
 	TClonesArray* spinCorrGen;
 
 };

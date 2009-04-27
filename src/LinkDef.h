@@ -9,6 +9,8 @@
 #include "../interface/TRootSignalEvent.h"
 #include "../interface/TRootMET.h"
 #include "../interface/TRootGenEvent.h"
+#include "../interface/TRootNPGenEvent.h"
+#include "../interface/TRootGenTop.h"
 #include "../interface/TRootSpinCorrGen.h"
 #else
 #include "../interface/TRootRun.h"
@@ -21,6 +23,8 @@
 #include "../interface/TRootSignalEvent.h"
 #include "../interface/TRootMET.h"
 #include "../interface/TRootGenEvent.h"
+#include "../interface/TRootNPGenEvent.h"
+#include "../interface/TRootGenTop.h"
 #include "../interface/TRootSpinCorrGen.h"
 #endif
 
@@ -39,6 +43,8 @@
 #pragma link C++ class TRootSignalEvent;
 #pragma link C++ class TRootMET;
 #pragma link C++ class TRootGenEvent;
+#pragma link C++ class TRootNPGenEvent;
+#pragma link C++ class TRootGenTop;
 #pragma link C++ class TRootSpinCorrGen;
 
 #endif

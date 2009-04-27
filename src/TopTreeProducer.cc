@@ -42,6 +42,7 @@ void TopTreeProducer::beginJob(const edm::EventSetup&)
 	doMET = myConfig_.getUntrackedParameter<bool>("doMET",false);
 	drawMCTree = myConfig_.getUntrackedParameter<bool>("drawMCTree",false);
 	doGenEvent = myConfig_.getUntrackedParameter<bool>("doGenEvent",false);
+	doNPGenEvent = myConfig_.getUntrackedParameter<bool>("doNPGenEvent",false);
 	doSpinCorrGen = myConfig_.getUntrackedParameter<bool>("doSpinCorrGen",false);
 
 	nTotEvt_ = 0;
@@ -86,6 +87,13 @@ void TopTreeProducer::beginJob(const edm::EventSetup&)
 		if(verbosity>0) cout << "GenEvent info will be added to rootuple" << endl;
 		genEvent = new TClonesArray("TRootGenEvent", 1000);
 		eventTree_->Branch ("GenEvent", "TClonesArray", &genEvent);
+	}
+
+	if(doNPGenEvent)
+	{
+		if(verbosity>0) cout << "NPGenEvent info will be added to rootuple" << endl;
+		NPgenEvent = new TClonesArray("TRootNPGenEvent", 1000);
+		eventTree_->Branch ("NPGenEvent", "TClonesArray", &NPgenEvent);
 	}
 
 	if(doSpinCorrGen)
@@ -232,6 +240,17 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		delete myGenEventAnalyzer;
 	}
 
+	// NPGenEvent
+	if(doNPGenEvent)
+	{
+		if(verbosity>1) cout << endl << "Analysing NPGenEvent collection..." << endl;
+		NPGenEventAnalyzer* myNPGenEventAnalyzer = new NPGenEventAnalyzer(producersNames_, myConfig_, verbosity);
+		if(verbosity>1) cout << endl << "Analysing NPGenEvent collection..." << endl;
+		myNPGenEventAnalyzer->Process(iEvent, NPgenEvent);
+		if(verbosity>1) cout << endl << "Analysing NPGenEvent collection..." << endl;
+		delete myNPGenEventAnalyzer;
+	}
+
 	// SpinCorrelation Gen
 	if(doSpinCorrGen)
 	{
@@ -311,6 +330,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	if(doElectron) (*electrons).Delete();
 	if(doMET) (*met).Delete();
 	if(doGenEvent) (*genEvent).Delete();
+	if(doNPGenEvent) (*NPgenEvent).Delete();
 	if(doSpinCorrGen) (*spinCorrGen).Delete();
 	if(verbosity>0) cout << endl;
 }

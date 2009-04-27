@@ -59,7 +59,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
  		# 		3 = Liste of high level objects (jetss, muons, ...)
  		# 		4 = List of all  objects 
 		# 		5 = Debug
- 		verbosity = cms.untracked.int32(0),
+ 		verbosity = cms.untracked.int32(5),
 
 		# name of output root file
 		RootFileName = cms.untracked.string('TopTree_pythia.root'),
@@ -86,7 +86,8 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		doElectron = cms.untracked.bool(True),
 		runSuperCluster = cms.untracked.bool(False),#true only if SuperCluster are stored
 		doMET = cms.untracked.bool(True),
-		doGenEvent = cms.untracked.bool(True),#put on False when running non-ttbar
+		doGenEvent = cms.untracked.bool(False),#put on False when running non-ttbar
+		doNPGenEvent = cms.untracked.bool(False),#put on True when running New Physics sample
                 doSpinCorrGen = cms.untracked.bool(False),#put on True only if you need SpinCorrelation Variables
 
 		conversionLikelihoodWeightsFile = cms.untracked.string('RecoEgamma/EgammaTools/data/TMVAnalysis_Likelihood.weights.txt'),
