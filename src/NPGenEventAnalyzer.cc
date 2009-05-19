@@ -56,6 +56,29 @@ TRootMCParticle NPGenEventAnalyzer::ConvertMCPart(reco::GenParticleCollection::c
   TRootMCParticle part(p4, vertex, t->pdgId(), t->charge(), t->status(), nDau, motherType, grannyType, dauOneId, dauTwoId, dauThreeId, dauFourId, -9999);
   return part;
 }
+
+TRootMCParticle NPGenEventAnalyzer::ConvertMCPart(reco::GenParticle::const_iterator t){
+  TLorentzVector p4 = P4toTLV(t->p4());
+  TVector3 vertex = TVector3(t->vertex().x(),t->vertex().y(),t->vertex().z());
+  int motherType = -9999;
+  int grannyType = -9999;
+  if(t->mother()) motherType = t->mother()->pdgId();
+  if(t->mother() && t->mother()->mother()) grannyType = t->mother()->mother()->pdgId();
+  int dauOneId = -9999;
+  int dauTwoId = -9999;
+  int dauThreeId = -9999;
+  int dauFourId = -9999;
+  int nDau = 0 ;
+  for (reco::GenParticle::const_iterator td = t->begin (); td != t->end (); ++td){
+    nDau++;
+    if(nDau==1) dauOneId = td->pdgId();
+    if(nDau==2) dauTwoId = td->pdgId();
+    if(nDau==3) dauThreeId = td->pdgId();
+    if(nDau==4) dauFourId = td->pdgId();
+  }
+  TRootMCParticle part(p4, vertex, t->pdgId(), t->charge(), t->status(), nDau, motherType, grannyType, dauOneId, dauTwoId, dauThreeId, dauFourId, -9999);
+  return part;
+}
 void
 NPGenEventAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootGenEvent)
 {

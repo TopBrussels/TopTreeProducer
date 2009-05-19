@@ -27,6 +27,7 @@ public:
 	void Process(const edm::Event& iEvent, TClonesArray* rootGenEvent);
         TLorentzVector P4toTLV (reco::Particle::LorentzVector a);
         TRootMCParticle ConvertMCPart(reco::GenParticleCollection::const_iterator t);
+        TRootMCParticle ConvertMCPart(reco::GenParticle::const_iterator t);
   
 private:
 	int verbosity_;
