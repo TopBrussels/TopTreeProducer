@@ -129,31 +129,31 @@ NPGenEventAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootGenEv
 		{
 		  if (abs (td->pdgId ()) == 24)
 		    {
-		      W_  = ConvertMCPart(t);
+		      W_  = ConvertMCPart(td);
 		      GenParticle::const_iterator Wd = td->begin ();
 		      for (; Wd != td->end (); ++Wd)
 			{
 			  if (Wd->pdgId () > 0 && Wd->pdgId () < 6)
 			    {
-			      quark_  = ConvertMCPart(t);
+			      quark_  = ConvertMCPart(Wd);
 			    }
 			  if (Wd->pdgId () < 0 && Wd->pdgId () > -6)
 			    {
-			      quarkBar_  = ConvertMCPart(t);
+			      quarkBar_  = ConvertMCPart(Wd);
 			    }
 			  if (abs (Wd->pdgId ()) == 11 || abs (Wd->pdgId ()) == 13 || abs (Wd->pdgId ()) == 15)
 			    {
-			      lepton_  = ConvertMCPart(t);
+			      lepton_  = ConvertMCPart(Wd);
 			      isLeptonic_ = true;
 			    }
 			  if (abs (Wd->pdgId ()) == 12 || abs (Wd->pdgId ()) == 14 || abs (Wd->pdgId ()) == 16)
 			    {
-			      neutrino_  = ConvertMCPart(t);
+			      neutrino_  = ConvertMCPart(Wd);
 			    }
 			}
 		    }
 		  else
-		    bquark_  = ConvertMCPart(t);
+		    bquark_  = ConvertMCPart(td);
 		}
 	      cout<<"TopGenPart"<<endl;
 	      //
