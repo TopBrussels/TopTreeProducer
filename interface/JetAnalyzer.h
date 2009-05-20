@@ -25,6 +25,7 @@ public:
 	JetAnalyzer(const edm::ParameterSet& producersNames);
 	JetAnalyzer(const edm::ParameterSet& producersNames, int verbosity);
 	JetAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity);
+	JetAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity);
 	~JetAnalyzer();
 	void SetVerbosity(int verbosity) {verbosity_ = verbosity; };
 	void Process(const edm::Event& iEvent, TClonesArray* rootJets);
@@ -35,6 +36,7 @@ private:
 	edm::InputTag jetProducer_;
 	edm::InputTag mcProducer_;
 	bool useMC_;
+	std::vector<std::string> vJetProducer;
 
 };
 

@@ -12,6 +12,10 @@
 #include "../interface/TRootNPGenEvent.h"
 #include "../interface/TRootGenTop.h"
 #include "../interface/TRootSpinCorrGen.h"
+#include "../interface/TRootWCandidate.h"
+#include "../interface/TRootTopCandidate.h"
+#include "../interface/TRootCompositeCandidate.h"
+#include "../interface/TRootSemiLepEvent.h"
 #else
 #include "../interface/TRootRun.h"
 #include "../interface/TRootEvent.h"
@@ -26,6 +30,10 @@
 #include "../interface/TRootNPGenEvent.h"
 #include "../interface/TRootGenTop.h"
 #include "../interface/TRootSpinCorrGen.h"
+#include "../interface/TRootWCandidate.h"
+#include "../interface/TRootTopCandidate.h"
+#include "../interface/TRootCompositeCandidate.h"
+#include "../interface/TRootSemiLepEvent.h"
 #endif
 
 #ifdef __CINT__
@@ -46,5 +54,9 @@
 #pragma link C++ class TRootNPGenEvent;
 #pragma link C++ class TRootGenTop;
 #pragma link C++ class TRootSpinCorrGen;
+#pragma link C++ class TRootWCandidate;
+#pragma link C++ class TRootTopCandidate;
+#pragma link C++ class TRootCompositeCandidate;
+#pragma link C++ class TRootSemiLepEvent;
 
 #endif

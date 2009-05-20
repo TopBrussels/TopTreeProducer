@@ -34,7 +34,7 @@ process.source = cms.Source("PoolSource",
 # AOD
 # PATAOD
 # PAT
-	fileNames = cms.untracked.vstring('file:PATLayer1Ext.root')
+	fileNames = cms.untracked.vstring('file:PATLayer2.root')
 	#fileNames = cms.untracked.vstring('file:/user/echabert/CMSSW/CMSSW_2_2_3/src/TopQuarkAnalysis/TopEventProducers/test/toto2.root')
 	#fileNames = cms.untracked.vstring('file:/user/echabert/CMSSW/CMSSW_2_2_6/src/NewPhysicsAnalysis/SUSYAnalysis/TopSUSYEvents.root')
 	#fileNames = cms.untracked.vstring('dcap:///pnfs/iihe/cms/store/user/ghammad/CMSSW223/Common/PATLayer1/TauolaTTbar/PATLayer1_1.root')
@@ -89,6 +89,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		doGenEvent = cms.untracked.bool(False),#put on False when running non-ttbar
 		doNPGenEvent = cms.untracked.bool(False),#put on True when running New Physics sample
                 doSpinCorrGen = cms.untracked.bool(False),#put on True only if you need SpinCorrelation Variables
+                doSemiLepEvent = cms.untracked.bool(True),#put on True only if you need TtSemiLeptonicEvent Collection exist in PAT-uples (L2)
 
 		conversionLikelihoodWeightsFile = cms.untracked.string('RecoEgamma/EgammaTools/data/TMVAnalysis_Likelihood.weights.txt'),
 

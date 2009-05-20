@@ -35,6 +35,7 @@
 #include "../interface/GenEventAnalyzer.h"
 #include "../interface/NPGenEventAnalyzer.h"
 #include "../interface/SpinCorrGenAnalyzer.h"
+#include "../interface/SemiLepEventAnalyzer.h"
 
 #include "../interface/TRootRun.h"
 #include "../interface/TRootEvent.h"
@@ -48,6 +49,7 @@
 #include "../interface/TRootGenEvent.h"
 #include "../interface/TRootNPGenEvent.h"
 #include "../interface/TRootSpinCorrGen.h"
+#include "../interface/TRootSemiLepEvent.h"
 
 #include "TFile.h"
 #include "TTree.h"
@@ -83,14 +85,16 @@ private:
 	bool doSignalTopTop;
 	bool doPrimaryVertex;
 	bool doJet;
+	bool doJetStudy;
 	bool doMuon;
 	bool doElectron;
 	bool doMET;
 	bool doGenEvent;
 	bool doNPGenEvent;
 	bool doSpinCorrGen;
+	bool doSemiLepEvent;
 	bool drawMCTree;
-	
+        std::vector<std::string> vJetProducer;	
 	
 	int nTotEvt_;
 	HLTAnalyzer* hltAnalyzer_;
@@ -99,12 +103,14 @@ private:
 	TClonesArray* mcParticles;
 	TClonesArray* tracks;
 	TClonesArray* jets;
+	vector<TClonesArray*> vjets;
 	TClonesArray* muons;
 	TClonesArray* electrons;
 	TClonesArray* met;
 	TClonesArray* genEvent;
         TClonesArray* NPgenEvent;
 	TClonesArray* spinCorrGen;
+	TClonesArray* semiLepEvent;
 
 };
 

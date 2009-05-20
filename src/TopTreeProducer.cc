@@ -37,6 +37,7 @@ void TopTreeProducer::beginJob(const edm::EventSetup&)
 	doPDFInfo = myConfig_.getUntrackedParameter<bool>("doPDFInfo",false);
 	doPrimaryVertex = myConfig_.getUntrackedParameter<bool>("doPrimaryVertex",false);
 	doJet = myConfig_.getUntrackedParameter<bool>("doJet",false);
+	doJetStudy = myConfig_.getUntrackedParameter<bool>("doJetStudy",false);
 	doMuon = myConfig_.getUntrackedParameter<bool>("doMuon",false);
 	doElectron = myConfig_.getUntrackedParameter<bool>("doElectron",false);	
 	doMET = myConfig_.getUntrackedParameter<bool>("doMET",false);
@@ -44,6 +45,13 @@ void TopTreeProducer::beginJob(const edm::EventSetup&)
 	doGenEvent = myConfig_.getUntrackedParameter<bool>("doGenEvent",false);
 	doNPGenEvent = myConfig_.getUntrackedParameter<bool>("doNPGenEvent",false);
 	doSpinCorrGen = myConfig_.getUntrackedParameter<bool>("doSpinCorrGen",false);
+	doSemiLepEvent = myConfig_.getUntrackedParameter<bool>("doSemiLepEvent",false);
+	vJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vjetProducer");
+
+        for(unsigned int s=0;s<vJetProducer.size();s++){
+		TClonesArray* a;
+		vjets.push_back(a); 
+	}
 
 	nTotEvt_ = 0;
 	
@@ -82,6 +90,17 @@ void TopTreeProducer::beginJob(const edm::EventSetup&)
 		eventTree_->Branch ("Jets", "TClonesArray", &jets);
 	}
 	
+	if(doJetStudy)
+	{
+		if(verbosity>0) cout << "Jets info will be added to rootuple (for JetStudy)" << endl;
+		for(unsigned int s=0;s<vJetProducer.size();s++){
+			vjets[s] = new TClonesArray("TRootJet", 1000);
+			char name[100];
+			sprintf(name,"Jets_%s",vJetProducer[s].c_str());
+			eventTree_->Branch (name, "TClonesArray", &vjets[s]);
+		}
+	}
+	
 	if(doGenEvent)
 	{
 		if(verbosity>0) cout << "GenEvent info will be added to rootuple" << endl;
@@ -103,6 +122,12 @@ void TopTreeProducer::beginJob(const edm::EventSetup&)
 		eventTree_->Branch ("SpinCorrGen", "TClonesArray", &spinCorrGen);
 	}
     
+	if(doSemiLepEvent)
+	{
+		if(verbosity>0) cout << "SemiLepEvent info will be added to rootuple" << endl;
+		semiLepEvent = new TClonesArray("TRootSemiLepEvent", 1000);
+		eventTree_->Branch ("SemiLepEvent", "TClonesArray", &semiLepEvent);
+	}
 
 	if(doMuon)
 	{
@@ -231,6 +256,16 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		delete myJetAnalyzer;
 	}
 
+	if(doJetStudy)
+	{
+		if(verbosity>1) cout << endl << "Analysing jets collection (for JetStudy)..." << endl;
+		for(unsigned int s=0;s<vJetProducer.size();s++){
+			JetAnalyzer* myJetAnalyzer = new JetAnalyzer(producersNames_, s,  myConfig_, verbosity);
+			myJetAnalyzer->Process(iEvent, vjets[s]);
+			delete myJetAnalyzer;
+		}
+	}
+
 	// GenEvent
 	if(doGenEvent)
 	{
@@ -260,6 +295,14 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		delete mySpinCorrGenAnalyzer;
 	}
 
+        //SemiLepEvent
+	if(doSemiLepEvent)
+	{
+		if(verbosity>1) cout << endl << "Analysing SemiLepEvent collection..." << endl;
+		SemiLepEventAnalyzer* mySemiLepEventAnalyzer = new SemiLepEventAnalyzer(producersNames_, myConfig_, verbosity);
+		mySemiLepEventAnalyzer->Process(iEvent, semiLepEvent, jets, muons);
+		delete mySemiLepEventAnalyzer;
+	}
 	
 	// Muons
 	if(doMuon)
@@ -326,12 +369,19 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	delete rootEvent;
 	if(doMC) (*mcParticles).Delete();
 	if(doJet) (*jets).Delete();
+	if(doJetStudy){
+		for(unsigned int s=0;s<vJetProducer.size();s++){
+			(*vjets[s]).Delete();
+		}
+	}
 	if(doMuon) (*muons).Delete();
 	if(doElectron) (*electrons).Delete();
 	if(doMET) (*met).Delete();
 	if(doGenEvent) (*genEvent).Delete();
 	if(doNPGenEvent) (*NPgenEvent).Delete();
 	if(doSpinCorrGen) (*spinCorrGen).Delete();
+	if(doSemiLepEvent) (*semiLepEvent).Delete();
 	if(verbosity>0) cout << endl;
+
 }
 

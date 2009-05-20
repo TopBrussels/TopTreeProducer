@@ -23,6 +23,14 @@ JetAnalyzer::JetAnalyzer(const edm::ParameterSet& producersNames, const edm::Par
 	useMC_ = myConfig.getUntrackedParameter<bool>("doJetMC");
 }
 
+JetAnalyzer::JetAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
+{
+	dataType_ = producersNames.getUntrackedParameter<string>("dataType","unknown");
+	vJetProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("vjetProducer");
+	jetProducer_ = edm::InputTag(vJetProducer[iter]);
+	useMC_ = myConfig.getUntrackedParameter<bool>("doJetMC");
+}
+
 JetAnalyzer::~JetAnalyzer()
 {
 }
