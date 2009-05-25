@@ -29,6 +29,7 @@ public:
                 ,vetoIso_(false)
 	        ,deltaRClosestJet_(-9999.)
 	        ,d0_(-9999.)
+	        ,d0error_(-9999.)
 		,chi2_(-9999.)
 		,nofValidHits_(-9999)
                 ,innerTrack_(TLorentzVector())
@@ -55,6 +56,7 @@ public:
                 ,vetoIso_(muon.vetoIso_)
 	        ,deltaRClosestJet_(muon.deltaRClosestJet_)
 	        ,d0_(muon.d0_)
+	        ,d0error_(muon.d0error_)
 		,chi2_(muon.chi2_)
 		,nofValidHits_(muon.nofValidHits_)
                 ,innerTrack_(muon.innerTrack_)
@@ -81,6 +83,7 @@ public:
                 ,vetoIso_(false)
 	        ,deltaRClosestJet_(-9999.)
 	        ,d0_(-9999.)
+	        ,d0error_(-9999.)
 		,chi2_(-9999.)
 		,nofValidHits_(-9999)
                 ,innerTrack_(TLorentzVector())
@@ -107,6 +110,7 @@ public:
                 ,vetoIso_(false)
 	        ,deltaRClosestJet_(-9999.)
 	        ,d0_(-9999.)
+	        ,d0error_(-9999.)
 		,chi2_(-9999.)
 		,nofValidHits_(-9999)
                 ,innerTrack_(TLorentzVector())
@@ -133,6 +137,7 @@ public:
                 ,vetoIso_(false)
 	        ,deltaRClosestJet_(-9999.)
 	        ,d0_(-9999.)
+	        ,d0error_(-9999.)
 		,chi2_(-9999.)
 		,nofValidHits_(-9999)
                 ,innerTrack_(TLorentzVector())
@@ -159,6 +164,7 @@ public:
                 ,vetoIso_(false)
 	        ,deltaRClosestJet_(-9999.)
 	        ,d0_(-9999.)
+	        ,d0error_(-9999.)
 		,chi2_(-9999.)
 		,nofValidHits_(-9999)
                 ,innerTrack_(TLorentzVector())
@@ -185,6 +191,7 @@ public:
                 ,vetoIso_(false)
 	        ,deltaRClosestJet_(-9999.)
 	        ,d0_(-9999.)
+	        ,d0error_(-9999.)
 		,chi2_(-9999.)
 		,nofValidHits_(-9999)
                 ,innerTrack_(TLorentzVector())
@@ -236,6 +243,7 @@ public:
         Bool_t vetoIso() const { return vetoIso_;} 
 	Float_t deltaRClosestJet() const { return deltaRClosestJet_;} 
 	Float_t d0() const { return d0_;}  
+	Float_t d0error() const { return d0error_;}  
 	Float_t chi2() const { return chi2_;}
         Int_t nofValidHits() const { return nofValidHits_;}  
         TLorentzVector innerTrack() const { return innerTrack_;}
@@ -287,6 +295,7 @@ public:
 	void SetVetoIso(Bool_t vetoIso) { vetoIso_ = vetoIso;}
 	void SetDeltaRClosestJet(Float_t deltaRClosestJet){ deltaRClosestJet_ = deltaRClosestJet;} 
 	void SetD0(Float_t d0) { d0_ = d0;}    
+	void SetD0Error(Float_t d0Error) { d0error_ = d0Error;}    
 	void SetChi2(Float_t chi2){ chi2_ = chi2;}
         void SetNofValidHits(Int_t nofValidHits){ nofValidHits_ = nofValidHits;}
         void SetInnerTrack (TLorentzVector innerTrack) { innerTrack_ = innerTrack;}
@@ -328,6 +337,7 @@ public:
 	                            // if true-> Isolated
 	Float_t deltaRClosestJet_;  // minimal DeltaR with the closest Jet (after requirements)
 	Float_t d0_;                // d0 of global Muon
+	Float_t d0error_;           // d0 error of global Muon
 	Float_t chi2_;              // chi2 of global Muon
         Int_t nofValidHits_;        // nof hits of inner track
         TLorentzVector innerTrack_; // inner track 
@@ -342,5 +352,6 @@ public:
 };
 
 #endif
+
 
 
