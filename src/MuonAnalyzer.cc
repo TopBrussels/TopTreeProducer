@@ -113,6 +113,7 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
       if (muon->isGlobalMuon ())
 	{
 	  localMuon.SetD0 (muon->innerTrack()->dxy(beamSpot));
+	  localMuon.SetD0Error (sqrt(pow(muon->innerTrack()->dxyError(),2)+pow(beamSpotHandle->BeamWidth(),2)));
 	  localMuon.SetChi2 (muon->globalTrack()->normalizedChi2 ());
 	  localMuon.SetNofValidHits (muon->innerTrack()->numberOfValidHits ());
 	  localMuon.SetInnerTrack (TLorentzVector (muon->innerTrack()->px (), muon->innerTrack ()->py(), muon->innerTrack()->pz (), muon->innerTrack()->p ()));
@@ -186,3 +187,4 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
 	cout << "   [" << setw (3) << j << "] " << localMuon << endl;
     }
 }
+
