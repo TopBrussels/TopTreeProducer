@@ -27,7 +27,7 @@ SpinCorrGenAnalyzer::~SpinCorrGenAnalyzer()
 }
 
 
-//TLorentzVector  P4toTLV(reco::Particle::LorentzVector a){ return TLorentzVector(a.px(), a.py(), a.pz(), a.energy());}
+TLorentzVector  MyP4toTLV(reco::Particle::LorentzVector a){ return TLorentzVector(a.px(), a.py(), a.pz(), a.energy());}
 
 void SpinCorrGenAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootSpinCorrGen){
 
@@ -43,6 +43,7 @@ void SpinCorrGenAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootSp
 	double cosThetaTLHel= -9999;
 	double cosThetaTBHel= -9999;
 	double cosThetaTQHel= -9999;
+	double cosPhi= -9999;
 	double topsZMFMass =-9999;
 
 	if(genEvt->isSemiLeptonic(WDecay::kMuon)){
@@ -52,45 +53,78 @@ void SpinCorrGenAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootSp
 	  // boost particle 4-vectors to tt ZMF
 	  if(genEvt->leptonicDecayTop() && genEvt->hadronicDecayTop() && genEvt->singleLepton() && genEvt->hadronicDecayB() && genEvt->hadronicDecayQuark()&& genEvt->hadronicDecayQuarkBar() ){
 	    
-	    reco::Particle::LorentzVector tLeptonicZMF(ROOT::Math::VectorUtil::boost(genEvt->leptonicDecayTop()->p4(), topsZMF.BoostToCM()));
-	    reco::Particle::LorentzVector tHadronicZMF(ROOT::Math::VectorUtil::boost(genEvt->hadronicDecayTop()->p4(), topsZMF.BoostToCM()));
-	    reco::Particle::LorentzVector lLeptonicZMF(ROOT::Math::VectorUtil::boost(genEvt->singleLepton()->p4(), topsZMF.BoostToCM()));
-	    reco::Particle::LorentzVector bHadronicZMF(ROOT::Math::VectorUtil::boost(genEvt->hadronicDecayB()->p4(), topsZMF.BoostToCM()));
-	    reco::Particle::LorentzVector q1HadronicZMF(ROOT::Math::VectorUtil::boost(genEvt->hadronicDecayQuark()->p4(), topsZMF.BoostToCM()));
-	    reco::Particle::LorentzVector q2HadronicZMF(ROOT::Math::VectorUtil::boost(genEvt->hadronicDecayQuarkBar()->p4(), topsZMF.BoostToCM()));
+	    TLorentzVector leptonicDecayTop;
+	    TLorentzVector hadronicDecayTop;
+	    TLorentzVector hadronicDecayB;
+	    TLorentzVector hadronicDecayQuark;
+	    TLorentzVector hadronicDecayQuarkBar;
+	    TLorentzVector Muon;
 	    
+	    hadronicDecayTop      = MyP4toTLV(genEvt->hadronicDecayTop()->p4());		
+	    leptonicDecayTop      = MyP4toTLV(genEvt->leptonicDecayTop()->p4());		
+	    hadronicDecayB        = MyP4toTLV(genEvt->hadronicDecayB()->p4());
+	    hadronicDecayQuark    = MyP4toTLV(genEvt->hadronicDecayQuark()->p4());
+	    hadronicDecayQuarkBar = MyP4toTLV(genEvt->hadronicDecayQuarkBar()->p4());
+	    Muon                  = MyP4toTLV(genEvt->singleLepton()->p4());
+	    
+	    
+	    TLorentzVector topsZMF = leptonicDecayTop+ hadronicDecayTop;
+	    
+	    // boost particle 4-vectors to tt ZMF
+	    TLorentzVector tLeptonicZMF  = leptonicDecayTop;
+	    TLorentzVector tHadronicZMF  = hadronicDecayTop;
+	    TLorentzVector lLeptonicZMF  = Muon;
+	    TLorentzVector bHadronicZMF  = hadronicDecayB; 
+	    TLorentzVector q1HadronicZMF = hadronicDecayQuark;
+	    TLorentzVector q2HadronicZMF = hadronicDecayQuarkBar;
+	    
+	    tLeptonicZMF.Boost(- topsZMF.BoostVector()); 
+	    tHadronicZMF.Boost(- topsZMF.BoostVector()); 
+	    lLeptonicZMF.Boost(- topsZMF.BoostVector());  
+	    bHadronicZMF.Boost(- topsZMF.BoostVector());  
+	    q1HadronicZMF.Boost(- topsZMF.BoostVector()); 
+	    q2HadronicZMF.Boost(- topsZMF.BoostVector()); 
+
 	    //--------------------------------------------------------------------------------
 	    // build spin basis unit vectors
-	    reco::Particle::Vector leptHelZMF(tLeptonicZMF.Vect().Unit());    
-	    reco::Particle::Vector hadrHelZMF(tHadronicZMF.Vect().Unit()); // = -leptHelZMF
-	    
-	    reco::Particle::Vector q1HadZMF(q1HadronicZMF.Vect().Unit());
-	    reco::Particle::Vector q2HadZMF(q2HadronicZMF.Vect().Unit());
-	    reco::Particle::Vector qHadZMF(q1HadronicZMF.energy() < q2HadronicZMF.energy() ? // only lower energy quark used
-					   q1HadZMF :
-					   q2HadZMF);
-	    
+	    TVector3 leptHelZMF(tLeptonicZMF.Vect().Unit());    
+	    TVector3 hadrHelZMF(tHadronicZMF.Vect().Unit()); // = -leptHelZMF
+	    TVector3 q1HadZMF(q1HadronicZMF.Vect().Unit());
+	    TVector3 q2HadZMF(q2HadronicZMF.Vect().Unit());
+	    TVector3 qHadZMF(q1HadronicZMF.E() < q2HadronicZMF.E() ? 
+			     q1HadZMF :
+			     q2HadZMF);// only lower energy quark used
+      
 	    // boost 4-vectors to t(bar) rest frames
-	    reco::Particle::LorentzVector lLeptonicTRest(ROOT::Math::VectorUtil::boost(lLeptonicZMF, tLeptonicZMF.BoostToCM()));
-	    reco::Particle::LorentzVector bHadronicTRest(ROOT::Math::VectorUtil::boost(bHadronicZMF, tHadronicZMF.BoostToCM()));
-	    reco::Particle::LorentzVector q1HadronicTRest(ROOT::Math::VectorUtil::boost(q1HadronicZMF, tHadronicZMF.BoostToCM()));
-	    reco::Particle::LorentzVector q2HadronicTRest(ROOT::Math::VectorUtil::boost(q2HadronicZMF, tHadronicZMF.BoostToCM()));
-	    reco::Particle::LorentzVector qHadronicTRest(q1HadronicTRest.energy() < q2HadronicTRest.energy() ? // only lower energy quark used
-							 q1HadronicTRest :
-							 q2HadronicTRest);
+	    TLorentzVector lLeptonicTRest  = lLeptonicZMF; //, tLeptonicZMF.BoostToCM()));
+	    TLorentzVector bHadronicTRest  = bHadronicZMF; //, tHadronicZMF.BoostToCM()));
+	    TLorentzVector q1HadronicTRest = q1HadronicZMF;//, tHadronicZMF.BoostToCM()));
+	    TLorentzVector q2HadronicTRest = q2HadronicZMF;//, tHadronicZMF.BoostToCM()));
+	    TLorentzVector qHadronicTRest;
 	    
+	    lLeptonicTRest.Boost(- tLeptonicZMF.BoostVector());  
+	    bHadronicTRest.Boost(- tHadronicZMF.BoostVector());   
+	    q1HadronicTRest.Boost(- tHadronicZMF.BoostVector());   
+	    q2HadronicTRest.Boost(- tHadronicZMF.BoostVector());   
+	    qHadronicTRest.Boost( -tHadronicZMF.BoostVector());   
+	    
+	    qHadronicTRest  = (q1HadronicTRest.E() < q2HadronicTRest.E() ? 
+			       q1HadronicTRest :
+			       q2HadronicTRest);// only lower energy quark used
+	    
+     
 	    // extract particle directions in t(bar) rest frames
-	    reco::Particle::Vector lDirectionTRest(lLeptonicTRest.Vect().Unit());
-	    reco::Particle::Vector bDirectionTRest(bHadronicTRest.Vect().Unit());
-	    reco::Particle::Vector q1DirectionTRest(q1HadronicTRest.Vect().Unit());
-	    reco::Particle::Vector q2DirectionTRest(q2HadronicTRest.Vect().Unit());
-	    reco::Particle::Vector qDirectionTRest(qHadronicTRest.Vect().Unit());
-	    
+	    TVector3 lDirectionTRest =lLeptonicTRest.Vect().Unit();
+	    TVector3 bDirectionTRest =bHadronicTRest.Vect().Unit();
+	    TVector3 q1DirectionTRest=q1HadronicTRest.Vect().Unit();
+	    TVector3 q2DirectionTRest=q2HadronicTRest.Vect().Unit();
+	    TVector3 qDirectionTRest =qHadronicTRest.Vect().Unit();
 	    
 	    cosThetaTLHel = leptHelZMF.Dot(lDirectionTRest);
 	    cosThetaTBHel = hadrHelZMF.Dot(bDirectionTRest);
 	    cosThetaTQHel = hadrHelZMF.Dot(qDirectionTRest);
-	    topsZMFMass = topsZMF.mass();
+	    cosPhi = lDirectionTRest.Dot(qDirectionTRest);
+	    topsZMFMass = topsZMF.M();
 	    
 	    
 	
@@ -99,6 +133,7 @@ void SpinCorrGenAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootSp
 	    localSSG.setcosThetaTLHel(cosThetaTLHel); 
 	    localSSG.setcosThetaTBHel(cosThetaTBHel);
 	    localSSG.setcosThetaTQHel(cosThetaTQHel);
+	    localSSG.setcosPhi(cosPhi);
 	    localSSG.settopsZMFMass(topsZMFMass);
 	    
 	    new( (*rootSpinCorrGen)[0] ) TRootSpinCorrGen(localSSG);
