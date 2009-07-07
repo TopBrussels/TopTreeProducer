@@ -162,6 +162,9 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
 	  // leptonID apparently not initialised in PAT...
 	  // cout << "Valeur pourrie du leptonID=" << patMuon->leptonID() << endl;
 
+	  if (patMuon->ecalIsoDeposit ()) localMuon.SetVetoEm  (patMuon->ecalIsoDeposit ()->candEnergy ());
+	  if (patMuon->hcalIsoDeposit ()) localMuon.SetVetoHad (patMuon->hcalIsoDeposit ()->candEnergy ());
+
 	  if (patMuon->ecalIsoDeposit () && patMuon->hcalIsoDeposit ())
 	    {
 	      if (patMuon->ecalIsoDeposit ()->candEnergy () < 4 && patMuon->hcalIsoDeposit ()->candEnergy () < 6)
