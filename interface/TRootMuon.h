@@ -27,6 +27,8 @@ public:
 		,matchesValid_(false)
 		,isolationValid_(false)
                 ,vetoIso_(false)
+		,vetoEm_(-9999)
+		,vetoHad_(-9999)
 	        ,deltaRClosestJet_(-9999.)
 	        ,d0_(-9999.)
 	        ,d0error_(-9999.)
@@ -54,6 +56,8 @@ public:
 		,matchesValid_(muon.matchesValid_)
 		,isolationValid_(muon.isolationValid_)
                 ,vetoIso_(muon.vetoIso_)
+                ,vetoEm_(muon.vetoEm_)
+                ,vetoHad_(muon.vetoHad_)
 	        ,deltaRClosestJet_(muon.deltaRClosestJet_)
 	        ,d0_(muon.d0_)
 	        ,d0error_(muon.d0error_)
@@ -81,6 +85,8 @@ public:
 		,matchesValid_(false)
 		,isolationValid_(false)
                 ,vetoIso_(false)
+		,vetoEm_(-9999)
+		,vetoHad_(-9999)
 	        ,deltaRClosestJet_(-9999.)
 	        ,d0_(-9999.)
 	        ,d0error_(-9999.)
@@ -108,6 +114,8 @@ public:
 		,matchesValid_(false)
 		,isolationValid_(false)
                 ,vetoIso_(false)
+		,vetoEm_(-9999)
+		,vetoHad_(-9999)
 	        ,deltaRClosestJet_(-9999.)
 	        ,d0_(-9999.)
 	        ,d0error_(-9999.)
@@ -135,6 +143,8 @@ public:
 		,matchesValid_(false)
 		,isolationValid_(false)
                 ,vetoIso_(false)
+		,vetoEm_(-9999)
+		,vetoHad_(-9999)
 	        ,deltaRClosestJet_(-9999.)
 	        ,d0_(-9999.)
 	        ,d0error_(-9999.)
@@ -162,6 +172,8 @@ public:
 		,matchesValid_(false)
 		,isolationValid_(false)
                 ,vetoIso_(false)
+		,vetoEm_(-9999)
+		,vetoHad_(-9999)
 	        ,deltaRClosestJet_(-9999.)
 	        ,d0_(-9999.)
 	        ,d0error_(-9999.)
@@ -189,6 +201,8 @@ public:
 		,matchesValid_(false)
 		,isolationValid_(false)
                 ,vetoIso_(false)
+		,vetoEm_(-9999)
+		,vetoHad_(-9999)
 	        ,deltaRClosestJet_(-9999.)
 	        ,d0_(-9999.)
 	        ,d0error_(-9999.)
@@ -293,6 +307,8 @@ public:
 	{ id_ = trackerMuonArbitrated*1 + allArbitrated*2 + globalMuonPromptTight*4 + tmLastStationLoose*8 + tmLastStationTight*16 + tm2DCompatibilityLoose*32 + tm2DCompatibilityTight*64; }
         
 	void SetVetoIso(Bool_t vetoIso) { vetoIso_ = vetoIso;}
+	void SetVetoEm(Float_t vetoEm) { vetoEm_ = vetoEm;}
+	void SetVetoHad(Float_t vetoHad) { vetoHad_ = vetoHad;}
 	void SetDeltaRClosestJet(Float_t deltaRClosestJet){ deltaRClosestJet_ = deltaRClosestJet;} 
 	void SetD0(Float_t d0) { d0_ = d0;}    
 	void SetD0Error(Float_t d0Error) { d0error_ = d0Error;}    
@@ -335,6 +351,8 @@ public:
         //New variables
         Bool_t vetoIso_;            //veto conesize is 0.07  in the ecal and 0.1 in the hcal
 	                            // if true-> Isolated
+	Float_t vetoEm_;            //veto conesize is 0.07  in the ecal
+	Float_t vetoHad_;           //veto conesize is 0.1  in the hcal
 	Float_t deltaRClosestJet_;  // minimal DeltaR with the closest Jet (after requirements)
 	Float_t d0_;                // d0 of global Muon
 	Float_t d0error_;           // d0 error of global Muon
