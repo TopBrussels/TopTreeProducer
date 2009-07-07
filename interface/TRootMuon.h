@@ -255,6 +255,8 @@ public:
 
 
         Bool_t vetoIso() const { return vetoIso_;} 
+        Float_t vetoEm() const { return vetoEm_;} 
+        Float_t vetoHad() const { return vetoHad_;} 
 	Float_t deltaRClosestJet() const { return deltaRClosestJet_;} 
 	Float_t d0() const { return d0_;}  
 	Float_t d0error() const { return d0error_;}  
