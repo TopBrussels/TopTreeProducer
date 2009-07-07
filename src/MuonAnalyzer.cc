@@ -113,6 +113,7 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
       if (muon->isGlobalMuon ())
 	{
 	  localMuon.SetD0 (muon->innerTrack()->dxy(beamSpot));
+	  localMuon.SetD0Error (sqrt(pow(muon->innerTrack()->dxyError(),2)+pow(beamSpotHandle->BeamWidth(),2)));
 	  localMuon.SetChi2 (muon->globalTrack()->normalizedChi2 ());
 	  localMuon.SetNofValidHits (muon->innerTrack()->numberOfValidHits ());
 	  localMuon.SetInnerTrack (TLorentzVector (muon->innerTrack()->px (), muon->innerTrack ()->py(), muon->innerTrack()->pz (), muon->innerTrack()->p ()));
@@ -161,6 +162,9 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
 	  // leptonID apparently not initialised in PAT...
 	  // cout << "Valeur pourrie du leptonID=" << patMuon->leptonID() << endl;
 
+	  if (patMuon->ecalIsoDeposit ()) localMuon.SetVetoEm  (patMuon->ecalIsoDeposit ()->candEnergy ());
+	  if (patMuon->hcalIsoDeposit ()) localMuon.SetVetoHad (patMuon->hcalIsoDeposit ()->candEnergy ());
+
 	  if (patMuon->ecalIsoDeposit () && patMuon->hcalIsoDeposit ())
 	    {
 	      if (patMuon->ecalIsoDeposit ()->candEnergy () < 4 && patMuon->hcalIsoDeposit ()->candEnergy () < 6)
@@ -186,3 +190,4 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
 	cout << "   [" << setw (3) << j << "] " << localMuon << endl;
     }
 }
+

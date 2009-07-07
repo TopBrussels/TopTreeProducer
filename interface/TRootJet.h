@@ -84,6 +84,7 @@ public:
 		,cCorrection_(jet.cCorrection_)
 		,udsCorrection_(jet.udsCorrection_)
 		,gCorrection_(jet.gCorrection_)
+	        ,partonFlavour_(jet.partonFlavour_)
 		,isTopJet_(jet.isTopJet_)
 		,genParton_(jet.genParton_)
 		{;}
@@ -306,7 +307,8 @@ public:
 	Float_t udsCorrection() const { return udsCorrection_; }
 	Float_t gCorrection() const { return gCorrection_; }
 	TObject* genParton() const { return genParton_.GetObject(); }
-	Float_t partonFlavour() const {return partonFlavour_; }
+	Int_t partonFlavour() const {return partonFlavour_; }
+	//Float_t partonFlavour() const {return partonFlavour_; }
 	Bool_t isTopJet() const { return isTopJet_; }
 
 	virtual TString typeName() const { return "TRootJet"; }

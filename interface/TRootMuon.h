@@ -27,8 +27,11 @@ public:
 		,matchesValid_(false)
 		,isolationValid_(false)
                 ,vetoIso_(false)
+		,vetoEm_(-9999)
+		,vetoHad_(-9999)
 	        ,deltaRClosestJet_(-9999.)
 	        ,d0_(-9999.)
+	        ,d0error_(-9999.)
 		,chi2_(-9999.)
 		,nofValidHits_(-9999)
                 ,innerTrack_(TLorentzVector())
@@ -53,8 +56,11 @@ public:
 		,matchesValid_(muon.matchesValid_)
 		,isolationValid_(muon.isolationValid_)
                 ,vetoIso_(muon.vetoIso_)
+                ,vetoEm_(muon.vetoEm_)
+                ,vetoHad_(muon.vetoHad_)
 	        ,deltaRClosestJet_(muon.deltaRClosestJet_)
 	        ,d0_(muon.d0_)
+	        ,d0error_(muon.d0error_)
 		,chi2_(muon.chi2_)
 		,nofValidHits_(muon.nofValidHits_)
                 ,innerTrack_(muon.innerTrack_)
@@ -79,8 +85,11 @@ public:
 		,matchesValid_(false)
 		,isolationValid_(false)
                 ,vetoIso_(false)
+		,vetoEm_(-9999)
+		,vetoHad_(-9999)
 	        ,deltaRClosestJet_(-9999.)
 	        ,d0_(-9999.)
+	        ,d0error_(-9999.)
 		,chi2_(-9999.)
 		,nofValidHits_(-9999)
                 ,innerTrack_(TLorentzVector())
@@ -105,8 +114,11 @@ public:
 		,matchesValid_(false)
 		,isolationValid_(false)
                 ,vetoIso_(false)
+		,vetoEm_(-9999)
+		,vetoHad_(-9999)
 	        ,deltaRClosestJet_(-9999.)
 	        ,d0_(-9999.)
+	        ,d0error_(-9999.)
 		,chi2_(-9999.)
 		,nofValidHits_(-9999)
                 ,innerTrack_(TLorentzVector())
@@ -131,8 +143,11 @@ public:
 		,matchesValid_(false)
 		,isolationValid_(false)
                 ,vetoIso_(false)
+		,vetoEm_(-9999)
+		,vetoHad_(-9999)
 	        ,deltaRClosestJet_(-9999.)
 	        ,d0_(-9999.)
+	        ,d0error_(-9999.)
 		,chi2_(-9999.)
 		,nofValidHits_(-9999)
                 ,innerTrack_(TLorentzVector())
@@ -157,8 +172,11 @@ public:
 		,matchesValid_(false)
 		,isolationValid_(false)
                 ,vetoIso_(false)
+		,vetoEm_(-9999)
+		,vetoHad_(-9999)
 	        ,deltaRClosestJet_(-9999.)
 	        ,d0_(-9999.)
+	        ,d0error_(-9999.)
 		,chi2_(-9999.)
 		,nofValidHits_(-9999)
                 ,innerTrack_(TLorentzVector())
@@ -183,8 +201,11 @@ public:
 		,matchesValid_(false)
 		,isolationValid_(false)
                 ,vetoIso_(false)
+		,vetoEm_(-9999)
+		,vetoHad_(-9999)
 	        ,deltaRClosestJet_(-9999.)
 	        ,d0_(-9999.)
+	        ,d0error_(-9999.)
 		,chi2_(-9999.)
 		,nofValidHits_(-9999)
                 ,innerTrack_(TLorentzVector())
@@ -234,8 +255,11 @@ public:
 
 
         Bool_t vetoIso() const { return vetoIso_;} 
+        Float_t vetoEm() const { return vetoEm_;} 
+        Float_t vetoHad() const { return vetoHad_;} 
 	Float_t deltaRClosestJet() const { return deltaRClosestJet_;} 
 	Float_t d0() const { return d0_;}  
+	Float_t d0error() const { return d0error_;}  
 	Float_t chi2() const { return chi2_;}
         Int_t nofValidHits() const { return nofValidHits_;}  
         TLorentzVector innerTrack() const { return innerTrack_;}
@@ -285,8 +309,11 @@ public:
 	{ id_ = trackerMuonArbitrated*1 + allArbitrated*2 + globalMuonPromptTight*4 + tmLastStationLoose*8 + tmLastStationTight*16 + tm2DCompatibilityLoose*32 + tm2DCompatibilityTight*64; }
         
 	void SetVetoIso(Bool_t vetoIso) { vetoIso_ = vetoIso;}
+	void SetVetoEm(Float_t vetoEm) { vetoEm_ = vetoEm;}
+	void SetVetoHad(Float_t vetoHad) { vetoHad_ = vetoHad;}
 	void SetDeltaRClosestJet(Float_t deltaRClosestJet){ deltaRClosestJet_ = deltaRClosestJet;} 
 	void SetD0(Float_t d0) { d0_ = d0;}    
+	void SetD0Error(Float_t d0Error) { d0error_ = d0Error;}    
 	void SetChi2(Float_t chi2){ chi2_ = chi2;}
         void SetNofValidHits(Int_t nofValidHits){ nofValidHits_ = nofValidHits;}
         void SetInnerTrack (TLorentzVector innerTrack) { innerTrack_ = innerTrack;}
@@ -326,8 +353,11 @@ public:
         //New variables
         Bool_t vetoIso_;            //veto conesize is 0.07  in the ecal and 0.1 in the hcal
 	                            // if true-> Isolated
+	Float_t vetoEm_;            //veto conesize is 0.07  in the ecal
+	Float_t vetoHad_;           //veto conesize is 0.1  in the hcal
 	Float_t deltaRClosestJet_;  // minimal DeltaR with the closest Jet (after requirements)
 	Float_t d0_;                // d0 of global Muon
+	Float_t d0error_;           // d0 error of global Muon
 	Float_t chi2_;              // chi2 of global Muon
         Int_t nofValidHits_;        // nof hits of inner track
         TLorentzVector innerTrack_; // inner track 
@@ -342,5 +372,6 @@ public:
 };
 
 #endif
+
 
 
