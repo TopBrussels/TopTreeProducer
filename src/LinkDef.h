@@ -5,6 +5,8 @@
 #include "../interface/TRootMCParticle.h"
 #include "../interface/TRootJet.h"
 #include "../interface/TRootMuon.h"
+#include "../interface/TRootCosmicMuon.h"
+#include "../interface/TRootTrack.h"
 #include "../interface/TRootElectron.h"
 #include "../interface/TRootSignalEvent.h"
 #include "../interface/TRootMET.h"
@@ -16,6 +18,7 @@
 #include "../interface/TRootTopCandidate.h"
 #include "../interface/TRootCompositeCandidate.h"
 #include "../interface/TRootSemiLepEvent.h"
+#include "../interface/TRootXYZPoint.h"
 #else
 #include "../interface/TRootRun.h"
 #include "../interface/TRootEvent.h"
@@ -23,6 +26,8 @@
 #include "../interface/TRootMCParticle.h"
 #include "../interface/TRootJet.h"
 #include "../interface/TRootMuon.h"
+#include "../interface/TRootCosmicMuon.h"
+#include "../interface/TRootTrack.h"
 #include "../interface/TRootElectron.h"
 #include "../interface/TRootSignalEvent.h"
 #include "../interface/TRootMET.h"
@@ -34,6 +39,7 @@
 #include "../interface/TRootTopCandidate.h"
 #include "../interface/TRootCompositeCandidate.h"
 #include "../interface/TRootSemiLepEvent.h"
+#include "../interface/TRootXYZPoint.h"
 #endif
 
 #ifdef __CINT__
@@ -47,6 +53,8 @@
 #pragma link C++ class TRootMCParticle;
 #pragma link C++ class TRootJet;
 #pragma link C++ class TRootMuon;
+#pragma link C++ class TRootCosmicMuon;
+#pragma link C++ class TRootTrack;
 #pragma link C++ class TRootElectron;
 #pragma link C++ class TRootSignalEvent;
 #pragma link C++ class TRootMET;
@@ -58,5 +66,6 @@
 #pragma link C++ class TRootTopCandidate;
 #pragma link C++ class TRootCompositeCandidate;
 #pragma link C++ class TRootSemiLepEvent;
+#pragma link C++ class TRootXYZPoint;
 
 #endif
