@@ -39,6 +39,7 @@ process.source = cms.Source("PoolSource",
 	#fileNames = cms.untracked.vstring('file:/user/echabert/CMSSW/CMSSW_2_2_6/src/NewPhysicsAnalysis/SUSYAnalysis/TopSUSYEvents.root')
 	#fileNames = cms.untracked.vstring('dcap:///pnfs/iihe/cms/store/user/ghammad/CMSSW223/Common/PATLayer1/TauolaTTbar/PATLayer1_1.root')
 #	fileNames = cms.untracked.vstring('dcap:///pnfs/iihe/cms/store/user/jmmaes/TTJets-madgraph/CMSSW227_R3_TTJets-madgraph_redigi_ns_3_PATLayer1WithTtGenEvt/5806ec35aac362025b4eea830982d55c/PATLayer1Ext_1.root')
+#fileNames = cms.untracked.vstring('/store/data/Commissioning08/Cosmics/RAW-RECO/CRAFT-ALL-V13-2213-Tosca090322_2pi-scaled-ReReco-FromSuperPointing-v1/0001/02AFE1E4-775D-DE11-BC49-001731AF67E1.root')
 )
 #process.load("TopBrussels.SanityChecker.PATLayer1_R3_TauolaTTbar_redigi_NoEvtSel_input_cfi")
 #process.load("TopBrussels.SanityChecker.PATLayer1_R3_InclusiveMuPt15_redigi_input_cfi")
@@ -84,6 +85,10 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		doJet = cms.untracked.bool(True),
 		doJetStudy = cms.untracked.bool(True),
 		doMuon = cms.untracked.bool(True),
+
+                doCosmicMuon = cms.untracked.bool(False),
+		doCosmicMuonTrack = cms.untracked.bool(False),
+                
 		doElectron = cms.untracked.bool(True),
 		runSuperCluster = cms.untracked.bool(False),#true only if SuperCluster are stored
 		doMET = cms.untracked.bool(True),
@@ -122,6 +127,8 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		jetProducer = cms.InputTag("iterativeCone5CaloJets"),
 		vjetProducer = cms.untracked.vstring("iterativeCone5CaloJets"),
 		muonProducer = cms.InputTag("muons"),
+                CosmicMuonProducer1Leg = cms.InputTag("muons1Leg"),
+		CosmicMuonProducer2Leg = cms.InputTag("muons"),
 		electronProducer = cms.InputTag("pixelMatchGsfElectrons"),
 		metProducer = cms.InputTag("met"),
 	        genEventProducer = cms.InputTag("genEvt")
@@ -135,6 +142,8 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		jetProducer = cms.InputTag("iterativeCone5CaloJets"),
 		vjetProducer = cms.untracked.vstring("iterativeCone5CaloJets"),
 		muonProducer = cms.InputTag("muons"),
+                CosmicMuonProducer1Leg = cms.InputTag("muons1Leg"),
+		CosmicMuonProducer2Leg = cms.InputTag("muons"),
 		electronProducer = cms.InputTag("pixelMatchGsfElectrons"),
 		metProducer = cms.InputTag("met"),
 	        genEventProducer = cms.InputTag("genEvt")
