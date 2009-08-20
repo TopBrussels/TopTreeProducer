@@ -108,12 +108,11 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
 
       localMuon.setDirection (muon->time ().direction ());
       localMuon.setAlgo (muon->type ());
-      localMuon.setID (int (muon->isGood (reco::Muon::TrackerMuonArbitrated)), int (muon->isGood (reco::Muon::AllArbitrated)), int (muon->isGood (reco::Muon::GlobalMuonPromptTight)), int (muon->isGood (reco::Muon::TMLastStationLoose)),
-		       int (muon->isGood (reco::Muon::TMLastStationTight)), int (muon->isGood (reco::Muon::TM2DCompatibilityLoose)), int (muon->isGood (reco::Muon::TM2DCompatibilityTight)));
+      localMuon.setID (int ( muon::isGoodMuon ( *muon, muon::AllGlobalMuons)), int ( muon::isGoodMuon ( *muon, muon::AllTrackerMuons)), int ( muon::isGoodMuon ( *muon, muon::AllStandAloneMuons)), int ( muon::isGoodMuon ( *muon, muon::TrackerMuonArbitrated)), int ( muon::isGoodMuon ( *muon, muon::AllArbitrated)), int ( muon::isGoodMuon ( *muon, muon::GlobalMuonPromptTight)), int ( muon::isGoodMuon (*muon, muon::TMLastStationLoose)), int ( muon::isGoodMuon ( *muon, muon::TMLastStationTight)), int ( muon::isGoodMuon ( *muon, muon::TMOneStationLoose)), int ( muon::isGoodMuon ( *muon, muon::TMOneStationTight)), int ( muon::isGoodMuon ( *muon, muon::TMLastStationOptimizedLowPtLoose)), int ( muon::isGoodMuon ( *muon, muon::TMLastStationOptimizedLowPtTight)), int ( muon::isGoodMuon ( *muon, muon::TM2DCompatibilityLoose)), int ( muon::isGoodMuon ( *muon, muon::TM2DCompatibilityTight)));
       if (muon->isGlobalMuon ())
 	{
 	  localMuon.SetD0 (muon->innerTrack()->dxy(beamSpot));
-	  localMuon.SetD0Error (sqrt(pow(muon->innerTrack()->dxyError(),2)+pow(beamSpotHandle->BeamWidth(),2)));
+	  localMuon.SetD0Error (sqrt(pow(muon->innerTrack()->dxyError(),2)+pow(beamSpotHandle->BeamWidthX(),2)+ pow(beamSpotHandle->BeamWidthY(),2)));
 	  localMuon.SetChi2 (muon->globalTrack()->normalizedChi2 ());
 	  localMuon.SetNofValidHits (muon->innerTrack()->numberOfValidHits ());
 	  localMuon.SetInnerTrack (TLorentzVector (muon->innerTrack()->px (), muon->innerTrack ()->py(), muon->innerTrack()->pz (), muon->innerTrack()->p ()));

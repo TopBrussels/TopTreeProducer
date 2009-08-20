@@ -326,14 +326,21 @@ public:
 	Bool_t isCaloMuon() const { return algo_ & 16; }
 
 	Int_t id() const { return id_;}
-	Bool_t idTrackerMuonArbitrated() const { return id_ & 1; }
-	Bool_t idAllArbitrated() const { return id_ & 2; }
-	Bool_t idGlobalMuonPromptTight() const { return id_ & 4; }
-	Bool_t idTMLastStationLoose() const { return id_ & 8; }
-	Bool_t idTMLastStationTight() const { return id_ & 16; }
-	Bool_t idTM2DCompatibilityLoose() const { return id_ & 32; }
-	Bool_t idTM2DCompatibilityTight() const { return id_ & 64; }
-
+	
+	Bool_t idAllGlobalMuons() const { return id_ & 1; }
+        Bool_t idAllTrackerMuons() const { return id_ & 2; }
+        Bool_t idAllStandAloneMuons() const { return id_ & 4; }
+        Bool_t idTrackerMuonArbitrated() const { return id_ & 8; }
+        Bool_t idAllArbitrated() const { return id_ & 16; }
+        Bool_t idGlobalMuonPromptTight() const { return id_ & 32; }
+        Bool_t idTMLastStationLoose() const { return id_ & 64; }
+        Bool_t idTMLastStationTight() const { return id_ & 128; }
+        Bool_t idTMOneStationLoose() const { return id_ & 256; }
+        Bool_t idTMOneStationTight() const { return id_ & 512; }
+        Bool_t idTMLastStationOptimizedLowPtLoose() const { return id_ & 1024; }
+        Bool_t idTMLastStationOptimizedLowPtTight() const { return id_ & 2048; }
+        Bool_t idTM2DCompatibilityLoose() const { return id_ & 4096; }
+        Bool_t idTM2DCompatibilityTight() const { return id_ & 8192; }
 
         Bool_t vetoIso() const { return vetoIso_;} 
         Float_t vetoEm() const { return vetoEm_;} 
@@ -397,16 +404,25 @@ public:
 	void setDirection(Int_t direction) { direction_ = direction; }
 	void setAlgo(Int_t algo) { algo_ = algo; }
 	void setID(Int_t id) { id_ = id; }
-	void setID(
-		Int_t trackerMuonArbitrated
-		,Int_t allArbitrated
-		,Int_t globalMuonPromptTight
-		,Int_t tmLastStationLoose
-		,Int_t tmLastStationTight
-		,Int_t tm2DCompatibilityLoose
-		,Int_t tm2DCompatibilityTight
-	) 
-	{ id_ = trackerMuonArbitrated*1 + allArbitrated*2 + globalMuonPromptTight*4 + tmLastStationLoose*8 + tmLastStationTight*16 + tm2DCompatibilityLoose*32 + tm2DCompatibilityTight*64; }
+	        void setID(
+                Int_t AllGlobalMuons,
+                Int_t AllTrackerMuons,
+                Int_t AllStandAloneMuons,
+                Int_t TrackerMuonArbitrated,
+                Int_t AllArbitrated,
+                Int_t GlobalMuonPromptTight,
+                Int_t TMLastStationLoose,
+                Int_t TMLastStationTight,
+                Int_t TMOneStationLoose,
+                Int_t TMOneStationTight,
+                Int_t TMLastStationOptimizedLowPtLoose,
+                Int_t TMLastStationOptimizedLowPtTight,
+                Int_t TM2DCompatibilityLoose,
+                Int_t TM2DCompatibilityTight
+        )
+        { id_ = AllGlobalMuons*1 + AllTrackerMuons*2 + AllStandAloneMuons*4 + TrackerMuonArbitrated*8 + AllArbitrated*16 + GlobalMuonPromptTight*32
+        + TMLastStationLoose*64 + TMLastStationTight*128 + TMOneStationLoose*256 + TMOneStationTight*512 + TMLastStationOptimizedLowPtLoose*1024
+        + TMLastStationOptimizedLowPtTight*2048 + TM2DCompatibilityLoose*4096 + TM2DCompatibilityTight*8192; }
         
 	void SetVetoIso(Bool_t vetoIso) { vetoIso_ = vetoIso;}
 	void SetVetoEm(Float_t vetoEm) { vetoEm_ = vetoEm;}

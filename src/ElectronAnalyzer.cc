@@ -64,7 +64,7 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 		// Variables from reco::GsfElectron
 		localElectron.setClassification(electron->classification());
 		localElectron.setCaloEnergy(electron->caloEnergy());
-		localElectron.setCaloEnergyError(electron->caloEnergyError());
+		localElectron.setCaloEnergyError(electron->ecalEnergyError());
 		// FIXME - Protect against sqrt(0)
 		localElectron.setTrackMomentum(sqrt(electron->trackMomentumAtVtx().Mag2()));
 		localElectron.setTrackMomentumError(electron->trackMomentumError());
@@ -102,7 +102,7 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 		//const reco::SuperCluster* sc = superCluster.get();
 		if ( superCluster.isNonnull() && runSuperCluster_ )
 		{
-			localElectron.setNbClusters(electron->numberOfClusters());
+			localElectron.setNbClusters(superCluster->clustersSize ());
 			localElectron.setSuperClusterRawEnergy(superCluster->rawEnergy());
 			localElectron.setPreshowerEnergy(superCluster->preshowerEnergy());
 			localElectron.setCaloPosition(
@@ -120,12 +120,12 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 		// need reco::SuperCluster and reco::BasicCluster
 		if ( superCluster.isNonnull() && runSuperCluster_ )
 		{
-			reco::BasicClusterRef seedBasicCluster = superCluster->seed();
+			reco::CaloClusterPtr seedBasicCluster = superCluster->seed();
 			if ( seedBasicCluster.isNonnull() ) localElectron.setClusterAlgo(seedBasicCluster->algo());
 
 			// dR of the cone centered on the reco::GsfElectron and containing all its basic clusters constituents
 			Float_t caloConeSize = 0;
-			for (reco::basicCluster_iterator basicCluster = (*superCluster).clustersBegin(); basicCluster != (*superCluster).clustersEnd(); ++basicCluster )
+			for (reco::CaloCluster_iterator  basicCluster = (*superCluster).clustersBegin(); basicCluster != (*superCluster).clustersEnd(); ++basicCluster )
 			{
 				Float_t dR = localElectron.DeltaR(TLorentzVector( (*basicCluster)->position().x(), (*basicCluster)->position().y(), (*basicCluster)->position().z(), 0. ) );
 				if (dR > caloConeSize) caloConeSize = dR;

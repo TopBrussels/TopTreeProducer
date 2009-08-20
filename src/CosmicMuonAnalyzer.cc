@@ -120,8 +120,8 @@ CosmicMuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootCosmi
 
       localCosmicMuon.setDirection (muon->time ().direction ());
       localCosmicMuon.setAlgo (muon->type ());
-      localCosmicMuon.setID (int (muon->isGood (reco::Muon::TrackerMuonArbitrated)), int (muon->isGood (reco::Muon::AllArbitrated)), int (muon->isGood (reco::Muon::GlobalMuonPromptTight)), int (muon->isGood (reco::Muon::TMLastStationLoose)),
-		       int (muon->isGood (reco::Muon::TMLastStationTight)), int (muon->isGood (reco::Muon::TM2DCompatibilityLoose)), int (muon->isGood (reco::Muon::TM2DCompatibilityTight)));
+      //localCosmicMuon.setID (int (muon::isGoodMuon (muon::TrackerMuonArbitrated)), int (muon::isGoodMuon (muon::AllArbitrated)), int (muon::isGoodMuon (muon::GlobalMuonPromptTight)), int (muon::isGoodMuon (muon::TMLastStationLoose)),int (muon::isGoodMuon (muon::TMLastStationTight)), int (muon::isGoodMuon (muon::TM2DCompatibilityLoose)), int (muon::isGoodMuon (muon::TM2DCompatibilityTight)));
+      localCosmicMuon.setID (int ( muon::isGoodMuon ( *muon, muon::AllGlobalMuons)), int ( muon::isGoodMuon ( *muon, muon::AllTrackerMuons)), int ( muon::isGoodMuon ( *muon, muon::AllStandAloneMuons)), int ( muon::isGoodMuon ( *muon, muon::TrackerMuonArbitrated)), int ( muon::isGoodMuon ( *muon, muon::AllArbitrated)), int ( muon::isGoodMuon ( *muon, muon::GlobalMuonPromptTight)), int ( muon::isGoodMuon (*muon, muon::TMLastStationLoose)), int ( muon::isGoodMuon ( *muon, muon::TMLastStationTight)), int ( muon::isGoodMuon ( *muon, muon::TMOneStationLoose)), int ( muon::isGoodMuon ( *muon, muon::TMOneStationTight)), int ( muon::isGoodMuon ( *muon, muon::TMLastStationOptimizedLowPtLoose)), int ( muon::isGoodMuon ( *muon, muon::TMLastStationOptimizedLowPtTight)), int ( muon::isGoodMuon ( *muon, muon::TM2DCompatibilityLoose)), int ( muon::isGoodMuon ( *muon, muon::TM2DCompatibilityTight)));
       if (muon->isGlobalMuon ()) {
 	localCosmicMuon.SetD0 ((muon->globalTrack())->d0());
 	localCosmicMuon.SetD0Error ((muon->globalTrack())->d0Error());
