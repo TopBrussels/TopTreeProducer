@@ -14,6 +14,7 @@ public:
 	TRootTrack() :
 	  TRootParticle()
 	  ,isValid_(false)
+	  ,chi2_(-9999.)
           ,d0_(-9999.)
           ,d0error_(-9999.)
           ,dz_(-9999.)
@@ -27,6 +28,7 @@ public:
 	TRootTrack(const TRootTrack& track) :
           TRootParticle(track)
 	  ,isValid_(track.isValid_)
+	  ,chi2_(track.chi2_)
           ,d0_(track.d0_)
           ,d0error_(track.d0error_)
           ,dz_(track.dz_)                                        
@@ -40,6 +42,7 @@ public:
 	TRootTrack(const TLorentzVector &momentum, const TVector3 &vertex, Int_t type,Float_t charge ) :
 	  TRootParticle(momentum,vertex,type,charge)
 	  ,isValid_(false)
+	  ,chi2_(-9999.)
 	  ,d0_(-9999.)
           ,d0error_(-9999.)
           ,dz_(-9999.)
@@ -56,6 +59,8 @@ public:
 	// OutPut methods
 
 	Bool_t isValid() const { return isValid_; }
+	
+	Double_t chi2 () const { return chi2_; }
 
 	Double_t d0 () const { return d0_; }
 	Double_t d0Error () const { return d0error_; }
@@ -70,6 +75,8 @@ public:
 	// input methods
 
 	void SetValid (Bool_t valid) { isValid_ = valid; }
+	
+	void SetChi2 ( Double_t chi2 ) { chi2_ = chi2; }
 
 	void SetD0 ( Double_t d0 ) { d0_ = d0;} 
 	void SetD0Error ( Double_t d0error ) { d0error_ = d0error;} 
@@ -117,6 +124,8 @@ public:
  	// charge momentum eta,phi ,... -> TRootParticle
 
 	Bool_t isValid_;
+	
+	Double_t chi2_;
 
 	Double_t d0_;
 	Double_t d0error_;
