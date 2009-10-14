@@ -124,6 +124,8 @@ CosmicMuonTrackAnalyzer::Process(const edm::Event& iEvent, std::string trackType
 	  track.SetValid(true);
 	  
 	  track.SetNofValidHits(Track->numberOfValidHits());
+	  
+	  track.SetChi2(Track->normalizedChi2());
 
 	  track.SetD0(Track->d0());
 	  track.SetD0Error(Track->d0Error());
