@@ -68,8 +68,8 @@ void SemiLepEventAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootS
 	for(TtEvent::HypoClassKey i=TtEvent::kGeom; i<=TtEvent::kKinFit;i=TtEvent::HypoClassKey(i+1)){
 		for(unsigned int j=0;j<semiLepEvent.numberOfAvailableHypos(i);j++){
 	 		if(semiLepEvent.isHypoValid(i,j)){
-			   if(semiLepEvent.lightQuarkP(i,j) && semiLepEvent.lightQuarkQ(i,j) && semiLepEvent.hadronicB(i,j)
-		    	   && semiLepEvent.neutrino(i,j) && semiLepEvent.lepton(i,j) && semiLepEvent.leptonicB(i,j)){
+			   if(semiLepEvent.hadronicDecayQuarkBar(i,j) && semiLepEvent.hadronicDecayQuarkBar(i,j) && semiLepEvent.hadronicDecayB(i,j)
+		    	   && semiLepEvent.singleNeutrino(i,j) && semiLepEvent.singleLepton(i,j) && semiLepEvent.leptonicDecayB(i,j)){
 				TRootJet* quarkP;
 				TRootJet* quarkQ;
 				TRootJet* hadronicB;
@@ -88,28 +88,28 @@ void SemiLepEventAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootS
 				for(int ij=0;ij<rootJets->GetEntriesFast();ij++){
 				        TRootJet* jet = (TRootJet*) rootJets->At(ij);
 					TLorentzVector tljet = TLorentzVector(jet->Px(),jet->Py(),jet->Pz(),jet->Energy());
-					if(P4toTLV(semiLepEvent.lightQuarkP(i,j))==tljet) quarkP = jet;
-					if(P4toTLV(semiLepEvent.lightQuarkQ(i,j))==tljet) quarkQ = jet;
-					if(P4toTLV(semiLepEvent.hadronicB(i,j))==tljet)   hadronicB = jet;
-					if(P4toTLV(semiLepEvent.leptonicB(i,j))==tljet)   leptonicB = jet;
+					if(P4toTLV(semiLepEvent.hadronicDecayQuarkBar(i,j))==tljet) quarkP = jet;
+					if(P4toTLV(semiLepEvent.hadronicDecayQuarkBar(i,j))==tljet) quarkQ = jet;
+					if(P4toTLV(semiLepEvent.hadronicDecayB(i,j))==tljet)   hadronicB = jet;
+					if(P4toTLV(semiLepEvent.leptonicDecayB(i,j))==tljet)   leptonicB = jet;
 				        delete jet;
 				}
 				//search in TRootMuon Collection
 				for(int ij=0;ij<rootMuons->GetEntriesFast();ij++){
 				        TRootMuon* trmuon = (TRootMuon*) rootMuons->At(ij);
 					TLorentzVector tlmuon = TLorentzVector(trmuon->Px(),trmuon->Py(),trmuon->Pz(),trmuon->Energy());
-					if(P4toTLV(semiLepEvent.lepton(i,j))==tlmuon) muon = trmuon;
+					if(P4toTLV(semiLepEvent.singleLepton(i,j))==tlmuon) muon = trmuon;
 				        delete trmuon;
 				}
 				if(!quarkP || !quarkQ || !hadronicB || !leptonicB || !muon){
 				   TLFormat = true;
-				   TLquarkP = P4toTLV(semiLepEvent.lightQuarkP(i,j));
-				   TLquarkQ = P4toTLV(semiLepEvent.lightQuarkQ(i,j));
-				   TLhadronicB = P4toTLV(semiLepEvent.hadronicB(i,j));
-				   TLleptonicB = P4toTLV(semiLepEvent.leptonicB(i,j));
-				   TLmuon = P4toTLV(semiLepEvent.lepton(i,j));
+				   TLquarkP = P4toTLV(semiLepEvent.hadronicDecayQuarkBar(i,j));
+				   TLquarkQ = P4toTLV(semiLepEvent.hadronicDecayQuarkBar(i,j));
+				   TLhadronicB = P4toTLV(semiLepEvent.hadronicDecayB(i,j));
+				   TLleptonicB = P4toTLV(semiLepEvent.leptonicDecayB(i,j));
+				   TLmuon = P4toTLV(semiLepEvent.singleLepton(i,j));
 				}
-				if(semiLepEvent.neutrino(i,j)) neutrino = P4toTLV(semiLepEvent.neutrino(i,j));
+				if(semiLepEvent.singleNeutrino(i,j)) neutrino = P4toTLV(semiLepEvent.singleNeutrino(i,j));
 				
 				if(!TLFormat){
 					TRootWCandidate hadW(quarkP,quarkQ);
@@ -120,7 +120,7 @@ void SemiLepEventAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootS
 					vecTop.push_back(std::pair<TRootTopCandidate,std::string>(hadTop,string("HadTop")));
 					vecTop.push_back(std::pair<TRootTopCandidate,std::string>(lepTop,string("LepTop")));
 					TRootCompositeCandidate compo(vecTop);
-					std::vector<int> vecInt = semiLepEvent.jetLepComb(i,j);
+					std::vector<int> vecInt = semiLepEvent.jetLeptonCombination(i,j);
 			        	TRootSemiLepEvent::HypoCombPair	hypcomb(compo,vecInt);
 			        	TRootSemiLepEvent::HypoClassKey	key = (TRootSemiLepEvent::HypoClassKey)i;
 					semiLepEvt.addEventHypo(key,hypcomb);
@@ -134,7 +134,7 @@ void SemiLepEventAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootS
 					vecTop.push_back(std::pair<TRootTopCandidate,std::string>(hadTop,string("HadTop")));
 					vecTop.push_back(std::pair<TRootTopCandidate,std::string>(lepTop,string("LepTop")));
 					TRootCompositeCandidate compo(vecTop);
-					std::vector<int> vecInt = semiLepEvent.jetLepComb(i,j);
+					std::vector<int> vecInt = semiLepEvent.jetLeptonCombination(i,j);
 			        	TRootSemiLepEvent::HypoCombPair	hypcomb(compo,vecInt);
 			        	TRootSemiLepEvent::HypoClassKey	key = (TRootSemiLepEvent::HypoClassKey)i;
 					semiLepEvt.addEventHypo(key,hypcomb);
