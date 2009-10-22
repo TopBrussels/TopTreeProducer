@@ -48,7 +48,8 @@ void TopTreeProducer::beginJob(const edm::EventSetup&)
 	doNPGenEvent = myConfig_.getUntrackedParameter<bool>("doNPGenEvent",false);
 	doSpinCorrGen = myConfig_.getUntrackedParameter<bool>("doSpinCorrGen",false);
 	doSemiLepEvent = myConfig_.getUntrackedParameter<bool>("doSemiLepEvent",false);
-	vJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vjetProducer");
+	vector<string> defaultVec;
+	vJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vjetProducer",defaultVec);
 
         for(unsigned int s=0;s<vJetProducer.size();s++){
 		TClonesArray* a;
@@ -179,12 +180,7 @@ void TopTreeProducer::beginJob(const edm::EventSetup&)
 // ------------ method called once each job just after ending the event loop  ------------
 void TopTreeProducer::endJob()
 {
-	runTree_->Fill();
 
-	std::cout << "Total number of events: " << nTotEvt_ << std::endl;
-	std::cout << "Closing rootfile " << rootFile_->GetName() << std::endl;
-	rootFile_->Write();
-	rootFile_->Close();
 
 	// Trigger Summary Tables
 	if(doHLT)
@@ -193,6 +189,12 @@ void TopTreeProducer::endJob()
 		hltAnalyzer_ ->copySummary(runInfos_);
 		hltAnalyzer_->printStats();
 	}
+	runTree_->Fill();
+	
+	std::cout << "Total number of events: " << nTotEvt_ << std::endl;
+	std::cout << "Closing rootfile " << rootFile_->GetName() << std::endl;
+	rootFile_->Write();
+	rootFile_->Close();
 
 }
 
