@@ -15,7 +15,7 @@ ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& producersNames, cons
 	dataType_ = producersNames.getUntrackedParameter<string>("dataType","unknown");
 	electronProducer_ = producersNames.getParameter<edm::InputTag>("electronProducer");
 	useMC_ = myConfig.getUntrackedParameter<bool>("doElectronMC");
-	runSuperCluster_ = myConfig.getUntrackedParameter<bool>("runSuperCluster");
+	runSuperCluster_ = myConfig.getUntrackedParameter<bool>("runSuperCluster",false);
 }
 
 ElectronAnalyzer::~ElectronAnalyzer()
