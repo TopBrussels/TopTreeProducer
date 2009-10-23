@@ -140,9 +140,9 @@ CosmicMuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootCosmi
 	{
 
 	  if ((dataType_ == "RECO" || dataType_ == "AOD") && jetType == "CALO")
-	    jet = (const reco::Jet *) (&((*recoCaloJets)[k]));
+	    jet = (const reco::Jet *) (&((*recoCaloJets)[l]));
 	  if ((dataType_ == "RECO" || dataType_ == "AOD") && jetType == "PF")
-	    jet = (const reco::Jet *) (&((*recoPFJets)[k]));
+	    jet = (const reco::Jet *) (&((*recoPFJets)[l]));
 	  
 
 	  if(jet && muon){
