@@ -12,7 +12,9 @@
 #include "TLorentzVector.h"
 
 using namespace std;
+using namespace TopTree;
 
+namespace TopTree{
 class TRootTopCandidate  : public TLorentzVector
 {
 
@@ -51,7 +53,7 @@ protected:
 
 	ClassDef (TRootTopCandidate,1);
 };
-
+}
 #endif
 
 

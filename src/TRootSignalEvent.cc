@@ -1,5 +1,7 @@
 #include "../interface/TRootSignalEvent.h"
 
+using namespace TopTree;
+
 ClassImp(TRootSignalEvent)
 
 

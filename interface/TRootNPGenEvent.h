@@ -11,6 +11,7 @@
 
 using namespace std;
 
+namespace TopTree{
 class TRootNPGenEvent: public TObject{
 
  public:
@@ -86,5 +87,5 @@ class TRootNPGenEvent: public TObject{
   
   ClassDef (TRootNPGenEvent,2); 
 };
-
+}
 #endif

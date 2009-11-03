@@ -17,6 +17,7 @@ using namespace std;
 
 class TCollection;
 
+namespace TopTree{
 class TRootSignalEvent : public TObject
 {
 	
@@ -57,5 +58,5 @@ private:
 	
 	ClassDef (TRootSignalEvent,3);
 };
-
+}
 #endif

@@ -1,5 +1,6 @@
 #include "../interface/TRootGenTop.h"
 
+using namespace TopTree;
   
 
 bool TRootGenTop::isHadronicWellSeparated(float deltaMin_) const{
@@ -23,5 +24,6 @@ float TRootGenTop::DeltaRMinHadronicTop() const{
   return dmin;
 }
  
+
 ClassImp(TRootGenTop)
  

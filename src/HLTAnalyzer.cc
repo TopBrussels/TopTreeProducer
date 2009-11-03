@@ -1,6 +1,7 @@
 #include "../interface/HLTAnalyzer.h"
 
 using namespace std;
+using namespace TopTree;
 
 void HLTAnalyzer::init(const edm::Event& iEvent, TRootEvent* rootEvent)
 {

@@ -8,6 +8,7 @@
 #include <string>
 using namespace std;
 
+namespace TopTree{
 class TRootGenTop : public TRootMCParticle {
 
   
@@ -99,5 +100,5 @@ class TRootGenTop : public TRootMCParticle {
 
   ClassDef (TRootGenTop,1);
 };
-
+}
 #endif

@@ -9,6 +9,7 @@
 
 using namespace std;
 
+namespace TopTree{
 class TRootMET : public TRootParticle
 {
 
@@ -438,5 +439,5 @@ class TRootMET : public TRootParticle
 
   ClassDef (TRootMET,1);
 };
-
+}
 #endif

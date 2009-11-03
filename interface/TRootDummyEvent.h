@@ -1,6 +1,6 @@
 #include "TObject.h"
 #include "TList.h"
-
+namespace TopTree{
 class dummyparticle : public TObject {
 	public :
 		dummyparticle():value(0){}
@@ -21,3 +21,4 @@ class dummyevent : public TObject {
 
         ClassDef(dummyevent,1);
 };
+}

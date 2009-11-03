@@ -12,6 +12,7 @@
 
 using namespace std;
 
+namespace TopTree{
 class TRootCompositeCandidate  : public TLorentzVector
 {
 
@@ -57,7 +58,7 @@ protected:
 
 	ClassDef (TRootCompositeCandidate,1);
 };
-
+}
 #endif
 
 

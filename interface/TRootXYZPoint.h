@@ -2,7 +2,7 @@
 #define TRootXYZPoint_h
 
 #include "TObject.h"
-
+namespace TopTree{
 class TRootXYZPoint : public TObject {
 
    public :
@@ -51,5 +51,5 @@ class TRootXYZPoint : public TObject {
    ClassDef(TRootXYZPoint,1);
 
 };
-
+}
 #endif

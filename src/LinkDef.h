@@ -42,30 +42,31 @@
 #include "../interface/TRootXYZPoint.h"
 #endif
 
+
 #ifdef __CINT__
 #pragma link off all globals;
 #pragma link off all classes;
 #pragma link off all functions;
 
-#pragma link C++ class TRootRun;
-#pragma link C++ class TRootEvent;
-#pragma link C++ class TRootParticle;
-#pragma link C++ class TRootMCParticle;
-#pragma link C++ class TRootJet;
-#pragma link C++ class TRootMuon;
-#pragma link C++ class TRootCosmicMuon;
-#pragma link C++ class TRootTrack;
-#pragma link C++ class TRootElectron;
-#pragma link C++ class TRootSignalEvent;
-#pragma link C++ class TRootMET;
-#pragma link C++ class TRootGenEvent;
-#pragma link C++ class TRootNPGenEvent;
-#pragma link C++ class TRootGenTop;
-#pragma link C++ class TRootSpinCorrGen;
-#pragma link C++ class TRootWCandidate;
-#pragma link C++ class TRootTopCandidate;
-#pragma link C++ class TRootCompositeCandidate;
-#pragma link C++ class TRootSemiLepEvent;
-#pragma link C++ class TRootXYZPoint;
+#pragma link C++ class TopTree::TRootRun;
+#pragma link C++ class TopTree::TRootEvent;
+#pragma link C++ class TopTree::TRootParticle;
+#pragma link C++ class TopTree::TRootMCParticle;
+#pragma link C++ class TopTree::TRootJet;
+#pragma link C++ class TopTree::TRootMuon;
+#pragma link C++ class TopTree::TRootCosmicMuon;
+#pragma link C++ class TopTree::TRootTrack;
+#pragma link C++ class TopTree::TRootElectron;
+#pragma link C++ class TopTree::TRootSignalEvent;
+#pragma link C++ class TopTree::TRootMET;
+#pragma link C++ class TopTree::TRootGenEvent;
+#pragma link C++ class TopTree::TRootNPGenEvent;
+#pragma link C++ class TopTree::TRootGenTop;
+#pragma link C++ class TopTree::TRootSpinCorrGen;
+#pragma link C++ class TopTree::TRootWCandidate;
+#pragma link C++ class TopTree::TRootTopCandidate;
+#pragma link C++ class TopTree::TRootCompositeCandidate;
+#pragma link C++ class TopTree::TRootSemiLepEvent;
+#pragma link C++ class TopTree::TRootXYZPoint;
 
 #endif

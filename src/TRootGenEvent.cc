@@ -2,4 +2,6 @@
 
 
 
+using namespace TopTree;
+
 ClassImp (TRootGenEvent)

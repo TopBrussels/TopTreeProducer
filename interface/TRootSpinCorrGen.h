@@ -13,6 +13,7 @@
 
 using namespace std;
 
+namespace TopTree{
 class TRootSpinCorrGen : public TObject 
 {
 	
@@ -68,5 +69,5 @@ private:
 	
   ClassDef (TRootSpinCorrGen,2);
 };
-
+}
 #endif

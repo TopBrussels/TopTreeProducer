@@ -11,6 +11,7 @@
 
 using namespace std;
 
+namespace TopTree{
 class TRootJet : public TRootParticle
 {
 	
@@ -402,5 +403,5 @@ private:
         TRef genParton_;	
   ClassDef (TRootJet,1);
 };
-
+}
 #endif

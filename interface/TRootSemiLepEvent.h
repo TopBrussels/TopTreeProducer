@@ -11,6 +11,7 @@
 
 #include "TLorentzVector.h"
 
+namespace TopTree{
 namespace TRootSemiLepDaughter{
   /// semi-leptonic daughter names for common
   /// use and use with the hypotheses
@@ -138,5 +139,5 @@ class TRootSemiLepEvent: public TObject {
   ClassDef (TRootSemiLepEvent,1);
 
 };
-
+}
 #endif

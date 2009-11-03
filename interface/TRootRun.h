@@ -11,6 +11,7 @@
 
 using namespace std;
 
+namespace TopTree{
 class TRootRun : public TObject
 {
 	
@@ -90,5 +91,5 @@ public:
 	
 	ClassDef (TRootRun,1);
 };
-
+}
 #endif

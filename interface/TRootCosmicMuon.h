@@ -6,6 +6,7 @@
 
 using namespace std;
 
+namespace TopTree{
 class TRootCosmicMuon : public TRootParticle
 {
 
@@ -489,7 +490,7 @@ public:
 
 	ClassDef (TRootCosmicMuon,1);
 };
-
+}
 #endif
 
 

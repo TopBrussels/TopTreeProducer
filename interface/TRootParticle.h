@@ -11,6 +11,7 @@
 
 using namespace std;
 
+namespace TopTree{
 class TRootParticle : public TLorentzVector
 {
 
@@ -130,7 +131,7 @@ protected:
 
 	ClassDef (TRootParticle,1);
 };
-
+}
 #endif
 
 
