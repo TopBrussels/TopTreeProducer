@@ -21,6 +21,8 @@
 #include "DataFormats/BeamSpot/interface/BeamSpot.h"
 
 #include "../interface/TRootCosmicMuon.h"
+#include "../interface/TRootTrack.h"
+#include "../interface/TRootXYZPoint.h"
 
 #include "TClonesArray.h"
 
@@ -29,16 +31,17 @@ class CosmicMuonAnalyzer{
 	
 public:
 	CosmicMuonAnalyzer(const edm::ParameterSet& producersNames);
-	CosmicMuonAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity);
+	CosmicMuonAnalyzer(const edm::ParameterSet& producersNames, int iter,  const edm::ParameterSet& myConfig, int verbosity);
+
 	~CosmicMuonAnalyzer();
 	void SetVerbosity(int verbosity) {verbosity_ = verbosity; };
-	void Process(const edm::Event& iEvent, TClonesArray* rootCosmicMuons);
+	void Process(const edm::Event& iEvent, TClonesArray* rootCosmicMuons, vector<TClonesArray*> rootCosmicMuonTracks);
 
 private:
 	int verbosity_;
 	std::string dataType_ ;
-	edm::InputTag CosmicMuonProducer1Leg_;
-	edm::InputTag CosmicMuonProducer2Leg_;
+	std::vector<std::string> vCosmicMuonProducer;
+	edm::InputTag CosmicMuonProducer_;
 	edm::InputTag jetProducer_;
 };
 

@@ -31,7 +31,6 @@
 #include "../interface/JetAnalyzer.h"
 #include "../interface/MuonAnalyzer.h"
 #include "../interface/CosmicMuonAnalyzer.h"
-#include "../interface/CosmicMuonTrackAnalyzer.h"
 #include "../interface/ElectronAnalyzer.h"
 #include "../interface/METAnalyzer.h"
 #include "../interface/GenEventAnalyzer.h"
@@ -92,7 +91,6 @@ private:
 	bool doJetStudy;
 	bool doMuon;
 	bool doCosmicMuon;
-	bool doCosmicMuonTrack;
 	bool doElectron;
 	bool doMET;
 	bool doGenEvent;
@@ -100,7 +98,8 @@ private:
 	bool doSpinCorrGen;
 	bool doSemiLepEvent;
 	bool drawMCTree;
-        std::vector<std::string> vJetProducer;	
+        std::vector<std::string> vJetProducer;
+	std::vector<std::string> vCosmicMuonProducer;	
 	
 	int nTotEvt_;
 	HLTAnalyzer* hltAnalyzer_;
@@ -111,17 +110,14 @@ private:
 	TClonesArray* jets;
 	vector<TClonesArray*> vjets;
 	TClonesArray* muons;
-	TClonesArray* CosmicMuons;
+	vector<TClonesArray*> vcosmicMuons;
+	vector<vector<TClonesArray*> > vcosmicMuonTracks;
 	TClonesArray* electrons;
 	TClonesArray* met;
 	TClonesArray* genEvent;
         TClonesArray* NPgenEvent;
 	TClonesArray* spinCorrGen;
 	TClonesArray* semiLepEvent;
-
-	TClonesArray* CosmicMuonTracksGL;
-	TClonesArray* CosmicMuonTracksSTA;
-	TClonesArray* CosmicMuonTracksTR;
 
 };
 

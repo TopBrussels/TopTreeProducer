@@ -10,17 +10,17 @@ CosmicMuonAnalyzer::CosmicMuonAnalyzer (const edm::ParameterSet & producersNames
   verbosity_ (0)
 {
   dataType_ = producersNames.getUntrackedParameter < string > ("dataType", "unknown");
-  CosmicMuonProducer1Leg_ = producersNames.getParameter < edm::InputTag > ("CosmicMuonProducer1Leg");
-  CosmicMuonProducer2Leg_ = producersNames.getParameter < edm::InputTag > ("CosmicMuonProducer2Leg");
+  vCosmicMuonProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("vcosmicMuonProducer");
+  CosmicMuonProducer_ = edm::InputTag(vCosmicMuonProducer[0]);
   jetProducer_ = producersNames.getParameter < edm::InputTag > ("jetProducer");
 }
 
-CosmicMuonAnalyzer::CosmicMuonAnalyzer (const edm::ParameterSet & producersNames, const edm::ParameterSet & myConfig, int verbosity):
+CosmicMuonAnalyzer::CosmicMuonAnalyzer (const edm::ParameterSet & producersNames, int iter ,  const edm::ParameterSet & myConfig, int verbosity):
 verbosity_ (verbosity)
 {
   dataType_ = producersNames.getUntrackedParameter < string > ("dataType", "unknown");
-  CosmicMuonProducer1Leg_ = producersNames.getParameter < edm::InputTag > ("CosmicMuonProducer1Leg");
-  CosmicMuonProducer2Leg_ = producersNames.getParameter < edm::InputTag > ("CosmicMuonProducer2Leg");
+  vCosmicMuonProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("vcosmicMuonProducer");
+  CosmicMuonProducer_ = edm::InputTag(vCosmicMuonProducer[iter]);
   jetProducer_ = producersNames.getParameter < edm::InputTag > ("jetProducer");
 }
 
@@ -29,20 +29,57 @@ CosmicMuonAnalyzer::~CosmicMuonAnalyzer ()
 }
 
 void
-CosmicMuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootCosmicMuons)
+CosmicMuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootCosmicMuons, vector<TClonesArray*> rootCosmicMuonTracks)
 {
 
   Float_t sintheta = 0.;
 
-  unsigned int nMuons1Leg = 0, nMuons2Leg = 0;
+  unsigned int nmuons = 0;
 
-  edm::Handle < std::vector < reco::Muon > >recoMuons1Leg, recoMuons2Leg;
+  vector<reco::TrackRef> globalTracks, trackerTracks, standaloneTracks;
+
+  edm::Handle < std::vector < reco::Muon > >recoMuons;
+  edm::Handle<reco::TrackCollection> glTrackHandle, trTrackHandle, staTrackHandle;
+
   if (dataType_ == "RECO" || dataType_ == "AOD")
     {
-      iEvent.getByLabel (CosmicMuonProducer1Leg_, recoMuons1Leg);
-      iEvent.getByLabel (CosmicMuonProducer2Leg_, recoMuons2Leg);
-      nMuons1Leg = recoMuons1Leg->size ();
-      nMuons2Leg = recoMuons2Leg->size ();
+      iEvent.getByLabel (CosmicMuonProducer_, recoMuons);
+      nmuons = recoMuons->size ();
+
+      //** STORE TRACK REFERENCES **//
+
+      if (CosmicMuonProducer_.label() == "muons") {
+	
+	iEvent.getByLabel("globalCosmicMuons",glTrackHandle);
+	iEvent.getByLabel("ctfWithMaterialTracksP5LHCNavigation",trTrackHandle);
+	iEvent.getByLabel("cosmicMuons",staTrackHandle);
+
+      }
+
+      if (CosmicMuonProducer_.label() == "muons1Leg") {
+	
+	iEvent.getByLabel("globalCosmicMuons1Leg",glTrackHandle);
+	iEvent.getByLabel("ctfWithMaterialTracksP5",trTrackHandle);
+	iEvent.getByLabel("cosmicMuons1Leg",staTrackHandle);
+
+      }
+
+      if (CosmicMuonProducer_.label() == "muonsBarrelOnly") {
+	
+	iEvent.getByLabel("globalCosmicMuonsBarrelOnly",glTrackHandle);
+	iEvent.getByLabel("ctfWithMaterialTracksP5LHCNavigation",trTrackHandle);
+	iEvent.getByLabel("cosmicMuonsBarrelOnly",staTrackHandle);
+
+      }
+
+      if (CosmicMuonProducer_.label() == "muons1LegBarrelOnly") {
+	
+	iEvent.getByLabel("globalCosmicMuons1LegBarrelOnly",glTrackHandle);
+	iEvent.getByLabel("ctfWithMaterialTracksP5",trTrackHandle);
+	iEvent.getByLabel("cosmicMuons1LegBarrelOnly",staTrackHandle);
+
+      }
+
     }
 
   edm::Handle < std::vector < pat::Muon > >patMuons;
@@ -50,6 +87,72 @@ CosmicMuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootCosmi
     {
       // not yet
     }
+
+  //** STORE TRACKS IN THE EVENT (e.g.: those that are not mathed to a muon)
+
+  for (unsigned int i=0; i<glTrackHandle->size(); i++) 
+    globalTracks.push_back(reco::TrackRef(glTrackHandle,i));
+
+  for (unsigned int i=0; i<trTrackHandle->size(); i++) 
+    trackerTracks.push_back(reco::TrackRef(trTrackHandle,i));
+
+  for (unsigned int i=0; i<staTrackHandle->size(); i++) 
+    standaloneTracks.push_back(reco::TrackRef(staTrackHandle,i));
+
+  if (verbosity_ > 1) {
+   
+    std::cout << "   Number of cosmic muon global tracks = " << glTrackHandle->size() << "   Label: " << CosmicMuonProducer_.label () << "   Instance: " << CosmicMuonProducer_.instance () << std::endl;
+
+    std::cout << "   Number of cosmic muon tracker tracks = " << trTrackHandle->size() << "   Label: " << CosmicMuonProducer_.label () << "   Instance: " << CosmicMuonProducer_.instance () << std::endl;
+
+    std::cout << "   Number cosmic muon standalone tracks = " << staTrackHandle->size() << "   Label: " << CosmicMuonProducer_.label () << "   Instance: " << CosmicMuonProducer_.instance () << std::endl;
+    
+  }
+
+  //cout << "Remaining number of global tracks " << globalTracks.size() << endl;
+
+  for (unsigned int i=0; i<3; i++) {
+
+    vector<reco::TrackRef> refs;
+
+    if (i==0) refs = globalTracks;
+    else if (i==1) refs = trackerTracks;
+    else if (i==2) refs = standaloneTracks;
+
+    for (unsigned int j=0; j<refs.size(); j++) {
+      
+      reco::TrackRef Track = refs.at(j);
+
+      TRootTrack track (TLorentzVector(Track->px(),Track->py(),Track->pz()),TVector3(Track->vx(),Track->vy(),Track->vz()),0,Track->charge());
+
+      // Set the track properties
+	  
+      track.SetNofValidHits(Track->numberOfValidHits());
+      track.SetChi2(Track->normalizedChi2());  
+      track.SetD0(Track->d0());
+      track.SetD0Error(Track->d0Error());
+      track.SetDZ(Track->dz());
+      track.SetDZError(Track->dzError());
+      track.SetInnerPosition(Track->innerPosition().x(),Track->innerPosition().y(),Track->innerPosition().z());
+      track.SetOuterPosition(Track->outerPosition().x(),Track->outerPosition().y(),Track->outerPosition().z());
+   
+      // put the tracks in their TClonesArray
+
+      new ((*rootCosmicMuonTracks[i])[j]) TRootTrack (track);
+      if (verbosity_ > 2 && i == 0)
+	cout << "   [" << setw (3) << j << "] " << "Cosmic Muon Global Track"  << " <-> " <<  TRootTrack(track) << endl;
+
+      if (verbosity_ > 2 && i == 1)
+	cout << "   [" << setw (3) << j << "] " << "Cosmic Muon Tracker Track"  << " <-> " <<  TRootTrack(track) << endl;
+
+      if (verbosity_ > 2 && i == 2)
+	cout << "   [" << setw (3) << j << "] " << "Cosmic Muon StandAlone Track"  << " <-> " <<  TRootTrack(track) << endl;
+
+
+    }
+  }
+
+  //** Get a handle on the jets
 
    unsigned int nJets = 0;
   // reco::CaloJet or reco::PFJet ?
@@ -75,32 +178,19 @@ CosmicMuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootCosmi
     }
 
 
-
+  // start processing muons
 
   if (verbosity_ > 1) {
-    std::cout << "   Number of 1Leg muons = " << nMuons1Leg << "   Label: " << CosmicMuonProducer1Leg_.label () << "   Instance: " << CosmicMuonProducer1Leg_.instance () << std::endl;
-    
-    std::cout << "   Number of 2Leg muons = " << nMuons2Leg << "   Label: " << CosmicMuonProducer2Leg_.label () << "   Instance: " << CosmicMuonProducer2Leg_.instance () << std::endl;
+    std::cout << "   Number cosmic muons = " << nmuons << "   Label: " << CosmicMuonProducer_.label () << "   Instance: " << CosmicMuonProducer_.instance () << std::endl;
 
   }
 
-  for (int k=0; k<2; k++) {
-
-    int size=0;
-
-    if (k == 0)
-      size=nMuons1Leg;
-    else
-      size=nMuons2Leg;
-
-    for (int j = 0; j < size; j++) {
+    for (unsigned int j = 0; j < nmuons; j++) {
 
       const reco::Muon * muon = 0;
       if (dataType_ == "RECO" || dataType_ == "AOD")
-	if (k==0)
-	  muon = &((*recoMuons1Leg)[j]);
-	else 
-	  muon = &((*recoMuons2Leg)[j]);
+
+	muon = &((*recoMuons)[j]);
 
       /*if (dataType_ == "PAT" || dataType_ == "PATAOD")
 	muon = (const reco::Muon *) (&((*patMuons)[j]));*/
@@ -169,34 +259,82 @@ CosmicMuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootCosmi
 
       localCosmicMuon.SetDeltaRClosestJet (DeltaRMin);
 
-      if (k == 0) 
-	localCosmicMuon.SetOneLeg (true);
-      else
-	localCosmicMuon.SetOneLeg (false);
-
-
+     
       if (dataType_ == "RECO" || dataType_ == "AOD") {
 	  // Some specific methods requiring  RECO / AOD format
 	  // Do association to genParticle ?
 	  // Add InnerTrack, OuterTrack, GlobalTrack infos ?
+
+	// do the track match
+
+	// global
+
+	if (muon->globalTrack().isNonnull()) {
+
+	  reco::TrackRef muontrack = muon->globalTrack();
+
+	  for (unsigned int p=0; p<globalTracks.size(); p++) {
+
+	    if (muontrack == globalTracks.at(p)) {
+
+	      //TRef ref = TRef((*rootCosmicMuonTracks[0])[p]);
+
+	      localCosmicMuon.SetGlobalTrack((TObject*)rootCosmicMuonTracks[0]->At(p));
+
+	    }
+
+	  }
+
+	}
+
+	// tracker
+
+	if (muon->innerTrack().isNonnull()) {
+
+	  reco::TrackRef muontrack = muon->innerTrack();
+
+	  for (unsigned int p=0; p<trackerTracks.size(); p++) {
+
+	    if (muontrack == trackerTracks.at(p)) {
+
+	      localCosmicMuon.SetTrackerTrack((TObject*)rootCosmicMuonTracks[1]->At(p));
+
+	    }
+
+	  }
+
+	}
+
+	// StandAlone 
+	  
+	if (muon->outerTrack().isNonnull()) {
+
+	  reco::TrackRef muontrack = muon->outerTrack();
+
+	  for (unsigned int p=0; p<standaloneTracks.size(); p++) {
+
+	    if (muontrack == standaloneTracks.at(p)) {
+
+	      localCosmicMuon.SetStandAloneTrack((TObject*)rootCosmicMuonTracks[2]->At(p));
+
+	    }
+
+	  }
+
+	}
+
       }
 
       if (dataType_ == "PATAOD" || dataType_ == "PAT") {
 	  // not yet implemented Cosmics under PAT
       }
 
-      int l=0;
-
-      if (k == 0)
-	l = j;
-      else
-	l = nMuons1Leg+j;
-
-      new ((*rootCosmicMuons)[l]) TRootCosmicMuon (localCosmicMuon);
+      new ((*rootCosmicMuons)[j]) TRootCosmicMuon (localCosmicMuon);
       if (verbosity_ > 2)
-	cout << "   [" << setw (3) << l << "] " << localCosmicMuon << endl;
+	cout << "   [" << setw (3) << j << "] " << localCosmicMuon << endl;
+
+
     }
 
-  }
 }
 
