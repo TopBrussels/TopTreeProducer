@@ -40,7 +40,6 @@ void TopTreeProducer::beginJob(const edm::EventSetup&)
 	doJetStudy = myConfig_.getUntrackedParameter<bool>("doJetStudy",false);
 	doMuon = myConfig_.getUntrackedParameter<bool>("doMuon",false);
 	doCosmicMuon = myConfig_.getUntrackedParameter<bool>("doCosmicMuon",false);
-	doCosmicMuonTrack = myConfig_.getUntrackedParameter<bool>("doCosmicMuonTrack",false);
 	doElectron = myConfig_.getUntrackedParameter<bool>("doElectron",false);	
 	doMET = myConfig_.getUntrackedParameter<bool>("doMET",false);
 	drawMCTree = myConfig_.getUntrackedParameter<bool>("drawMCTree",false);
@@ -49,11 +48,25 @@ void TopTreeProducer::beginJob(const edm::EventSetup&)
 	doSpinCorrGen = myConfig_.getUntrackedParameter<bool>("doSpinCorrGen",false);
 	doSemiLepEvent = myConfig_.getUntrackedParameter<bool>("doSemiLepEvent",false);
 	vector<string> defaultVec;
+	vector<string> defaultVecCM;
+	
 	vJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vjetProducer",defaultVec);
+	vCosmicMuonProducer = producersNames_.getUntrackedParameter<vector<string> >("vcosmicMuonProducer",defaultVecCM);
 
         for(unsigned int s=0;s<vJetProducer.size();s++){
 		TClonesArray* a;
 		vjets.push_back(a); 
+	}
+
+	for(unsigned int s=0;s<vCosmicMuonProducer.size();s++){
+		TClonesArray* a;
+		vcosmicMuons.push_back(a); 
+
+		vector<TClonesArray*> trackVector;
+                for (unsigned int t=0; t<3; t++)
+		  trackVector.push_back(a);
+
+		vcosmicMuonTracks.push_back(trackVector);
 	}
 
 	nTotEvt_ = 0;
@@ -142,20 +155,32 @@ void TopTreeProducer::beginJob(const edm::EventSetup&)
 	if(doCosmicMuon)
 	{
 		if(verbosity>0) cout << "Cosmic Muons info will be added to rootuple" << endl;
-		CosmicMuons = new TClonesArray("TRootCosmicMuon", 1000);
-		eventTree_->Branch ("CosmicMuons", "TClonesArray", &CosmicMuons);
-	}
+	     
+		for(unsigned int s=0;s<vCosmicMuonProducer.size();s++){
+			vcosmicMuons[s] = new TClonesArray("TRootCosmicMuon", 1000);
+			char name[100];
+			sprintf(name,"CosmicMuons_%s",vCosmicMuonProducer[s].c_str());
+			eventTree_->Branch (name, "TClonesArray", &vcosmicMuons[s]);
 
-	if(doCosmicMuonTrack)
-	{
-		CosmicMuonTracksGL = new TClonesArray("TRootTrack", 1000);
-		eventTree_->Branch ("CosmicMuonGlobalTracks", "TClonesArray", &CosmicMuonTracksGL);
+			// put the track(gl,sta,tr) branches for this muoncollection
 
-		CosmicMuonTracksSTA = new TClonesArray("TRootTrack", 1000);
-		eventTree_->Branch ("CosmicMuonStandAloneTracks", "TClonesArray", &CosmicMuonTracksSTA);
+		        vcosmicMuonTracks[s][0] = new TClonesArray("TRootTrack",1000);
+			//char name[100];
+			sprintf(name,"CosmicMuonGlobalTracks_%s",vCosmicMuonProducer[s].c_str());
+			eventTree_->Branch (name, "TClonesArray", &vcosmicMuonTracks[s][0]);
 
-		CosmicMuonTracksTR = new TClonesArray("TRootTrack", 1000);
-		eventTree_->Branch ("CosmicMuonTrackerTracks", "TClonesArray", &CosmicMuonTracksTR);
+			vcosmicMuonTracks[s][1] = new TClonesArray("TRootTrack",1000);
+			//char name[100];
+			sprintf(name,"CosmicMuonTrackerTracks_%s",vCosmicMuonProducer[s].c_str());
+			eventTree_->Branch (name, "TClonesArray", &vcosmicMuonTracks[s][1]);
+
+			vcosmicMuonTracks[s][2] = new TClonesArray("TRootTrack",1000);
+			//char name[100];
+			sprintf(name,"CosmicMuonStandAloneTracks_%s",vCosmicMuonProducer[s].c_str());
+			eventTree_->Branch (name, "TClonesArray", &vcosmicMuonTracks[s][2]);
+
+			//}
+		} 
 	}
 	
 	if(doElectron)
@@ -339,25 +364,16 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	// Cosmic Muons
 	if(doCosmicMuon)
 	{
-		if(verbosity>1) cout << endl << "Analysing muons collection (for cosmics)..." << endl;
-		CosmicMuonAnalyzer* myCosmicMuonAnalyzer = new CosmicMuonAnalyzer(producersNames_, myConfig_, verbosity);
-		myCosmicMuonAnalyzer->Process(iEvent, CosmicMuons);
-		delete myCosmicMuonAnalyzer;
+	  if(verbosity>1) cout << endl << "Analysing muons collection (for cosmics)..." << endl;
+     	  
+	  for(unsigned int s=0;s<vCosmicMuonProducer.size();s++){
+	    CosmicMuonAnalyzer *myCosmicMuonAnalyzer = new CosmicMuonAnalyzer(producersNames_, s,  myConfig_, verbosity);
+	    myCosmicMuonAnalyzer->Process(iEvent, vcosmicMuons[s],vcosmicMuonTracks[s]);
+	    delete myCosmicMuonAnalyzer;
+	  }
+
 	}
 	
-	if(doCosmicMuonTrack)
-	{
-		if(verbosity>1) cout << endl << "Analysing muon tracks (for cosmics)..." << endl;
-		CosmicMuonTrackAnalyzer* myCosmicMuonTracksAnalyzer = new CosmicMuonTrackAnalyzer(producersNames_, myConfig_, verbosity);
-	
-		myCosmicMuonTracksAnalyzer->Process(iEvent,"GlobalTrack", CosmicMuonTracksGL);
-		myCosmicMuonTracksAnalyzer->Process(iEvent,"TrackerTrack", CosmicMuonTracksTR);
-		myCosmicMuonTracksAnalyzer->Process(iEvent,"StandAloneTrack", CosmicMuonTracksSTA);
-
-		delete myCosmicMuonTracksAnalyzer;
-
-		
-	}
 
         // Lazy Tools to calculate Cluster shape variables
 	EcalClusterLazyTools* lazyTools = 0;
@@ -421,14 +437,14 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		}
 	}
 	if(doMuon) (*muons).Delete();
-	if(doCosmicMuon) (*CosmicMuons).Delete();
-	if(doCosmicMuonTrack) {
-
-	  (*CosmicMuonTracksGL).Delete();
-	  (*CosmicMuonTracksTR).Delete();
-	  (*CosmicMuonTracksSTA).Delete();
+       	if(doCosmicMuon) {
+	
+	  for(unsigned int s=0;s<vCosmicMuonProducer.size();s++){
+	    (*vcosmicMuons[s]).Delete();
+	  }
 
 	}
+
 	if(doElectron) (*electrons).Delete();
 	if(doMET) (*met).Delete();
 	if(doGenEvent) (*genEvent).Delete();
