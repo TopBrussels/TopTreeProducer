@@ -3,6 +3,8 @@
 
 #include "../interface/TRootParticle.h"
 
+#include "TRef.h"
+
 
 using namespace std;
 
@@ -47,7 +49,9 @@ public:
 		,direction_(-9999)
 		,algo_(-9999)
 		,id_(-9999)
-	        ,isOneLeg_(false)
+	        ,globalTrack_(0)
+	        ,trackerTrack_(0)
+	        ,standaloneTrack_(0)
 		{;}
 
 	TRootCosmicMuon(const TRootCosmicMuon& muon) :
@@ -86,7 +90,9 @@ public:
 		,direction_(muon.direction_)
 		,algo_(muon.algo_)
 		,id_(muon.id_)
-	        ,isOneLeg_(muon.isOneLeg_)
+	        ,globalTrack_(muon.globalTrack_)
+	        ,trackerTrack_(muon.trackerTrack_)
+	        ,standaloneTrack_(muon.standaloneTrack_)
 		{;}
 
 	TRootCosmicMuon(Double_t px, Double_t py, Double_t pz, Double_t e) :
@@ -125,7 +131,9 @@ public:
 		,direction_(-9999)
 		,algo_(-9999)
 		,id_(-9999)
-	        ,isOneLeg_(false)
+	        ,globalTrack_(0)
+	        ,trackerTrack_(0)
+	        ,standaloneTrack_(0)
 		{;}
 
 	TRootCosmicMuon(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z) :
@@ -164,7 +172,9 @@ public:
 		,direction_(-9999)
 		,algo_(-9999)
 		,id_(-9999)
-	        ,isOneLeg_(false)
+	        ,globalTrack_(0)
+	        ,trackerTrack_(0)
+	        ,standaloneTrack_(0)
 		{;}
 
 	TRootCosmicMuon(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z, Int_t type, Float_t charge) :
@@ -203,7 +213,9 @@ public:
 		,direction_(-9999)
 		,algo_(-9999)
 		,id_(-9999)
-	        ,isOneLeg_(false)
+	        ,globalTrack_(0)
+	        ,trackerTrack_(0)
+	        ,standaloneTrack_(0)
 		{;}
 
 	TRootCosmicMuon(const TLorentzVector &momentum) :
@@ -242,7 +254,9 @@ public:
 		,direction_(-9999)
 		,algo_(-9999)
 		,id_(-9999)
-	        ,isOneLeg_(false)
+	        ,globalTrack_(0)
+	        ,trackerTrack_(0)
+	        ,standaloneTrack_(0)
 		{;}
 
 	TRootCosmicMuon(const TLorentzVector &momentum, const TVector3 &vertex, Int_t type, Float_t charge) :
@@ -281,7 +295,9 @@ public:
 		,direction_(-9999)
 		,algo_(-9999)
 		,id_(-9999)
-	        ,isOneLeg_(false)
+	        ,globalTrack_(0)
+	        ,trackerTrack_(0)
+	        ,standaloneTrack_(0)
 		{;}
 
 	~TRootCosmicMuon() {;}
@@ -358,10 +374,12 @@ public:
 	Int_t nofValidHitsMuonDetector() const { return nofValidHitsMuonDetector_; }
         TLorentzVector innerTrack() const { return innerTrack_;}
 
+	TObject* globalTrack() const { return globalTrack_.GetObject(); } 
+	TObject* trackerTrack() const { return trackerTrack_.GetObject(); } 
+	TObject* standaloneTrack() const { return standaloneTrack_.GetObject(); } 
+
 	//TObject* genMuon() const { return genMuon_.GetObject() ;}
 	virtual TString typeName() const { return "TRootCosmicMuon";} 
-
-	Bool_t isOneLegMuon() { return isOneLeg_; }
 
         // Input methods
 
@@ -437,9 +455,10 @@ public:
 	void SetNofValidHitsMuonDetector(Int_t nofValidHits){ nofValidHitsMuonDetector_ = nofValidHits;}
         void SetInnerTrack (TLorentzVector innerTrack) { innerTrack_ = innerTrack;}
 
-	void SetOneLeg (bool oneLeg) { isOneLeg_ = oneLeg; }
-
-
+	void SetGlobalTrack (TObject* globalTrack) { globalTrack_ = globalTrack; }
+	void SetTrackerTrack (TObject* trackerTrack) { trackerTrack_ = trackerTrack; }
+	void SetStandAloneTrack (TObject* standaloneTrack) { standaloneTrack_ = standaloneTrack; }
+ 
 	friend std::ostream& operator<< (std::ostream& stream, const TRootCosmicMuon& muon) {
 	  stream << "TRootCosmicMuon - Charge=" << muon.charge() << " (Et,eta,phi)=("<< muon.Et() <<","<< muon.Eta() <<","<< muon.Phi() << ")  vertex(x,y,z)=("<< muon.vx() <<","<< muon.vy() <<","<< muon.vz() << ")" << endl
 		 << "            Type(G,T,S,C)=(" << muon.isGlobalMuon() << ","  << muon.isTrackerMuon() << ","  << muon.isStandAloneMuon() << ","  << muon.isCaloMuon() << ") "
@@ -493,7 +512,7 @@ public:
         Int_t nofValidHits_;        // nof hits of inner track 
         Int_t nofValidHitsMuonDetector_;        // nof hits of muon track 
 
-        TLorentzVector innerTrack_; // inner track 
+        TLorentzVector innerTrack_; // inner track
 
 	Int_t direction_;	//  OutsideIn = -1, Undefined = 0, InsideOut = 1
 	Int_t algo_; // binary => GlobalMuon=00010 , TrackerMuon=00100 , StandAloneMuon=01000 , CaloMuon=10000
@@ -501,7 +520,10 @@ public:
 	// TMLastStationLoose=0001000 , TMLastStationTight=0010000 , TM2DCompatibilityLoose=0100000 , TM2DCompatibilityTight=1000000
 	Int_t id_;
 
-        Bool_t isOneLeg_; // true if 1-leg reconstruction false if 2-leg reconstruction
+	TRef globalTrack_;
+	TRef trackerTrack_;
+	TRef standaloneTrack_;
+
 
 	ClassDef (TRootCosmicMuon,1);
 };
