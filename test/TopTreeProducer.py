@@ -35,6 +35,7 @@ process.source = cms.Source("PoolSource",
 # PATAOD
 # PAT
 	fileNames = cms.untracked.vstring('file:PATLayer2.root')
+        #fileNames = cms.untracked.vstring('/store/data/CRAFT09/Cosmics/RAW-RECO/SuperPointing-CRAFT09_R_V4_CosmicsSeq_v1/0009/763782DB-DCB9-DE11-A238-003048678B30.root')
 	#fileNames = cms.untracked.vstring('file:/user/echabert/CMSSW/CMSSW_2_2_3/src/TopQuarkAnalysis/TopEventProducers/test/toto2.root')
 	#fileNames = cms.untracked.vstring('file:/user/echabert/CMSSW/CMSSW_2_2_6/src/NewPhysicsAnalysis/SUSYAnalysis/TopSUSYEvents.root')
 	#fileNames = cms.untracked.vstring('dcap:///pnfs/iihe/cms/store/user/ghammad/CMSSW223/Common/PATLayer1/TauolaTTbar/PATLayer1_1.root')
@@ -85,10 +86,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		doJet = cms.untracked.bool(True),
 		doJetStudy = cms.untracked.bool(True),
 		doMuon = cms.untracked.bool(True),
-
                 doCosmicMuon = cms.untracked.bool(False),
-		doCosmicMuonTrack = cms.untracked.bool(False),
-                
 		doElectron = cms.untracked.bool(True),
 		runSuperCluster = cms.untracked.bool(False),#true only if SuperCluster are stored
 		doMET = cms.untracked.bool(True),
@@ -127,8 +125,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		jetProducer = cms.InputTag("iterativeCone5CaloJets"),
 		vjetProducer = cms.untracked.vstring("iterativeCone5CaloJets"),
 		muonProducer = cms.InputTag("muons"),
-                CosmicMuonProducer1Leg = cms.InputTag("muons1Leg"),
-		CosmicMuonProducer2Leg = cms.InputTag("muons"),
+                vcosmicMuonProducer = cms.untracked.vstring("muons"),
 		electronProducer = cms.InputTag("pixelMatchGsfElectrons"),
 		metProducer = cms.InputTag("met"),
 	        genEventProducer = cms.InputTag("genEvt")
