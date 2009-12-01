@@ -53,7 +53,7 @@ void TopTreeProducer::beginJob(const edm::EventSetup&)
 	vJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vjetProducer",defaultVec);
 	vCosmicMuonProducer = producersNames_.getUntrackedParameter<vector<string> >("vcosmicMuonProducer",defaultVecCM);
 
-        for(unsigned int s=0;s<vJetProducer.size();s++){
+	for(unsigned int s=0;s<vJetProducer.size();s++){
 		TClonesArray* a;
 		vjets.push_back(a); 
 	}

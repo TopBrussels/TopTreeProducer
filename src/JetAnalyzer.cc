@@ -21,6 +21,7 @@ JetAnalyzer::JetAnalyzer(const edm::ParameterSet& producersNames, const edm::Par
 	dataType_ = producersNames.getUntrackedParameter<string>("dataType","unknown");
 	jetProducer_ = producersNames.getParameter<edm::InputTag>("jetProducer");
 	useMC_ = myConfig.getUntrackedParameter<bool>("doJetMC");
+	doJetId_ = myConfig.getUntrackedParameter<bool>("doJetId");
 }
 
 JetAnalyzer::JetAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
@@ -29,6 +30,7 @@ JetAnalyzer::JetAnalyzer(const edm::ParameterSet& producersNames, int iter, cons
 	vJetProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("vjetProducer");
 	jetProducer_ = edm::InputTag(vJetProducer[iter]);
 	useMC_ = myConfig.getUntrackedParameter<bool>("doJetMC");
+	doJetId_ = myConfig.getUntrackedParameter<bool>("doJetId");
 }
 
 JetAnalyzer::~JetAnalyzer()
@@ -52,6 +54,8 @@ void JetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets)
 		|| jetProducer_.label()=="iterativeCone5CaloJets"
 		|| jetProducer_.label()=="sisCone5CaloJets"
 		|| jetProducer_.label()=="sisCone7CaloJets"
+      || jetProducer_.label()=="ak5CaloJets"
+      || jetProducer_.label()=="ak7CaloJets"
 	) jetType="CALO";
 
 	if( jetProducer_.label()=="kt4PFJets"
@@ -61,7 +65,7 @@ void JetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets)
 		|| jetProducer_.label()=="sisCone7PFJets"
 	) jetType="PF";
 
-	edm::Handle < std::vector <reco::CaloJet> > recoCaloJets;
+	edm::Handle < edm::View <reco::CaloJet> > recoCaloJets; //edm::View necessary for the edm::RefToBase to access the JetId variables
 	if( (dataType_=="RECO" || dataType_=="AOD") && jetType=="CALO" )
 	{
 		iEvent.getByLabel(jetProducer_, recoCaloJets);
@@ -132,6 +136,53 @@ void JetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets)
 		                localJet.setMaxEInHadTowers(caloJet->maxEInHadTowers());
 	                        localJet.setTowersArea(caloJet->towersArea());
 				//std::vector<CaloTowerPtr> getCaloConstituents () const;
+
+				std::map<std::string, Float_t> jetIdVariables;
+
+				// initialize everything with standard value of -9999.
+				jetIdVariables["fHPD"] = jetIdVariables["fRBX"] = jetIdVariables["n90Hits"]
+					= jetIdVariables["nHCALTowers"]  = jetIdVariables["nECALTowers"]
+					= jetIdVariables["phiphiMoment"] = jetIdVariables["etaphiMoment"]
+					= jetIdVariables["etaetaMoment"] = -9999.;
+			
+				if(doJetId_ && dataType_=="RECO")
+				{
+					// jet ID handle
+					edm::Handle<reco::JetIDValueMap> hJetIDMap;
+					if(jetProducer_.label() == "ak5CaloJets")
+						iEvent.getByLabel( "ak5JetID", hJetIDMap );
+					else if(jetProducer_.label() == "ak7CaloJets")
+						iEvent.getByLabel( "ak7JetID", hJetIDMap );
+					else if(jetProducer_.label() == "sisCone5CaloJets")
+						iEvent.getByLabel( "sisCone5JetID", hJetIDMap );
+					else if(jetProducer_.label() == "sisCone7CaloJets")
+						iEvent.getByLabel( "sisCone7JetID", hJetIDMap );
+					else if(jetProducer_.label() == "iterativeCone5CaloJets")
+						iEvent.getByLabel( "iterativeCone5JetID", hJetIDMap );
+					else if(jetProducer_.label() == "kt4CaloJets")
+						iEvent.getByLabel( "kt4JetID", hJetIDMap );
+					else if(jetProducer_.label() == "kt6CaloJets")
+						iEvent.getByLabel( "kt6JetID", hJetIDMap );
+				
+					edm::RefToBase<reco::CaloJet> jetRef = recoCaloJets->refAt(j);
+					reco::JetID jetId = (*hJetIDMap)[ jetRef ];
+				
+					jetIdVariables["fHPD"] = jetId.fHPD;
+					jetIdVariables["fRBX"] = jetId.fRBX;
+					jetIdVariables["n90Hits"] = jetId.n90Hits;
+					jetIdVariables["nHCALTowers"] = jetId.nHCALTowers;
+					jetIdVariables["nECALTowers"] = jetId.nECALTowers;
+
+					jetIdVariables["phiphiMoment"] = jet->phiphiMoment();
+					jetIdVariables["etaphiMoment"] = jet->etaphiMoment();
+					jetIdVariables["etaetaMoment"] = jet->etaetaMoment();
+				}
+				// todo?
+				//  for AOD use tower based approximations / inferior options?
+				// approximatefHPD, approximatefRBX, hitsInN90        
+		
+				localJet.setJetIdVariables(jetIdVariables);
+
 			}
 
 			if( jetType=="PF" )
@@ -167,7 +218,6 @@ void JetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets)
 			localJet.setBtag_trackCountingHighEffBJetTags(patJet->bDiscriminator("trackCountingHighEffBJetTags"));
 			localJet.setBtag_trackCountingHighPurBJetTags(patJet->bDiscriminator("trackCountingHighPurBJetTags"));
 
-			
 			localJet.setBCorrection(patJet->corrFactor(patJet->corrStep(), "b"));
 			localJet.setCCorrection(patJet->corrFactor(patJet->corrStep(), "c"));
 			localJet.setUDSCorrection(patJet->corrFactor(patJet->corrStep(), "uds"));
@@ -212,10 +262,30 @@ void JetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets)
 				localJet.setEcalEnergyFraction(patJet->emEnergyFraction());
 				localJet.setHcalEnergyFraction(patJet->energyFractionHadronic());
 				localJet.setChargedMultiplicity(patJet->associatedTracks().size()) ;
-			      	//std::vector<CaloTowerPtr> getCaloConstituents () const;
-		                localJet.setMaxEInEmTowers(patJet->maxEInEmTowers());
-		                localJet.setMaxEInHadTowers(patJet->maxEInHadTowers());
-	                        localJet.setTowersArea(patJet->towersArea());
+				//std::vector<CaloTowerPtr> getCaloConstituents () const;
+				localJet.setMaxEInEmTowers(patJet->maxEInEmTowers());
+				localJet.setMaxEInHadTowers(patJet->maxEInHadTowers());
+				localJet.setTowersArea(patJet->towersArea());
+				std::map<std::string, Float_t> jetIdVariables;
+
+				// initialize everything with standard value of -9999.
+				jetIdVariables["fHPD"] = jetIdVariables["fRBX"] = jetIdVariables["n90Hits"]
+					= jetIdVariables["nHCALTowers"]  = jetIdVariables["nECALTowers"]
+					= jetIdVariables["phiphiMoment"] = jetIdVariables["etaphiMoment"]
+					= jetIdVariables["etaetaMoment"] = -9999.;
+				if(doJetId_)
+				{
+					jetIdVariables["fHPD"] = patJet->jetID().fHPD;
+					jetIdVariables["fRBX"] = patJet->jetID().fRBX;
+					jetIdVariables["n90Hits"] = patJet->jetID().n90Hits;
+					jetIdVariables["nHCALTowers"] = patJet->jetID().nHCALTowers;
+					jetIdVariables["nECALTowers"] = patJet->jetID().nECALTowers;
+		
+					jetIdVariables["phiphiMoment"] = patJet->phiphiMoment();
+					jetIdVariables["etaphiMoment"] = patJet->etaphiMoment();
+					jetIdVariables["etaetaMoment"] = patJet->etaetaMoment();
+				}
+				localJet.setJetIdVariables(jetIdVariables);
 			
 			}
 

@@ -17,6 +17,7 @@
 #include "../interface/TRootJet.h"
 
 #include "TClonesArray.h"
+#include <map>
 
 
 class JetAnalyzer{
@@ -36,6 +37,7 @@ private:
 	edm::InputTag jetProducer_;
 	edm::InputTag mcProducer_;
 	bool useMC_;
+	bool doJetId_;
 	std::vector<std::string> vJetProducer;
 
 };

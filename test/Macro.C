@@ -18,7 +18,7 @@
 #include <TTree.h>
 
 void Macro(){
-        int verbosity                 = 5;
+        int verbosity                 = 4;
 	//0 muet
 	//1 Main Info
 	//2
@@ -29,13 +29,14 @@ void Macro(){
 	bool isCSA07Soup              = false;
 	bool doHLT                    = false;
 	bool doMC                     = false;
-	bool doJet                    = false;
+	bool doJet                    = true;
 	bool doMuon                   = false;
 	bool doElectron               = false;
-	bool doMET                    = true;
-	bool doGenEvent               = true;
+	bool doMET                    = false;
+	bool doGenEvent               = false;
 
-	TFile* f=new TFile("TopTree.root");
+	//TFile* f=new TFile("TopTree_CRAFT09_test.root");
+	TFile* f=new TFile("TopTree_pythia.root");
 	//TFile* f=new TFile("/user/jmmaes/CMSSW/CMSSW_2_2_4_Sanity/CMSSW_2_2_4/src/TopBrussels/TopTreeProducer/test/TopTree.root");
 	TTree* runTree = (TTree*) f->Get("runTree");
 	TTree* eventTree = (TTree*) f->Get("eventTree");
@@ -71,12 +72,12 @@ void Macro(){
 
 	if(doJet)
 	{
-		jets_br = (TBranch *) eventTree->GetBranch("Jets");
+		jets_br = (TBranch *) eventTree->GetBranch("Jets_selectedLayer1Jets");
+//		jets_br = (TBranch *) eventTree->GetBranch("Jets_iterativeCone5CaloJets");
 		jets = new TClonesArray("TRootJet", 0);
 		jets_br->SetAddress(&jets);
 	}
 
-	
 	if(doMuon)
 	{
 		muons_br = (TBranch *) eventTree->GetBranch("Muons");
@@ -86,7 +87,6 @@ void Macro(){
 		
 	if(doElectron)
 	{
-
 		electrons_br = (TBranch *) eventTree->GetBranch("Electrons");
 		electrons = new TClonesArray("TRootElectron", 0);
 		electrons_br->SetAddress(&electrons);
@@ -136,8 +136,8 @@ void Macro(){
 
 
 
-        //Declaration of histograms
-        TH1F h_PtJets("PtJets","Pt of jets",50,0,500); 
+   //Declaration of histograms
+   TH1F h_PtJets("PtJets","Pt of jets",50,0,500); 
 	TH1F h_distrib("distrib","",100,-1,1);
 	//
 
@@ -182,11 +182,25 @@ void Macro(){
 		  TRootJet* jet;
 		  for(int i=0;i<jets->GetEntriesFast();i++){
 		    jet = (TRootJet*) jets->At(i);
-		    //h_PtJets.Fill(jet->Pt());
+		    h_PtJets.Fill(jet->Pt());
 		    //h_distrib.Fill(jet->btag_combinedSecondaryVertexBJetTags());
 		    h_distrib.Fill(jet->btag_trackCountingHighEffBJetTags());
+			 
+			 std::map<std::string, Float_t> jetIdVar = jet->jetIdVariables();
+//			 if(&jet->jetIdVariables() != NULL)
+			 {
+//			 	cout<<"jet->jetIdVariables() != NULL"<<endl;
+//				if(&jetIdVar["fHPD"] != NULL)
+					cout<<"jetIdVar[\"fHPD\"] = "<<jetIdVar["fHPD"]<<endl;
+//				if(&jetIdVar["fRBX"] != NULL)
+					cout<<"jetIdVar[\"fRBX\"] = "<<jetIdVar["fRBX"]<<endl;
+//				if(&jetIdVar["phiphiMoment"] != NULL)
+					cout<<"jetIdVar[\"phiphiMoment\"] = "<<jetIdVar["phiphiMoment"]<<endl;
+			 }
+//			 else cout<<"jet->jetIdVariables() == NULL"<<endl;
+
 		  }
-                }
+		}
 		
 		//access to GenEvent
 		if(doGenEvent){

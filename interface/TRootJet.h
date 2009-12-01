@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <map>
 
 using namespace std;
 
@@ -31,6 +32,7 @@ public:
                 ,maxEInEmTowers_(-9999.)
                 ,maxEInHadTowers_(-9999.)
 	        ,towersArea_(-9999.) 
+		,jetIdVariables_(std::map<std::string, Float_t> ())
 		,chargedBroadness_(-9999.)
 	        ,btag_combinedSecondaryVertexBJetTags_(-9999.)
 	        ,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
@@ -68,6 +70,7 @@ public:
                 ,maxEInEmTowers_(jet.maxEInEmTowers_)
                 ,maxEInHadTowers_(jet.maxEInHadTowers_)
 	        ,towersArea_(jet.towersArea_) 
+		,jetIdVariables_(jet.jetIdVariables_)
 		,chargedBroadness_(jet.chargedBroadness_)
 	        ,btag_combinedSecondaryVertexBJetTags_(jet.btag_combinedSecondaryVertexBJetTags_)
 	        ,btag_combinedSecondaryVertexMVABJetTags_(jet.btag_combinedSecondaryVertexMVABJetTags_)
@@ -105,6 +108,7 @@ public:
                 ,maxEInEmTowers_(-9999.)
                 ,maxEInHadTowers_(-9999.)
 	        ,towersArea_(-9999.) 
+		,jetIdVariables_(std::map<std::string, Float_t> ())
 		,chargedBroadness_(-9999.)
 	        ,btag_combinedSecondaryVertexBJetTags_(-9999.)
 	        ,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
@@ -142,6 +146,7 @@ public:
                 ,maxEInEmTowers_(-9999.)
                 ,maxEInHadTowers_(-9999.)
 	        ,towersArea_(-9999.) 
+		,jetIdVariables_(std::map<std::string, Float_t> ())
 		,chargedBroadness_(-9999.)
 	        ,btag_combinedSecondaryVertexBJetTags_(-9999.)
 	        ,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
@@ -179,6 +184,7 @@ public:
                 ,maxEInEmTowers_(-9999.)
                 ,maxEInHadTowers_(-9999.)
 	        ,towersArea_(-9999.) 
+		,jetIdVariables_(std::map<std::string, Float_t> ())
 		,chargedBroadness_(-9999.)
 	        ,btag_combinedSecondaryVertexBJetTags_(-9999.)
 	        ,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
@@ -215,6 +221,7 @@ public:
                 ,maxEInEmTowers_(-9999.)
                 ,maxEInHadTowers_(-9999.)
 	        ,towersArea_(-9999.) 
+		,jetIdVariables_(std::map<std::string, Float_t> ())
 		,chargedBroadness_(-9999.)
 	        ,btag_combinedSecondaryVertexBJetTags_(-9999.)
 	        ,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
@@ -252,6 +259,7 @@ public:
                 ,maxEInEmTowers_(-9999.)
                 ,maxEInHadTowers_(-9999.)
 	        ,towersArea_(-9999.) 
+		,jetIdVariables_(std::map<std::string, Float_t> ())
 		,chargedBroadness_(-9999.)
 	        ,btag_combinedSecondaryVertexBJetTags_(-9999.)
 	        ,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
@@ -290,6 +298,7 @@ public:
         Float_t maxEInEmTowers() const { return maxEInEmTowers_; }
         Float_t maxEInHadTowers() const { return maxEInHadTowers_;}
 	Float_t towersArea() const { return towersArea_;} 
+	std::map<std::string, Float_t> jetIdVariables() const { return jetIdVariables_; }
 	Float_t chargedBroadness() const { return chargedBroadness_; }
 	Float_t btag_combinedSecondaryVertexBJetTags() const { return btag_combinedSecondaryVertexBJetTags_;}
 	Float_t btag_combinedSecondaryVertexMVABJetTags() const { return btag_combinedSecondaryVertexMVABJetTags_;}
@@ -328,6 +337,7 @@ public:
 	void setEcalEnergyFraction(Float_t ecalEnergyFraction) { ecalEnergyFraction_ = ecalEnergyFraction; }
 	void setHcalEnergyFraction(Float_t hcalEnergyFraction) { hcalEnergyFraction_ = hcalEnergyFraction; }
 	void setChargedEnergyFraction(Float_t chargedEnergyFraction) { chargedEnergyFraction_ = chargedEnergyFraction; }
+	void setJetIdVariables(std::map<std::string, Float_t> jetIdVariables) { jetIdVariables_ = jetIdVariables; }
 	void setChargedBroadness(Float_t chargedBroadness) { chargedBroadness_ = chargedBroadness; }
 	//btag
 	void setBtag_combinedSecondaryVertexBJetTags(Float_t btag_combinedSecondaryVertexBJetTags) { btag_combinedSecondaryVertexBJetTags_ = btag_combinedSecondaryVertexBJetTags;};
@@ -372,6 +382,7 @@ private:
         Float_t maxEInEmTowers_;
         Float_t maxEInHadTowers_;
 	Float_t towersArea_; 
+	std::map<std::string, Float_t> jetIdVariables_;	// Stores the jetIdVaribles
 	
 	// Variables from pat::Jet
         

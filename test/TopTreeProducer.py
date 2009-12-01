@@ -11,7 +11,7 @@ process.load("SimGeneral.HepPDTESSource.pythiapdt_cfi")
 process.load("Configuration.StandardSequences.Geometry_cff")
 
 # geometry needed for clustering and calo shapes variables
-process.load("RecoEcal.EgammaClusterProducers.geometryForClustering_cff")
+# process.load("RecoEcal.EgammaClusterProducers.geometryForClustering_cff")
 # 3 folllowing config files included in RecoEcal.EgammaClusterProducers.geometryForClustering_cff
 #process.load("Geometry.CMSCommonData.cmsIdealGeometryXML_cfi")
 #process.load("Geometry.CaloEventSetup.CaloGeometry_cfi")
@@ -24,7 +24,7 @@ process.load("RecoEcal.EgammaClusterProducers.geometryForClustering_cff")
 #process.load("RecoEcal.EgammaClusterProducers.piZeroDiscriminators_cfi")
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(-1)
+    input = cms.untracked.int32(100)
 )
 
 
@@ -34,10 +34,11 @@ process.source = cms.Source("PoolSource",
 # AOD
 # PATAOD
 # PAT
-	fileNames = cms.untracked.vstring('file:PATLayer2.root')
-        #fileNames = cms.untracked.vstring('/store/data/CRAFT09/Cosmics/RAW-RECO/SuperPointing-CRAFT09_R_V4_CosmicsSeq_v1/0009/763782DB-DCB9-DE11-A238-003048678B30.root')
+	fileNames = cms.untracked.vstring('file:Summer09TTbar_39.root')
+	#fileNames = cms.untracked.vstring('/store/data/CRAFT09/Cosmics/RAW-RECO/SuperPointing-CRAFT09_R_V4_CosmicsSeq_v1/0009/763782DB-DCB9-DE11-A238-003048678B30.root')
 	#fileNames = cms.untracked.vstring('file:/user/echabert/CMSSW/CMSSW_2_2_3/src/TopQuarkAnalysis/TopEventProducers/test/toto2.root')
 	#fileNames = cms.untracked.vstring('file:/user/echabert/CMSSW/CMSSW_2_2_6/src/NewPhysicsAnalysis/SUSYAnalysis/TopSUSYEvents.root')
+#	fileNames = cms.untracked.vstring('dcap:///pnfs/iihe/cms/store/user/blyweert/temp/CRAFT09_RERECO/CRAFT09_SuperPointing_RERECO_CMSSW330_1.root')
 	#fileNames = cms.untracked.vstring('dcap:///pnfs/iihe/cms/store/user/ghammad/CMSSW223/Common/PATLayer1/TauolaTTbar/PATLayer1_1.root')
 #	fileNames = cms.untracked.vstring('dcap:///pnfs/iihe/cms/store/user/jmmaes/TTJets-madgraph/CMSSW227_R3_TTJets-madgraph_redigi_ns_3_PATLayer1WithTtGenEvt/5806ec35aac362025b4eea830982d55c/PATLayer1Ext_1.root')
 #fileNames = cms.untracked.vstring('/store/data/Commissioning08/Cosmics/RAW-RECO/CRAFT-ALL-V13-2213-Tosca090322_2pi-scaled-ReReco-FromSuperPointing-v1/0001/02AFE1E4-775D-DE11-BC49-001731AF67E1.root')
@@ -70,30 +71,31 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		isCSA07Soup = cms.untracked.bool(False),
 
 		# What is written to rootuple		    
-		doHLT = cms.untracked.bool(True),
-		doMC = cms.untracked.bool(True),
+		doHLT = cms.untracked.bool(False),
+		doMC = cms.untracked.bool(False),
 		doPDFInfo = cms.untracked.bool(False),
-#		signalGenerator = cms.untracked.string('PYTHIA'),
+		signalGenerator = cms.untracked.string('PYTHIA'),
 #		signalGenerator = cms.untracked.string('ALPGEN'),
-		signalGenerator = cms.untracked.string('MADGRAPH'),
+#		signalGenerator = cms.untracked.string('MADGRAPH'),
 
-		doElectronMC = cms.untracked.bool(True),
-		doMuonMC = cms.untracked.bool(True),
-		doJetMC = cms.untracked.bool(True),
-		doMETMC = cms.untracked.bool(True),
+		doElectronMC = cms.untracked.bool(False),
+		doMuonMC = cms.untracked.bool(False),
+		doJetMC = cms.untracked.bool(False),
+		doMETMC = cms.untracked.bool(False),
 		doUnstablePartsMC = cms.untracked.bool(False),
-		doPrimaryVertex = cms.untracked.bool(True),
-		doJet = cms.untracked.bool(True),
+		doPrimaryVertex = cms.untracked.bool(False),
+		doJet = cms.untracked.bool(False),
 		doJetStudy = cms.untracked.bool(True),
-		doMuon = cms.untracked.bool(True),
-                doCosmicMuon = cms.untracked.bool(False),
-		doElectron = cms.untracked.bool(True),
+		doJetId = cms.untracked.bool(True),
+		doMuon = cms.untracked.bool(False),
+		doCosmicMuon = cms.untracked.bool(False),
+		doElectron = cms.untracked.bool(False),
 		runSuperCluster = cms.untracked.bool(False),#true only if SuperCluster are stored
-		doMET = cms.untracked.bool(True),
+		doMET = cms.untracked.bool(False),
 		doGenEvent = cms.untracked.bool(False),#put on False when running non-ttbar
 		doNPGenEvent = cms.untracked.bool(False),#put on True when running New Physics sample
-                doSpinCorrGen = cms.untracked.bool(True),#put on True only if you need SpinCorrelation Variables
-                doSemiLepEvent = cms.untracked.bool(False),#put on True only if you need TtSemiLeptonicEvent Collection exist in PAT-uples (L2)
+		doSpinCorrGen = cms.untracked.bool(False),#put on True only if you need SpinCorrelation Variables
+		doSemiLepEvent = cms.untracked.bool(False),#put on True only if you need TtSemiLeptonicEvent Collection exist in PAT-uples (L2)
 
 		conversionLikelihoodWeightsFile = cms.untracked.string('RecoEgamma/EgammaTools/data/TMVAnalysis_Likelihood.weights.txt'),
 
@@ -123,12 +125,12 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		genParticlesProducer = cms.InputTag("genParticles"),
 		primaryVertexProducer = cms.InputTag("offlinePrimaryVertices"),
 		jetProducer = cms.InputTag("iterativeCone5CaloJets"),
-		vjetProducer = cms.untracked.vstring("iterativeCone5CaloJets"),
+		vjetProducer = cms.untracked.vstring("iterativeCone5CaloJets","sisCone5CaloJets","ak5CaloJets"),
 		muonProducer = cms.InputTag("muons"),
-                vcosmicMuonProducer = cms.untracked.vstring("muons"),
+		vcosmicMuonProducer = cms.untracked.vstring("muons"),
 		electronProducer = cms.InputTag("pixelMatchGsfElectrons"),
 		metProducer = cms.InputTag("met"),
-	        genEventProducer = cms.InputTag("genEvt")
+		genEventProducer = cms.InputTag("genEvt")
 	),
 
 	producersNamesAOD = cms.PSet(
@@ -139,8 +141,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		jetProducer = cms.InputTag("iterativeCone5CaloJets"),
 		vjetProducer = cms.untracked.vstring("iterativeCone5CaloJets"),
 		muonProducer = cms.InputTag("muons"),
-                CosmicMuonProducer1Leg = cms.InputTag("muons1Leg"),
-		CosmicMuonProducer2Leg = cms.InputTag("muons"),
+		vcosmicMuonProducer = cms.untracked.vstring("muons","muons1Leg"),
 		electronProducer = cms.InputTag("pixelMatchGsfElectrons"),
 		metProducer = cms.InputTag("met"),
 	        genEventProducer = cms.InputTag("genEvt")
@@ -156,7 +157,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		muonProducer = cms.InputTag("selectedLayer1Muons"),
 		electronProducer = cms.InputTag("selectedLayer1Electrons"),
 		metProducer = cms.InputTag("selectedLayer1METs"),
-	        genEventProducer = cms.InputTag("genEvt")
+		genEventProducer = cms.InputTag("genEvt")
 	),
 
 	producersNamesPAT = cms.PSet(
@@ -169,9 +170,9 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		muonProducer = cms.InputTag("selectedLayer1Muons"),
 		electronProducer = cms.InputTag("selectedLayer1Electrons"),
 		metProducer = cms.InputTag("selectedLayer1METs"),
-	        genEventProducer = cms.InputTag("genEvt")
+		genEventProducer = cms.InputTag("genEvt")
 	)
- )
+)
 
 process.p = cms.Path(process.analysis)
 

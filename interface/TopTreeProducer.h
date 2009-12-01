@@ -98,7 +98,7 @@ private:
 	bool doSpinCorrGen;
 	bool doSemiLepEvent;
 	bool drawMCTree;
-        std::vector<std::string> vJetProducer;
+	std::vector<std::string> vJetProducer;
 	std::vector<std::string> vCosmicMuonProducer;	
 	
 	int nTotEvt_;
@@ -115,7 +115,7 @@ private:
 	TClonesArray* electrons;
 	TClonesArray* met;
 	TClonesArray* genEvent;
-        TClonesArray* NPgenEvent;
+	TClonesArray* NPgenEvent;
 	TClonesArray* spinCorrGen;
 	TClonesArray* semiLepEvent;
 
