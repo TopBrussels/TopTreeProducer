@@ -17,7 +17,6 @@
 #include "../interface/TRootJet.h"
 
 #include "TClonesArray.h"
-#include <map>
 
 
 class JetAnalyzer{

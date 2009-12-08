@@ -137,13 +137,13 @@ void JetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets)
 	                        localJet.setTowersArea(caloJet->towersArea());
 				//std::vector<CaloTowerPtr> getCaloConstituents () const;
 
-				std::map<std::string, Float_t> jetIdVariables;
+//				std::map<std::string, Float_t> jetIdVariables;
 
 				// initialize everything with standard value of -9999.
-				jetIdVariables["fHPD"] = jetIdVariables["fRBX"] = jetIdVariables["n90Hits"]
+/*				jetIdVariables["fHPD"] = jetIdVariables["fRBX"] = jetIdVariables["n90Hits"]
 					= jetIdVariables["nHCALTowers"]  = jetIdVariables["nECALTowers"]
 					= jetIdVariables["phiphiMoment"] = jetIdVariables["etaphiMoment"]
-					= jetIdVariables["etaetaMoment"] = -9999.;
+					= jetIdVariables["etaetaMoment"] = -9999.;*/
 			
 				if(doJetId_ && dataType_=="RECO")
 				{
@@ -166,8 +166,14 @@ void JetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets)
 				
 					edm::RefToBase<reco::CaloJet> jetRef = recoCaloJets->refAt(j);
 					reco::JetID jetId = (*hJetIDMap)[ jetRef ];
+					
+					localJet.setfHPD(jetId.fHPD);
+					localJet.setfRBX(jetId.fRBX);
+					localJet.setn90Hits(jetId.n90Hits);
+					localJet.setnHCALTowers(jetId.nHCALTowers);
+					localJet.setnECALTowers(jetId.nECALTowers);
 				
-					jetIdVariables["fHPD"] = jetId.fHPD;
+/*					jetIdVariables["fHPD"] = jetId.fHPD;
 					jetIdVariables["fRBX"] = jetId.fRBX;
 					jetIdVariables["n90Hits"] = jetId.n90Hits;
 					jetIdVariables["nHCALTowers"] = jetId.nHCALTowers;
@@ -175,13 +181,13 @@ void JetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets)
 
 					jetIdVariables["phiphiMoment"] = jet->phiphiMoment();
 					jetIdVariables["etaphiMoment"] = jet->etaphiMoment();
-					jetIdVariables["etaetaMoment"] = jet->etaetaMoment();
+					jetIdVariables["etaetaMoment"] = jet->etaetaMoment();*/
 				}
 				// todo?
 				//  for AOD use tower based approximations / inferior options?
 				// approximatefHPD, approximatefRBX, hitsInN90        
 		
-				localJet.setJetIdVariables(jetIdVariables);
+//				localJet.setJetIdVariables(jetIdVariables);
 
 			}
 
@@ -266,16 +272,22 @@ void JetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets)
 				localJet.setMaxEInEmTowers(patJet->maxEInEmTowers());
 				localJet.setMaxEInHadTowers(patJet->maxEInHadTowers());
 				localJet.setTowersArea(patJet->towersArea());
-				std::map<std::string, Float_t> jetIdVariables;
+//				std::map<std::string, Float_t> jetIdVariables;
 
 				// initialize everything with standard value of -9999.
-				jetIdVariables["fHPD"] = jetIdVariables["fRBX"] = jetIdVariables["n90Hits"]
+/*_				jetIdVariables["fHPD"] = jetIdVariables["fRBX"] = jetIdVariables["n90Hits"]
 					= jetIdVariables["nHCALTowers"]  = jetIdVariables["nECALTowers"]
 					= jetIdVariables["phiphiMoment"] = jetIdVariables["etaphiMoment"]
-					= jetIdVariables["etaetaMoment"] = -9999.;
+					= jetIdVariables["etaetaMoment"] = -9999.;*/
 				if(doJetId_)
 				{
-					jetIdVariables["fHPD"] = patJet->jetID().fHPD;
+					localJet.setfHPD(patJet->jetID().fHPD);
+					localJet.setfRBX(patJet->jetID().fRBX);
+					localJet.setn90Hits(patJet->jetID().n90Hits);
+					localJet.setnHCALTowers(patJet->jetID().nHCALTowers);
+					localJet.setnECALTowers(patJet->jetID().nECALTowers);
+
+/*					jetIdVariables["fHPD"] = patJet->jetID().fHPD;
 					jetIdVariables["fRBX"] = patJet->jetID().fRBX;
 					jetIdVariables["n90Hits"] = patJet->jetID().n90Hits;
 					jetIdVariables["nHCALTowers"] = patJet->jetID().nHCALTowers;
@@ -283,9 +295,9 @@ void JetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets)
 		
 					jetIdVariables["phiphiMoment"] = patJet->phiphiMoment();
 					jetIdVariables["etaphiMoment"] = patJet->etaphiMoment();
-					jetIdVariables["etaetaMoment"] = patJet->etaetaMoment();
+					jetIdVariables["etaetaMoment"] = patJet->etaetaMoment();*/
 				}
-				localJet.setJetIdVariables(jetIdVariables);
+//				localJet.setJetIdVariables(jetIdVariables);
 			
 			}
 
