@@ -163,21 +163,21 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 			// Isolation
 			pair < Float_t, Int_t > trackerIso;
 
-			trackerIso = patElectron->trackerIsoDeposit()->depositAndCountWithin(0.1);
+			trackerIso = patElectron->trackIsoDeposit()->depositAndCountWithin(0.1);
 			localElectron.setIsoR01_sumPt(trackerIso.first);
 			localElectron.setIsoR01_nTracks(trackerIso.second);
 
-			trackerIso = patElectron->trackerIsoDeposit()->depositAndCountWithin(0.2);
+			trackerIso = patElectron->trackIsoDeposit()->depositAndCountWithin(0.2);
 			localElectron.setIsoR02_sumPt(trackerIso.first);
 			localElectron.setIsoR02_nTracks(trackerIso.second);
 
-			trackerIso = patElectron->trackerIsoDeposit()->depositAndCountWithin(0.3);
+			trackerIso = patElectron->trackIsoDeposit()->depositAndCountWithin(0.3);
 			localElectron.setIsoR03_sumPt(trackerIso.first);
 			localElectron.setIsoR03_nTracks(trackerIso.second);
 			localElectron.setIsoR03_emEt( patElectron->ecalIsoDeposit()->depositAndCountWithin(0.3).first );
 			localElectron.setIsoR03_hadEt( patElectron->hcalIsoDeposit()->depositAndCountWithin(0.3).first );
 
-			trackerIso = patElectron->trackerIsoDeposit()->depositAndCountWithin(0.5);
+			trackerIso = patElectron->trackIsoDeposit()->depositAndCountWithin(0.5);
 			localElectron.setIsoR05_sumPt(trackerIso.first );
 			localElectron.setIsoR05_nTracks(trackerIso.second);
 			localElectron.setIsoR05_emEt( patElectron->ecalIsoDeposit()->depositAndCountWithin(0.5).first );
