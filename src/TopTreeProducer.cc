@@ -25,7 +25,7 @@ TopTreeProducer::~TopTreeProducer()
 
 
 // ------------ method called once each job just before starting event loop  ------------
-void TopTreeProducer::beginJob(const edm::EventSetup&)
+void TopTreeProducer::beginJob()
 {
 
 	// Load Config parameters	
