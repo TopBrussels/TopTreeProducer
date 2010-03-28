@@ -33,7 +33,14 @@ public:
 	virtual TString typeName() const { return "TRootCompositeCandidate"; }
 
 
-        TRootTopCandidate	daughter(const std::string& s) const { for(unsigned int i=0;i<daughters_.size();i++) if(daughters_[i].second == s) return daughters_[i].first;};
+        TRootTopCandidate daughter(const std::string& s) const { 
+          for(unsigned int i=0;i<daughters_.size();i++) 
+            if(daughters_[i].second == s) 
+              return daughters_[i].first;
+
+	  return TRootTopCandidate();
+        };
+
 	std::vector< std::pair<TRootTopCandidate,std::string> > daughters() const { return daughters_;};
 	int NofDaughters() const { return daughters_.size(); };
 	void SetDaughters( std::vector< std::pair<TRootTopCandidate,std::string> > daughters) { daughters_ = daughters; };
