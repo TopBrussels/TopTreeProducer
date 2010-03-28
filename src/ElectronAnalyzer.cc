@@ -163,7 +163,8 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 			// Isolation
 			pair < Float_t, Int_t > trackerIso;
 
-			trackerIso = patElectron->trackIsoDeposit()->depositAndCountWithin(0.1);
+			/* TrackIsoDeposit makes the toptreeproducer crash in 35X -> To Be Checked!! */
+			/*trackerIso = patElectron->trackIsoDeposit()->depositAndCountWithin(0.1);
 			localElectron.setIsoR01_sumPt(trackerIso.first);
 			localElectron.setIsoR01_nTracks(trackerIso.second);
 
@@ -182,8 +183,8 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 			localElectron.setIsoR05_nTracks(trackerIso.second);
 			localElectron.setIsoR05_emEt( patElectron->ecalIsoDeposit()->depositAndCountWithin(0.5).first );
 			localElectron.setIsoR05_hadEt( patElectron->hcalIsoDeposit()->depositAndCountWithin(0.5).first );
-
-
+			*/
+			
 			// Electron ID
 			
 			// Old 2.1.X electron ID
