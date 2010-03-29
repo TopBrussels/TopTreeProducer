@@ -29,6 +29,8 @@
 #include "../interface/MCAssociator.h"
 #include "../interface/VertexAnalyzer.h"
 #include "../interface/JetAnalyzer.h"
+#include "../interface/CaloJetAnalyzer.h"
+#include "../interface/PFJetAnalyzer.h"
 #include "../interface/MuonAnalyzer.h"
 #include "../interface/CosmicMuonAnalyzer.h"
 #include "../interface/ElectronAnalyzer.h"
@@ -44,6 +46,8 @@
 #include "../interface/TRootParticle.h"
 #include "../interface/TRootMCParticle.h"
 #include "../interface/TRootJet.h"
+#include "../interface/TRootCaloJet.h"
+#include "../interface/TRootPFJet.h"
 #include "../interface/TRootMuon.h"
 #include "../interface/TRootCosmicMuon.h"
 #include "../interface/TRootElectron.h"
@@ -87,8 +91,12 @@ private:
 	bool doSignalMuMuGamma;
 	bool doSignalTopTop;
 	bool doPrimaryVertex;
-	bool doJet;
-	bool doJetStudy;
+//	bool doJet;
+//	bool doJetStudy;
+	bool doCaloJet;
+	bool doCaloJetStudy;
+	bool doPFJet;
+	bool doPFJetStudy;
 	bool doMuon;
 	bool doCosmicMuon;
 	bool doElectron;
@@ -98,7 +106,9 @@ private:
 	bool doSpinCorrGen;
 	bool doSemiLepEvent;
 	bool drawMCTree;
-	std::vector<std::string> vJetProducer;
+//	std::vector<std::string> vJetProducer;
+	std::vector<std::string> vCaloJetProducer;
+	std::vector<std::string> vPFJetProducer;
 	std::vector<std::string> vCosmicMuonProducer;	
 	
 	int nTotEvt_;
@@ -107,8 +117,12 @@ private:
 	TRootEvent* rootEvent;
 	TClonesArray* mcParticles;
 	TClonesArray* tracks;
-	TClonesArray* jets;
-	vector<TClonesArray*> vjets;
+//	TClonesArray* jets;
+//	vector<TClonesArray*> vjets;
+	TClonesArray* caloJets;
+	vector<TClonesArray*> vcaloJets;
+	TClonesArray* pfJets;
+	vector<TClonesArray*> vpfJets;
 	TClonesArray* muons;
 	vector<TClonesArray*> vcosmicMuons;
 	vector<vector<TClonesArray*> > vcosmicMuonTracks;

@@ -36,7 +36,7 @@
 <flags LDFLAGS="-lTMVA">
 <flags EDM_PLUGIN=1>
 <export>
-	<lib name=TopTreeProducer>
+#	<lib name=TopTreeProducer>
 	<use name=FWCore/Framework>
 	<use name=FWCore/PluginManager>
 	<use name=FWCore/ParameterSet>

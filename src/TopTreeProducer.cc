@@ -36,8 +36,12 @@ void TopTreeProducer::beginJob()
 	doMC = myConfig_.getUntrackedParameter<bool>("doMC",false);
 	doPDFInfo = myConfig_.getUntrackedParameter<bool>("doPDFInfo",false);
 	doPrimaryVertex = myConfig_.getUntrackedParameter<bool>("doPrimaryVertex",false);
-	doJet = myConfig_.getUntrackedParameter<bool>("doJet",false);
-	doJetStudy = myConfig_.getUntrackedParameter<bool>("doJetStudy",false);
+//	doJet = myConfig_.getUntrackedParameter<bool>("doJet",false);
+//	doJetStudy = myConfig_.getUntrackedParameter<bool>("doJetStudy",false);
+	doCaloJet = myConfig_.getUntrackedParameter<bool>("doCaloJet",false);
+	doCaloJetStudy = myConfig_.getUntrackedParameter<bool>("doCaloJetStudy",false);
+	doPFJet = myConfig_.getUntrackedParameter<bool>("doPFJet",false);
+	doPFJetStudy = myConfig_.getUntrackedParameter<bool>("doPFJetStudy",false);
 	doMuon = myConfig_.getUntrackedParameter<bool>("doMuon",false);
 	doCosmicMuon = myConfig_.getUntrackedParameter<bool>("doCosmicMuon",false);
 	doElectron = myConfig_.getUntrackedParameter<bool>("doElectron",false);	
@@ -50,12 +54,19 @@ void TopTreeProducer::beginJob()
 	vector<string> defaultVec;
 	vector<string> defaultVecCM;
 	
-	vJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vjetProducer",defaultVec);
+//	vJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vjetProducer",defaultVec);
+	vCaloJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vcaloJetProducer",defaultVec);
+	vPFJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vpfJetProducer",defaultVec);
 	vCosmicMuonProducer = producersNames_.getUntrackedParameter<vector<string> >("vcosmicMuonProducer",defaultVecCM);
 
-	for(unsigned int s=0;s<vJetProducer.size();s++){
+	for(unsigned int s=0;s<vCaloJetProducer.size();s++){
 		TClonesArray* a;
-		vjets.push_back(a); 
+		vcaloJets.push_back(a);
+	}
+
+	for(unsigned int s=0;s<vPFJetProducer.size();s++){
+		TClonesArray* a;
+		vpfJets.push_back(a);
 	}
 
 	for(unsigned int s=0;s<vCosmicMuonProducer.size();s++){
@@ -96,24 +107,40 @@ void TopTreeProducer::beginJob()
 		mcParticles = new TClonesArray("TRootMCParticle", 1000);
 		eventTree_->Branch ("MCParticles", "TClonesArray", &mcParticles);
 	}
-	
-	
 
-	if(doJet)
+	if(doCaloJet)
 	{
-		if(verbosity>0) cout << "Jets info will be added to rootuple" << endl;
-		jets = new TClonesArray("TRootJet", 1000);
-		eventTree_->Branch ("Jets", "TClonesArray", &jets);
+		if(verbosity>0) cout << "CaloJets info will be added to rootuple" << endl;
+		caloJets = new TClonesArray("TRootCaloJet", 1000);
+		eventTree_->Branch ("CaloJets", "TClonesArray", &caloJets);
 	}
 	
-	if(doJetStudy)
+	if(doCaloJetStudy)
 	{
-		if(verbosity>0) cout << "Jets info will be added to rootuple (for JetStudy)" << endl;
-		for(unsigned int s=0;s<vJetProducer.size();s++){
-			vjets[s] = new TClonesArray("TRootJet", 1000);
+		if(verbosity>0) cout << "CaloJets info will be added to rootuple (for CaloJetStudy)" << endl;
+		for(unsigned int s=0;s<vCaloJetProducer.size();s++){
+			vcaloJets[s] = new TClonesArray("TRootCaloJet", 1000);
 			char name[100];
-			sprintf(name,"Jets_%s",vJetProducer[s].c_str());
-			eventTree_->Branch (name, "TClonesArray", &vjets[s]);
+			sprintf(name,"CaloJets_%s",vCaloJetProducer[s].c_str());
+			eventTree_->Branch (name, "TClonesArray", &vcaloJets[s]);
+		}
+	}
+
+	if(doPFJet)
+	{
+		if(verbosity>0) cout << "PFJets info will be added to rootuple" << endl;
+		pfJets = new TClonesArray("TRootPFJet", 1000);
+		eventTree_->Branch ("PFJets", "TClonesArray", &pfJets);
+	}
+	
+	if(doPFJetStudy)
+	{
+		if(verbosity>0) cout << "PFJets info will be added to rootuple (for PFJetStudy)" << endl;
+		for(unsigned int s=0;s<vPFJetProducer.size();s++){
+			vpfJets[s] = new TClonesArray("TRootPFJet", 1000);
+			char name[100];
+			sprintf(name,"PFJets_%s",vPFJetProducer[s].c_str());
+			eventTree_->Branch (name, "TClonesArray", &vpfJets[s]);
 		}
 	}
 	
@@ -206,7 +233,6 @@ void TopTreeProducer::beginJob()
 void TopTreeProducer::endJob()
 {
 
-
 	// Trigger Summary Tables
 	if(doHLT)
 	{	
@@ -292,25 +318,42 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		myVertexAnalyzer->Process(iEvent, rootEvent);
 		delete myVertexAnalyzer;
 	}
-	
-	
 
-	// Calo Jet
-	if(doJet)
+	// CaloJet
+	if(doCaloJet)
 	{
-		if(verbosity>1) cout << endl << "Analysing jets collection..." << endl;
-		JetAnalyzer* myJetAnalyzer = new JetAnalyzer(producersNames_, myConfig_, verbosity);
-		myJetAnalyzer->Process(iEvent, jets);
-		delete myJetAnalyzer;
+		if(verbosity>1) cout << endl << "Analysing CaloJets collection..." << endl;
+		CaloJetAnalyzer* myCaloJetAnalyzer = new CaloJetAnalyzer(producersNames_, myConfig_, verbosity);
+		myCaloJetAnalyzer->Process(iEvent, caloJets);
+		delete myCaloJetAnalyzer;
 	}
 
-	if(doJetStudy)
+	if(doCaloJetStudy)
 	{
-		if(verbosity>1) cout << endl << "Analysing jets collection (for JetStudy)..." << endl;
-		for(unsigned int s=0;s<vJetProducer.size();s++){
-			JetAnalyzer* myJetAnalyzer = new JetAnalyzer(producersNames_, s,  myConfig_, verbosity);
-			myJetAnalyzer->Process(iEvent, vjets[s]);
-			delete myJetAnalyzer;
+		if(verbosity>1) cout << endl << "Analysing Calojets collection (for JetStudy)..." << endl;
+		for(unsigned int s=0;s<vCaloJetProducer.size();s++){
+			CaloJetAnalyzer* myCaloJetAnalyzer = new CaloJetAnalyzer(producersNames_, s,  myConfig_, verbosity);
+			myCaloJetAnalyzer->Process(iEvent, vcaloJets[s]);
+			delete myCaloJetAnalyzer;
+		}
+	}
+
+	// PFJet
+	if(doPFJet)
+	{
+		if(verbosity>1) cout << endl << "Analysing PFJets collection..." << endl;
+		PFJetAnalyzer* myPFJetAnalyzer = new PFJetAnalyzer(producersNames_, myConfig_, verbosity);
+		myPFJetAnalyzer->Process(iEvent, pfJets);
+		delete myPFJetAnalyzer;
+	}
+
+	if(doPFJetStudy)
+	{
+		if(verbosity>1) cout << endl << "Analysing PFjets collection (for JetStudy)..." << endl;
+		for(unsigned int s=0;s<vPFJetProducer.size();s++){
+			PFJetAnalyzer* myPFJetAnalyzer = new PFJetAnalyzer(producersNames_, s,  myConfig_, verbosity);
+			myPFJetAnalyzer->Process(iEvent, vpfJets[s]);
+			delete myPFJetAnalyzer;
 		}
 	}
 
@@ -343,12 +386,13 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		delete mySpinCorrGenAnalyzer;
 	}
 
-        //SemiLepEvent
+	//SemiLepEvent
 	if(doSemiLepEvent)
 	{
 		if(verbosity>1) cout << endl << "Analysing SemiLepEvent collection..." << endl;
 		SemiLepEventAnalyzer* mySemiLepEventAnalyzer = new SemiLepEventAnalyzer(producersNames_, myConfig_, verbosity);
-		mySemiLepEventAnalyzer->Process(iEvent, semiLepEvent, jets, muons);
+		mySemiLepEventAnalyzer->Process(iEvent, semiLepEvent, caloJets, muons);
+		// FIXME: add possibility to use PFjets in the SemiLepEventAnalyzer
 		delete mySemiLepEventAnalyzer;
 	}
 	
@@ -412,7 +456,9 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	{
 		MCAssociator* myMCAssociator = new MCAssociator(producersNames_, verbosity);
 		myMCAssociator->init(iEvent, mcParticles);
-		if(doJet) myMCAssociator->process(jets);
+		if(doCaloJet) myMCAssociator->process(caloJets);
+		if(doPFJet) myMCAssociator->process(pfJets);
+		// FIXME: do MC association if multiple jets are used (with jetStudy stuff)
 		if(doMuon) myMCAssociator->process(muons);
 		if(doElectron) myMCAssociator->process(electrons);
 		if(doMET) myMCAssociator->process(met);
@@ -430,10 +476,16 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	if(verbosity>1) cout << endl << "Deleting objects..." << endl;
 	delete rootEvent;
 	if(doMC) (*mcParticles).Delete();
-	if(doJet) (*jets).Delete();
-	if(doJetStudy){
-		for(unsigned int s=0;s<vJetProducer.size();s++){
-			(*vjets[s]).Delete();
+	if(doCaloJet) (*caloJets).Delete();
+	if(doCaloJetStudy){
+		for(unsigned int s=0;s<vCaloJetProducer.size();s++){
+			(*vcaloJets[s]).Delete();
+		}
+	}
+	if(doPFJet) (*pfJets).Delete();
+	if(doPFJetStudy){
+		for(unsigned int s=0;s<vPFJetProducer.size();s++){
+			(*vpfJets[s]).Delete();
 		}
 	}
 	if(doMuon) (*muons).Delete();

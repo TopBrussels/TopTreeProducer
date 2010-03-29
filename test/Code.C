@@ -2,6 +2,8 @@
 #include "../interface/TRootMuon.h"
 #include "../interface/TRootElectron.h"
 #include "../interface/TRootJet.h"
+#include "../interface/TRootCaloJet.h"
+#include "../interface/TRootPFJet.h"
 #include "../interface/TRootMET.h"
 #include "../interface/TRootGenEvent.h"
 #include "../interface/TRootSignalEvent.h"
@@ -29,7 +31,7 @@ int main(){
 	bool isCSA07Soup              = false;
 	bool doHLT                    = false;
 	bool doMC                     = false;
-	bool doJet                    = true;
+	bool doCaloJet                = true;
 	bool doMuon                   = true;
 	bool doElectron               = false;
 	bool doMET                    = true;
@@ -50,8 +52,8 @@ int main(){
 	//Declartion of Branches and TClonesArray
 	TBranch* mcParticles_br;
 	TClonesArray* mcParticles;
-	TBranch* jets_br;
-	TClonesArray* jets;
+	TBranch* caloJets_br;
+	TClonesArray* caloJets;
 	TBranch* muons_br;
 	TClonesArray* muons;
 	TBranch* electrons_br;
@@ -68,11 +70,11 @@ int main(){
 		mcParticles_br->SetAddress(&mcParticles);
 	}
 
-	if(doJet)
+	if(doCaloJet)
 	{
-		jets_br = (TBranch *) eventTree->GetBranch("Jets");
-		jets = new TClonesArray("TRootJet", 0);
-		jets_br->SetAddress(&jets);
+		caloJets_br = (TBranch *) eventTree->GetBranch("CaloJets");
+		caloJets = new TClonesArray("TRootCaloJet", 0);
+		caloJets_br->SetAddress(&caloJets);
 	}
 
 	
@@ -136,7 +138,7 @@ int main(){
 
 
         //Declaration of histograms
-        TH1F h_PtJets("PtJets","Pt of jets",50,0,500); 
+        TH1F h_PtJets("PtCaloJets","Pt of caloJets",50,0,500); 
 	//
 
 	unsigned int nEvents = (int)eventTree->GetEntries();
@@ -173,16 +175,16 @@ int main(){
 		  }
 	        } 
 		
-		//access to jets
-		if(doJet){
-		  if(verbosity>4) cout<<"Access to jets"<<endl;
-                  if(verbosity>3) cout<<"Nof jets: "<<jets->GetEntriesFast()<<endl;
-		  TRootJet* jet;
-		  for(int i=0;i<jets->GetEntriesFast();i++){
-		    jet = (TRootJet*) jets->At(i);
-		    h_PtJets.Fill(jet->Pt());
+		//access to calojets
+		if(doCaloJet){
+		  if(verbosity>4) cout<<"Access to caloJets"<<endl;
+        if(verbosity>3) cout<<"Nof caloJets: "<<caloJets->GetEntriesFast()<<endl;
+		  TRootCaloJet* caloJet;
+		  for(int i=0;i<caloJets->GetEntriesFast();i++){
+		    caloJet = (TRootCaloJet*) caloJets->At(i);
+		    h_PtJets.Fill(caloJet->Pt());
 		  }
-                }
+      }
 		
 		//access to GenEvent
 		if(doGenEvent){

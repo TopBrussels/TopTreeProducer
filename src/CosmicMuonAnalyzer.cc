@@ -12,7 +12,6 @@ CosmicMuonAnalyzer::CosmicMuonAnalyzer (const edm::ParameterSet & producersNames
   dataType_ = producersNames.getUntrackedParameter < string > ("dataType", "unknown");
   vCosmicMuonProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("vcosmicMuonProducer");
   CosmicMuonProducer_ = edm::InputTag(vCosmicMuonProducer[0]);
-  jetProducer_ = producersNames.getParameter < edm::InputTag > ("jetProducer");
 }
 
 CosmicMuonAnalyzer::CosmicMuonAnalyzer (const edm::ParameterSet & producersNames, int iter ,  const edm::ParameterSet & myConfig, int verbosity):
@@ -21,7 +20,6 @@ verbosity_ (verbosity)
   dataType_ = producersNames.getUntrackedParameter < string > ("dataType", "unknown");
   vCosmicMuonProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("vcosmicMuonProducer");
   CosmicMuonProducer_ = edm::InputTag(vCosmicMuonProducer[iter]);
-  jetProducer_ = producersNames.getParameter < edm::InputTag > ("jetProducer");
 }
 
 CosmicMuonAnalyzer::~CosmicMuonAnalyzer ()
@@ -152,32 +150,6 @@ CosmicMuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootCosmi
     }
   }
 
-  //** Get a handle on the jets
-
-   unsigned int nJets = 0;
-  // reco::CaloJet or reco::PFJet ?
-  std::string jetType = "CALO";
-  if (jetProducer_.label () == "kt4CaloJets" || jetProducer_.label () == "kt6CaloJets" || jetProducer_.label () == "iterativeCone5CaloJets" || jetProducer_.label () == "sisCone5CaloJets" || jetProducer_.label () == "sisCone7CaloJets")
-    jetType = "CALO";
-
-  if (jetProducer_.label () == "kt4PFJets" || jetProducer_.label () == "kt6PFJets" || jetProducer_.label () == "iterativeCone5PFJets" || jetProducer_.label () == "sisCone5PFJets" || jetProducer_.label () == "sisCone7PFJets")
-    jetType = "PF";
-
-  edm::Handle < std::vector < reco::CaloJet > >recoCaloJets;
-  if ((dataType_ == "RECO" || dataType_ == "AOD") && jetType == "CALO")
-    {
-      iEvent.getByLabel (jetProducer_, recoCaloJets);
-      nJets = recoCaloJets->size ();
-    }
-
-  edm::Handle < std::vector < reco::PFJet > >recoPFJets;
-  if ((dataType_ == "RECO" || dataType_ == "AOD") && jetType == "PF")
-    {
-      iEvent.getByLabel (jetProducer_, recoPFJets);
-      nJets = recoPFJets->size ();
-    }
-
-
   // start processing muons
 
   if (verbosity_ > 1) {
@@ -224,42 +196,6 @@ CosmicMuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootCosmi
       }
       
 
-      const reco::Jet * jet = 0;
-      float DeltaRMin = 999.;
-      for (unsigned int l = 0; l < nJets; l++)
-	{
-
-	  if ((dataType_ == "RECO" || dataType_ == "AOD") && jetType == "CALO")
-	    jet = (const reco::Jet *) (&((*recoCaloJets)[l]));
-	  if ((dataType_ == "RECO" || dataType_ == "AOD") && jetType == "PF")
-	    jet = (const reco::Jet *) (&((*recoPFJets)[l]));
-	  
-
-	  if(jet && muon){
-	    //float val = ROOT::Math::VectorUtil::DeltaR (jet->p4 (), muon->p4 ()); // produces a glibc error after a few events
-
-	    double phi1 = muon->phi();
-	    double phi2 = jet->phi();
-
-	    double phia=phi1;
-	    if(phi1>PI) phia=phi1-(2*PI);
-	    double phib=phi2;
-	    if(phi2>PI) phib=phi2-(2*PI);
-	    double dphi=phia-phib;
-	    if(dphi>PI) dphi-=(2*PI);
-	    if(dphi<-PI) dphi+=(2*PI);
-	    
-	    double deta = muon->eta()-jet->eta();
-
-	    float val=sqrt(pow(deta,2)+pow(dphi,2));
-	    if (val < DeltaRMin)
-	      DeltaRMin = val;
-	  }
-      }
-
-      localCosmicMuon.SetDeltaRClosestJet (DeltaRMin);
-
-     
       if (dataType_ == "RECO" || dataType_ == "AOD") {
 	  // Some specific methods requiring  RECO / AOD format
 	  // Do association to genParticle ?

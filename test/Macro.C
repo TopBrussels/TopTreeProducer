@@ -2,6 +2,8 @@
 #include "../interface/TRootMuon.h"
 #include "../interface/TRootElectron.h"
 #include "../interface/TRootJet.h"
+#include "../interface/TRootCaloJet.h"
+#include "../interface/TRootPFJet.h"
 #include "../interface/TRootMET.h"
 #include "../interface/TRootGenEvent.h"
 #include "../interface/TRootSignalEvent.h"
@@ -18,7 +20,7 @@
 #include <TTree.h>
 
 void Macro(){
-        int verbosity                 = 4;
+        int verbosity                 = 5;
 	//0 muet
 	//1 Main Info
 	//2
@@ -29,14 +31,15 @@ void Macro(){
 	bool isCSA07Soup              = false;
 	bool doHLT                    = false;
 	bool doMC                     = false;
-	bool doJet                    = true;
+	bool doCaloJet                = true;
 	bool doMuon                   = false;
 	bool doElectron               = false;
 	bool doMET                    = false;
 	bool doGenEvent               = false;
 
-	//TFile* f=new TFile("TopTree_CRAFT09_test.root");
-	TFile* f=new TFile("TopTree_pythia.root");
+	cout << "Opening file" << endl;
+	TFile* f = new TFile("TopTree_TTbar_Summer09_7TeV_fromPAT.root");
+	//TFile* f=new TFile("TopTree_pythia.root");
 	//TFile* f=new TFile("/user/jmmaes/CMSSW/CMSSW_2_2_4_Sanity/CMSSW_2_2_4/src/TopBrussels/TopTreeProducer/test/TopTree.root");
 	TTree* runTree = (TTree*) f->Get("runTree");
 	TTree* eventTree = (TTree*) f->Get("eventTree");
@@ -49,11 +52,12 @@ void Macro(){
 	TRootEvent* event = 0;
 	event_br->SetAddress(&event);
 	
+	if(verbosity > 0) cout<<"Declaring Branches and TClonesArray"<<endl;
 	//Declartion of Branches and TClonesArray
 	TBranch* mcParticles_br;
 	TClonesArray* mcParticles;
-	TBranch* jets_br;
-	TClonesArray* jets;
+	TBranch* caloJets_br;
+	TClonesArray* caloJets;
 	TBranch* muons_br;
 	TClonesArray* muons;
 	TBranch* electrons_br;
@@ -70,12 +74,12 @@ void Macro(){
 		mcParticles_br->SetAddress(&mcParticles);
 	}
 
-	if(doJet)
+	if(doCaloJet)
 	{
-		jets_br = (TBranch *) eventTree->GetBranch("Jets_selectedLayer1Jets");
-//		jets_br = (TBranch *) eventTree->GetBranch("Jets_iterativeCone5CaloJets");
-		jets = new TClonesArray("TRootJet", 0);
-		jets_br->SetAddress(&jets);
+		caloJets_br = (TBranch *) eventTree->GetBranch("CaloJets_selectedPatJetsAK5Calo");
+//		caloJets_br = (TBranch *) eventTree->GetBranch("Jets_iterativeCone5CaloJets");
+		caloJets = new TClonesArray("TRootCaloJet", 0);
+		caloJets_br->SetAddress(&caloJets);
 	}
 
 	if(doMuon)
@@ -137,7 +141,7 @@ void Macro(){
 
 
    //Declaration of histograms
-   TH1F h_PtJets("PtJets","Pt of jets",50,0,500); 
+   TH1F h_PtJets("PtCaloJets","Pt of caloJets",50,0,500); 
 	TH1F h_distrib("distrib","",100,-1,1);
 	//
 
@@ -175,30 +179,16 @@ void Macro(){
 		  }
 	        } 
 		
-		//access to jets
-		if(doJet){
-		  if(verbosity>4) cout<<"Access to jets"<<endl;
-                  if(verbosity>3) cout<<"Nof jets: "<<jets->GetEntriesFast()<<endl;
-		  TRootJet* jet;
-		  for(int i=0;i<jets->GetEntriesFast();i++){
-		    jet = (TRootJet*) jets->At(i);
-		    h_PtJets.Fill(jet->Pt());
-		    //h_distrib.Fill(jet->btag_combinedSecondaryVertexBJetTags());
-		    h_distrib.Fill(jet->btag_trackCountingHighEffBJetTags());
-			 
-			 std::map<std::string, Float_t> jetIdVar = jet->jetIdVariables();
-//			 if(&jet->jetIdVariables() != NULL)
-			 {
-//			 	cout<<"jet->jetIdVariables() != NULL"<<endl;
-//				if(&jetIdVar["fHPD"] != NULL)
-					cout<<"jetIdVar[\"fHPD\"] = "<<jetIdVar["fHPD"]<<endl;
-//				if(&jetIdVar["fRBX"] != NULL)
-					cout<<"jetIdVar[\"fRBX\"] = "<<jetIdVar["fRBX"]<<endl;
-//				if(&jetIdVar["phiphiMoment"] != NULL)
-					cout<<"jetIdVar[\"phiphiMoment\"] = "<<jetIdVar["phiphiMoment"]<<endl;
-			 }
-//			 else cout<<"jet->jetIdVariables() == NULL"<<endl;
-
+		//access to caloJets
+		if(doCaloJet){
+		  if(verbosity>4) cout<<"Access to caloJets"<<endl;
+        if(verbosity>3) cout<<"Nof caloJets: "<<caloJets->GetEntriesFast()<<endl;
+		  TRootCaloJet* caloJet;
+		  for(int i=0;i<caloJets->GetEntriesFast();i++){
+		    caloJet = (TRootCaloJet*) caloJets->At(i);
+		    h_PtJets.Fill(caloJet->Pt());
+		    //h_distrib.Fill(caloJet->btag_combinedSecondaryVertexBJetTags());
+		    h_distrib.Fill(caloJet->btag_trackCountingHighEffBJetTags());
 		  }
 		}
 		

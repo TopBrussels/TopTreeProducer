@@ -10,7 +10,6 @@ useMC_ (false)
 {
   dataType_ = producersNames.getUntrackedParameter < string > ("dataType", "unknown");
   muonProducer_ = producersNames.getParameter < edm::InputTag > ("muonProducer");
-  jetProducer_ = producersNames.getParameter < edm::InputTag > ("jetProducer");
 }
 
 MuonAnalyzer::MuonAnalyzer (const edm::ParameterSet & producersNames, const edm::ParameterSet & myConfig, int verbosity):
@@ -19,7 +18,6 @@ verbosity_ (verbosity)
   dataType_ = producersNames.getUntrackedParameter < string > ("dataType", "unknown");
   muonProducer_ = producersNames.getParameter < edm::InputTag > ("muonProducer");
   useMC_ = myConfig.getUntrackedParameter < bool > ("doMuonMC");
-  jetProducer_ = producersNames.getParameter < edm::InputTag > ("jetProducer");
 }
 
 MuonAnalyzer::~MuonAnalyzer ()
@@ -50,36 +48,6 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
   edm::Handle<reco::BeamSpot> beamSpotHandle;
   iEvent.getByLabel("offlineBeamSpot", beamSpotHandle);
   const TrackBase::Point & beamSpot = beamSpotHandle->position();
-
-  unsigned int nJets = 0;
-  // reco::CaloJet or reco::PFJet ?
-  std::string jetType = "BASIC";
-  if (jetProducer_.label () == "kt4CaloJets" || jetProducer_.label () == "kt6CaloJets" || jetProducer_.label () == "iterativeCone5CaloJets" || jetProducer_.label () == "sisCone5CaloJets" || jetProducer_.label () == "sisCone7CaloJets")
-    jetType = "CALO";
-
-  if (jetProducer_.label () == "kt4PFJets" || jetProducer_.label () == "kt6PFJets" || jetProducer_.label () == "iterativeCone5PFJets" || jetProducer_.label () == "sisCone5PFJets" || jetProducer_.label () == "sisCone7PFJets")
-    jetType = "PF";
-
-  edm::Handle < std::vector < reco::CaloJet > >recoCaloJets;
-  if ((dataType_ == "RECO" || dataType_ == "AOD") && jetType == "CALO")
-    {
-      iEvent.getByLabel (jetProducer_, recoCaloJets);
-      nJets = recoCaloJets->size ();
-    }
-
-  edm::Handle < std::vector < reco::PFJet > >recoPFJets;
-  if ((dataType_ == "RECO" || dataType_ == "AOD") && jetType == "PF")
-    {
-      iEvent.getByLabel (jetProducer_, recoPFJets);
-      nJets = recoPFJets->size ();
-    }
-
-  edm::Handle < std::vector < pat::Jet > >patJets;
-  if (dataType_ == "PAT" || dataType_ == "PATAOD")
-    {
-      iEvent.getByLabel (jetProducer_, patJets);
-      nJets = patJets->size ();
-    }
 
 
   if (verbosity_ > 1)
@@ -118,32 +86,6 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
 	  localMuon.SetInnerTrack (TLorentzVector (muon->innerTrack()->px (), muon->innerTrack ()->py(), muon->innerTrack()->pz (), muon->innerTrack()->p ()));
 	}
       
-      const reco::Jet * jet = 0;
-      float DeltaRMin = 999.;
-      for (unsigned int k = 0; k < nJets; k++)
-	{
-
-	  if ((dataType_ == "RECO" || dataType_ == "AOD") && jetType == "CALO")
-	    jet = (const reco::Jet *) (&((*recoCaloJets)[k]));
-	  if ((dataType_ == "RECO" || dataType_ == "AOD") && jetType == "PF")
-	    jet = (const reco::Jet *) (&((*recoPFJets)[k]));
-	  if (dataType_ == "PAT" || dataType_ == "PATAOD")
-	    {
-	      jet = (const reco::Jet *) (&((*patJets)[k]));
-	      if ((*patJets)[k].isCaloJet ())
-		jetType = "CALO";
-	      if ((*patJets)[k].isPFJet ())
-		jetType = "PF";
-	    }
-
-	  if(jet && muon){
-	    float val = ROOT::Math::VectorUtil::DeltaR (jet->p4 (), muon->p4 ());
-	    if (val < DeltaRMin)
-	      DeltaRMin = val;
-	  }
-	}
-      localMuon.SetDeltaRClosestJet (DeltaRMin);
-
       if (dataType_ == "RECO" || dataType_ == "AOD")
 	{
 	  // Some specific methods requiring  RECO / AOD format
