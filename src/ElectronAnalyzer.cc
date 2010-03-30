@@ -8,6 +8,8 @@ ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& producersNames):verb
 {
 	dataType_ = producersNames.getUntrackedParameter<string>("dataType","unknown");
 	electronProducer_ = producersNames.getParameter<edm::InputTag>("electronProducer");
+        primaryVertexProducer_ = producersNames.getParameter<edm::InputTag>("primaryVertexProducer");
+        newId_ = producersNames.getParameter<bool>("electronNewId");
 }
 
 ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
@@ -16,6 +18,8 @@ ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& producersNames, cons
 	electronProducer_ = producersNames.getParameter<edm::InputTag>("electronProducer");
 	useMC_ = myConfig.getUntrackedParameter<bool>("doElectronMC");
 	runSuperCluster_ = myConfig.getUntrackedParameter<bool>("runSuperCluster",false);
+        primaryVertexProducer_ = producersNames.getParameter<edm::InputTag>("primaryVertexProducer");
+        newId_ = producersNames.getParameter<bool>("electronNewId");
 }
 
 ElectronAnalyzer::~ElectronAnalyzer()
@@ -60,70 +64,86 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 			,electron->pdgId()
 			,electron->charge()
 		); 
+//=======================================
+                
+                localElectron.setChargeInfo(electron->scPixCharge(),electron->isGsfCtfScPixChargeConsistent(),electron->isGsfScPixChargeConsistent(),electron->isGsfCtfChargeConsistent());
+                localElectron.setSeedingInfo(electron->ecalDrivenSeed(), electron->trackerDrivenSeed());
+                localElectron.setTrackClusterMatching(electron->eSuperClusterOverP(),electron->eEleClusterOverPout(),electron->eSeedClusterOverP(),
+                        electron->eSeedClusterOverPout(),electron->deltaEtaSuperClusterTrackAtVtx(),electron->deltaEtaSeedClusterTrackAtCalo(),
+                        electron->deltaPhiSuperClusterTrackAtVtx(),electron->deltaPhiSeedClusterTrackAtCalo(),electron->deltaPhiEleClusterTrackAtCalo(),
+                        electron->deltaEtaEleClusterTrackAtCalo());
 
-		// Variables from reco::GsfElectron
-		localElectron.setClassification(electron->classification());
-		localElectron.setCaloEnergy(electron->caloEnergy());
-		localElectron.setCaloEnergyError(electron->ecalEnergyError());
-		// FIXME - Protect against sqrt(0)
-		localElectron.setTrackMomentum(sqrt(electron->trackMomentumAtVtx().Mag2()));
-		localElectron.setTrackMomentumError(electron->trackMomentumError());
-		localElectron.setHadOverEm(electron->hadronicOverEm());
-		localElectron.setDeltaEtaIn(electron->deltaEtaSuperClusterTrackAtVtx());
-		localElectron.setDeltaPhiIn(electron->deltaPhiSuperClusterTrackAtVtx());
-		localElectron.setEnergySuperClusterOverPin(electron->eSuperClusterOverP());
-		localElectron.setDeltaEtaOut(electron->deltaEtaSeedClusterTrackAtCalo());
-		localElectron.setDeltaPhiOut(electron->deltaPhiSeedClusterTrackAtCalo());
-		localElectron.setEnergySeedClusterOverPout(electron->eSeedClusterOverPout());
-		localElectron.setEnergyScaleCorrected(electron->isEnergyScaleCorrected());
-		localElectron.setMomentumCorrected(electron->isMomentumCorrected());
+                //setTrackProperties:
+                localElectron.setTrackMomentum(sqrt(electron->trackMomentumAtVtx().Mag2()));
+                localElectron.setTrackMomentumAtCalo(sqrt(electron->trackMomentumAtCalo().Mag2()));
+                localElectron.setTrackMomentumAtElectronCluster( sqrt(electron->trackMomentumAtEleClus().Mag2()));
+                localElectron.setTrackMomentumAtVtxWithConstraint( sqrt(electron->trackMomentumAtVtxWithConstraint().Mag2()));
+                localElectron.setTrackMomentumOut( sqrt(electron->trackMomentumOut().Mag2()));
+                localElectron.setTrackPositionAtCalo(electron->trackPositionAtCalo().x(),  electron->trackPositionAtCalo().Y(),  electron->trackPositionAtCalo().Z());
+                localElectron.setTrackPositionAtVtx( electron->trackPositionAtVtx().x(),  electron->trackPositionAtVtx().y(),  electron->trackPositionAtVtx().z());
 
-		// Variables from reco::GsfTrack
+                //setCorrections
+                localElectron.setCaloEnergyError( electron->ecalEnergyError()) ;
+                localElectron.setCaloEnergy(electron->caloEnergy()) ;
+                localElectron.setElectronMomentumError( electron->electronMomentumError());
+                localElectron.setEnergyScaleCorrected( electron->isEcalEnergyCorrected());
+                localElectron.setMomentumCorrected( electron->isMomentumCorrected()) ;
+                localElectron.setTrackMomentumError(electron->trackMomentumError());
+
 		reco::GsfTrackRef gsfTrack = electron->gsfTrack();
 		if ( gsfTrack.isNonnull() )
 		{
 			const reco::HitPattern& hit = gsfTrack->hitPattern();
+
 			localElectron.setPixelLayersWithMeasurement(hit.pixelLayersWithMeasurement());
 			localElectron.setStripLayersWithMeasurement(hit.stripLayersWithMeasurement());
-			// FIXME - replace with double dxy(const Point& myBeamSpot) method ?
+
 			localElectron.setD0(gsfTrack->d0());
 			localElectron.setD0Error(gsfTrack->d0Error());
-			// FIXME - replace with double dsz(const Point& myBeamSpot) method ?
 			localElectron.setDsz(gsfTrack->dsz());
 			localElectron.setDszError(gsfTrack->dszError());
-			localElectron.setNormalizedChi2(gsfTrack->normalizedChi2());
-			localElectron.setPtError(gsfTrack->ptError());
-			localElectron.setEtaError(gsfTrack->etaError());
-			localElectron.setPhiError(gsfTrack->phiError());
+
+			localElectron.setTrackNormalizedChi2(gsfTrack->normalizedChi2());
+			localElectron.setTrackPtError(gsfTrack->ptError());
+
+                        localElectron.setTrackMissingHits(gsfTrack->trackerExpectedHitsInner().numberOfHits());
 		}
 
-		// Variables from reco::SuperCluster
+                edm::Handle< reco::VertexCollection > recoVertex;
+                iEvent.getByLabel(primaryVertexProducer_, recoVertex);
+                //good for eID : http://cmssw.cvs.cern.ch/cgi-bin/cmssw.cgi/CMSSW/RecoEgamma/ElectronIdentification/src/CutBasedElectronID.cc?revision=1.17&view=markup&sortdir=down&pathrev=V00-03-05
+                double ip = -9999.;
+                if (recoVertex->size() != 0) {
+                    reco::VertexRef vtx(recoVertex, 0);
+                    ip = fabs(electron->gsfTrack()->dxy(math::XYZPoint(vtx->x(),vtx->y(),vtx->z())));
+                } else
+                  ip = fabs(electron->gsfTrack()->dxy());
+
+                localElectron.setImpactParameter(ip);
+                
+                //setSuperCluster
+                localElectron.setCaloPosition(electron->caloPosition().x(),electron->caloPosition().y(),electron->caloPosition().z());
+                localElectron.setBasicClusterSize(electron->basicClustersSize());
+                
+                //setShowerShape
+                
+                
+                localElectron.setE1x5( electron->e1x5());
+                localElectron.setE2x5Max( electron->e2x5Max());
+                localElectron.setE5x5( electron->e5x5());
+                localElectron.setHoverEDepth1( electron->hcalDepth1OverEcal());
+                localElectron.setHoverEDepth2( electron->hcalDepth2OverEcal());
+                localElectron.setSigmaEtaEta( electron->sigmaEtaEta());
+                localElectron.setSigmaIetaIeta( electron->sigmaIetaIeta());
+
 		reco::SuperClusterRef superCluster = electron->superCluster();
-		//const reco::SuperCluster* sc = superCluster.get();
 		if ( superCluster.isNonnull() && runSuperCluster_ )
 		{
-			localElectron.setNbClusters(superCluster->clustersSize ());
+                        localElectron.setNbClusters(superCluster->clustersSize ());
 			localElectron.setSuperClusterRawEnergy(superCluster->rawEnergy());
 			localElectron.setPreshowerEnergy(superCluster->preshowerEnergy());
-			localElectron.setCaloPosition(
-				superCluster->position().X()
-				,superCluster->position().Y()
-				,superCluster->position().Z()
-			);
-
-			// FIXME - associator supercluster <-> electron
-			//localElectron.setSCRef(superCluster->toto());
-		}		
-
-
-		// Cluster Shape variables
-		// need reco::SuperCluster and reco::BasicCluster
-		if ( superCluster.isNonnull() && runSuperCluster_ )
-		{
 			reco::CaloClusterPtr seedBasicCluster = superCluster->seed();
 			if ( seedBasicCluster.isNonnull() ) localElectron.setClusterAlgo(seedBasicCluster->algo());
-
-			// dR of the cone centered on the reco::GsfElectron and containing all its basic clusters constituents
 			Float_t caloConeSize = 0;
 			for (reco::CaloCluster_iterator  basicCluster = (*superCluster).clustersBegin(); basicCluster != (*superCluster).clustersEnd(); ++basicCluster )
 			{
@@ -132,17 +152,51 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 			}
 			// FIXME - if no BasicCluster collection, init to -999.
 			localElectron.setCaloConeSize(caloConeSize);
-
-			// need reduced Ecal RecHits Collections for EcalClusterLazyTools
-			// FIXME - check lazyTools is initialized ==> lazyTools has to be a pointer
-			if ( seedBasicCluster.isNonnull() ) 
+			if ( seedBasicCluster.isNonnull() )
 			{
 				localElectron.setE2x2(lazyTools.e2x2(*seedBasicCluster));
 				localElectron.setE3x3(lazyTools.e3x3(*seedBasicCluster));
-				localElectron.setE5x5(lazyTools.e5x5(*seedBasicCluster));
-				localElectron.setEMax(lazyTools.eMax(*seedBasicCluster));
 			}
 		}
+
+                //setFiducialFlags
+                localElectron.setFiducialFlags(electron->isEB(),electron->isEE(), electron->isEBEEGap(),electron->isEBEtaGap(),electron->isEBPhiGap(),electron->isEEDeeGap(),electron->isEERingGap());
+
+                //Isolation
+                //localElectron.setIsolation(1, electron->getIsolation(1));
+                //localElectron.setIsolation(2, electron->getIsolation(2));
+
+                localElectron.setIsoR03_Depth1HadEt(electron->dr03HcalDepth1TowerSumEt());
+                localElectron.setIsoR03_Depth2HadEt(electron->dr03HcalDepth2TowerSumEt());
+                localElectron.setIsoR03_emEt(electron->dr03EcalRecHitSumEt());
+                localElectron.setIsoR03_sumPt(electron->dr03TkSumPt());
+
+                localElectron.setIsoR04_Depth1HadEt(electron->dr04HcalDepth1TowerSumEt());
+                localElectron.setIsoR04_Depth2HadEt(electron->dr04HcalDepth2TowerSumEt());
+                localElectron.setIsoR04_emEt(electron->dr04EcalRecHitSumEt());
+                localElectron.setIsoR04_sumPt(electron->dr04TkSumPt());
+
+
+                //localElectron.setIsolation(5, electron->getIsolation(5));
+
+               
+
+                //            TLorentzVector tmpP4(-1000.,-1000.,-1000.,-1000);
+
+                localElectron.setClassification(electron->classification());
+                localElectron.setFbrem(electron->fbrem());
+//                localElectron.setTriggerInfo(electron->getTriggerInfo());
+//                localElectron.setConversion(electron->isFromConversion());
+
+
+//=======================================
+
+		// Variables from reco::GsfTrack
+
+
+
+		// Cluster Shape variables
+		// need reco::SuperCluster and reco::BasicCluster
 
 
 		if( dataType_=="RECO" || dataType_=="AOD" )
@@ -160,58 +214,23 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 			// Some specific methods to pat::Electron
 			const pat::Electron *patElectron = dynamic_cast<const pat::Electron*>(&*electron);
 
-			// Isolation
-			pair < Float_t, Int_t > trackerIso;
-
-			/* TrackIsoDeposit makes the toptreeproducer crash in 35X -> To Be Checked!! */
-			/*trackerIso = patElectron->trackIsoDeposit()->depositAndCountWithin(0.1);
-			localElectron.setIsoR01_sumPt(trackerIso.first);
-			localElectron.setIsoR01_nTracks(trackerIso.second);
-
-			trackerIso = patElectron->trackIsoDeposit()->depositAndCountWithin(0.2);
-			localElectron.setIsoR02_sumPt(trackerIso.first);
-			localElectron.setIsoR02_nTracks(trackerIso.second);
-
-			trackerIso = patElectron->trackIsoDeposit()->depositAndCountWithin(0.3);
-			localElectron.setIsoR03_sumPt(trackerIso.first);
-			localElectron.setIsoR03_nTracks(trackerIso.second);
-			localElectron.setIsoR03_emEt( patElectron->ecalIsoDeposit()->depositAndCountWithin(0.3).first );
-			localElectron.setIsoR03_hadEt( patElectron->hcalIsoDeposit()->depositAndCountWithin(0.3).first );
-
-			trackerIso = patElectron->trackIsoDeposit()->depositAndCountWithin(0.5);
-			localElectron.setIsoR05_sumPt(trackerIso.first );
-			localElectron.setIsoR05_nTracks(trackerIso.second);
-			localElectron.setIsoR05_emEt( patElectron->ecalIsoDeposit()->depositAndCountWithin(0.5).first );
-			localElectron.setIsoR05_hadEt( patElectron->hcalIsoDeposit()->depositAndCountWithin(0.5).first );
-			*/
-			
-			// Electron ID
-			
-			// Old 2.1.X electron ID
-			/*
-			localElectron.setIDPTDRLoose(patElectron->leptonID("ptdrLoose"));
-			localElectron.setIDPTDRMedium(patElectron->leptonID("ptdrMedium"));
-			localElectron.setIDPTDRTight(patElectron->leptonID("ptdrTight"));
-			localElectron.setIDCutBasedLoose(patElectron->leptonID("loose"));
-			localElectron.setIDCutBasedRobust(patElectron->leptonID("robust"));
-			localElectron.setIDCutBasedTight(patElectron->leptonID("tight"));
-			localElectron.setIDLikelihood(patElectron->leptonID("likelihood"));
-			localElectron.setIDNeuralNet(patElectron->leptonID("neuralnet"));
-			*/
-
-			// New 2.2.X electron ID
-			// Only Cut Based ID available by default (4 sequential cuts on H/E, DeltaEta, DeltaPhi, SigmaEtaEta)
-			// "Robust" ids (eidRobustLoose, eidRobustTight, eidRobustHighEnergy) corresponds to fixed threshold
-			// eidLoose and eidTight corresponds to the catagory based identification (E/p, fBrem)
-			localElectron.setIDCutBasedFixedThresholdLoose(int(patElectron->electronID("eidRobustLoose")));
-			localElectron.setIDCutBasedFixedThresholdTight(int(patElectron->electronID("eidRobustTight")));
-			localElectron.setIDCutBasedFixedThresholdHighEnergy(int(patElectron->electronID("eidRobustHighEnergy")));
-			localElectron.setIDCutBasedCategorizedLoose(int(patElectron->electronID("eidLoose")));
-			localElectron.setIDCutBasedCategorizedTight(int(patElectron->electronID("eidTight")));
-			//localElectron.setIDLikelihood(patElectron->leptonID("likelihood"));
-			//localElectron.setIDNeuralNet(patElectron->leptonID("neuralnet"));
-
-
+			 //identification
+                        localElectron.setIDCutBasedRobustLoose(int(patElectron->electronID("eidRobustLoose")));
+                        localElectron.setIDCutBasedRobustTight(int(patElectron->electronID("eidRobustTight")));
+                        localElectron.setIDCutBasedRobustHighEnergy(int(patElectron->electronID("eidRobustHighEnergy")));
+                        localElectron.setIDCategorizedLoose(int(patElectron->electronID("eidLoose")));
+                        localElectron.setIDCategorizedTight(int(patElectron->electronID("eidTight")));
+                        if(newId_){
+                            localElectron.setIDCiCVeryLoose(int(patElectron->electronID("eidCiCVeryLoose")));
+                            localElectron.setIDCiCLoose(int(patElectron->electronID("eidCiCLoose")));
+                            localElectron.setIDCiCMedium(int(patElectron->electronID("eidCiCMedium")));
+                            localElectron.setIDCiCTight(int(patElectron->electronID("eidCiCTight")));
+                            localElectron.setIDCiCSuperTight(int(patElectron->electronID("eidCiCSuperTight")));
+                            localElectron.setIDCiCHyperTight1(int(patElectron->electronID("eidCiCHyperTight1")));
+                            localElectron.setIDCiCHyperTight2(int(patElectron->electronID("eidCiCHyperTight2")));
+                            localElectron.setIDCiCHyperTight3(int(patElectron->electronID("eidCiCHyperTight3")));
+                            localElectron.setIDCiCHyperTight4(int(patElectron->electronID("eidCiCHyperTight4")));                           
+                        }
 			// Matched genParticle
 			if(useMC_)
 			{
@@ -221,6 +240,7 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 				} else {
 					localElectron.setGenParticleIndex(-1);
 				}
+
 			}
 
 		}
