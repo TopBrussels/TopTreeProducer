@@ -20,6 +20,9 @@
 #include "DataFormats/RecoCandidate/interface/IsoDeposit.h"
 #include "RecoEcal/EgammaCoreTools/interface/EcalClusterLazyTools.h"
 
+#include "DataFormats/VertexReco/interface/Vertex.h"
+#include "DataFormats/VertexReco/interface/VertexFwd.h"
+
 #include "../interface/TRootElectron.h"
 
 #include "TClonesArray.h"
@@ -38,8 +41,10 @@ private:
 	int verbosity_;
 	std::string dataType_ ;
 	edm::InputTag electronProducer_;
+        edm::InputTag primaryVertexProducer_;
 	bool useMC_;
         bool runSuperCluster_;
+        bool newId_;
 
 };
 
