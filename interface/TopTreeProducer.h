@@ -86,6 +86,7 @@ private:
 	std::string dataType_ ;
 	bool isCSA07Soup;
 	bool doHLT;
+        bool doHLTStudy;
 	bool doMC;
 	bool doPDFInfo;
 	bool doSignalMuMuGamma;
@@ -109,8 +110,10 @@ private:
 //	std::vector<std::string> vJetProducer;
 	std::vector<std::string> vCaloJetProducer;
 	std::vector<std::string> vPFJetProducer;
-	std::vector<std::string> vCosmicMuonProducer;	
-	
+	std::vector<std::string> vCosmicMuonProducer;
+        std::vector<edm::InputTag> vhltProducer;
+        std::vector<HLTAnalyzer*> vhlts;
+	std::vector<TRootRun*> vruns;
 	int nTotEvt_;
 	HLTAnalyzer* hltAnalyzer_;
 	TRootRun* runInfos_;
@@ -120,12 +123,12 @@ private:
 //	TClonesArray* jets;
 //	vector<TClonesArray*> vjets;
 	TClonesArray* caloJets;
-	vector<TClonesArray*> vcaloJets;
+	std::vector<TClonesArray*> vcaloJets;
 	TClonesArray* pfJets;
-	vector<TClonesArray*> vpfJets;
+	std::vector<TClonesArray*> vpfJets;
 	TClonesArray* muons;
-	vector<TClonesArray*> vcosmicMuons;
-	vector<vector<TClonesArray*> > vcosmicMuonTracks;
+	std::vector<TClonesArray*> vcosmicMuons;
+	std::vector<std::vector<TClonesArray*> > vcosmicMuonTracks;
 	TClonesArray* electrons;
 	TClonesArray* met;
 	TClonesArray* genEvent;
