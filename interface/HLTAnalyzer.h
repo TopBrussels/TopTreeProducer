@@ -40,19 +40,19 @@ public:
   		,hltErrors_(0)
   		,hltNames_(0)
 		{;}
-        HLTAnalyzer(const edm::ParameterSet& producersNames, int itr) :
-		verbosity_(0)
-		,triggerResultsTag_((producersNames.getUntrackedParameter<std::vector<edm::InputTag> > ("vhltProducer")).at(itr))
-  		,triggerNames_()
-  		,nEvents_(0)
-  		,nWasRun_(0)
-  		,nAccept_(0)
-  		,nErrors_(0)
-  		,hltWasRun_(0)
-  		,hltAccept_(0)
-  		,hltErrors_(0)
-  		,hltNames_(0)
-		{;}
+//        HLTAnalyzer(const edm::ParameterSet& producersNames, int itr) : //for adding more hlt menus
+//		verbosity_(0)
+//		,triggerResultsTag_((producersNames.getUntrackedParameter<std::vector<edm::InputTag> > ("vhltProducer")).at(itr))
+//  		,triggerNames_()
+//  		,nEvents_(0)
+//  		,nWasRun_(0)
+//  		,nAccept_(0)
+//  		,nErrors_(0)
+//  		,hltWasRun_(0)
+//  		,hltAccept_(0)
+//  		,hltErrors_(0)
+//  		,hltNames_(0)
+//		{;}
 	
 	~HLTAnalyzer() {;}
 	
