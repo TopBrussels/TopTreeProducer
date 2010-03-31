@@ -33,7 +33,7 @@ void TopTreeProducer::beginJob()
 	rootFileName_ = myConfig_.getUntrackedParameter<string>("RootFileName","noname.root");
 	isCSA07Soup = myConfig_.getUntrackedParameter<bool>("isCSA07Soup",false);
 	doHLT = myConfig_.getUntrackedParameter<bool>("doHLT",false);
-        doHLTStudy = myConfig_.getUntrackedParameter<bool>("doHLTStudy",false);
+//        doHLTStudy = myConfig_.getUntrackedParameter<bool>("doHLTStudy",false);
 	doMC = myConfig_.getUntrackedParameter<bool>("doMC",false);
 	doPDFInfo = myConfig_.getUntrackedParameter<bool>("doPDFInfo",false);
 	doPrimaryVertex = myConfig_.getUntrackedParameter<bool>("doPrimaryVertex",false);
@@ -54,10 +54,10 @@ void TopTreeProducer::beginJob()
 	doSemiLepEvent = myConfig_.getUntrackedParameter<bool>("doSemiLepEvent",false);
 	vector<string> defaultVec;
 	vector<string> defaultVecCM;
-        vector<edm::InputTag> defaultVecHlt;
-        defaultVecHlt.clear();
-        vruns.clear();
-        vhltProducer = producersNames_.getUntrackedParameter<vector<edm::InputTag> >("vhltProducer",defaultVecHlt);
+//        vector<edm::InputTag> defaultVecHlt;
+//        defaultVecHlt.clear();
+//        vruns.clear();
+//        vhltProducer = producersNames_.getUntrackedParameter<vector<edm::InputTag> >("vhltProducer",defaultVecHlt);
 //	vJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vjetProducer",defaultVec);
 	vCaloJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vcaloJetProducer",defaultVec);
 	vPFJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vpfJetProducer",defaultVec);
@@ -91,9 +91,9 @@ void TopTreeProducer::beginJob()
 	rootFile_ = new TFile(rootFileName_.c_str(), "recreate");
 	rootFile_->cd();
 
-	runInfos_ = new TRootRun();
+//	runInfos_ = new TRootRun();
 	runTree_ = new TTree("runTree", "Global Run Infos");
-	runTree_->Branch ("runInfos", "TRootRun", &runInfos_);
+//	runTree_->Branch ("runInfos", "TRootRun", &runInfos_);
 
 	rootEvent = 0;
 	eventTree_ = new TTree("eventTree", "Event Infos");
@@ -110,20 +110,20 @@ void TopTreeProducer::beginJob()
 		hltAnalyzer_ = new HLTAnalyzer(producersNames_);
 		hltAnalyzer_->setVerbosity(verbosity);
 	}
-        if(doHLTStudy)
-	{
-		for(unsigned int s=0;s<vhltProducer.size();s++){
-                        vruns.push_back(new TRootRun());
-                        cout<<"-------------"<<endl;
-			char name[100];
-			sprintf(name,"runInfos_%s",vhltProducer[s].process().c_str());
-			runTree_->Branch (name, "TRootRun", &vruns[s]);
-                        cout<<"========="<<endl;
-                        HLTAnalyzer * hltAna = new HLTAnalyzer(producersNames_,s);
-                        hltAna->setVerbosity(verbosity);
-                        vhlts.push_back(hltAna) ;
-		}
-	}
+//        if(doHLTStudy)//to add more hlt menus
+//	{
+//		for(unsigned int s=0;s<vhltProducer.size();s++){
+//                        vruns.push_back(new TRootRun());
+//                        cout<<"-------------"<<endl;
+//			char name[100];
+//			sprintf(name,"runInfos_%s",vhltProducer[s].process().c_str());
+//			runTree_->Branch (name, "TRootRun", &vruns[s]);
+//                        cout<<"========="<<endl;
+//                        HLTAnalyzer * hltAna = new HLTAnalyzer(producersNames_,s);
+//                        hltAna->setVerbosity(verbosity);
+//                        vhlts.push_back(hltAna) ;
+//		}
+//	}
 	if(doMC)
 	{
 		if(verbosity>0) cout << "MC Particles info will be added to rootuple" << endl;
@@ -263,14 +263,14 @@ void TopTreeProducer::endJob()
 		hltAnalyzer_ ->copySummary(runInfos_);
 		hltAnalyzer_->printStats();
 	}
-        if(doHLTStudy)
-	{
-		cout << "Trigger Summary Tables ALL" << endl;
-                for(unsigned int s=0;s<vhltProducer.size();s++){
-                    vhlts[s]->copySummary(vruns[s]);
-                    vhlts[s]->printStats();
-                }
-	}
+//        if(doHLTStudy)
+//	{
+//		cout << "Trigger Summary Tables ALL" << endl;
+//                for(unsigned int s=0;s<vhltProducer.size();s++){
+//                    vhlts[s]->copySummary(vruns[s]);
+//                    vhlts[s]->printStats();
+//                }
+//	}
 	runTree_->Fill();
 	
 	std::cout << "Total number of events: " << nTotEvt_ << std::endl;
@@ -326,16 +326,16 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		if (nTotEvt_==1) hltAnalyzer_->init(iEvent, rootEvent);
 		hltAnalyzer_->process(iEvent, rootEvent);
 	}
-	if(doHLTStudy)
-	{
-		if(verbosity>1) cout << endl << "Get All TriggerResults..." << endl;
-                for(unsigned int s=0;s<vhltProducer.size();s++){
-                    if (nTotEvt_==1)
-                        vhlts[s]->init(iEvent, rootEvent);
-                    vhlts[s]->process(iEvent, rootEvent);
-                }
-
-	}
+//	if(doHLTStudy) //if true, it will add the trigger menus in vhltProducer
+//	{
+//		if(verbosity>1) cout << endl << "Get All TriggerResults..." << endl;
+//                for(unsigned int s=0;s<vhltProducer.size();s++){
+//                    if (nTotEvt_==1)
+//                        vhlts[s]->init(iEvent, rootEvent);
+//                    vhlts[s]->process(iEvent, rootEvent);
+//                }
+//
+//	}
 	//if ( ! rootEvent->passGlobalHLT() ) return;
 
 	// MC Info
