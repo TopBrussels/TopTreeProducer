@@ -10,7 +10,9 @@
 #<use name=SimDataFormats/HepMCProduct>
 <use name=DataFormats/HepMCCandidate>
 <use name=SimGeneral/HepPDTRecord>
-
+<use name=DataFormats/TrackReco>
+<use name=DataFormats/BeamSpot>
+<use name=DataFormats/GsfTrackReco>
 
 <use name=DataFormats/L1GlobalTrigger>
 <use name=DataFormats/L1Trigger>
@@ -53,7 +55,9 @@
 	<use name=DataFormats/L1Trigger>
 	<use name=HLTrigger/HLTcore>
 	<use name=DataFormats/HLTReco>
-	
+	<use name=DataFormats/TrackReco>
+	<use name=DataFormats/BeamSpot>
+	<use name=DataFormats/GsfTrackReco>
 	<use name=RecoEgamma/EgammaTools>
 	<use name=RecoEgamma/EgammaMCTools>
 #	<use name=Geometry/CaloEventSetup>
