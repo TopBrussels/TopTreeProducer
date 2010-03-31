@@ -322,13 +322,13 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
         rootEvent->setGlobalHLT(true);
 	if(doHLT)
 	{
-		cout << endl << "Get TriggerResults..." << endl;
+		if(verbosity>1) cout << endl << "Get TriggerResults..." << endl;
 		if (nTotEvt_==1) hltAnalyzer_->init(iEvent, rootEvent);
 		hltAnalyzer_->process(iEvent, rootEvent);
 	}
 	if(doHLTStudy)
 	{
-		cout << endl << "Get All TriggerResults..." << endl;
+		if(verbosity>1) cout << endl << "Get All TriggerResults..." << endl;
                 for(unsigned int s=0;s<vhltProducer.size();s++){
                     if (nTotEvt_==1)
                         vhlts[s]->init(iEvent, rootEvent);

@@ -83,13 +83,13 @@ void
 NPGenEventAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootGenEvent)
 {
 
-  cout<<"Handle"<<endl;
+  //cout<<"Handle"<<endl;
   edm::Handle < reco::GenParticleCollection > hsrc;
-  cout<<"Handle"<<endl;
+  //cout<<"Handle"<<endl;
   iEvent.getByLabel (genParticlesProducer_, hsrc);
-  cout<<"Handle"<<endl;
+  //cout<<"Handle"<<endl;
   reco::GenParticleCollection src = * hsrc;
-  cout<<"Handle"<<endl;
+  //cout<<"Handle"<<endl;
 
   if (verbosity_ > 1)
     std::cout << "   NPGenEventAnalyzer  " << "   Label: " << genParticlesProducer_.label () << "   Instance: " << genParticlesProducer_.instance () << std::endl;
@@ -106,7 +106,7 @@ NPGenEventAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootGenEv
 
   for (reco::GenParticleCollection::const_iterator t = src.begin (); t != src.end (); ++t)
     {
-      cout<<t->p4()<<" "<<t->pdgId()<<" "<<t->status()<<endl;
+      if(verbosity_>4) cout<<t->p4()<<" "<<t->pdgId()<<" "<<t->status()<<endl;
       if (t->status () == 3)
 	{
 	  if (t->pdgId () > 100000)
@@ -178,7 +178,7 @@ NPGenEventAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootGenEv
 		  else
 		    bquark_  = ConvertMCPart(td);
 		}
-	      cout<<"TopGenPart"<<endl;
+	      //cout<<"TopGenPart"<<endl;
 	      //
 	      char cprod[1000];
 	      char cprodTemp[1000];
@@ -197,15 +197,15 @@ NPGenEventAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootGenEv
 	        TRootGenTop top (isLeptonic_, top_, W_, bquark_, quark_, quarkBar_, production_);
 	        tops_.push_back (top);
 	     }
-	      cout<<"End TopGenPart"<<endl;
+	      //cout<<"End TopGenPart"<<endl;
 	    }
 	}
     }
-    cout<<"AT THE END"<<endl;
+    //cout<<"AT THE END"<<endl;
   TRootNPGenEvent TRootgenEvt (isNewPhysics_, tops_, leptons_, quarks_, bquarks_, invisibleParticles_, neutrinos_, gluinos_, stops_);
-    cout<<"AT THE END"<<endl;
+    //cout<<"AT THE END"<<endl;
 
 
   new ((*rootGenEvent)[0]) TRootNPGenEvent (TRootgenEvt);
-    cout<<"AT THE END"<<endl;
+    //cout<<"AT THE END"<<endl;
 }
