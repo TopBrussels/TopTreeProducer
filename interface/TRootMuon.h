@@ -31,6 +31,8 @@ public:
 		,vetoHad_(-9999)
 	        ,d0_(-9999.)
 	        ,d0error_(-9999.)
+	        ,dz_(-9999.)
+	        ,dzerror_(-9999.)
 		,chi2_(-9999.)
 		,nofValidHits_(-9999)
                 ,innerTrack_(TLorentzVector())
@@ -59,6 +61,8 @@ public:
                 ,vetoHad_(muon.vetoHad_)
 	        ,d0_(muon.d0_)
 	        ,d0error_(muon.d0error_)
+	        ,dz_(muon.dz_)
+	        ,dzerror_(muon.dzerror_)
 		,chi2_(muon.chi2_)
 		,nofValidHits_(muon.nofValidHits_)
                 ,innerTrack_(muon.innerTrack_)
@@ -87,6 +91,8 @@ public:
 		,vetoHad_(-9999)
 	        ,d0_(-9999.)
 	        ,d0error_(-9999.)
+	        ,dz_(-9999.)
+	        ,dzerror_(-9999.)
 		,chi2_(-9999.)
 		,nofValidHits_(-9999)
                 ,innerTrack_(TLorentzVector())
@@ -115,6 +121,8 @@ public:
 		,vetoHad_(-9999)
 	        ,d0_(-9999.)
 	        ,d0error_(-9999.)
+	        ,dz_(-9999.)
+	        ,dzerror_(-9999.)
 		,chi2_(-9999.)
 		,nofValidHits_(-9999)
                 ,innerTrack_(TLorentzVector())
@@ -143,6 +151,8 @@ public:
 		,vetoHad_(-9999)
 	        ,d0_(-9999.)
 	        ,d0error_(-9999.)
+	        ,dz_(-9999.)
+	        ,dzerror_(-9999.)
 		,chi2_(-9999.)
 		,nofValidHits_(-9999)
                 ,innerTrack_(TLorentzVector())
@@ -171,6 +181,8 @@ public:
 		,vetoHad_(-9999)
 	        ,d0_(-9999.)
 	        ,d0error_(-9999.)
+	        ,dz_(-9999.)
+	        ,dzerror_(-9999.)
 		,chi2_(-9999.)
 		,nofValidHits_(-9999)
                 ,innerTrack_(TLorentzVector())
@@ -199,6 +211,8 @@ public:
 		,vetoHad_(-9999)
 	        ,d0_(-9999.)
 	        ,d0error_(-9999.)
+	        ,dz_(-9999.)
+	        ,dzerror_(-9999.)
 		,chi2_(-9999.)
 		,nofValidHits_(-9999)
                 ,innerTrack_(TLorentzVector())
@@ -259,6 +273,8 @@ public:
         Float_t vetoHad() const { return vetoHad_;} 
 	Float_t d0() const { return d0_;}  
 	Float_t d0error() const { return d0error_;}  
+	Float_t dz() const { return dz_;}
+	Float_t dzerror() const { return dzerror_;}
 	Float_t chi2() const { return chi2_;}
         Int_t nofValidHits() const { return nofValidHits_;}  
         TLorentzVector innerTrack() const { return innerTrack_;}
@@ -320,7 +336,9 @@ public:
 	void SetVetoEm(Float_t vetoEm) { vetoEm_ = vetoEm;}
 	void SetVetoHad(Float_t vetoHad) { vetoHad_ = vetoHad;}
 	void SetD0(Float_t d0) { d0_ = d0;}    
-	void SetD0Error(Float_t d0Error) { d0error_ = d0Error;}    
+	void SetD0Error(Float_t d0Error) { d0error_ = d0Error;}   
+	void SetDZ(Float_t dz) { dz_ = dz;}    
+	void SetDZError(Float_t dzError) { dzerror_ = dzError;}
 	void SetChi2(Float_t chi2){ chi2_ = chi2;}
         void SetNofValidHits(Int_t nofValidHits){ nofValidHits_ = nofValidHits;}
         void SetInnerTrack (TLorentzVector innerTrack) { innerTrack_ = innerTrack;}
@@ -364,6 +382,8 @@ public:
 	Float_t vetoHad_;           //veto conesize is 0.1  in the hcal
 	Float_t d0_;                // d0 of global Muon
 	Float_t d0error_;           // d0 error of global Muon
+	Float_t dz_;                // dZ of global Muon
+	Float_t dzerror_;           // dZ error of global Muon
 	Float_t chi2_;              // chi2 of global Muon
         Int_t nofValidHits_;        // nof hits of inner track
         TLorentzVector innerTrack_; // inner track 
