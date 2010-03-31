@@ -192,6 +192,5 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		electronNewId = cms.bool(False)
 	)
 )
-process.load("PhysicsTools.PatAlgos.patSequences_cff")
-process.p = cms.Path(process.patDefaultSequence*process.analysis)
+process.p = cms.Path(process.analysis)
 
