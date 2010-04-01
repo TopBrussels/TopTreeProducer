@@ -30,6 +30,7 @@
 #include "../interface/VertexAnalyzer.h"
 #include "../interface/JetAnalyzer.h"
 #include "../interface/CaloJetAnalyzer.h"
+#include "../interface/GenJetAnalyzer.h"
 #include "../interface/PFJetAnalyzer.h"
 #include "../interface/MuonAnalyzer.h"
 #include "../interface/CosmicMuonAnalyzer.h"
@@ -47,6 +48,7 @@
 #include "../interface/TRootMCParticle.h"
 #include "../interface/TRootJet.h"
 #include "../interface/TRootCaloJet.h"
+#include "../interface/TRootGenJet.h"
 #include "../interface/TRootPFJet.h"
 #include "../interface/TRootMuon.h"
 #include "../interface/TRootCosmicMuon.h"
@@ -96,6 +98,7 @@ private:
 //	bool doJetStudy;
 	bool doCaloJet;
 	bool doCaloJetStudy;
+	bool doGenJet;
 	bool doPFJet;
 	bool doPFJetStudy;
 	bool doMuon;
@@ -124,6 +127,7 @@ private:
 //	vector<TClonesArray*> vjets;
 	TClonesArray* caloJets;
 	std::vector<TClonesArray*> vcaloJets;
+	TClonesArray* genJets;
 	TClonesArray* pfJets;
 	std::vector<TClonesArray*> vpfJets;
 	TClonesArray* muons;

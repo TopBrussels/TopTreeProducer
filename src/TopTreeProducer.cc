@@ -41,6 +41,7 @@ void TopTreeProducer::beginJob()
 //	doJetStudy = myConfig_.getUntrackedParameter<bool>("doJetStudy",false);
 	doCaloJet = myConfig_.getUntrackedParameter<bool>("doCaloJet",false);
 	doCaloJetStudy = myConfig_.getUntrackedParameter<bool>("doCaloJetStudy",false);
+	doGenJet = myConfig_.getUntrackedParameter<bool>("doGenJet",false);
 	doPFJet = myConfig_.getUntrackedParameter<bool>("doPFJet",false);
 	doPFJetStudy = myConfig_.getUntrackedParameter<bool>("doPFJetStudy",false);
 	doMuon = myConfig_.getUntrackedParameter<bool>("doMuon",false);
@@ -148,6 +149,14 @@ void TopTreeProducer::beginJob()
 			eventTree_->Branch (name, "TClonesArray", &vcaloJets[s]);
 		}
 	}
+
+	if(doGenJet)
+	{
+		if(verbosity>0) cout << "GenJets info will be added to rootuple" << endl;
+		genJets = new TClonesArray("TRootGenJet", 1000);
+		eventTree_->Branch ("GenJets", "TClonesArray", &genJets);
+	}
+
 
 	if(doPFJet)
 	{
@@ -379,6 +388,15 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		}
 	}
 
+	// GenJet
+	if(doGenJet)
+	{
+		if(verbosity>1) cout << endl << "Analysing GenJets collection..." << endl;
+		GenJetAnalyzer* myGenJetAnalyzer = new GenJetAnalyzer(producersNames_, myConfig_, verbosity);
+		myGenJetAnalyzer->Process(iEvent, genJets);
+		delete myGenJetAnalyzer;
+	}
+
 	// PFJet
 	if(doPFJet)
 	{
@@ -523,6 +541,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 			(*vcaloJets[s]).Delete();
 		}
 	}
+	if(doGenJet) (*genJets).Delete();
 	if(doPFJet) (*pfJets).Delete();
 	if(doPFJetStudy){
 		for(unsigned int s=0;s<vPFJetProducer.size();s++){
