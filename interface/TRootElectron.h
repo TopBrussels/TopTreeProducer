@@ -121,7 +121,10 @@ public:
                 pdgIdMCElectron_(-9999),
                 classification_(-9999),
                 fBrem_(-9999.),
-                isConversion(true){
+                isConversion(true),
+                HLT_Ele10_SW_L1R(false),
+                HLT_Ele15_SW_L1R(false)
+        {
             
 //            TriggerMatchingInfo tmpTrig;
 //            tmpTrig.clear();
@@ -234,7 +237,9 @@ public:
                 pdgIdMCElectron_(e.MCId()),
                 classification_(e.classification()),
                 fBrem_(e.fbrem()),
-                isConversion(e.isFromConversion())
+                isConversion(e.isFromConversion()),
+                HLT_Ele10_SW_L1R(e.hasTriggerMatch("HLT_Ele10_SW_L1R")),
+                HLT_Ele15_SW_L1R(e.hasTriggerMatch("HLT_Ele15_SW_L1R"))
         {
             ;
             
@@ -345,7 +350,9 @@ public:
                 pdgIdMCElectron_(-9999),
                 classification_(-9999),
                 fBrem_(-9999.),
-                isConversion(true)
+                isConversion(true),
+                HLT_Ele10_SW_L1R(false),
+                HLT_Ele15_SW_L1R(false)
         {
 
 //            TriggerMatchingInfo tmpTrig;
@@ -460,7 +467,9 @@ public:
                 pdgIdMCElectron_(-9999),
                 classification_(-9999),
                 fBrem_(-9999.),
-                isConversion(true)
+                isConversion(true),
+                HLT_Ele10_SW_L1R(false),
+                HLT_Ele15_SW_L1R(false)
         {
             ;
 //            TriggerMatchingInfo tmpTrig;
@@ -578,7 +587,9 @@ public:
                 pdgIdMCElectron_(-9999),
                 classification_(-9999),
                 fBrem_(-9999.),
-                isConversion(true)
+                isConversion(true),
+                HLT_Ele10_SW_L1R(false),
+                HLT_Ele15_SW_L1R(false)
         {
            
 //            TriggerMatchingInfo tmpTrig;
@@ -694,7 +705,10 @@ public:
                 pdgIdMCElectron_(-9999),
                 classification_(-9999),
                 fBrem_(-9999.),
-                isConversion(true){
+                isConversion(true),
+                HLT_Ele10_SW_L1R(false),
+                HLT_Ele15_SW_L1R(false)
+        {
 //            TriggerMatchingInfo tmpTrig;
 //            tmpTrig.clear();
 //            setTriggerInfo(tmpTrig);
@@ -808,7 +822,9 @@ public:
                 pdgIdMCElectron_(-9999),
                 classification_(-9999),
                 fBrem_(-9999.),
-                isConversion(true)
+                isConversion(true),
+                HLT_Ele10_SW_L1R(false),
+                HLT_Ele15_SW_L1R(false)
         {
 //            TriggerMatchingInfo tmpTrig;
 //            tmpTrig.clear();
@@ -981,7 +997,8 @@ private:
     bool isConversion;
 
 //Trigger Info ======================================
-    std::vector<std::pair<std::string,bool> > triggerInfo;
+    bool HLT_Ele10_SW_L1R;
+    bool HLT_Ele15_SW_L1R;
 
 
 
@@ -1431,25 +1448,28 @@ public:
     //setter
     void setClassification(int i){classification_ = i;};
     bool isFromConversion()const{
-        return isConversion;
+        return ((bool)isConversion);
     }
     void setConversion(bool is){
         isConversion = is;
     }
     bool hasTriggerMatch(std::string input)const{
-        for(uint i = 0; i<triggerInfo.size(); i++){
-            if(triggerInfo.at(i).first != input)
-                continue;
-            return triggerInfo.at(i).second;
-        }
+        
+        if(input == "HLT_Ele10_SW_L1R")
+            return HLT_Ele10_SW_L1R ;
+        if(input == "HLT_Ele15_SW_L1R")
+            return HLT_Ele15_SW_L1R;
         return false;
     }
-    void setTriggerinfo(std::vector<std::pair<std::string, bool> > input){
-        triggerInfo.clear();
-        triggerInfo = input;
+    void setTriggerinfo(std::string input, bool is){
+        if(input == "HLT_Ele10_SW_L1R")
+            HLT_Ele10_SW_L1R = is;
+        if(input == "HLT_Ele15_SW_L1R")
+            HLT_Ele15_SW_L1R = is;
     }
+
 	
-	ClassDef (TRootElectron,7);
+	ClassDef (TRootElectron,9);
 };
 //typedef std::pair<int,double> IntDoublePair;
 //typedef std::pair<TRootElectron,std::vector<std::pair<int,double> > > MassPair;
