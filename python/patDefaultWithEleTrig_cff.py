@@ -14,14 +14,19 @@ electronTriggerMatchHLTEle15LWL1R.pathNames = 'HLT_Ele15_LW_L1R',#backup
 electronTriggerMatchHLTEle10LWL1R = electronTriggerMatchHLTEle15LWL1R.clone()
 electronTriggerMatchHLTEle10LWL1R.pathNames = 'HLT_Ele10_LW_L1R',#physics
 
+#electronTriggerMatchHLTEle15LWL1R.src = 'cleanPatElectrons' 
+#electronTriggerMatchHLTEle10LWL1R.src = 'cleanPatElectrons'
+
 # keep matching only for electron
 patTriggerMatcher = cms.Sequence(electronTriggerMatchHLTEle10LWL1R+electronTriggerMatchHLTEle15LWL1R+electronTriggerMatchHLTDoubleEle5SWL1R)
 
 #change the matching sources in embedder
 cleanPatElectronsTriggerMatch.matches = 'electronTriggerMatchHLTEle10LWL1R','electronTriggerMatchHLTEle15LWL1R'
-cleanPatElectronsTriggerMatch.src = 'selectedPatElectrons'
+cleanPatElectronsTriggerMatch.src = 'cleanPatElectrons'
 
 # keep Embedding only for electron
 patTriggerMatchEmbedder = cms.Sequence(cleanPatElectronsTriggerMatch)
 
 patDefaultWithTrigger = cms.Sequence(patDefaultSequence * patTrigger * patTriggerMatcher * patTriggerMatchEmbedder * patTriggerEvent)
+patAddTrigger = cms.Sequence(patTrigger * patTriggerMatcher * patTriggerMatchEmbedder * patTriggerEvent)
+
