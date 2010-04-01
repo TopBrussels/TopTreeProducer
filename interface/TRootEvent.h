@@ -22,6 +22,7 @@ public:
 		nb_(0)
 		,eventId_(-1)
 		,runId_(-1)
+		,lumiBlockId_(-1)
 		,passGlobalL1_(false)
 		,passGlobalHLT_(false)
 		,trigHLT_(0)
@@ -44,7 +45,7 @@ public:
 	Int_t nb() const { return nb_; }
 	Int_t eventId() const { return eventId_; }
 	Int_t runId() const { return runId_; }
-
+	Int_t lumiBlockId() const {return lumiBlockId_; }
 	// Trigger decision
 	Int_t passGlobalL1() const { return passGlobalL1_; }
 	Bool_t passGlobalHLT() const { return passGlobalHLT_; }
@@ -114,6 +115,7 @@ public:
 	void setNb(Int_t nb) { nb_ = nb; }
 	void setEventId(Int_t eventId) { eventId_ = eventId; }
 	void setRunId(Int_t runId) { runId_ = runId; }
+	void setLumiBlockId(Int_t lumiBlockId) { lumiBlockId_ = lumiBlockId; }
 	void setGlobalL1(Int_t passGlobalL1) { passGlobalL1_ = passGlobalL1; }
 	void setGlobalHLT(Bool_t passGlobalHLT) { passGlobalHLT_ = passGlobalHLT; }
 	void setTrigHLT(std::vector<Bool_t> trigHLT)
@@ -153,6 +155,7 @@ private:
 	Int_t nb_;
 	Int_t eventId_;
 	Int_t runId_;
+	Int_t lumiBlockId_;
 
 	// Trigger Infos
 	Bool_t passGlobalL1_;
@@ -175,7 +178,7 @@ private:
 	Float_t xParton2_;
 	Float_t factorizationScale_;
 
-	ClassDef (TRootEvent,1);
+	ClassDef (TRootEvent,2);
 };
 
 #endif

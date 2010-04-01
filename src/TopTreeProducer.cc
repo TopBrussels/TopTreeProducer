@@ -309,6 +309,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	rootEvent->setNb(nTotEvt_);
 	rootEvent->setEventId(iEvent.id().event());
 	rootEvent->setRunId(iEvent.id().run());
+	rootEvent->setLumiBlockId(iEvent.luminosityBlock ());
 
 	/*
 	// CSA07 Process Id and Event Weight
