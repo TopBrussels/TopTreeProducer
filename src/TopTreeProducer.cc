@@ -149,14 +149,12 @@ void TopTreeProducer::beginJob()
 			eventTree_->Branch (name, "TClonesArray", &vcaloJets[s]);
 		}
 	}
-
 	if(doGenJet)
 	{
 		if(verbosity>0) cout << "GenJets info will be added to rootuple" << endl;
 		genJets = new TClonesArray("TRootGenJet", 1000);
 		eventTree_->Branch ("GenJets", "TClonesArray", &genJets);
 	}
-
 
 	if(doPFJet)
 	{
@@ -309,7 +307,6 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	rootEvent->setNb(nTotEvt_);
 	rootEvent->setEventId(iEvent.id().event());
 	rootEvent->setRunId(iEvent.id().run());
-	rootEvent->setLumiBlockId(iEvent.luminosityBlock ());
 
 	/*
 	// CSA07 Process Id and Event Weight
@@ -388,7 +385,6 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 			delete myCaloJetAnalyzer;
 		}
 	}
-
 	// GenJet
 	if(doGenJet)
 	{
@@ -397,6 +393,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		myGenJetAnalyzer->Process(iEvent, genJets);
 		delete myGenJetAnalyzer;
 	}
+
 
 	// PFJet
 	if(doPFJet)
