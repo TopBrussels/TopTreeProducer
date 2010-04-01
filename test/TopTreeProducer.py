@@ -10,7 +10,8 @@ process.load("SimGeneral.HepPDTESSource.pythiapdt_cfi")
 # Global geometry
 process.load("Configuration.StandardSequences.Geometry_cff")
 process.load("Configuration.StandardSequences.MagneticField_cff")
-
+process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
+process.GlobalTag.globaltag = cms.string('MC_3XY_V20::All')
 # geometry needed for clustering and calo shapes variables
 # process.load("RecoEcal.EgammaClusterProducers.geometryForClustering_cff")
 # 3 folllowing config files included in RecoEcal.EgammaClusterProducers.geometryForClustering_cff
@@ -25,7 +26,7 @@ process.load("Configuration.StandardSequences.MagneticField_cff")
 #process.load("RecoEcal.EgammaClusterProducers.piZeroDiscriminators_cfi")
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(5)
+    input = cms.untracked.int32(-1)
 )
 
 
@@ -35,7 +36,7 @@ process.source = cms.Source("PoolSource",
 # AOD
 # PATAOD
 # PAT
-	fileNames = cms.untracked.vstring('file:/tmp/mzeinali/myFile.root')
+	fileNames = cms.untracked.vstring('file:/tmp/ajafari/reco_Ttbar_Tauola_1.root')
 	#fileNames = cms.untracked.vstring('/store/data/CRAFT09/Cosmics/RAW-RECO/SuperPointing-CRAFT09_R_V4_CosmicsSeq_v1/0009/763782DB-DCB9-DE11-A238-003048678B30.root')
 	#fileNames = cms.untracked.vstring('file:/user/echabert/CMSSW/CMSSW_2_2_3/src/TopQuarkAnalysis/TopEventProducers/test/toto2.root')
 	#fileNames = cms.untracked.vstring('file:/user/echabert/CMSSW/CMSSW_2_2_6/src/NewPhysicsAnalysis/SUSYAnalysis/TopSUSYEvents.root')
@@ -63,16 +64,16 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
  		# 		3 = Liste of high level objects (jetss, muons, ...)
  		# 		4 = List of all  objects 
 		# 		5 = Debug
- 		verbosity = cms.untracked.int32(5),
+ 		verbosity = cms.untracked.int32(0),
 
 		# name of output root file
-		RootFileName = cms.untracked.string('TopTree_pythia.root'),
+		RootFileName = cms.untracked.string('/tmp/ajafari/test.root'),
 
 		# Is PoolSource coming from CSA07 Soup Production ? (needed to get CSA07 Process Id and weights)
 		isCSA07Soup = cms.untracked.bool(False),
 
 		# What is written to rootuple		    
-		doHLT = cms.untracked.bool(False),
+		doHLT = cms.untracked.bool(True),
 #		doHLTStudy = cms.untracked.bool(False),#to add different hlt menus
 		doMC = cms.untracked.bool(False),
 		doPDFInfo = cms.untracked.bool(False),
@@ -88,13 +89,13 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		doPrimaryVertex = cms.untracked.bool(False),
 		doCaloJet = cms.untracked.bool(False),
 		doCaloJetStudy = cms.untracked.bool(False),
-		doGenJet = cms.untracked.bool(True),
+		doGenJet = cms.untracked.bool(False),
 		doCaloJetId = cms.untracked.bool(False),
 		doPFJet = cms.untracked.bool(False),
 		doPFJetStudy = cms.untracked.bool(False),
 		doMuon = cms.untracked.bool(False),
 		doCosmicMuon = cms.untracked.bool(False),
-		doElectron = cms.untracked.bool(False),
+		doElectron = cms.untracked.bool(True),
 		runSuperCluster = cms.untracked.bool(False),#true only if SuperCluster are stored
 		doMET = cms.untracked.bool(False),
 		doGenEvent = cms.untracked.bool(False),#put on False when running non-ttbar
@@ -126,7 +127,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 
 	producersNamesRECO = cms.PSet(
 		dataType = cms.untracked.string("RECO"), 
-		#hltProducer = cms.InputTag("TriggerResults","","HLT8E29"),
+		hltProducer = cms.InputTag("TriggerResults","","HLT"),
 #		vhltProducer = cms.untracked.VInputTag(cms.InputTag("TriggerResults","","HLT8E29"),),#used if doHLTStudy is true
 		genParticlesProducer = cms.InputTag("genParticles"),
 		primaryVertexProducer = cms.InputTag("offlinePrimaryVertices"),
@@ -146,7 +147,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 
 	producersNamesAOD = cms.PSet(
 		dataType = cms.untracked.string("AOD"), 
-		#hltProducer = cms.InputTag("TriggerResults","","HLT8E29"),
+		hltProducer = cms.InputTag("TriggerResults","","HLT"),
 #		vhltProducer = cms.untracked.VInputTag(cms.InputTag("TriggerResults","","HLT8E29"),),#used if doHLTStudy is true
 		genParticlesProducer = cms.InputTag("genParticles"),
 		primaryVertexProducer = cms.InputTag("offlinePrimaryVertices"),
@@ -166,7 +167,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 
 	producersNamesPATAOD = cms.PSet(
 		dataType = cms.untracked.string("PATAOD"), 
-		#hltProducer = cms.InputTag("TriggerResults","","HLT8E29"),
+		hltProducer = cms.InputTag("TriggerResults","","HLT"),
 #		vhltProducer = cms.untracked.VInputTag(cms.InputTag("TriggerResults","","HLT8E29"),),#used if doHLTStudy is true
 		genParticlesProducer = cms.InputTag("genParticles"),
 		primaryVertexProducer = cms.InputTag("offlinePrimaryVertices"),
@@ -185,7 +186,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 
 	producersNamesPAT = cms.PSet(
 		dataType = cms.untracked.string("PAT"), 
-		#hltProducer = cms.InputTag("TriggerResults","","HLT8E29"),
+		hltProducer = cms.InputTag("TriggerResults","","HLT"),
 #		vhltProducer = cms.untracked.VInputTag(cms.InputTag("TriggerResults","","HLT8E29"),),#to add more hlt menus, used if doHLTStudy is true
 		genParticlesProducer = cms.InputTag("genParticles"),
 		primaryVertexProducer = cms.InputTag("offlinePrimaryVertices"),
@@ -195,13 +196,13 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		pfJetProducer = cms.InputTag("selectedPatJets"),
 		vpfJetProducer = cms.untracked.vstring("selectedPatJets"),
 		muonProducer = cms.InputTag("selectedPatMuons"),
-		electronProducer = cms.InputTag("selectedPatElectrons"),# if electronTriggerMatching == true, change the electron inputTag to "cleanPatElectronsTriggerMatch"
+		electronProducer = cms.InputTag("cleanPatElectronsTriggerMatch"),# if electronTriggerMatching == true, change the electron inputTag to "cleanPatElectronsTriggerMatch" selectedPatElectrons
 		metProducer = cms.InputTag("selectedPatMETs"),
 		genEventProducer = cms.InputTag("genEvt"),
 		generalTrackLabel = cms.InputTag("generalTracks"), # to calculate the conversion flag
 		electronNewId = cms.untracked.bool(False), #for recent electronID recommanded by EGamma. still Not accepted by Top group
-		electronTriggerMatching = cms.untracked.bool(False), # to keep the triggerMatching Info -- Only for "PAT" data type
-		triggerPaths = cms.untracked.vstring('HLT_Ele10_LW_L1R','HLT_Ele15_LW_L1R',)# for triggerMatching
+		electronTriggerMatching = cms.untracked.bool(True), # to keep the triggerMatching Info -- Only for "PAT" data type
+		electronTriggerPaths = cms.untracked.vstring('HLT_Ele10_SW_L1R','HLT_Ele15_SW_L1R',)# for triggerMatching in electron. For the moment accept only two paths. To be fixed in future
 	)
 )
 
