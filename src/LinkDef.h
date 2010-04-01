@@ -5,6 +5,7 @@
 #include "../interface/TRootMCParticle.h"
 #include "../interface/TRootJet.h"
 #include "../interface/TRootCaloJet.h"
+#include "../interface/TRootGenJet.h"
 #include "../interface/TRootPFJet.h"
 #include "../interface/TRootMuon.h"
 #include "../interface/TRootCosmicMuon.h"
@@ -28,6 +29,7 @@
 #include "../interface/TRootMCParticle.h"
 #include "../interface/TRootJet.h"
 #include "../interface/TRootCaloJet.h"
+#include "../interface/TRootGenJet.h"
 #include "../interface/TRootPFJet.h"
 #include "../interface/TRootMuon.h"
 #include "../interface/TRootCosmicMuon.h"
@@ -57,6 +59,7 @@
 #pragma link C++ class TRootMCParticle;
 #pragma link C++ class TRootJet;
 #pragma link C++ class TRootCaloJet;
+#pragma link C++ class TRootGenJet;
 #pragma link C++ class TRootPFJet;
 #pragma link C++ class TRootMuon;
 #pragma link C++ class TRootCosmicMuon;
