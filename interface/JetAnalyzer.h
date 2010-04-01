@@ -26,6 +26,7 @@ public:
 	~JetAnalyzer();
 	void SetVerbosity(int verbosity) {verbosity_ = verbosity; };
 	TRootJet Process(const reco::Jet* jet, std::string dataType);
+	TRootJet Process(const reco::GenJet* jet, std::string dataType);
 
 private:
 	int verbosity_;
