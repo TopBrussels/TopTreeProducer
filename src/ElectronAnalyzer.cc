@@ -1,3 +1,5 @@
+#include <FWCore/Framework/interface/TriggerNames.h>
+
 #include "../interface/ElectronAnalyzer.h"
 
 using namespace std;
@@ -14,7 +16,7 @@ ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& producersNames):verb
         doTriggerMatching = producersNames.getUntrackedParameter<bool>("electronTriggerMatching",false);
         std::vector<std::string> tmp;
         tmp.clear();
-        pathNames = producersNames.getUntrackedParameter<std::vector<std::string> >("triggerPaths",tmp); // electron trigger path names
+        pathNames = producersNames.getUntrackedParameter<std::vector<std::string> >("electronTriggerPaths",tmp); // electron trigger path names
 }
 
 ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
@@ -29,7 +31,7 @@ ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& producersNames, cons
         doTriggerMatching = producersNames.getUntrackedParameter<bool>("electronTriggerMatching",false);
         std::vector<std::string> tmp;
         tmp.clear();
-        pathNames = producersNames.getUntrackedParameter<std::vector<std::string> >("triggerPaths",tmp); // electron trigger path names
+        pathNames = producersNames.getUntrackedParameter<std::vector<std::string> >("electronTriggerPaths",tmp); // electron trigger path names
 }
 
 ElectronAnalyzer::~ElectronAnalyzer()
@@ -73,7 +75,8 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 			,electron->vz()
 			,electron->pdgId()
 			,electron->charge()
-		); 
+		);
+                
 //=======================================
                 //std::cout<<"electron->isGsfCtfScPixChargeConsistent(): "<<electron->isGsfCtfScPixChargeConsistent()<<endl;
                 localElectron.setChargeInfo(electron->scPixCharge(),electron->isGsfCtfScPixChargeConsistent(),electron->isGsfScPixChargeConsistent(),electron->isGsfCtfChargeConsistent());
@@ -213,12 +216,12 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
                 double Dist = 9999.;
                 double DCot = 9999.;
                 reco::TrackRef partnerTrack = getConversionPartnerTrack(*electron,MyTrackHandle,Bfied,Dist,DCot);
-                localElectron.setConversion(partnerTrack.isNonnull());
-                // Trigger
-                //Filling with stupid numbers to avoid randoms in case of doTriggerMatching == false
-                std::vector<std::pair<std::string, bool> > tmpInput;
-                tmpInput.push_back(make_pair("NoName",false));
-                localElectron.setTriggerinfo(tmpInput);
+//                cout<<partnerTrack.isNonnull()<<endl;
+//                if(!partnerTrack.isNonnull())
+//                    cout<<"========================================"<<endl;
+                localElectron.setConversion((bool)partnerTrack.isNonnull());
+//                cout<<localElectron.isFromConversion()<<endl;
+
 //=======================================
 
 		// Variables from reco::GsfTrack
@@ -275,12 +278,13 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 			}
                         //triggerMatching
                         if(doTriggerMatching && pathNames.size() != 0){
-                            std::vector<std::pair<std::string, bool> > input;
-                            input.clear();
                             for(uint trig = 0; trig < pathNames.size(); trig++){
-                                input.push_back(make_pair(pathNames.at(trig),(patElectron->triggerObjectMatchesByPath(pathNames.at(trig)).size() != 0)));
+//                                cout<<pathNames.at(trig)<<"  "<<(patElectron->triggerObjectMatchesByPath(pathNames.at(trig)).size() != 0)<<endl;
+                                localElectron.setTriggerinfo(pathNames.at(trig),(patElectron->triggerObjectMatchesByPath(pathNames.at(trig)).size() != 0));
                             }
-                            localElectron.setTriggerinfo(input);
+                            
+//                            cout<<pathNames.at(0)<<" "<<localElectron.hasTriggerMatch(pathNames.at(0))<<endl;
+//                            cout<<pathNames.at(1)<<" "<<localElectron.hasTriggerMatch(pathNames.at(1))<<endl;
                         }
 
 		}
