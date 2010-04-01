@@ -75,9 +75,9 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 			,electron->charge()
 		); 
 //=======================================
-                std::cout<<"electron->isGsfCtfScPixChargeConsistent(): "<<electron->isGsfCtfScPixChargeConsistent()<<endl;
+                //std::cout<<"electron->isGsfCtfScPixChargeConsistent(): "<<electron->isGsfCtfScPixChargeConsistent()<<endl;
                 localElectron.setChargeInfo(electron->scPixCharge(),electron->isGsfCtfScPixChargeConsistent(),electron->isGsfScPixChargeConsistent(),electron->isGsfCtfChargeConsistent());
-                std::cout<<"localElectron.isGsfCtfScPixConsistent(): "<<localElectron.isGsfCtfScPixConsistent()<<endl;
+                //std::cout<<"localElectron.isGsfCtfScPixConsistent(): "<<localElectron.isGsfCtfScPixConsistent()<<endl;
                 localElectron.setSeedingInfo(electron->ecalDrivenSeed(), electron->trackerDrivenSeed());
                 localElectron.setTrackClusterMatching(electron->eSuperClusterOverP(),electron->eEleClusterOverPout(),electron->eSeedClusterOverP(),
                         electron->eSeedClusterOverPout(),electron->deltaEtaSuperClusterTrackAtVtx(),electron->deltaEtaSeedClusterTrackAtCalo(),
@@ -85,9 +85,9 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
                         electron->deltaEtaEleClusterTrackAtCalo());
 
                 //setTrackProperties:
-                std::cout<<"sqrt(electron->trackMomentumAtVtx().Mag2()): "<<sqrt(electron->trackMomentumAtVtx().Mag2())<<endl;
+                //std::cout<<"sqrt(electron->trackMomentumAtVtx().Mag2()): "<<sqrt(electron->trackMomentumAtVtx().Mag2())<<endl;
                 localElectron.setTrackMomentum(sqrt(electron->trackMomentumAtVtx().Mag2()));
-                std::cout<<"localElectron.trackMomentum(): "<<localElectron.trackMomentum()<<endl;
+                //std::cout<<"localElectron.trackMomentum(): "<<localElectron.trackMomentum()<<endl;
                 localElectron.setTrackMomentumAtCalo(sqrt(electron->trackMomentumAtCalo().Mag2()));
                 localElectron.setTrackMomentumAtElectronCluster( sqrt(electron->trackMomentumAtEleClus().Mag2()));
                 localElectron.setTrackMomentumAtVtxWithConstraint( sqrt(electron->trackMomentumAtVtxWithConstraint().Mag2()));

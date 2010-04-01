@@ -477,7 +477,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	{
 		if(verbosity>1) cout << endl << "Analysing electrons collection..." << endl;
 		ElectronAnalyzer* myElectronAnalyzer = new ElectronAnalyzer(producersNames_, myConfig_, verbosity);
-		myElectronAnalyzer->Process(iEvent, electrons, *lazyTools);
+		myElectronAnalyzer->Process(iEvent, electrons, *lazyTools, iSetup);
 		delete myElectronAnalyzer;
 	}
 			
