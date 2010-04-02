@@ -9,3 +9,5 @@ from RecoJets.JetProducers.ak5GenJets_cfi import ak5GenJets
 ak5GenJets=ak5GenJets.clone()
 ak5GenJets.src ="genParticlesForJets"
 
+genJet = cms.Sequence(genParticlesForJets*ak5GenJets);
+
