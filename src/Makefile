@@ -30,7 +30,7 @@ SOBJECTS	= $(SOURCES:.$(SrcSuf)=.$(DllSuf))
 
 #PROGRAMS	=  $(SOBJECTS)
 
-all: libToto.so clean ; cp libToto.so ../test; cp libToto.so ../skimmer
+all: libToto.so clean ; cp libToto.so ../test
 
 clean:
 	@echo "Cleaning..."

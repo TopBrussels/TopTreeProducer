@@ -31,4 +31,3 @@ patTriggerMatchEmbedder = cms.Sequence(cleanPatElectronsTriggerMatch)
 patTriggerEvent.patTriggerMatches = 'electronTriggerMatchHLTEle10SWL1R','electronTriggerMatchHLTEle15SWL1R'
 
 patDefaultWithTrigger = cms.Sequence(patDefaultSequence* patTrigger * patTriggerMatcher * patTriggerMatchEmbedder * patTriggerEvent)
-patAddTrigger = cms.Sequence(patTrigger * patTriggerMatcher * patTriggerMatchEmbedder * patTriggerEvent)

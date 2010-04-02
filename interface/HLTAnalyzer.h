@@ -7,6 +7,9 @@
 #include <iostream>
 
 // user include files
+//#include "FWCore/Framework/interface/Frameworkfwd.h"
+//#include "FWCore/Framework/interface/EDAnalyzer.h"
+//#include "FWCore/Framework/interface/MakerMacros.h"
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/Framework/interface/ESHandle.h"
@@ -37,6 +40,19 @@ public:
   		,hltErrors_(0)
   		,hltNames_(0)
 		{;}
+//        HLTAnalyzer(const edm::ParameterSet& producersNames, int itr) : //for adding more hlt menus
+//		verbosity_(0)
+//		,triggerResultsTag_((producersNames.getUntrackedParameter<std::vector<edm::InputTag> > ("vhltProducer")).at(itr))
+//  		,triggerNames_()
+//  		,nEvents_(0)
+//  		,nWasRun_(0)
+//  		,nAccept_(0)
+//  		,nErrors_(0)
+//  		,hltWasRun_(0)
+//  		,hltAccept_(0)
+//  		,hltErrors_(0)
+//  		,hltNames_(0)
+//		{;}
 	
 	~HLTAnalyzer() {;}
 	
