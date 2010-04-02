@@ -19,4 +19,5 @@
 <k type="TRootCaloJet" name="CaloJets_selectedPatJetsAK5Calo" minPt="15" maxEta="2.4" skipObjects="1" minNObjects="0"/>
 <k type="TRootCaloJet" name="CaloJets_selectedPatJetsSC5Calo" minPt="15" maxEta="2.4" skipObjects="1" minNObjects="0"/>
 <k type="TRootPFJet" name="PFJets_selectedPatJetsAK5PF" minPt="15" maxEta="2.4" skipObjects="1" minNObjects="0"/>
+<k type="TRootGenEvent" name="GenEvent" minPt="0" maxEta="9999" skipObjects="0" minNObjects="0"/>
 </keepbranches>

@@ -318,8 +318,70 @@ int main()
 					else cout << "skipObjects = false" << endl;
 				}
 			}
+			
+			if(objectsToKeep[j].type == "TRootGenEvent")
+			{
+				TRootGenEvent* genEvt;
+				int genEvtKeeped=0;
 
-			if(objectsToKeep[j].type == "TRootPFJet")
+				genEvt = (TRootGenEvent*) (objectsToKeep[j].inArray)->At(0);
+				bool keepGenEvt = true;
+				
+				if(objectsToKeep[j].skipObjects)
+				{
+					keepGenEvt = false;
+					if( verbosity > 1 ) cout << "skip GenEvent" << endl;
+				}
+				
+				if(keepGenEvt)
+				{
+					new( (*(objectsToKeep[j].outArray))[0] ) TRootGenEvent(*genEvt);
+					genEvtKeeped++;
+				}
+
+				if(genEvtKeeped < objectsToKeep[j].minNObjects)
+				{
+					keepEvent = false;
+					if( verbosity > 1 ) cout << "Too small number of selected GenEvent: genEvtKeeped = " << genEvtKeeped << endl;
+				}
+
+				if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
+				if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
+				
+			}
+
+			else if(objectsToKeep[j].type == "TRootNPGenEvent")
+			{
+				TRootNPGenEvent* npGenEvt;
+				int npGenEvtKeeped=0;
+
+				npGenEvt = (TRootNPGenEvent*) (objectsToKeep[j].inArray)->At(0);
+				bool keepNPGenEvt = true;
+				
+				if(objectsToKeep[j].skipObjects)
+				{
+					keepNPGenEvt = false;
+					if( verbosity > 1 ) cout << "skip NPGenEvent" << endl;
+				}
+				
+				if(keepNPGenEvt)
+				{
+					new( (*(objectsToKeep[j].outArray))[0] ) TRootNPGenEvent(*npGenEvt);
+					npGenEvtKeeped++;
+				}
+
+				if(npGenEvtKeeped < objectsToKeep[j].minNObjects)
+				{
+					keepEvent = false;
+					if( verbosity > 1 ) cout << "Too small number of selected NPGenEvent: npGenEvtKeeped = " << npGenEvtKeeped << endl;
+				}
+
+				if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
+				if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
+				
+			}
+
+			else if(objectsToKeep[j].type == "TRootPFJet")
 			{
 				TRootPFJet* pfJet;
 				int pfJetsKeeped=0;
