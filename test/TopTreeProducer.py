@@ -36,7 +36,7 @@ process.source = cms.Source("PoolSource",
 # AOD
 # PATAOD
 # PAT
-	fileNames = cms.untracked.vstring('file:~/public/RelValZee.root')
+	fileNames = cms.untracked.vstring('file:TTbar_Summer09_7TeV_PAT.root')
 	#fileNames = cms.untracked.vstring('/store/data/CRAFT09/Cosmics/RAW-RECO/SuperPointing-CRAFT09_R_V4_CosmicsSeq_v1/0009/763782DB-DCB9-DE11-A238-003048678B30.root')
 	#fileNames = cms.untracked.vstring('file:/user/echabert/CMSSW/CMSSW_2_2_3/src/TopQuarkAnalysis/TopEventProducers/test/toto2.root')
 	#fileNames = cms.untracked.vstring('file:/user/echabert/CMSSW/CMSSW_2_2_6/src/NewPhysicsAnalysis/SUSYAnalysis/TopSUSYEvents.root')
@@ -67,13 +67,13 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
  		verbosity = cms.untracked.int32(0),
 
 		# name of output root file
-		RootFileName = cms.untracked.string('TopTree_pythia.root'),
+		RootFileName = cms.untracked.string('TTbar_Summer09_7TeV_TopTree.root'),
 
 		# Is PoolSource coming from CSA07 Soup Production ? (needed to get CSA07 Process Id and weights)
 		isCSA07Soup = cms.untracked.bool(False),
 
 		# What is written to rootuple		    
-		doHLT = cms.untracked.bool(False),
+		doHLT = cms.untracked.bool(True),
 #		doHLTStudy = cms.untracked.bool(False),#to add different hlt menus
 		doMC = cms.untracked.bool(False),
 		doPDFInfo = cms.untracked.bool(False),
@@ -89,15 +89,15 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		doPrimaryVertex = cms.untracked.bool(False),
 		doCaloJet = cms.untracked.bool(False),
 		doCaloJetStudy = cms.untracked.bool(True),
-		doGenJet = cms.untracked.bool(True),
-		doCaloJetId = cms.untracked.bool(False),
+		doGenJet = cms.untracked.bool(False),
+		doCaloJetId = cms.untracked.bool(True),
 		doPFJet = cms.untracked.bool(False),
-		doPFJetStudy = cms.untracked.bool(False),
-		doMuon = cms.untracked.bool(False),
+		doPFJetStudy = cms.untracked.bool(True),
+		doMuon = cms.untracked.bool(True),
 		doCosmicMuon = cms.untracked.bool(False),
 		doElectron = cms.untracked.bool(False),
 		runSuperCluster = cms.untracked.bool(False),#true only if SuperCluster are stored
-		doMET = cms.untracked.bool(False),
+		doMET = cms.untracked.bool(True),
 		doGenEvent = cms.untracked.bool(False),#put on False when running non-ttbar
 		doNPGenEvent = cms.untracked.bool(False),#put on True when running New Physics sample
 		doSpinCorrGen = cms.untracked.bool(False),#put on True only if you need SpinCorrelation Variables
@@ -128,7 +128,6 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 	producersNamesRECO = cms.PSet(
 		dataType = cms.untracked.string("RECO"), 
 		hltProducer = cms.InputTag("TriggerResults","","HLT"),
-#		vhltProducer = cms.untracked.VInputTag(cms.InputTag("TriggerResults","","HLT8E29"),),#used if doHLTStudy is true
 		genParticlesProducer = cms.InputTag("genParticles"),
 		primaryVertexProducer = cms.InputTag("offlinePrimaryVertices"),
 		caloJetProducer = cms.InputTag("iterativeCone5CaloJets"),
@@ -148,7 +147,6 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 	producersNamesAOD = cms.PSet(
 		dataType = cms.untracked.string("AOD"), 
 		hltProducer = cms.InputTag("TriggerResults","","HLT"),
-#		vhltProducer = cms.untracked.VInputTag(cms.InputTag("TriggerResults","","HLT8E29"),),#used if doHLTStudy is true
 		genParticlesProducer = cms.InputTag("genParticles"),
 		primaryVertexProducer = cms.InputTag("offlinePrimaryVertices"),
 		caloJetProducer = cms.InputTag("iterativeCone5CaloJets"),
@@ -160,7 +158,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		vcosmicMuonProducer = cms.untracked.vstring("muons","muons1Leg"),
 		electronProducer = cms.InputTag("pixelMatchGsfElectrons"),
 		metProducer = cms.InputTag("met"),
-	        genEventProducer = cms.InputTag("genEvt"),
+		genEventProducer = cms.InputTag("genEvt"),
 		generalTrackLabel = cms.InputTag("generalTracks"),
 		electronNewId = cms.untracked.bool(False)
 	),
@@ -168,7 +166,6 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 	producersNamesPATAOD = cms.PSet(
 		dataType = cms.untracked.string("PATAOD"), 
 		hltProducer = cms.InputTag("TriggerResults","","HLT"),
-#		vhltProducer = cms.untracked.VInputTag(cms.InputTag("TriggerResults","","HLT8E29"),),#used if doHLTStudy is true
 		genParticlesProducer = cms.InputTag("genParticles"),
 		primaryVertexProducer = cms.InputTag("offlinePrimaryVertices"),
 		caloJetProducer = cms.InputTag("selectedPatJets"),
@@ -187,17 +184,16 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 	producersNamesPAT = cms.PSet(
 		dataType = cms.untracked.string("PAT"), 
 		hltProducer = cms.InputTag("TriggerResults","","HLT"),
-#		vhltProducer = cms.untracked.VInputTag(cms.InputTag("TriggerResults","","HLT8E29"),),#to add more hlt menus, used if doHLTStudy is true
 		genParticlesProducer = cms.InputTag("genParticles"),
 		primaryVertexProducer = cms.InputTag("offlinePrimaryVertices"),
 		caloJetProducer = cms.InputTag("selectedPatJets"),
-		vcaloJetProducer = cms.untracked.vstring("selectedPatJets","selectedPatJetsNAK5Calo"),
+		vcaloJetProducer = cms.untracked.vstring("selectedPatJetsAK5Calo","selectedPatJetsSC5Calo"),
 		genJetProducer = cms.InputTag("ak5GenJets"),
 		pfJetProducer = cms.InputTag("selectedPatJets"),
-		vpfJetProducer = cms.untracked.vstring("selectedPatJets"),
+		vpfJetProducer = cms.untracked.vstring("selectedPatJetsAK5PF","selectedPatJetsSC5PF"),
 		muonProducer = cms.InputTag("selectedPatMuons"),
-		electronProducer = cms.InputTag("selectedPatElectrons"),# if electronTriggerMatching == true, change the electron inputTag to "cleanPatElectronsTriggerMatch" 
-		metProducer = cms.InputTag("selectedPatMETs"),
+		electronProducer = cms.InputTag("selectedPatElectrons"),# if electronTriggerMatching == true, change the electron inputTag to "cleanPatElectronsTriggerMatch"
+		metProducer = cms.InputTag("patMETs"),
 		genEventProducer = cms.InputTag("genEvt"),
 		generalTrackLabel = cms.InputTag("generalTracks"), # to calculate the conversion flag
 		electronNewId = cms.untracked.bool(False), #for recent electronID recommanded by EGamma. still Not accepted by Top group
@@ -214,30 +210,6 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 ###
 ### the path will change accordingly
 ###
-##process.p = cms.Path(process.patDefaultWithTrigger * process.analysis) 
+##process.p = cms.Path(process.patDefaultWithTrigger * process.analysis)
 
-
-process.load("PhysicsTools.PatAlgos.patSequences_cff")
-
-# remove the electrons from input source of "ak5GenJets"
-process.load("TopBrussels.TopTreeProducer.genJetNoElectron_cfi")
-# loading the tower cleaning seq.
-process.load("TopBrussels.TopTreeProducer.TowerCleaningSequence_cff")
-#adding new collection of ak5CaloJets which are clean from electrons
-from PhysicsTools.PatAlgos.tools.jetTools import *
-addJetCollection(process,cms.InputTag('newAntikt5CaloJets'),
-                 'NAK5', 'Calo',
-                 doJTA        = True,
-                 doBTagging   = True,
-                 jetCorrLabel = ('AK5','Calo'),
-                 doType1MET   = True,
-                 doL1Cleaning = False,                 
-                 doL1Counters = False,
-                 genJetCollection=cms.InputTag("ak5GenJets"),
-                 doJetID      = False,
-                 jetIdLabel   = "ak5"
-                 )
-
-process.p = cms.Path(process.genParticlesForJets* process.ak5GenJets* process.TowerCleaningSeq* process.patDefaultSequence *process.analysis)
-
-
+process.p = cms.Path(process.analysis)
