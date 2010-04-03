@@ -14,6 +14,7 @@
 #include "../interface/TRootJet.h"
 #include "../interface/TRootPFJet.h"
 #include "../interface/TRootCaloJet.h"
+#include "../interface/TRootGenJet.h"
 #include "../interface/TRootMET.h"
 #include "../interface/TRootGenEvent.h"
 #include "../interface/TRootNPGenEvent.h"
@@ -381,6 +382,42 @@ int main()
 				
 			}
 
+			else if(objectsToKeep[j].type == "TRootGenJet")
+			{
+				TRootGenJet* genJet;
+				int genJetsKeeped=0;
+				for(int i=0; i<(objectsToKeep[j].inArray)->GetEntriesFast(); i++)
+				{
+					genJet = (TRootGenJet*) (objectsToKeep[j].inArray)->At(i);
+					bool keepGenJet = true;
+					
+					if(genJet->Pt() < objectsToKeep[j].minPt || fabs(genJet->Eta()) > objectsToKeep[j].maxEta)
+					{
+						if(objectsToKeep[j].skipObjects)
+						{
+							keepGenJet = false;
+							if( verbosity > 1 ) cout << "skip genJet with pT = " << genJet->Pt() << " and eta = " << genJet->Eta() << endl;
+						}
+					}
+
+					if(keepGenJet)
+					{
+						new( (*(objectsToKeep[j].outArray))[genJetsKeeped] ) TRootGenJet(*genJet);			
+						genJetsKeeped++;
+					}
+				}
+				
+				if(genJetsKeeped < objectsToKeep[j].minNObjects)
+				{
+					keepEvent = false;
+					if( verbosity > 1 ) cout << "Too small number of selected jets: genJetsKeeped = " << genJetsKeeped << endl;
+				}
+				
+				if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
+				if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
+				
+			}
+
 			else if(objectsToKeep[j].type == "TRootPFJet")
 			{
 				TRootPFJet* pfJet;
@@ -395,7 +432,7 @@ int main()
 						if(objectsToKeep[j].skipObjects)
 						{
 							keepPFJet = false;
-							if( verbosity > 1 ) cout << "skip jet with pT = " << pfJet->Pt() << " and eta = " << pfJet->Eta() << endl;
+							if( verbosity > 1 ) cout << "skip PFJet with pT = " << pfJet->Pt() << " and eta = " << pfJet->Eta() << endl;
 						}
 					}
 
@@ -431,7 +468,7 @@ int main()
 						if(objectsToKeep[j].skipObjects)
 						{
 							keepCaloJet = false;
-							if( verbosity > 1 ) cout << "skip jet with pT = " << caloJet->Pt() << " and eta = " << caloJet->Eta() << endl;
+							if( verbosity > 1 ) cout << "skip CaloJet with pT = " << caloJet->Pt() << " and eta = " << caloJet->Eta() << endl;
 						}
 					}
 

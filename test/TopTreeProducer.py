@@ -75,7 +75,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		# What is written to rootuple		    
 		doHLT = cms.untracked.bool(True),
 #		doHLTStudy = cms.untracked.bool(False),#to add different hlt menus
-		doMC = cms.untracked.bool(False),
+		doMC = cms.untracked.bool(True),
 		doPDFInfo = cms.untracked.bool(False),
 		signalGenerator = cms.untracked.string('PYTHIA'),
 #		signalGenerator = cms.untracked.string('ALPGEN'),
@@ -99,7 +99,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		runSuperCluster = cms.untracked.bool(False),#true only if SuperCluster are stored
 		doMET = cms.untracked.bool(True),
 		doGenEvent = cms.untracked.bool(True),#put on False when running non-ttbar
-		doNPGenEvent = cms.untracked.bool(False),#put on True when running New Physics sample
+		doNPGenEvent = cms.untracked.bool(True),#put on True when running New Physics sample
 		doSpinCorrGen = cms.untracked.bool(False),#put on True only if you need SpinCorrelation Variables
 		doSemiLepEvent = cms.untracked.bool(False),#put on True only if you need TtSemiLeptonicEvent Collection exist in PAT-uples (L2)
 
