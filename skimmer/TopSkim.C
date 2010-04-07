@@ -5,6 +5,9 @@
 #include <iomanip>
 #include <vector>
 #include <time.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
 
 #include "./tinyxml/tinyxml.h"
 
@@ -46,7 +49,7 @@ struct keepObjects
 	int minNObjects;
 };
 
-vector<keepObjects> parseObjects(TiXmlDocument doc, TTree* inEventTree, TTree* outEventTree)
+vector<keepObjects> parseObjects(TiXmlDocument doc, TTree* outEventTree)
 {
 	vector<keepObjects> toKeep;
 	TiXmlHandle hdl (&doc);
@@ -71,10 +74,6 @@ vector<keepObjects> parseObjects(TiXmlDocument doc, TTree* inEventTree, TTree* o
 				keepObjects tempObj;
 				tempObj.name = (TString) elem->Attribute("name");
 				tempObj.type = (TString) elem->Attribute("type");
-				
-				tempObj.inBranch = (TBranch *) inEventTree->GetBranch((tempObj.name).c_str());
-				tempObj.inArray = new TClonesArray((tempObj.type).c_str(), 0);
-				tempObj.inBranch->SetAddress( &(tempObj.inArray) );
 				
 				tempObj.outArray = new TClonesArray((tempObj.type).c_str(), 1000);
 				outEventTree->Branch ((tempObj.name).c_str(), "TClonesArray", &(tempObj.outArray) );
@@ -115,10 +114,6 @@ vector<keepObjects> parseObjects(TiXmlDocument doc, TTree* inEventTree, TTree* o
 					tempObj1.name = "CosmicMuonGlobalTracks_" + muonType;
 					tempObj1.type = "TRootTrack";
 					
-					tempObj1.inBranch = (TBranch *) inEventTree->GetBranch((tempObj1.name).c_str());
-					tempObj1.inArray = new TClonesArray((tempObj1.type).c_str(), 0);
-					tempObj1.inBranch->SetAddress( &(tempObj1.inArray) );
-					
 					tempObj1.outArray = new TClonesArray((tempObj1.type).c_str(), 1000);
 					outEventTree->Branch ((tempObj1.name).c_str(), "TClonesArray", &(tempObj1.outArray) );
 					toKeep.push_back(tempObj1);
@@ -126,20 +121,12 @@ vector<keepObjects> parseObjects(TiXmlDocument doc, TTree* inEventTree, TTree* o
 					tempObj2.name = "CosmicMuonTrackerTracks_" + muonType;
 					tempObj2.type = "TRootTrack";
 					
-					tempObj2.inBranch = (TBranch *) inEventTree->GetBranch((tempObj2.name).c_str());
-					tempObj2.inArray = new TClonesArray((tempObj2.type).c_str(), 0);
-					tempObj2.inBranch->SetAddress( &(tempObj2.inArray) );
-					
 					tempObj2.outArray = new TClonesArray((tempObj2.type).c_str(), 1000);
 					outEventTree->Branch ((tempObj2.name).c_str(), "TClonesArray", &(tempObj2.outArray) );
 					toKeep.push_back(tempObj2);
 					
 					tempObj3.name = "CosmicMuonStandAloneTracks_" + muonType;
 					tempObj3.type = "TRootTrack";
-					
-					tempObj3.inBranch = (TBranch *) inEventTree->GetBranch((tempObj3.name).c_str());
-					tempObj3.inArray = new TClonesArray((tempObj3.type).c_str(), 0);
-					tempObj3.inBranch->SetAddress( &(tempObj3.inArray) );
 					
 					tempObj3.outArray = new TClonesArray((tempObj3.type).c_str(), 1000);
 					outEventTree->Branch ((tempObj3.name).c_str(), "TClonesArray", &(tempObj3.outArray) );
@@ -162,9 +149,9 @@ vector<keepObjects> parseObjects(TiXmlDocument doc, TTree* inEventTree, TTree* o
 	return toKeep;
 }
 
-TString parseFileName(TiXmlDocument doc, string name)
+vector<TString> parseFileName(TiXmlDocument doc, string name)
 {
-	TString inFileName;
+	vector<TString> inFileName;
 	TiXmlHandle hdl (&doc);
 	TiXmlNode *node = 0;
 	TiXmlElement *elem = 0;
@@ -181,11 +168,11 @@ TString parseFileName(TiXmlDocument doc, string name)
 				cerr << "The node doesn't exist" << endl;
 				delete node;
 				delete elem;
-				return 3;
+				exit (3);
 			}
 			while (elem)
 			{
-				inFileName = (TString) elem->Attribute("file");
+				inFileName.push_back( (TString) elem->Attribute("file") );
 				elem = elem->NextSiblingElement ();	// iteration 
 			}
 		}
@@ -196,7 +183,7 @@ TString parseFileName(TiXmlDocument doc, string name)
 		cerr << "The node doesn't exist" << endl;
 		delete node;
 		delete elem;
-		return 2;
+		exit (2);
 	}
 	return inFileName;
 }
@@ -220,47 +207,29 @@ int main()
       return 1;
 	}
 	
-	TString inFileName = parseFileName(doc, "inputdatasets");
+	vector<TString> inFileName = parseFileName(doc, "inputdatasets");
 	
-	TString outFileName = parseFileName(doc, "outputfilename");
+	vector<TString> outFileName = parseFileName(doc, "outputfilename");
 
-	cout << "input file: " << inFileName << endl;
+	cout << "output file: " << outFileName[0] << endl;
 
-	TFile* inFile = TFile::Open(inFileName);
-	
-	TTree* inRunTree = (TTree*) inFile->Get("runTree");
-
-	TBranch* inRunBranch = (TBranch *) inRunTree->GetBranch("runInfos");
-	TRootRun* inRunInfos = 0;
-	inRunBranch->SetAddress(&inRunInfos);
-
-	TTree* inEventTree = (TTree*) inFile->Get("eventTree");
-	
-	TBranch* inEventBranch = (TBranch *) inEventTree->GetBranch("Event");
-	TRootEvent* inEvent = 0;
-	inEventBranch->SetAddress(&inEvent);
-	
-	cout << "output file: " << outFileName << endl;
-
-	TFile* outFile = new TFile(outFileName, "Recreate");
+	TFile* outFile = new TFile(outFileName[0], "Recreate");
 	outFile->cd();
 
 	TRootRun* outRunInfos = 0;
 	TTree* outRunTree = new TTree("runTree", "Global Run Infos");
+	outRunTree->SetMaxTreeSize(ULONG_MAX);
 	outRunTree->Branch("runInfos", "TRootRun", &outRunInfos);
-	
-	if( verbosity > 0 ) cout << "inRunTree->GetEntries()=" << inRunTree->GetEntries()<<endl;
-	inRunTree->GetEvent(0);
-	outRunInfos = inRunInfos;
 	
 	TRootEvent* outRootEvent = 0;
 	TTree* outEventTree = new TTree("eventTree", "Event Infos");
+	outEventTree->SetMaxTreeSize(ULONG_MAX);
 	outEventTree->Branch ("Event", "TRootEvent", &outRootEvent);
 	
 	cout << "Parsing objectsToKeep from xml file..." << endl;
 	
 	//	parse input objects from xml
-	vector<keepObjects> objectsToKeep = parseObjects(doc, inEventTree, outEventTree);
+	vector<keepObjects> objectsToKeep = parseObjects(doc, outEventTree);
 	
 	if( verbosity > 0 ) cout << "objectsToKeep.size() = " << objectsToKeep.size() << endl;
 	
@@ -288,433 +257,550 @@ int main()
 	cout << "userInfo that will be added to the outEventTree:\n" << userInfo->GetString() << endl;
 	
 	outEventTree->GetUserInfo()->Add( userInfo );
+
+	unsigned int nOutEvents = 0, nInEvents = 0, NHLTAccept = 0; 
+	vector<unsigned int> hltAccept;
 	
-	//loop over events
-	unsigned int nEvents = (int) inEventTree->GetEntries();
-	unsigned int nOutEvents = 0;
-
-	for(unsigned int ievt=0; ievt<nEvents; ievt++)
+	for(unsigned int nFile = 0; nFile < inFileName.size(); nFile++)
 	{
-		inEventTree->GetEvent(ievt);
-		if((int) ievt/10000 == (double) ievt/10000)  cout << ">>> analyzing event " << ievt << endl;
 		
-		if( verbosity > 1 ) cout << ">>> analyzing event " << ievt << endl;
+		cout << "input file[" << nFile << "] = " << inFileName[nFile] << endl;
+
+		TFile* inFile = TFile::Open(inFileName[nFile]);
+	
+		TTree* inRunTree = (TTree*) inFile->Get("runTree");
+
+		TBranch* inRunBranch = (TBranch *) inRunTree->GetBranch("runInfos");
+		TRootRun* inRunInfos = 0;
+		inRunBranch->SetAddress(&inRunInfos);
+
+		TTree* inEventTree = (TTree*) inFile->Get("eventTree");
+	
+		TBranch* inEventBranch = (TBranch *) inEventTree->GetBranch("Event");
+		TRootEvent* inEvent = 0;
+		inEventBranch->SetAddress(&inEvent);
+	
+		if( verbosity > 0 ) cout << "inRunTree->GetEntries()=" << inRunTree->GetEntries()<<endl;
+		inRunTree->GetEvent(0);
 		
-		outFile->cd();
+		cout << "outRunInfos->nHLTEvents() = " << outRunInfos->nHLTEvents() << endl;
 		
-		outRootEvent = inEvent;
-		
-		bool keepEvent = true;
-		
-		for(unsigned int j=0; j !=objectsToKeep.size(); j++)
+		if(nFile == 0)
 		{
-			if(ievt == 0)
+			outRunInfos = inRunInfos; // To fix!!!!!
+			hltAccept.resize(inRunInfos->nHLTPaths()); //initialized with zero's
+		}
+		else
+		{
+			if(outRunInfos->nHLTPaths() != inRunInfos->nHLTPaths())
 			{
-				if( verbosity > 0 )
-				{
-					cout << "objectsToKeep[" << j << "] : " <<endl;
-					cout << "name = " << objectsToKeep[j].name << " type = " << objectsToKeep[j].type << endl;
-					cout << "minPt = " << objectsToKeep[j].minPt << " maxEta = " << objectsToKeep[j].maxEta << endl;
-					if(objectsToKeep[j].skipObjects) cout << "skipObjects = true" << endl;
-					else cout << "skipObjects = false" << endl;
-				}
-			}
-			
-			if(objectsToKeep[j].type == "TRootGenEvent")
-			{
-				TRootGenEvent* genEvt;
-				int genEvtKeeped=0;
-
-				genEvt = (TRootGenEvent*) (objectsToKeep[j].inArray)->At(0);
-				bool keepGenEvt = true;
-				
-				if(objectsToKeep[j].skipObjects)
-				{
-					keepGenEvt = false;
-					if( verbosity > 1 ) cout << "skip GenEvent" << endl;
-				}
-				
-				if(keepGenEvt)
-				{
-					new( (*(objectsToKeep[j].outArray))[0] ) TRootGenEvent(*genEvt);
-					genEvtKeeped++;
-				}
-
-				if(genEvtKeeped < objectsToKeep[j].minNObjects)
-				{
-					keepEvent = false;
-					if( verbosity > 1 ) cout << "Too small number of selected GenEvent: genEvtKeeped = " << genEvtKeeped << endl;
-				}
-
-				if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
-				if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
-				
-			}
-
-			else if(objectsToKeep[j].type == "TRootNPGenEvent")
-			{
-				TRootNPGenEvent* npGenEvt;
-				int npGenEvtKeeped=0;
-
-				npGenEvt = (TRootNPGenEvent*) (objectsToKeep[j].inArray)->At(0);
-				bool keepNPGenEvt = true;
-				
-				if(objectsToKeep[j].skipObjects)
-				{
-					keepNPGenEvt = false;
-					if( verbosity > 1 ) cout << "skip NPGenEvent" << endl;
-				}
-				
-				if(keepNPGenEvt)
-				{
-					new( (*(objectsToKeep[j].outArray))[0] ) TRootNPGenEvent(*npGenEvt);
-					npGenEvtKeeped++;
-				}
-
-				if(npGenEvtKeeped < objectsToKeep[j].minNObjects)
-				{
-					keepEvent = false;
-					if( verbosity > 1 ) cout << "Too small number of selected NPGenEvent: npGenEvtKeeped = " << npGenEvtKeeped << endl;
-				}
-
-				if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
-				if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
-				
-			}
-
-			else if(objectsToKeep[j].type == "TRootGenJet")
-			{
-				TRootGenJet* genJet;
-				int genJetsKeeped=0;
-				for(int i=0; i<(objectsToKeep[j].inArray)->GetEntriesFast(); i++)
-				{
-					genJet = (TRootGenJet*) (objectsToKeep[j].inArray)->At(i);
-					bool keepGenJet = true;
-					
-					if(genJet->Pt() < objectsToKeep[j].minPt || fabs(genJet->Eta()) > objectsToKeep[j].maxEta)
-					{
-						if(objectsToKeep[j].skipObjects)
-						{
-							keepGenJet = false;
-							if( verbosity > 1 ) cout << "skip genJet with pT = " << genJet->Pt() << " and eta = " << genJet->Eta() << endl;
-						}
-					}
-
-					if(keepGenJet)
-					{
-						new( (*(objectsToKeep[j].outArray))[genJetsKeeped] ) TRootGenJet(*genJet);			
-						genJetsKeeped++;
-					}
-				}
-				
-				if(genJetsKeeped < objectsToKeep[j].minNObjects)
-				{
-					keepEvent = false;
-					if( verbosity > 1 ) cout << "Too small number of selected jets: genJetsKeeped = " << genJetsKeeped << endl;
-				}
-				
-				if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
-				if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
-				
-			}
-
-			else if(objectsToKeep[j].type == "TRootPFJet")
-			{
-				TRootPFJet* pfJet;
-				int pfJetsKeeped=0;
-				for(int i=0; i<(objectsToKeep[j].inArray)->GetEntriesFast(); i++)
-				{
-					pfJet = (TRootPFJet*) (objectsToKeep[j].inArray)->At(i);
-					bool keepPFJet = true;
-					
-					if(pfJet->Pt() < objectsToKeep[j].minPt || fabs(pfJet->Eta()) > objectsToKeep[j].maxEta)
-					{
-						if(objectsToKeep[j].skipObjects)
-						{
-							keepPFJet = false;
-							if( verbosity > 1 ) cout << "skip PFJet with pT = " << pfJet->Pt() << " and eta = " << pfJet->Eta() << endl;
-						}
-					}
-
-					if(keepPFJet)
-					{
-						new( (*(objectsToKeep[j].outArray))[pfJetsKeeped] ) TRootPFJet(*pfJet);			
-						pfJetsKeeped++;
-					}
-				}
-				
-				if(pfJetsKeeped < objectsToKeep[j].minNObjects)
-				{
-					keepEvent = false;
-					if( verbosity > 1 ) cout << "Too small number of selected jets: pfJetsKeeped = " << pfJetsKeeped << endl;
-				}
-				
-				if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
-				if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
-				
-			}
-
-			else if(objectsToKeep[j].type == "TRootCaloJet")
-			{
-				TRootCaloJet* caloJet;
-				int caloJetsKeeped=0;
-				for(int i=0; i<(objectsToKeep[j].inArray)->GetEntriesFast(); i++)
-				{
-					caloJet = (TRootCaloJet*) (objectsToKeep[j].inArray)->At(i);
-					bool keepCaloJet = true;
-					
-					if(caloJet->Pt() < objectsToKeep[j].minPt || fabs(caloJet->Eta()) > objectsToKeep[j].maxEta)
-					{
-						if(objectsToKeep[j].skipObjects)
-						{
-							keepCaloJet = false;
-							if( verbosity > 1 ) cout << "skip CaloJet with pT = " << caloJet->Pt() << " and eta = " << caloJet->Eta() << endl;
-						}
-					}
-
-					if(keepCaloJet)
-					{
-						new( (*(objectsToKeep[j].outArray))[caloJetsKeeped] ) TRootCaloJet(*caloJet);			
-						caloJetsKeeped++;
-					}
-				}
-				
-				if(caloJetsKeeped < objectsToKeep[j].minNObjects)
-				{
-					keepEvent = false;
-					if( verbosity > 1 ) cout << "Too small number of selected caloJets: caloJetsKeeped = " << caloJetsKeeped << endl;
-				}
-				
-				if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
-				if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
-				
-			}
-			
-			else if(objectsToKeep[j].type == "TRootMCParticle")
-			{
-				TRootMCParticle* mcparticle;
-				int mcparticlesKeeped=0;
-				for(int i=0; i<(objectsToKeep[j].inArray)->GetEntriesFast(); i++)
-				{
-					mcparticle = (TRootMCParticle*) (objectsToKeep[j].inArray)->At(i);
-					bool keepMCParticle = true;
-					
-					if(mcparticle->Pt() < objectsToKeep[j].minPt || fabs(mcparticle->Eta()) > objectsToKeep[j].maxEta)
-					{
-						if(objectsToKeep[j].skipObjects)
-						{
-							keepMCParticle = false;
-							if( verbosity > 1 ) cout << "skip MCparticle with pT = " << mcparticle->Pt() << " and eta = " << mcparticle->Eta() << endl;
-						}
-					}
-					
-					if(keepMCParticle)
-					{
-						new( (*(objectsToKeep[j].outArray))[mcparticlesKeeped] ) TRootMCParticle(*mcparticle);
-						mcparticlesKeeped++;
-					}
-				}
-
-				if(mcparticlesKeeped < objectsToKeep[j].minNObjects)
-				{
-					keepEvent = false;
-					if( verbosity > 1 ) cout << "Too small number of selected MCparticles: mcparticlesKeeped = " << mcparticlesKeeped << endl;
-				}
-
-				if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
-				if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
-			}
-			
-			else if(objectsToKeep[j].type == "TRootMET")
-			{
-				TRootMET* met;
-				int METKeeped=0;
-				met = (TRootMET*) (objectsToKeep[j].inArray)->At(0);
-				bool keepMET = true;
-				
-				if(met->Pt() < objectsToKeep[j].minPt || fabs(met->Eta()) > objectsToKeep[j].maxEta)
-				{
-					if(objectsToKeep[j].skipObjects)
-					{
-						keepMET = false;
-						if( verbosity > 1 ) cout << "skip MET with pT = " << met->Pt() << " and eta = " << met->Eta() << endl;
-					}
-				}
-				
-				if(keepMET)
-				{
-					new( (*(objectsToKeep[j].outArray))[0] ) TRootMET(*met);
-					METKeeped++;
-				}
-
-				if(METKeeped < objectsToKeep[j].minNObjects)
-				{
-					keepEvent = false;
-					if( verbosity > 1 ) cout << "Too small number of selected MET: METKeeped = " << METKeeped << endl;
-				}
-
-				if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
-				if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
-			}
-			
-			else if(objectsToKeep[j].type == "TRootElectron")
-			{
-				TRootElectron* electron;
-				int electronsKeeped=0;
-				for(int i=0; i<(objectsToKeep[j].inArray)->GetEntriesFast(); i++)
-				{
-					electron = (TRootElectron*) (objectsToKeep[j].inArray)->At(i);
-					bool keepElectron = true;
-					
-					if(electron->Pt() < objectsToKeep[j].minPt || fabs(electron->Eta()) > objectsToKeep[j].maxEta)
-					{
-						if(objectsToKeep[j].skipObjects)
-						{
-							keepElectron = false;
-							if( verbosity > 1 ) cout << "skip Electron with pT = " << electron->Pt() << " and eta = " << electron->Eta() << endl;
-						}
-					}
-					
-					if(keepElectron)
-					{
-						new( (*(objectsToKeep[j].outArray))[electronsKeeped] ) TRootElectron(*electron);
-						electronsKeeped++;
-					}
-				}
-
-				if(electronsKeeped < objectsToKeep[j].minNObjects)
-				{
-					keepEvent = false;
-					if( verbosity > 1 ) cout << "Too small number of selected Electrons: electronsKeeped = " << electronsKeeped << endl;
-				}
-
-				if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
-				if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
-			}
-			
-			else if(objectsToKeep[j].type == "TRootMuon")
-			{
-				TRootMuon* muon;
-				int muonsKeeped=0;
-				for(int i=0; i<(objectsToKeep[j].inArray)->GetEntriesFast(); i++)
-				{
-					muon = (TRootMuon*) (objectsToKeep[j].inArray)->At(i);
-					bool keepMuon = true;
-					
-					if(muon->Pt() < objectsToKeep[j].minPt || fabs(muon->Eta()) > objectsToKeep[j].maxEta)
-					{
-						if(objectsToKeep[j].skipObjects)
-						{
-							keepMuon = false;
-							if( verbosity > 1 ) cout << "skip Muon with pT = " << muon->Pt() << " and eta = " << muon->Eta() << endl;
-						}
-					}
-					
-					if(keepMuon)
-					{
-						new( (*(objectsToKeep[j].outArray))[muonsKeeped] ) TRootMuon(*muon);
-						muonsKeeped++;
-					}
-				}
-
-				if(muonsKeeped < objectsToKeep[j].minNObjects)
-				{
-					keepEvent = false;
-					if( verbosity > 1 ) cout << "Too small number of selected Muons: muonsKeeped = " << muonsKeeped << endl;
-				}
-
-				if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
-				if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
-			}
-			
-			else if(objectsToKeep[j].type == "TRootCosmicMuon")
-			{
-				TRootCosmicMuon* muon;
-				int cosmicMuonsKeeped=0;
-				for(int i=0; i<(objectsToKeep[j].inArray)->GetEntriesFast(); i++)
-				{
-					muon = (TRootCosmicMuon*) (objectsToKeep[j].inArray)->At(i);
-					bool keepCosmicMuon = true;
-					
-					if(muon->Pt() < objectsToKeep[j].minPt || fabs(muon->Eta()) > objectsToKeep[j].maxEta)
-					{
-						if(objectsToKeep[j].skipObjects)
-						{
-							keepCosmicMuon = false;
-							if( verbosity > 1 ) cout << "skip CosmicMuon with pT = " << muon->Pt() << " and eta = " << muon->Eta() << endl;
-						}
-					}
-					
-					if(keepCosmicMuon)
-					{
-						int nCosmicMuonGlobalTracks = 0;
-						if(muon->globalTrack() != NULL)
-						{
-							TRootTrack* track = (TRootTrack*) muon->globalTrack();
-							new( (*(objectsToKeep[j+1].outArray))[cosmicMuonsKeeped] ) TRootTrack(*track);
-					
-							muon->SetGlobalTrack( (TObject*) (objectsToKeep[j+1].outArray)->At(nCosmicMuonGlobalTracks));
-				
-							nCosmicMuonGlobalTracks++;
-						}
-					
-						int nCosmicMuonTrackerTracks = 0;
-						if(muon->trackerTrack() != NULL)
-						{
-							TRootTrack* track = (TRootTrack*) muon->trackerTrack();
-							new( (*(objectsToKeep[j+2].outArray))[cosmicMuonsKeeped] ) TRootTrack(*track);
-				
-							muon->SetGlobalTrack( (TObject*) (objectsToKeep[j+2].outArray)->At(nCosmicMuonTrackerTracks));
-				
-							nCosmicMuonTrackerTracks++;
-						}
-					
-						int nCosmicMuonStandaloneTracks = 0;
-						if(muon->trackerTrack() != NULL)
-						{
-							TRootTrack* track = (TRootTrack*) muon->trackerTrack();
-							new( (*(objectsToKeep[j+3].outArray))[cosmicMuonsKeeped] ) TRootTrack(*track);
-				
-							muon->SetGlobalTrack( (TObject*) (objectsToKeep[j+3].outArray)->At(nCosmicMuonStandaloneTracks));
-				
-							nCosmicMuonStandaloneTracks++;
-						}
-					
-						new( (*(objectsToKeep[j].outArray))[cosmicMuonsKeeped] ) TRootCosmicMuon(*muon);
-						cosmicMuonsKeeped++;
-					}
-				}
-
-				if(cosmicMuonsKeeped < objectsToKeep[j].minNObjects)
-				{
-					keepEvent = false;
-					if( verbosity > 1 ) cout << "Too small number of selected CosmicMuons: cosmicMuonsKeeped = " << cosmicMuonsKeeped << endl;
-				}
-
-				if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
-				if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
+				cerr << "Different number of HLT Paths in two files???" << endl;
+				cerr << "outRunInfos->nHLTPaths() = " << outRunInfos->nHLTPaths() << "inRunInfos->nHLTPaths() = " << inRunInfos->nHLTPaths() << endl;
+				cerr << "Check the input files!" << endl;
+				exit (4);
 			}
 			else
-				cerr << "Unknown type: " << objectsToKeep[j].type << endl;
+			{
+				for(unsigned int i=0; i!=outRunInfos->nHLTPaths(); i++)
+				{
+					if(inRunInfos->hltNames(i) != outRunInfos->hltNames(i))
+					{
+						cerr << "Different name of the HLT paths between two files???" << endl;
+						cerr << "inRunInfos->hltNames("<<i<<")" << inRunInfos->hltNames(i) << "outRunInfos->hltNames("<<i<<")" << outRunInfos->hltNames(i) << endl;
+						exit (4);
+					}
+				}
+			}
 		}
-		
-		if(keepEvent)
+	
+		for(unsigned int j=0; j !=objectsToKeep.size(); j++)
 		{
-			nOutEvents++; // nr of output events
+			objectsToKeep[j].inBranch = (TBranch *) inEventTree->GetBranch((objectsToKeep[j].name).c_str());
+			objectsToKeep[j].inArray = new TClonesArray((objectsToKeep[j].type).c_str(), 0);
+			objectsToKeep[j].inBranch->SetAddress( &(objectsToKeep[j].inArray) );
+				
+			if(objectsToKeep[j].type == "TRootCosmicMuon") // prepare stuff for storage of the CosmicMuonTracks
+			{
+				j++;
+				objectsToKeep[j].inBranch = (TBranch *) inEventTree->GetBranch((objectsToKeep[j].name).c_str());
+				objectsToKeep[j].inArray = new TClonesArray((objectsToKeep[j].type).c_str(), 0);
+				objectsToKeep[j].inBranch->SetAddress( &(objectsToKeep[j].inArray) );
+					
+				j++;
+				objectsToKeep[j].inBranch = (TBranch *) inEventTree->GetBranch((objectsToKeep[j].name).c_str());
+				objectsToKeep[j].inArray = new TClonesArray((objectsToKeep[j].type).c_str(), 0);
+				objectsToKeep[j].inBranch->SetAddress( &(objectsToKeep[j].inArray) );
+					
+				j++;
+				objectsToKeep[j].inBranch = (TBranch *) inEventTree->GetBranch((objectsToKeep[j].name).c_str());
+				objectsToKeep[j].inArray = new TClonesArray((objectsToKeep[j].type).c_str(), 0);
+				objectsToKeep[j].inBranch->SetAddress( &(objectsToKeep[j].inArray) );
+			}
+		}
+	
+		unsigned int nTempEvents = (int) inEventTree->GetEntries();
+		nInEvents += nTempEvents;
 
-			if( verbosity > 1 ) cout << "Filling the outEventTree" << endl;
-			
-			outEventTree->Fill();
-		}
-		
-		for(vector<keepObjects>::const_iterator iter=objectsToKeep.begin(); iter!=objectsToKeep.end(); iter++)
+		//loop over events
+		for(unsigned int ievt=0; ievt<nTempEvents; ievt++)
 		{
-//			if( verbosity > 1 ) cout << "(iter->outArray)->GetEntriesFast() = "  << (iter->outArray)->GetEntriesFast() << endl;
-//			if( verbosity > 1 ) cout << "iter->outArray: " << iter->outArray << endl;
-			( *(iter->outArray) ).Delete();
-		}
+			inEventTree->GetEvent(ievt);
+			if((int) ievt/10000 == (double) ievt/10000)  cout << ">>> analyzing event " << ievt << endl;
 		
+			if( verbosity > 1 ) cout << ">>> analyzing event " << ievt << endl;
+		
+			outFile->cd();
+		
+			outRootEvent = inEvent;
+		
+			bool keepEvent = true;
+		
+			for(unsigned int j=0; j !=objectsToKeep.size(); j++)
+			{
+				if(ievt == 0)
+				{
+					if( verbosity > 0 )
+					{
+						cout << "objectsToKeep[" << j << "] : " <<endl;
+						cout << "name = " << objectsToKeep[j].name << " type = " << objectsToKeep[j].type << endl;
+						cout << "minPt = " << objectsToKeep[j].minPt << " maxEta = " << objectsToKeep[j].maxEta << endl;
+						if(objectsToKeep[j].skipObjects) cout << "skipObjects = true" << endl;
+						else cout << "skipObjects = false" << endl;
+					}
+				}
+			
+				if(objectsToKeep[j].type == "TRootGenEvent")
+				{
+					TRootGenEvent* genEvt;
+					int genEvtKeeped=0;
+
+					genEvt = (TRootGenEvent*) (objectsToKeep[j].inArray)->At(0);
+					bool keepGenEvt = true;
+				
+					if(objectsToKeep[j].skipObjects)
+					{
+						keepGenEvt = false;
+						if( verbosity > 1 ) cout << "skip GenEvent" << endl;
+					}
+				
+					if(keepGenEvt)
+					{
+						new( (*(objectsToKeep[j].outArray))[0] ) TRootGenEvent(*genEvt);
+						genEvtKeeped++;
+					}
+
+					if(genEvtKeeped < objectsToKeep[j].minNObjects)
+					{
+						keepEvent = false;
+						if( verbosity > 1 ) cout << "Too small number of selected GenEvent: genEvtKeeped = " << genEvtKeeped << endl;
+					}
+
+					if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
+					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
+				
+				}
+
+				else if(objectsToKeep[j].type == "TRootNPGenEvent")
+				{
+					TRootNPGenEvent* npGenEvt;
+					int npGenEvtKeeped=0;
+
+					npGenEvt = (TRootNPGenEvent*) (objectsToKeep[j].inArray)->At(0);
+					bool keepNPGenEvt = true;
+				
+					if(objectsToKeep[j].skipObjects)
+					{
+						keepNPGenEvt = false;
+						if( verbosity > 1 ) cout << "skip NPGenEvent" << endl;
+					}
+				
+					if(keepNPGenEvt)
+					{
+						new( (*(objectsToKeep[j].outArray))[0] ) TRootNPGenEvent(*npGenEvt);
+						npGenEvtKeeped++;
+					}
+
+					if(npGenEvtKeeped < objectsToKeep[j].minNObjects)
+					{
+						keepEvent = false;
+						if( verbosity > 1 ) cout << "Too small number of selected NPGenEvent: npGenEvtKeeped = " << npGenEvtKeeped << endl;
+					}
+
+					if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
+					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
+				
+				}
+
+				else if(objectsToKeep[j].type == "TRootGenJet")
+				{
+					TRootGenJet* genJet;
+					int genJetsKeeped=0;
+					for(int i=0; i<(objectsToKeep[j].inArray)->GetEntriesFast(); i++)
+					{
+						genJet = (TRootGenJet*) (objectsToKeep[j].inArray)->At(i);
+						bool keepGenJet = true;
+					
+						if(genJet->Pt() < objectsToKeep[j].minPt || fabs(genJet->Eta()) > objectsToKeep[j].maxEta)
+						{
+							if(objectsToKeep[j].skipObjects)
+							{
+								keepGenJet = false;
+								if( verbosity > 1 ) cout << "skip genJet with pT = " << genJet->Pt() << " and eta = " << genJet->Eta() << endl;
+							}
+						}
+
+						if(keepGenJet)
+						{
+							new( (*(objectsToKeep[j].outArray))[genJetsKeeped] ) TRootGenJet(*genJet);			
+							genJetsKeeped++;
+						}
+					}
+				
+					if(genJetsKeeped < objectsToKeep[j].minNObjects)
+					{
+						keepEvent = false;
+						if( verbosity > 1 ) cout << "Too small number of selected jets: genJetsKeeped = " << genJetsKeeped << endl;
+					}
+					
+					if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
+					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
+				
+				}
+
+				else if(objectsToKeep[j].type == "TRootPFJet")
+				{
+					TRootPFJet* pfJet;
+					int pfJetsKeeped=0;
+					for(int i=0; i<(objectsToKeep[j].inArray)->GetEntriesFast(); i++)
+					{
+						pfJet = (TRootPFJet*) (objectsToKeep[j].inArray)->At(i);
+						bool keepPFJet = true;
+						
+						if(pfJet->Pt() < objectsToKeep[j].minPt || fabs(pfJet->Eta()) > objectsToKeep[j].maxEta)
+						{
+							if(objectsToKeep[j].skipObjects)
+							{
+								keepPFJet = false;
+								if( verbosity > 1 ) cout << "skip PFJet with pT = " << pfJet->Pt() << " and eta = " << pfJet->Eta() << endl;
+							}
+						}
+	
+						if(keepPFJet)
+						{
+							new( (*(objectsToKeep[j].outArray))[pfJetsKeeped] ) TRootPFJet(*pfJet);			
+							pfJetsKeeped++;
+						}
+					}
+				
+					if(pfJetsKeeped < objectsToKeep[j].minNObjects)
+					{
+						keepEvent = false;
+						if( verbosity > 1 ) cout << "Too small number of selected jets: pfJetsKeeped = " << pfJetsKeeped << endl;
+					}
+				
+					if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
+					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
+				
+				}
+
+				else if(objectsToKeep[j].type == "TRootCaloJet")
+				{
+					TRootCaloJet* caloJet;
+					int caloJetsKeeped=0;
+					for(int i=0; i<(objectsToKeep[j].inArray)->GetEntriesFast(); i++)
+					{
+						caloJet = (TRootCaloJet*) (objectsToKeep[j].inArray)->At(i);
+						bool keepCaloJet = true;
+					
+						if(caloJet->Pt() < objectsToKeep[j].minPt || fabs(caloJet->Eta()) > objectsToKeep[j].maxEta)
+						{
+							if(objectsToKeep[j].skipObjects)
+							{
+								keepCaloJet = false;
+								if( verbosity > 1 ) cout << "skip CaloJet with pT = " << caloJet->Pt() << " and eta = " << caloJet->Eta() << endl;
+							}
+						}
+
+						if(keepCaloJet)
+						{
+							new( (*(objectsToKeep[j].outArray))[caloJetsKeeped] ) TRootCaloJet(*caloJet);			
+							caloJetsKeeped++;
+						}
+					}
+				
+					if(caloJetsKeeped < objectsToKeep[j].minNObjects)
+					{
+						keepEvent = false;
+						if( verbosity > 1 ) cout << "Too small number of selected caloJets: caloJetsKeeped = " << caloJetsKeeped << endl;
+					}
+				
+					if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
+					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
+				
+				}
+			
+				else if(objectsToKeep[j].type == "TRootMCParticle")
+				{
+					TRootMCParticle* mcparticle;
+					int mcparticlesKeeped=0;
+					for(int i=0; i<(objectsToKeep[j].inArray)->GetEntriesFast(); i++)
+					{
+						mcparticle = (TRootMCParticle*) (objectsToKeep[j].inArray)->At(i);
+						bool keepMCParticle = true;
+	
+						if(mcparticle->Pt() < objectsToKeep[j].minPt || fabs(mcparticle->Eta()) > objectsToKeep[j].maxEta)
+						{
+							if(objectsToKeep[j].skipObjects)
+							{
+								keepMCParticle = false;
+								if( verbosity > 1 ) cout << "skip MCparticle with pT = " << mcparticle->Pt() << " and eta = " << mcparticle->Eta() << endl;
+							}
+						}
+					
+						if(keepMCParticle)
+						{
+							new( (*(objectsToKeep[j].outArray))[mcparticlesKeeped] ) TRootMCParticle(*mcparticle);
+							mcparticlesKeeped++;
+						}
+					}
+
+					if(mcparticlesKeeped < objectsToKeep[j].minNObjects)
+					{
+						keepEvent = false;
+						if( verbosity > 1 ) cout << "Too small number of selected MCparticles: mcparticlesKeeped = " << mcparticlesKeeped << endl;
+					}
+
+					if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
+					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
+				}
+			
+				else if(objectsToKeep[j].type == "TRootMET")
+				{
+					TRootMET* met;
+					int METKeeped=0;
+					met = (TRootMET*) (objectsToKeep[j].inArray)->At(0);
+					bool keepMET = true;
+				
+					if(met->Pt() < objectsToKeep[j].minPt || fabs(met->Eta()) > objectsToKeep[j].maxEta)
+					{
+						if(objectsToKeep[j].skipObjects)
+						{
+							keepMET = false;
+							if( verbosity > 1 ) cout << "skip MET with pT = " << met->Pt() << " and eta = " << met->Eta() << endl;
+						}
+					}
+				
+					if(keepMET)
+					{
+						new( (*(objectsToKeep[j].outArray))[0] ) TRootMET(*met);
+						METKeeped++;
+					}
+
+					if(METKeeped < objectsToKeep[j].minNObjects)
+					{
+						keepEvent = false;
+						if( verbosity > 1 ) cout << "Too small number of selected MET: METKeeped = " << METKeeped << endl;
+					}
+
+					if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
+					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
+				}
+			
+				else if(objectsToKeep[j].type == "TRootElectron")
+				{
+					TRootElectron* electron;
+					int electronsKeeped=0;
+					for(int i=0; i<(objectsToKeep[j].inArray)->GetEntriesFast(); i++)
+					{
+						electron = (TRootElectron*) (objectsToKeep[j].inArray)->At(i);
+						bool keepElectron = true;
+					
+						if(electron->Pt() < objectsToKeep[j].minPt || fabs(electron->Eta()) > objectsToKeep[j].maxEta)
+						{
+							if(objectsToKeep[j].skipObjects)
+							{
+								keepElectron = false;
+								if( verbosity > 1 ) cout << "skip Electron with pT = " << electron->Pt() << " and eta = " << electron->Eta() << endl;
+							}
+						}
+					
+						if(keepElectron)
+						{
+							new( (*(objectsToKeep[j].outArray))[electronsKeeped] ) TRootElectron(*electron);
+							electronsKeeped++;
+						}
+					}
+
+					if(electronsKeeped < objectsToKeep[j].minNObjects)
+					{
+						keepEvent = false;
+						if( verbosity > 1 ) cout << "Too small number of selected Electrons: electronsKeeped = " << electronsKeeped << endl;
+					}
+
+					if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
+					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
+				}
+			
+				else if(objectsToKeep[j].type == "TRootMuon")
+				{
+					TRootMuon* muon;
+					int muonsKeeped=0;
+					for(int i=0; i<(objectsToKeep[j].inArray)->GetEntriesFast(); i++)
+					{
+						muon = (TRootMuon*) (objectsToKeep[j].inArray)->At(i);
+						bool keepMuon = true;
+				
+						if(muon->Pt() < objectsToKeep[j].minPt || fabs(muon->Eta()) > objectsToKeep[j].maxEta)
+						{
+							if(objectsToKeep[j].skipObjects)
+							{
+								keepMuon = false;
+								if( verbosity > 1 ) cout << "skip Muon with pT = " << muon->Pt() << " and eta = " << muon->Eta() << endl;
+							}
+						}
+					
+						if(keepMuon)
+						{
+							new( (*(objectsToKeep[j].outArray))[muonsKeeped] ) TRootMuon(*muon);
+							muonsKeeped++;
+						}
+					}
+
+					if(muonsKeeped < objectsToKeep[j].minNObjects)
+					{
+						keepEvent = false;
+						if( verbosity > 1 ) cout << "Too small number of selected Muons: muonsKeeped = " << muonsKeeped << endl;
+					}
+
+					if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
+					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
+				}
+			
+				else if(objectsToKeep[j].type == "TRootCosmicMuon")
+				{
+					TRootCosmicMuon* muon;
+					int cosmicMuonsKeeped=0;
+					for(int i=0; i<(objectsToKeep[j].inArray)->GetEntriesFast(); i++)
+					{
+						muon = (TRootCosmicMuon*) (objectsToKeep[j].inArray)->At(i);
+						bool keepCosmicMuon = true;
+			
+						if(muon->Pt() < objectsToKeep[j].minPt || fabs(muon->Eta()) > objectsToKeep[j].maxEta)
+						{
+							if(objectsToKeep[j].skipObjects)
+							{
+								keepCosmicMuon = false;
+								if( verbosity > 1 ) cout << "skip CosmicMuon with pT = " << muon->Pt() << " and eta = " << muon->Eta() << endl;
+							}
+						}
+				
+						if(keepCosmicMuon)
+						{
+							new( (*(objectsToKeep[j].outArray))[cosmicMuonsKeeped] ) TRootCosmicMuon(*muon);
+							cosmicMuonsKeeped++;
+
+							j++;
+							int nCosmicMuonGlobalTracks = 0;
+							if(muon->globalTrack() != NULL)
+							{
+								TRootTrack* track = (TRootTrack*) muon->globalTrack();
+								new( (*(objectsToKeep[j].outArray))[cosmicMuonsKeeped] ) TRootTrack(*track);
+					
+								muon->SetGlobalTrack( (TObject*) (objectsToKeep[j].outArray)->At(nCosmicMuonGlobalTracks));
+				
+								nCosmicMuonGlobalTracks++;
+							}
+					
+							j++;
+							int nCosmicMuonTrackerTracks = 0;
+							if(muon->trackerTrack() != NULL)
+							{
+								TRootTrack* track = (TRootTrack*) muon->trackerTrack();
+								new( (*(objectsToKeep[j].outArray))[cosmicMuonsKeeped] ) TRootTrack(*track);
+				
+								muon->SetGlobalTrack( (TObject*) (objectsToKeep[j].outArray)->At(nCosmicMuonTrackerTracks));
+				
+								nCosmicMuonTrackerTracks++;
+							}
+					
+							j++;
+							int nCosmicMuonStandaloneTracks = 0;
+							if(muon->trackerTrack() != NULL)
+							{
+								TRootTrack* track = (TRootTrack*) muon->trackerTrack();
+								new( (*(objectsToKeep[j].outArray))[cosmicMuonsKeeped] ) TRootTrack(*track);
+				
+								muon->SetGlobalTrack( (TObject*) (objectsToKeep[j].outArray)->At(nCosmicMuonStandaloneTracks));
+				
+								nCosmicMuonStandaloneTracks++;
+							}
+						}
+					}
+
+					if(cosmicMuonsKeeped < objectsToKeep[j].minNObjects)
+					{
+						keepEvent = false;
+						if( verbosity > 1 ) cout << "Too small number of selected CosmicMuons: cosmicMuonsKeeped = " << cosmicMuonsKeeped << endl;
+					}
+
+					if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
+					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
+				}
+				else
+					cerr << "Unknown type: " << objectsToKeep[j].type << endl;
+			}
+		
+			if(keepEvent)
+			{
+				nOutEvents++; // nr of output events
+				
+//				Calculate HLT stuff
+				bool passHLT = false;
+				for(unsigned int k=0; k!=hltAccept.size() ;k++)
+				{
+					if(outRootEvent->trigHLT(k))
+					{
+						hltAccept[k]++;
+						passHLT = true;
+					}
+				}
+				if(passHLT) NHLTAccept++;
+
+				if( verbosity > 1 ) cout << "Filling the outEventTree" << endl;
+			
+				outEventTree->Fill();
+			}
+		
+			for(vector<keepObjects>::const_iterator iter=objectsToKeep.begin(); iter!=objectsToKeep.end(); iter++)
+			{
+//				if( verbosity > 1 ) cout << "(iter->outArray)->GetEntriesFast() = "  << (iter->outArray)->GetEntriesFast() << endl;
+//				if( verbosity > 1 ) cout << "iter->outArray: " << iter->outArray << endl;
+				( *(iter->outArray) ).Delete();
+			}
+		
+		} // loop over events
+	
+	} // loop over input files
+	
+//	Some HLT related variables are impossible to calculate with the present information
+//	Set them to 987654321
+	vector<unsigned int> tempVector;
+	tempVector.resize(outRunInfos->nHLTPaths());
+	for(unsigned int i=0; i!=outRunInfos->nHLTPaths(); i++)
+	{
+		tempVector[i] = 987654321;
 	}
+
+	outRunInfos->setNHLTWasRun(987654321);
+	outRunInfos->setNHLTErrors(987654321);
+	outRunInfos->setHLTWasRun(tempVector);
+	outRunInfos->setHLTErrors(tempVector);
+	
+	outRunInfos->setNHLTEvents(nOutEvents);
+
+//	TODO: Handle and calculate NHLTAccept and hltAccept
+	outRunInfos->setHLTAccept(hltAccept);
+	outRunInfos->setNHLTAccept(NHLTAccept);
 
 	cout << "Filling outRunTree" << endl;
 	
@@ -729,7 +815,7 @@ int main()
 	outFile->Close();
 
 //	WARNING! Don't remove or modify the next line!!! The Automatic TopTree Producer depends on it!
-	cout << "--> Skimmed " << nOutEvents << " out of a total of " << nEvents << " events" << endl;
+	cout << "--> Skimmed " << nOutEvents << " out of a total of " << nInEvents << " events" << endl;
 
 	if (((double)clock() - start) / CLOCKS_PER_SEC < 60)
 		cout << "--> The skimming took " << ((double)clock() - start) / CLOCKS_PER_SEC << " seconds." << endl;
