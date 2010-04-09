@@ -2,7 +2,8 @@
 
 <inputdatasets>
 <!-- <i file="../test/TopTree_CRAFT09_test.root"/> -->
-<i file="TTbar_Summer09_7TeV_TopTree.root"/>
+<i file="TTbar_Summer09_7TeV_TopTree_1.root"/>
+<i file="TTbar_Summer09_7TeV_TopTree_2.root"/>
 </inputdatasets>
 
 <outputfilename>
