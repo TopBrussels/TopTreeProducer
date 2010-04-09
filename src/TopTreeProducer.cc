@@ -1,6 +1,7 @@
 #include "../interface/TopTreeProducer.h"
 
 using namespace std;
+using namespace TopTree;
 using namespace reco;
 using namespace edm;
 
@@ -80,17 +81,19 @@ void TopTreeProducer::beginJob()
 	nTotEvt_ = 0;
 	
 	// initialize root output file
-	if(verbosity>0) cout << "New RootFile " << rootFileName_.c_str() << " is created" << endl;
 	rootFile_ = new TFile(rootFileName_.c_str(), "recreate");
 	rootFile_->cd();
+	if(verbosity>0) cout << "New RootFile " << rootFileName_.c_str() << " is created" << endl;
 
 	runInfos_ = new TRootRun();
 	runTree_ = new TTree("runTree", "Global Run Infos");
-	runTree_->Branch ("runInfos", "TRootRun", &runInfos_);
+	runTree_->Branch ("runInfos", "TopTree::TRootRun", &runInfos_);
+	if(verbosity>0) cout << "RunTree is created" << endl;
 
 	rootEvent = 0;
 	eventTree_ = new TTree("eventTree", "Event Infos");
-	eventTree_->Branch ("Event", "TRootEvent", &rootEvent);
+	eventTree_->Branch ("Event", "TopTree::TRootEvent", &rootEvent);
+	if(verbosity>0) cout << "EventTree is created" << endl;
 
 	if(doHLT)
 	{
@@ -101,14 +104,14 @@ void TopTreeProducer::beginJob()
 	if(doMC)
 	{
 		if(verbosity>0) cout << "MC Particles info will be added to rootuple" << endl;
-		mcParticles = new TClonesArray("TRootMCParticle", 1000);
+		mcParticles = new TClonesArray("TopTree::TRootMCParticle", 1000);
 		eventTree_->Branch ("MCParticles", "TClonesArray", &mcParticles);
 	}
 
 	if(doCaloJet)
 	{
 		if(verbosity>0) cout << "CaloJets info will be added to rootuple" << endl;
-		caloJets = new TClonesArray("TRootCaloJet", 1000);
+		caloJets = new TClonesArray("TopTree::TRootCaloJet", 1000);
 		eventTree_->Branch ("CaloJets", "TClonesArray", &caloJets);
 	}
 	
@@ -116,7 +119,7 @@ void TopTreeProducer::beginJob()
 	{
 		if(verbosity>0) cout << "CaloJets info will be added to rootuple (for CaloJetStudy)" << endl;
 		for(unsigned int s=0;s<vCaloJetProducer.size();s++){
-			vcaloJets[s] = new TClonesArray("TRootCaloJet", 1000);
+			vcaloJets[s] = new TClonesArray("TopTree::TRootCaloJet", 1000);
 			char name[100];
 			sprintf(name,"CaloJets_%s",vCaloJetProducer[s].c_str());
 			eventTree_->Branch (name, "TClonesArray", &vcaloJets[s]);
@@ -125,14 +128,14 @@ void TopTreeProducer::beginJob()
 	if(doGenJet)
 	{
 		if(verbosity>0) cout << "GenJets info will be added to rootuple" << endl;
-		genJets = new TClonesArray("TRootGenJet", 1000);
+		genJets = new TClonesArray("TopTree::TRootGenJet", 1000);
 		eventTree_->Branch ("GenJets", "TClonesArray", &genJets);
 	}
 
 	if(doPFJet)
 	{
 		if(verbosity>0) cout << "PFJets info will be added to rootuple" << endl;
-		pfJets = new TClonesArray("TRootPFJet", 1000);
+		pfJets = new TClonesArray("TopTree::TRootPFJet", 1000);
 		eventTree_->Branch ("PFJets", "TClonesArray", &pfJets);
 	}
 	
@@ -140,7 +143,7 @@ void TopTreeProducer::beginJob()
 	{
 		if(verbosity>0) cout << "PFJets info will be added to rootuple (for PFJetStudy)" << endl;
 		for(unsigned int s=0;s<vPFJetProducer.size();s++){
-			vpfJets[s] = new TClonesArray("TRootPFJet", 1000);
+			vpfJets[s] = new TClonesArray("TopTree::TRootPFJet", 1000);
 			char name[100];
 			sprintf(name,"PFJets_%s",vPFJetProducer[s].c_str());
 			eventTree_->Branch (name, "TClonesArray", &vpfJets[s]);
@@ -150,35 +153,35 @@ void TopTreeProducer::beginJob()
 	if(doGenEvent)
 	{
 		if(verbosity>0) cout << "GenEvent info will be added to rootuple" << endl;
-		genEvent = new TClonesArray("TRootGenEvent", 1000);
+		genEvent = new TClonesArray("TopTree::TRootGenEvent", 1000);
 		eventTree_->Branch ("GenEvent", "TClonesArray", &genEvent);
 	}
 
 	if(doNPGenEvent)
 	{
 		if(verbosity>0) cout << "NPGenEvent info will be added to rootuple" << endl;
-		NPgenEvent = new TClonesArray("TRootNPGenEvent", 1000);
+		NPgenEvent = new TClonesArray("TopTree::TRootNPGenEvent", 1000);
 		eventTree_->Branch ("NPGenEvent", "TClonesArray", &NPgenEvent);
 	}
 
 	if(doSpinCorrGen)
 	{
 		if(verbosity>0) cout << "SpinCorrelation Gen info will be added to rootuple" << endl;
-		spinCorrGen = new TClonesArray("TRootSpinCorrGen", 1000);
+		spinCorrGen = new TClonesArray("TopTree::TRootSpinCorrGen", 1000);
 		eventTree_->Branch ("SpinCorrGen", "TClonesArray", &spinCorrGen);
 	}
     
 	if(doSemiLepEvent)
 	{
 		if(verbosity>0) cout << "SemiLepEvent info will be added to rootuple" << endl;
-		semiLepEvent = new TClonesArray("TRootSemiLepEvent", 1000);
+		semiLepEvent = new TClonesArray("TopTree::TRootSemiLepEvent", 1000);
 		eventTree_->Branch ("SemiLepEvent", "TClonesArray", &semiLepEvent);
 	}
 
 	if(doMuon)
 	{
 		if(verbosity>0) cout << "Muons info will be added to rootuple" << endl;
-		muons = new TClonesArray("TRootMuon", 1000);
+		muons = new TClonesArray("TopTree::TRootMuon", 1000);
 		eventTree_->Branch ("Muons", "TClonesArray", &muons);
 	}
 
@@ -187,24 +190,24 @@ void TopTreeProducer::beginJob()
 		if(verbosity>0) cout << "Cosmic Muons info will be added to rootuple" << endl;
 	     
 		for(unsigned int s=0;s<vCosmicMuonProducer.size();s++){
-			vcosmicMuons[s] = new TClonesArray("TRootCosmicMuon", 1000);
+			vcosmicMuons[s] = new TClonesArray("TopTree::TRootCosmicMuon", 1000);
 			char name[100];
 			sprintf(name,"CosmicMuons_%s",vCosmicMuonProducer[s].c_str());
 			eventTree_->Branch (name, "TClonesArray", &vcosmicMuons[s]);
 
 			// put the track(gl,sta,tr) branches for this muoncollection
 
-		        vcosmicMuonTracks[s][0] = new TClonesArray("TRootTrack",1000);
+		        vcosmicMuonTracks[s][0] = new TClonesArray("TopTree::TRootTrack",1000);
 			//char name[100];
 			sprintf(name,"CosmicMuonGlobalTracks_%s",vCosmicMuonProducer[s].c_str());
 			eventTree_->Branch (name, "TClonesArray", &vcosmicMuonTracks[s][0]);
 
-			vcosmicMuonTracks[s][1] = new TClonesArray("TRootTrack",1000);
+			vcosmicMuonTracks[s][1] = new TClonesArray("TopTree::TRootTrack",1000);
 			//char name[100];
 			sprintf(name,"CosmicMuonTrackerTracks_%s",vCosmicMuonProducer[s].c_str());
 			eventTree_->Branch (name, "TClonesArray", &vcosmicMuonTracks[s][1]);
 
-			vcosmicMuonTracks[s][2] = new TClonesArray("TRootTrack",1000);
+			vcosmicMuonTracks[s][2] = new TClonesArray("TopTree::TRootTrack",1000);
 			//char name[100];
 			sprintf(name,"CosmicMuonStandAloneTracks_%s",vCosmicMuonProducer[s].c_str());
 			eventTree_->Branch (name, "TClonesArray", &vcosmicMuonTracks[s][2]);
@@ -216,17 +219,22 @@ void TopTreeProducer::beginJob()
 	if(doElectron)
 	{
 		if(verbosity>0) cout << "Electrons info will be added to rootuple" << endl;
-		electrons = new TClonesArray("TRootElectron", 1000);
+		electrons = new TClonesArray("TopTree::TRootElectron", 1000);
 		eventTree_->Branch ("Electrons", "TClonesArray", &electrons);
 	}
-
-
 
 	if(doMET)
 	{
 		if(verbosity>0) cout << "MET info will be added to rootuple" << endl;
-		met = new TClonesArray("TRootMET", 1000);
+		met = new TClonesArray("TopTree::TRootMET", 1000);
 		eventTree_->Branch ("MET", "TClonesArray", &met);
+	}
+	
+	if(doPrimaryVertex)
+	{
+		if(verbosity>0) cout << "Primary Vertex info will be added to rootuple" << endl;
+		primaryVertex = new TClonesArray("TopTree::TRootVertex", 1000);
+		eventTree_->Branch ("PrimaryVertex", "TClonesArray", &primaryVertex);
 	}
 
 }
@@ -316,7 +324,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	{
 		if(verbosity>1) cout << endl << "Analysing primary vertices collection..." << endl;
 		VertexAnalyzer* myVertexAnalyzer = new VertexAnalyzer(producersNames_, verbosity);
-		myVertexAnalyzer->Process(iEvent, rootEvent);
+		myVertexAnalyzer->Process(iEvent, primaryVertex);
 		delete myVertexAnalyzer;
 	}
 
@@ -438,7 +446,6 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		// FIXME - Test availability of reducedEcalRecHits...
 		lazyTools = new EcalClusterLazyTools( iEvent, iSetup, reducedBarrelEcalRecHitCollection_, reducedEndcapEcalRecHitCollection_ );
 	}
-																
 
 	// Electrons
 	if(doElectron)
@@ -448,8 +455,6 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		myElectronAnalyzer->Process(iEvent, electrons, *lazyTools, iSetup);
 		delete myElectronAnalyzer;
 	}
-			
-
 
 	// MET 
 	if(doMET)
@@ -513,6 +518,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	if(doNPGenEvent) (*NPgenEvent).Delete();
 	if(doSpinCorrGen) (*spinCorrGen).Delete();
 	if(doSemiLepEvent) (*semiLepEvent).Delete();
+	if(doPrimaryVertex) (*primaryVertex).Delete();
 	if(verbosity>0) cout << endl;
 
 }

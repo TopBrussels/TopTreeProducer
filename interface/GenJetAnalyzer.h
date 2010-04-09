@@ -14,12 +14,11 @@
 #include "DataFormats/PatCandidates/interface/JetCorrFactors.h"
 
 #include "../interface/TRootGenJet.h"
-#include "../interface/JetAnalyzer.h"
 
 #include "TClonesArray.h"
 
 
-class GenJetAnalyzer : JetAnalyzer {
+class GenJetAnalyzer {
 
 public:
 	GenJetAnalyzer(const edm::ParameterSet& producersNames);
@@ -27,7 +26,7 @@ public:
 	GenJetAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity);
 	GenJetAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity);
 	~GenJetAnalyzer();
-	void SetVerbosity(int verbosity) {verbosity_ = verbosity; };
+	void SetVerbosity(int verbosity) { verbosity_ = verbosity; };
 	void Process(const edm::Event& iEvent, TClonesArray* rootGenJets);
 
 private:
@@ -36,7 +35,6 @@ private:
 	edm::InputTag genJetProducer_;
 	edm::InputTag mcProducer_;
 	std::vector<std::string> vGenJetProducer;
-	JetAnalyzer* myJetAnalyzer; // FIXME: Handle the deletion of the JetAnalyzer
 
 };
 

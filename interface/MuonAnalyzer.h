@@ -27,7 +27,7 @@ public:
 	MuonAnalyzer(const edm::ParameterSet& producersNames);
 	MuonAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity);
 	~MuonAnalyzer();
-	void SetVerbosity(int verbosity) {verbosity_ = verbosity; };
+	void SetVerbosity(int verbosity) { verbosity_ = verbosity; };
 	void Process(const edm::Event& iEvent, TClonesArray* rootMuons);
 
 private:

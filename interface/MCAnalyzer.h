@@ -39,7 +39,7 @@
 
 #include "TClonesArray.h"
 
-
+using namespace TopTree;
 
 class MCAnalyzer{
 	

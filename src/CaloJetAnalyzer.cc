@@ -1,6 +1,7 @@
 #include "../interface/CaloJetAnalyzer.h"
 
 using namespace std;
+using namespace TopTree;
 using namespace reco;
 using namespace edm;
 

@@ -19,6 +19,7 @@
 
 #include <iomanip>
 
+using namespace TopTree;
 
 class HLTAnalyzer{
 	

@@ -11,6 +11,7 @@
 #include "../interface/TRootRun.h"
 #include "../interface/TRootParticle.h"
 #include "../interface/TRootMCParticle.h"
+#include "../interface/TRootVertex.h"
 
 #include <TFile.h>
 #include <TH1.h>
@@ -18,6 +19,8 @@
 #include <TCanvas.h>
 #include <TBranch.h>
 #include <TTree.h>
+
+using namespace TopTree;
 
 int main(){
         int verbosity                 = 1;
@@ -66,14 +69,14 @@ int main(){
 	if(doMC)
 	{
 		mcParticles_br = (TBranch *) eventTree->GetBranch("MCParticles");
-		mcParticles = new TClonesArray("TRootParticle", 0);
+		mcParticles = new TClonesArray("TopTree::TRootParticle", 0);
 		mcParticles_br->SetAddress(&mcParticles);
 	}
 
 	if(doCaloJet)
 	{
 		caloJets_br = (TBranch *) eventTree->GetBranch("CaloJets");
-		caloJets = new TClonesArray("TRootCaloJet", 0);
+		caloJets = new TClonesArray("TopTree::TRootCaloJet", 0);
 		caloJets_br->SetAddress(&caloJets);
 	}
 
@@ -81,7 +84,7 @@ int main(){
 	if(doMuon)
 	{
 		muons_br = (TBranch *) eventTree->GetBranch("Muons");
-		muons = new TClonesArray("TRootMuon", 0);
+		muons = new TClonesArray("TopTree::TRootMuon", 0);
 		muons_br->SetAddress(&muons);
 	}
 		
@@ -89,21 +92,21 @@ int main(){
 	{
 
 		electrons_br = (TBranch *) eventTree->GetBranch("Electrons");
-		electrons = new TClonesArray("TRootElectron", 0);
+		electrons = new TClonesArray("TopTree::TRootElectron", 0);
 		electrons_br->SetAddress(&electrons);
 	}
 		
         if(doMET)
 	{
 		mets_br = (TBranch *) eventTree->GetBranch("MET");
-		mets = new TClonesArray("TRootMET", 0);
+		mets = new TClonesArray("TopTree::TRootMET", 0);
 		mets_br->SetAddress(&mets);
 	}
         
 	if(doGenEvent)
 	{
 		genEvents_br = (TBranch *) eventTree->GetBranch("GenEvent");
-		genEvents = new TClonesArray("TRootGenEvent", 0);
+		genEvents = new TClonesArray("TopTree::TRootGenEvent", 0);
 		genEvents_br->SetAddress(&genEvents);
 	}
 		

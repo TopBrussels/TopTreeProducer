@@ -3,6 +3,7 @@
 #define PI 3.14159265
 
 using namespace std;
+using namespace TopTree;
 using namespace reco;
 using namespace edm;
 

@@ -1,5 +1,7 @@
 #include "../interface/TRootSemiLepEvent.h"
 
+using namespace TopTree;
+
 // find corresponding hypotheses based on JetLepComb
 int TRootSemiLepEvent::correspondingHypo(const HypoClassKey& key1, const unsigned& hyp1, const HypoClassKey& key2) const
 {

@@ -1,6 +1,7 @@
 #include "../interface/JetAnalyzer.h"
 
 using namespace std;
+using namespace TopTree;
 using namespace reco;
 using namespace edm;
 
@@ -144,29 +145,6 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet, std::string dataType)
 		}
 
 	}
-
-	return localJet;
-}
-TRootJet JetAnalyzer::Process(const reco::GenJet* jet, std::string dataType)
-{
-
-	TRootJet localJet(
-		jet->px()
-		,jet->py()
-		,jet->pz()
-		,jet->energy()
-		,jet->vx()
-		,jet->vy()
-		,jet->vz()
-		,jet->pdgId()
-		,jet->charge()
-	); 
-
-	localJet.setNConstituents(jet->nConstituents());
-	localJet.setJetArea(jet->jetArea());
-	localJet.setPileupEnergy(jet->pileup());
-	localJet.setMaxDistance(jet->maxDistance());
-
 
 	return localJet;
 }

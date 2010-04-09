@@ -59,12 +59,13 @@
 #include "../interface/TRootSpinCorrGen.h"
 #include "../interface/TRootSemiLepEvent.h"
 #include "../interface/TRootTrack.h"
+#include "../interface/TRootVertex.h"
 
 #include "TFile.h"
 #include "TTree.h"
 #include "TClonesArray.h"
 
-
+//using namespace TopTree;
 
 class TopTreeProducer : public edm::EDAnalyzer {
 public:
@@ -130,6 +131,7 @@ private:
 	TClonesArray* NPgenEvent;
 	TClonesArray* spinCorrGen;
 	TClonesArray* semiLepEvent;
+	TClonesArray* primaryVertex;
 
 };
 

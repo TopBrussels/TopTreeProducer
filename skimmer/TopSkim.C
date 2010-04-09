@@ -29,12 +29,15 @@
 #include "../interface/TRootMCParticle.h"
 #include "../interface/TRootSemiLepEvent.h"
 #include "../interface/TRootTrack.h"
+#include "../interface/TRootVertex.h"
 
 #include "TFile.h"
 #include "TBranch.h"
 #include "TTree.h"
 #include "TClonesArray.h"
 #include "TObjString.h"
+
+using namespace TopTree;
 
 struct keepObjects
 {
@@ -101,7 +104,7 @@ vector<keepObjects> parseObjects(TiXmlDocument doc, TTree* outEventTree)
 
 				toKeep.push_back(tempObj);
 				
-				if(tempObj.type == "TRootCosmicMuon") // prepare stuff for storage of the CosmicMuonTracks
+				if(tempObj.type == "TopTree::TRootCosmicMuon") // prepare stuff for storage of the CosmicMuonTracks
 				{
 					keepObjects tempObj1, tempObj2, tempObj3;
 					string muonType = "";
@@ -112,21 +115,21 @@ vector<keepObjects> parseObjects(TiXmlDocument doc, TTree* outEventTree)
 					else if(tempObj.name == "CosmicMuons_muons1LegBarrelOnly") muonType = "muons1LegBarrelOnly";
 					
 					tempObj1.name = "CosmicMuonGlobalTracks_" + muonType;
-					tempObj1.type = "TRootTrack";
+					tempObj1.type = "TopTree::TRootTrack";
 					
 					tempObj1.outArray = new TClonesArray((tempObj1.type).c_str(), 1000);
 					outEventTree->Branch ((tempObj1.name).c_str(), "TClonesArray", &(tempObj1.outArray) );
 					toKeep.push_back(tempObj1);
 					
 					tempObj2.name = "CosmicMuonTrackerTracks_" + muonType;
-					tempObj2.type = "TRootTrack";
+					tempObj2.type = "TopTree::TRootTrack";
 					
 					tempObj2.outArray = new TClonesArray((tempObj2.type).c_str(), 1000);
 					outEventTree->Branch ((tempObj2.name).c_str(), "TClonesArray", &(tempObj2.outArray) );
 					toKeep.push_back(tempObj2);
 					
 					tempObj3.name = "CosmicMuonStandAloneTracks_" + muonType;
-					tempObj3.type = "TRootTrack";
+					tempObj3.type = "TopTree::TRootTrack";
 					
 					tempObj3.outArray = new TClonesArray((tempObj3.type).c_str(), 1000);
 					outEventTree->Branch ((tempObj3.name).c_str(), "TClonesArray", &(tempObj3.outArray) );
@@ -219,12 +222,12 @@ int main()
 	TRootRun* outRunInfos = 0;
 	TTree* outRunTree = new TTree("runTree", "Global Run Infos");
 	outRunTree->SetMaxTreeSize(ULONG_MAX);
-	outRunTree->Branch("runInfos", "TRootRun", &outRunInfos);
+	outRunTree->Branch("runInfos", "TopTree::TRootRun", &outRunInfos);
 	
 	TRootEvent* outRootEvent = 0;
 	TTree* outEventTree = new TTree("eventTree", "Event Infos");
 	outEventTree->SetMaxTreeSize(ULONG_MAX);
-	outEventTree->Branch ("Event", "TRootEvent", &outRootEvent);
+	outEventTree->Branch ("Event", "TopTree::TRootEvent", &outRootEvent);
 	
 	cout << "Parsing objectsToKeep from xml file..." << endl;
 	
@@ -263,7 +266,6 @@ int main()
 	
 	for(unsigned int nFile = 0; nFile < inFileName.size(); nFile++)
 	{
-		
 		cout << "input file[" << nFile << "] = " << inFileName[nFile] << endl;
 
 		TFile* inFile = TFile::Open(inFileName[nFile]);
@@ -283,7 +285,7 @@ int main()
 		if( verbosity > 0 ) cout << "inRunTree->GetEntries()=" << inRunTree->GetEntries()<<endl;
 		inRunTree->GetEvent(0);
 		
-		cout << "outRunInfos->nHLTEvents() = " << outRunInfos->nHLTEvents() << endl;
+		if( verbosity > 1 ) cout << "outRunInfos->nHLTEvents() = " << outRunInfos->nHLTEvents() << endl;
 		
 		if(nFile == 0)
 		{
@@ -319,7 +321,7 @@ int main()
 			objectsToKeep[j].inArray = new TClonesArray((objectsToKeep[j].type).c_str(), 0);
 			objectsToKeep[j].inBranch->SetAddress( &(objectsToKeep[j].inArray) );
 				
-			if(objectsToKeep[j].type == "TRootCosmicMuon") // prepare stuff for storage of the CosmicMuonTracks
+			if(objectsToKeep[j].type == "TopTree::TRootCosmicMuon") // prepare stuff for storage of the CosmicMuonTracks
 			{
 				j++;
 				objectsToKeep[j].inBranch = (TBranch *) inEventTree->GetBranch((objectsToKeep[j].name).c_str());
@@ -368,8 +370,39 @@ int main()
 						else cout << "skipObjects = false" << endl;
 					}
 				}
-			
-				if(objectsToKeep[j].type == "TRootGenEvent")
+
+				if(objectsToKeep[j].type == "TopTree::TRootVertex")
+				{
+					TRootVertex* vertex;
+					int verticesKeeped=0;
+					
+					vertex = (TRootVertex*) (objectsToKeep[j].inArray)->At(0);
+					bool keepPrimaryVertex = true;
+					
+					if(objectsToKeep[j].skipObjects)
+					{
+						keepPrimaryVertex = false;
+						if( verbosity > 1 ) cout << "skip Primary Vertex" << endl;
+					}
+					
+					if(keepPrimaryVertex)
+					{
+						new( (*(objectsToKeep[j].outArray))[0] ) TRootVertex(*vertex);
+						verticesKeeped++;					
+					}
+
+					if(verticesKeeped < objectsToKeep[j].minNObjects)
+					{
+						keepEvent = false;
+						if( verbosity > 1 ) cout << "Too small number of selected Primary Vertices: verticesKeeped = " << verticesKeeped << endl;
+					}
+
+					if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
+					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
+
+				}
+
+				else if(objectsToKeep[j].type == "TopTree::TRootGenEvent")
 				{
 					TRootGenEvent* genEvt;
 					int genEvtKeeped=0;
@@ -400,7 +433,7 @@ int main()
 				
 				}
 
-				else if(objectsToKeep[j].type == "TRootNPGenEvent")
+				else if(objectsToKeep[j].type == "TopTree::TRootNPGenEvent")
 				{
 					TRootNPGenEvent* npGenEvt;
 					int npGenEvtKeeped=0;
@@ -431,7 +464,7 @@ int main()
 				
 				}
 
-				else if(objectsToKeep[j].type == "TRootGenJet")
+				else if(objectsToKeep[j].type == "TopTree::TRootGenJet")
 				{
 					TRootGenJet* genJet;
 					int genJetsKeeped=0;
@@ -467,7 +500,7 @@ int main()
 				
 				}
 
-				else if(objectsToKeep[j].type == "TRootPFJet")
+				else if(objectsToKeep[j].type == "TopTree::TRootPFJet")
 				{
 					TRootPFJet* pfJet;
 					int pfJetsKeeped=0;
@@ -503,7 +536,7 @@ int main()
 				
 				}
 
-				else if(objectsToKeep[j].type == "TRootCaloJet")
+				else if(objectsToKeep[j].type == "TopTree::TRootCaloJet")
 				{
 					TRootCaloJet* caloJet;
 					int caloJetsKeeped=0;
@@ -539,7 +572,7 @@ int main()
 				
 				}
 			
-				else if(objectsToKeep[j].type == "TRootMCParticle")
+				else if(objectsToKeep[j].type == "TopTree::TRootMCParticle")
 				{
 					TRootMCParticle* mcparticle;
 					int mcparticlesKeeped=0;
@@ -574,7 +607,7 @@ int main()
 					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
 				}
 			
-				else if(objectsToKeep[j].type == "TRootMET")
+				else if(objectsToKeep[j].type == "TopTree::TRootMET")
 				{
 					TRootMET* met;
 					int METKeeped=0;
@@ -606,7 +639,7 @@ int main()
 					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
 				}
 			
-				else if(objectsToKeep[j].type == "TRootElectron")
+				else if(objectsToKeep[j].type == "TopTree::TRootElectron")
 				{
 					TRootElectron* electron;
 					int electronsKeeped=0;
@@ -641,7 +674,7 @@ int main()
 					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
 				}
 			
-				else if(objectsToKeep[j].type == "TRootMuon")
+				else if(objectsToKeep[j].type == "TopTree::TRootMuon")
 				{
 					TRootMuon* muon;
 					int muonsKeeped=0;
@@ -676,7 +709,7 @@ int main()
 					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
 				}
 			
-				else if(objectsToKeep[j].type == "TRootCosmicMuon")
+				else if(objectsToKeep[j].type == "TopTree::TRootCosmicMuon")
 				{
 					TRootCosmicMuon* muon;
 					int cosmicMuonsKeeped=0;

@@ -1,6 +1,7 @@
 #include "../interface/MuonAnalyzer.h"
 
 using namespace std;
+using namespace TopTree;
 using namespace reco;
 using namespace edm;
 

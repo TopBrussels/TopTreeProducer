@@ -1,7 +1,8 @@
 #include "../interface/TRootSignalEvent.h"
 
-ClassImp(TRootSignalEvent)
+using namespace TopTree;
 
+ClassImp(TRootSignalEvent)
 
 TRootSignalEvent::TRootSignalEvent() : nZ_(0), nMuplus_(0), nMuminus_(0), nFSR_(0), nISR_(0)
 {

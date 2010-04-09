@@ -6,142 +6,126 @@
 
 using namespace std;
 
-class TRootTrack : public TRootParticle
+namespace TopTree
 {
+	class TRootTrack : public TRootParticle
+	{
 
-public:
+	public:
+		TRootTrack() :
+			TRootParticle()
+			,isValid_(false)
+			,chi2_(-9999.)
+			,d0_(-9999.)
+			,d0error_(-9999.)
+			,dz_(-9999.)
+			,dzerror_(-9999.)
+			,nofValidHits_(-9999)
+			,innerPosition_(TRootXYZPoint(-9999.,-9999.,-9999.))
+			,outerPosition_(TRootXYZPoint(-9999.,-9999.,-9999.))
+			{;}
 
-	TRootTrack() :
-	  TRootParticle()
-	  ,isValid_(false)
-	  ,chi2_(-9999.)
-          ,d0_(-9999.)
-          ,d0error_(-9999.)
-          ,dz_(-9999.)
-          ,dzerror_(-9999.)
-          ,nofValidHits_(-9999)
-	  ,innerPosition_(TRootXYZPoint(-9999.,-9999.,-9999.))
-	  ,outerPosition_(TRootXYZPoint(-9999.,-9999.,-9999.))
+		TRootTrack(const TRootTrack& track) :
+			TRootParticle(track)
+			,isValid_(track.isValid_)
+			,chi2_(track.chi2_)
+			,d0_(track.d0_)
+			,d0error_(track.d0error_)
+			,dz_(track.dz_)                                        
+			,dzerror_(track.dzerror_)
+			,nofValidHits_(track.nofValidHits_)
+			,innerPosition_(track.innerPosition_)
+			,outerPosition_(track.innerPosition_)
+			{;}
 
-	{;}
-
-	TRootTrack(const TRootTrack& track) :
-          TRootParticle(track)
-	  ,isValid_(track.isValid_)
-	  ,chi2_(track.chi2_)
-          ,d0_(track.d0_)
-          ,d0error_(track.d0error_)
-          ,dz_(track.dz_)                                        
-          ,dzerror_(track.dzerror_)
-          ,nofValidHits_(track.nofValidHits_)
-	  ,innerPosition_(track.innerPosition_)
-	  ,outerPosition_(track.innerPosition_)
-
-        {;}
-
-	TRootTrack(const TLorentzVector &momentum, const TVector3 &vertex, Int_t type,Float_t charge ) :
-	  TRootParticle(momentum,vertex,type,charge)
-	  ,isValid_(false)
-	  ,chi2_(-9999.)
-	  ,d0_(-9999.)
-          ,d0error_(-9999.)
-          ,dz_(-9999.)
-          ,dzerror_(-9999.)
-          ,nofValidHits_(-9999)
-	  ,innerPosition_(TRootXYZPoint(-9999.,-9999.,-9999.))
-	  ,outerPosition_(TRootXYZPoint(-9999.,-9999.,-9999.))
-
-	{;}
+		TRootTrack(const TLorentzVector &momentum, const TVector3 &vertex, Int_t type,Float_t charge ) :
+			TRootParticle(momentum,vertex,type,charge)
+			,isValid_(false)
+			,chi2_(-9999.)
+			,d0_(-9999.)
+			,d0error_(-9999.)
+			,dz_(-9999.)
+			,dzerror_(-9999.)
+			,nofValidHits_(-9999)
+			,innerPosition_(TRootXYZPoint(-9999.,-9999.,-9999.))
+			,outerPosition_(TRootXYZPoint(-9999.,-9999.,-9999.))
+			{;}
 
 
-	~TRootTrack() {;}
+		~TRootTrack() {;}
 
-	// OutPut methods
+		// OutPut methods
 
-	Bool_t isValid() const { return isValid_; }
+		Bool_t isValid() const { return isValid_; }
 	
-	Double_t chi2 () const { return chi2_; }
+		Double_t chi2 () const { return chi2_; }
 
-	Double_t d0 () const { return d0_; }
-	Double_t d0Error () const { return d0error_; }
-	Double_t dZ () const { return dz_; }
-	Double_t dZError () const { return dzerror_; }
+		Double_t d0 () const { return d0_; }
+		Double_t d0Error () const { return d0error_; }
+		Double_t dZ () const { return dz_; }
+		Double_t dZError () const { return dzerror_; }
 
-	Int_t nofValidHits () const { return nofValidHits_; }
+		Int_t nofValidHits () const { return nofValidHits_; }
 
-	TRootXYZPoint innerPosition() const { return innerPosition_; }
-	TRootXYZPoint outerPosition() const { return outerPosition_; }
+		TRootXYZPoint innerPosition() const { return innerPosition_; }
+		TRootXYZPoint outerPosition() const { return outerPosition_; }
 
-	// input methods
+		// input methods
 
-	void SetValid (Bool_t valid) { isValid_ = valid; }
-	
-	void SetChi2 ( Double_t chi2 ) { chi2_ = chi2; }
+		void SetValid (Bool_t valid) { isValid_ = valid; }
+		void SetChi2 ( Double_t chi2 ) { chi2_ = chi2; }
+		void SetD0 ( Double_t d0 ) { d0_ = d0;} 
+		void SetD0Error ( Double_t d0error ) { d0error_ = d0error;} 
+		void SetDZ ( Double_t dz ) { dz_ = dz;} 
+		void SetDZError ( Double_t dzerror ) { dzerror_ = dzerror;} 
 
-	void SetD0 ( Double_t d0 ) { d0_ = d0;} 
-	void SetD0Error ( Double_t d0error ) { d0error_ = d0error;} 
-	void SetDZ ( Double_t dz ) { dz_ = dz;} 
-	void SetDZError ( Double_t dzerror ) { dzerror_ = dzerror;} 
+		void SetInnerPosition (Double_t x, Double_t y, Double_t z)
+		{
+			innerPosition_.setx(x);
+			innerPosition_.sety(y);
+			innerPosition_.setz(z);
+		}
 
-        void SetInnerPosition (Double_t x, Double_t y, Double_t z) {
+		void SetOuterPosition (Double_t x, Double_t y, Double_t z)
+		{
+			outerPosition_.setx(x);
+			outerPosition_.sety(y);
+		}
 
-	  innerPosition_.setx(x);
-	  innerPosition_.sety(y);
-	  innerPosition_.setz(z);
+		void SetNofValidHits (Int_t n)
+		{
+			nofValidHits_ = n;
+		}
 
-	}
+		virtual TString typeName() const { return "TRootTrack"; }
 
-        void SetOuterPosition (Double_t x, Double_t y, Double_t z) {
-
-  	  outerPosition_.setx(x);
-	  outerPosition_.sety(y);
-	  outerPosition_.setz(z);
-
-
-	}
-
-	void SetNofValidHits (Int_t n) {
-
-	  nofValidHits_ = n;
-
-	}
-
-	virtual TString typeName() const { return "TRootTrack"; }
-
-	friend std::ostream& operator<< (std::ostream& stream, const TRootTrack& track) {
-	  stream << "TRootTrack - Charge=" << track.charge() << " (Pt,eta,phi)=("<< track.Pt() <<","<< track.Eta() <<","<< track.Phi() << 
-")  vertex(x,y,z)=("<< track.vx() <<","<< track.vy() <<","<< track.vz() << ")" << endl << "  innerPos (x,y,z)=(" << track.innerPosition().x()  
-<< "," << track.innerPosition().y() << "," << track.innerPosition().z() << ")" << endl << " d0: " << track.d0() << endl;  
-
-		return stream;
-	};
-
+		friend std::ostream& operator<< (std::ostream& stream, const TRootTrack& track)
+		{
+			stream << "TRootTrack - Charge=" << track.charge() << " (Pt,eta,phi)=("<< track.Pt() <<","<< track.Eta() <<","<< track.Phi()
+				<<")  vertex(x,y,z)=("<< track.vx() <<","<< track.vy() <<","<< track.vz() << ")" << endl << "  innerPos (x,y,z)=(" << track.innerPosition().x()  
+				<< "," << track.innerPosition().y() << "," << track.innerPosition().z() << ")" << endl << " d0: " << track.d0() << endl;  
+			return stream;
+		};
 
 	private:
-	
-	// Variables from reco::Track
+		// Variables from reco::Track
 
- 	// charge momentum eta,phi ,... -> TRootParticle
+		// charge momentum eta,phi ,... -> TRootParticle
 
-	Bool_t isValid_;
-	
-	Double_t chi2_;
+		Bool_t isValid_;
+		Double_t chi2_;
+		Double_t d0_;
+		Double_t d0error_;
+		Double_t dz_;
+		Double_t dzerror_;
 
-	Double_t d0_;
-	Double_t d0error_;
-	Double_t dz_;
-	Double_t dzerror_;
+		Int_t nofValidHits_;
 
-	Int_t nofValidHits_;
+		TRootXYZPoint innerPosition_;
+		TRootXYZPoint outerPosition_;
 
-	TRootXYZPoint innerPosition_;
-	TRootXYZPoint outerPosition_;
-	
-
-	ClassDef (TRootTrack,1);
-};
+		ClassDef (TRootTrack,1);
+	};
+}
 
 #endif
-
-
-

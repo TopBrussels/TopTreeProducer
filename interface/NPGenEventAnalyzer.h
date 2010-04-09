@@ -16,6 +16,8 @@
 #include "TClonesArray.h"
 #include "TLorentzVector.h"
 
+using namespace TopTree;
+
 class NPGenEventAnalyzer{
 	
 public:

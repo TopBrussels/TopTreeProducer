@@ -1,5 +1,6 @@
 #include "../interface/MCAssociator.h"
 
+using namespace TopTree;
 
 MCAssociator::MCAssociator(): verbosity_(0), nMC_(0), mcParticles_(0), genParticles_(), mcParticlesMap_()
 {

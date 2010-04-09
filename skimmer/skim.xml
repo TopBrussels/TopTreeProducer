@@ -2,8 +2,7 @@
 
 <inputdatasets>
 <!-- <i file="../test/TopTree_CRAFT09_test.root"/> -->
-<i file="TTbar_Summer09_7TeV_TopTree_1.root"/>
-<i file="TTbar_Summer09_7TeV_TopTree_2.root"/>
+<i file="TTbar_Summer09_7TeV_TopTree.root"/>
 </inputdatasets>
 
 <outputfilename>
@@ -14,11 +13,13 @@
 <keepbranches>
 <!-- Branches which need to be kept -->
 <!-- skipObjects:  1 = True | 0 = False -->
-<k type="TRootMuon" name="Muons" minPt="15" maxEta="2.4" skipObjects="1" minNObjects="1"/>
-<k type="TRootMET" name="MET" minPt="15" maxEta="2.4" skipObjects="0" minNObjects="0"/>
-<k type="TRootCaloJet" name="CaloJets_selectedPatJetsAK5Calo" minPt="15" maxEta="2.4" skipObjects="1" minNObjects="0"/>
-<k type="TRootCaloJet" name="CaloJets_selectedPatJetsSC5Calo" minPt="15" maxEta="2.4" skipObjects="1" minNObjects="0"/>
-<k type="TRootPFJet" name="PFJets_selectedPatJetsAK5PF" minPt="15" maxEta="2.4" skipObjects="1" minNObjects="0"/>
-<k type="TRootGenEvent" name="GenEvent" minPt="0" maxEta="9999" skipObjects="0" minNObjects="0"/>
-<k type="TRootNPGenEvent" name="NPGenEvent" minPt="0" maxEta="9999" skipObjects="0" minNObjects="0"/>
+<k type="TopTree::TRootMuon" name="Muons" minPt="15" maxEta="2.4" skipObjects="1" minNObjects="0"/>
+<k type="TopTree::TRootMET" name="MET" minPt="15" maxEta="2.4" skipObjects="0" minNObjects="0"/>
+<k type="TopTree::TRootCaloJet" name="CaloJets_selectedPatJetsAK5Calo" minPt="15" maxEta="2.4" skipObjects="1" minNObjects="0"/>
+<k type="TopTree::TRootCaloJet" name="CaloJets_selectedPatJetsSC5Calo" minPt="15" maxEta="2.4" skipObjects="1" minNObjects="0"/>
+<k type="TopTree::TRootPFJet" name="PFJets_selectedPatJetsAK5PF" minPt="15" maxEta="2.4" skipObjects="1" minNObjects="0"/>
+<k type="TopTree::TRootGenJet" name="GenJets" minPt="15" maxEta="2.4" skipObjects="1" minNObjects="0"/>
+<k type="TopTree::TRootGenEvent" name="GenEvent" minPt="0" maxEta="9999" skipObjects="0" minNObjects="0"/>
+<k type="TopTree::TRootNPGenEvent" name="NPGenEvent" minPt="0" maxEta="9999" skipObjects="0" minNObjects="0"/>
+<k type="TopTree::TRootVertex" name="PrimaryVertex" minPt="0" maxEta="9999" skipObjects="0" minNObjects="0"/>
 </keepbranches>

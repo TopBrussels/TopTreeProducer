@@ -3,53 +3,74 @@
 
 #include "TObject.h"
 
-class TRootXYZPoint : public TObject {
+namespace TopTree
+{
+	class TRootXYZPoint : public TObject
+	{
 
-   public :
+	public :
+		TRootXYZPoint () :
+			x_(-9999.)
+			,xError_(-9999.)
+			,y_(-9999.)
+			,yError_(-9999.)
+			,z_(-9999.)
+			,zError_(-9999.)
+			{;}
 
-	TRootXYZPoint () :
-	  x_(-9999.)
-	 ,y_(-9999.)
-	 ,z_(-9999.)
+		TRootXYZPoint ( const TRootXYZPoint &point ) :
+			x_(point.x_)
+			,xError_(point.xError_)
+			,y_(point.y_)
+			,yError_(point.yError_)
+			,z_(point.z_)
+			,zError_(point.zError_)
+			{;}
 
-        {;}
+		TRootXYZPoint (Float_t x, Float_t y, Float_t z) :
+			x_(x)
+			,xError_(-9999.)
+			,y_(y)
+			,yError_(-9999.)
+			,z_(z)
+			,zError_(-9999.)
+			{;}
 
-	TRootXYZPoint ( const TRootXYZPoint &point ) :
-	  x_(point.x_)
-	 ,y_(point.y_)
-	 ,z_(point.z_)
-
-        {;}
-
-	TRootXYZPoint (Double_t x,Double_t y,Double_t z) {
-
-	  x_ = x;
-	  y_ = y;
-	  z_ = z;
-
-	}
-
-
-	~TRootXYZPoint ()
+		TRootXYZPoint (Float_t x, Float_t xError, Float_t y, Float_t yError, Float_t z, Float_t zError) :
+			x_(x)
+			,xError_(xError)
+			,y_(y)
+			,yError_(yError)
+			,z_(z)
+			,zError_(zError)
+			{;}
 	
-	{;}
+		~TRootXYZPoint () {;}
    
-   Double_t x () const { return x_; } 
-   Double_t y () const { return y_; } 
-   Double_t z () const { return z_; } 
+		Float_t x () const { return x_; } 
+		Float_t xError () const { return xError_; } 
+		Float_t y () const { return y_; } 
+		Float_t yError () const { return yError_; } 
+	   Float_t z () const { return z_; } 
+	   Float_t zError () const { return zError_; } 
 
-   void setx ( Double_t x ) { x_ = x; }
-   void sety ( Double_t y ) { y_ = y; }
-   void setz ( Double_t z ) { z_ = z; }
+		void setx ( Float_t x ) { x_ = x; }
+		void setxError ( Float_t xError ) { xError_ = xError; }
+		void sety ( Float_t y ) { y_ = y; }
+		void setyError ( Float_t yError ) { yError_ = yError; }
+		void setz ( Float_t z ) { z_ = z; }
+		void setzError ( Float_t zError ) { zError_ = zError; }
 
-   private:
+	private:
+		Float_t x_;
+		Float_t xError_;
+		Float_t y_;
+		Float_t yError_;
+		Float_t z_;
+		Float_t zError_;
 
-	Double_t x_;
-	Double_t y_;
-	Double_t z_;
-
-   ClassDef(TRootXYZPoint,1);
-
-};
+		ClassDef(TRootXYZPoint,1);
+	};
+}
 
 #endif

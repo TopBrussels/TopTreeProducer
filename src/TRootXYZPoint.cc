@@ -1,4 +1,5 @@
 #include "../interface/TRootXYZPoint.h"
 
-ClassImp(TRootXYZPoint)
+using namespace TopTree;
 
+ClassImp(TRootXYZPoint)

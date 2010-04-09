@@ -1,4 +1,5 @@
 #include "../interface/TRootTrack.h"
 
-ClassImp(TRootTrack)
+using namespace TopTree;
 
+ClassImp(TRootTrack)
