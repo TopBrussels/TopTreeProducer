@@ -87,6 +87,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		doMETMC = cms.untracked.bool(False),
 		doUnstablePartsMC = cms.untracked.bool(False),
 		doPrimaryVertex = cms.untracked.bool(True),
+		runGeneralTracks = cms.untracked.bool(True),#true only if generalTracks are stored.
 		doCaloJet = cms.untracked.bool(False),
 		doCaloJetStudy = cms.untracked.bool(True),
 		doGenJet = cms.untracked.bool(True),

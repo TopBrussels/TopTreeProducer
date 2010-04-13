@@ -37,6 +37,7 @@ void TopTreeProducer::beginJob()
 	doMC = myConfig_.getUntrackedParameter<bool>("doMC",false);
 	doPDFInfo = myConfig_.getUntrackedParameter<bool>("doPDFInfo",false);
 	doPrimaryVertex = myConfig_.getUntrackedParameter<bool>("doPrimaryVertex",false);
+	runGeneralTracks = myConfig_.getUntrackedParameter<bool>("runGeneralTracks",false);
 	doCaloJet = myConfig_.getUntrackedParameter<bool>("doCaloJet",false);
 	doCaloJetStudy = myConfig_.getUntrackedParameter<bool>("doCaloJetStudy",false);
 	doGenJet = myConfig_.getUntrackedParameter<bool>("doGenJet",false);
@@ -280,6 +281,31 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	rootEvent->setNb(nTotEvt_);
 	rootEvent->setEventId(iEvent.id().event());
 	rootEvent->setRunId(iEvent.id().run());
+	
+	if(runGeneralTracks) // Calculate and fill number of tracks and number of high purity tracks
+	{
+		// get GeneralTracks collection
+		edm::Handle<reco::TrackCollection> tkRef;
+		iEvent.getByLabel("generalTracks",tkRef);    
+		const reco::TrackCollection* tkColl = tkRef.product();
+
+		if(verbosity>1) std::cout << "Total Number of Tracks " << tkColl->size() << endl;
+		rootEvent->setNTracks(tkColl->size());
+
+		int numhighpurity=0;
+		reco::TrackBase::TrackQuality _trackQuality = reco::TrackBase::qualityByName("highPurity");
+
+		reco::TrackCollection::const_iterator itk = tkColl->begin();
+		reco::TrackCollection::const_iterator itk_e = tkColl->end();
+		for(;itk!=itk_e;++itk)
+		{
+			if(verbosity>1) std::cout << "HighPurity?  " << itk->quality(_trackQuality) << std::endl;
+			if(itk->quality(_trackQuality)) numhighpurity++;
+		}
+
+		if(verbosity>1) std::cout << "Total Number of HighPurityTracks " << numhighpurity << endl;
+		rootEvent->setNHighPurityTracks(numhighpurity);
+	}
 
 	/*
 	// CSA07 Process Id and Event Weight

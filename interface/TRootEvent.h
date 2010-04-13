@@ -25,6 +25,8 @@ namespace TopTree
 			,eventId_(-1)
 			,runId_(-1)
 			,lumiBlockId_(-1)
+			,nTracks_(-1)
+			,nHighPurityTracks_(-1)
 			,passGlobalL1_(false)
 			,passGlobalHLT_(false)
 			,trigHLT_(0)
@@ -47,13 +49,16 @@ namespace TopTree
 		Int_t eventId() const { return eventId_; }
 		Int_t runId() const { return runId_; }
 		Int_t lumiBlockId() const {return lumiBlockId_; }
+		// generalTracks infos (for cleaning of the scraping events)
+		Int_t nTracks() const { return nTracks_; }
+		Int_t nHighPurityTracks() const { return nHighPurityTracks_; }
 		// Trigger decision
 		Int_t passGlobalL1() const { return passGlobalL1_; }
 		Bool_t passGlobalHLT() const { return passGlobalHLT_; }
 		unsigned int nHLTPaths() const { return trigHLT_.size(); }
 		std::vector<Bool_t> trigHLT() const { return trigHLT_; }
 		Bool_t trigHLT(unsigned int i) const
-		{ 
+		{
 			if (trigHLT_.size()>i)
 			{
 				return trigHLT_.at(i); 
@@ -97,11 +102,12 @@ namespace TopTree
 		Float_t factorizationScale() const { return factorizationScale_; }
 
 
-	
 		void setNb(Int_t nb) { nb_ = nb; }
 		void setEventId(Int_t eventId) { eventId_ = eventId; }
 		void setRunId(Int_t runId) { runId_ = runId; }
 		void setLumiBlockId(Int_t lumiBlockId) { lumiBlockId_ = lumiBlockId; }
+		void setNTracks(Int_t nTracks) { nTracks_ = nTracks; }
+		void setNHighPurityTracks(Int_t nHighPurityTracks) { nHighPurityTracks_ = nHighPurityTracks; }
 		void setGlobalL1(Int_t passGlobalL1) { passGlobalL1_ = passGlobalL1; }
 		void setGlobalHLT(Bool_t passGlobalHLT) { passGlobalHLT_ = passGlobalHLT; }
 		void setTrigHLT(std::vector<Bool_t> trigHLT)
@@ -138,6 +144,10 @@ namespace TopTree
 		Int_t eventId_;
 		Int_t runId_;
 		Int_t lumiBlockId_;
+		
+		// generalTracks infos (for cleaning of the scraping events)
+		Int_t nTracks_;
+		Int_t nHighPurityTracks_;
 
 		// Trigger Infos
 		Bool_t passGlobalL1_;

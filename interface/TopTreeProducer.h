@@ -94,6 +94,7 @@ private:
 	bool doSignalMuMuGamma;
 	bool doSignalTopTop;
 	bool doPrimaryVertex;
+	bool runGeneralTracks;
 	bool doCaloJet;
 	bool doCaloJetStudy;
 	bool doGenJet;
