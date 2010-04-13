@@ -30,11 +30,6 @@ namespace TopTree
 			,passGlobalL1_(false)
 			,passGlobalHLT_(false)
 			,trigHLT_(0)
-			,csa07id_(-1)
-			,csa07weight_(-1.)
-			,csa07process_()
-			,nBasicClusters_()
-			,nSuperClusters_()
 			,idParton1_(-1)
 			,xParton1_(-1.)
 			,idParton2_(-1)
@@ -70,25 +65,6 @@ namespace TopTree
 			}
 		}
 		
-		// CSA07 Process Id and Event Weight
-		Int_t csa07id() const { return csa07id_; }
-		Float_t csa07weight() const { return csa07weight_; }
-		TString csa07process() const { return csa07process_; }
-	
-		// Nb of BasicClusters of a given type
-		Int_t nBasicClusters(Int_t type)
-		{
-			map<Int_t,Int_t>::iterator it=nBasicClusters_.find(type);
-			return ( it ==nBasicClusters_.end() ? 0 : (*it).second );
-		}
-	
-		// Nb of SuperClusters of a given type
-		Int_t nSuperClusters(Int_t type)
-		{
-			map<Int_t,Int_t>::iterator it=nSuperClusters_.find(type);
-			return ( it ==nSuperClusters_.end() ? 0 : (*it).second );
-		}
-
 		// PDF infos
 		// flavour first incoming parton
 		Int_t idParton1() const { return idParton1_; }
@@ -116,14 +92,6 @@ namespace TopTree
 			for (unsigned int i=0; i!=trigHLT.size(); ++i) trigHLT_[i]=trigHLT[i];
 		}
 
-		void setCsa07id(Int_t csa07id) { csa07id_=csa07id; }
-		void setCsa07weight(Float_t csa07weight)  { csa07weight_=csa07weight; }
-		void setCsa07process(TString csa07process)  { csa07process_=csa07process; }
-		void setCsa07process(char* csa07process)  { csa07process_=csa07process; }
-	
-		void setNBasicClusters(Int_t type,Int_t nBC) { nBasicClusters_[type]=nBC; }
-		void setNSuperClusters(Int_t type,Int_t nSC) { nSuperClusters_[type]=nSC; }
-		
 		void setIdParton1(Int_t idParton1) { idParton1_=idParton1; }
 		void setXParton1(Float_t xParton1) { xParton1_=xParton1; }
 		void setIdParton2(Int_t idParton2) { idParton2_=idParton2; }
@@ -153,14 +121,6 @@ namespace TopTree
 		Bool_t passGlobalL1_;
 		Bool_t passGlobalHLT_;
 		std::vector<Bool_t> trigHLT_;
-
-		// CSA07 Process ID and Weight
-		Int_t csa07id_;
-		Float_t csa07weight_;
-		TString csa07process_;
-	
-		map<Int_t,Int_t> nBasicClusters_;
-		map<Int_t,Int_t> nSuperClusters_;
 
 		// PDF infos
 		Int_t idParton1_;

@@ -281,7 +281,8 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	rootEvent->setNb(nTotEvt_);
 	rootEvent->setEventId(iEvent.id().event());
 	rootEvent->setRunId(iEvent.id().run());
-	
+	rootEvent->setLumiBlockId(iEvent.luminosityBlock());
+
 	if(runGeneralTracks) // Calculate and fill number of tracks and number of high purity tracks
 	{
 		// get GeneralTracks collection
