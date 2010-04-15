@@ -87,7 +87,6 @@ private:
 	TTree* eventTree_;
 	TTree* runTree_;
 	std::string dataType_ ;
-	bool isCSA07Soup;
 	bool doHLT8E29;
 	bool doHLT;
 	bool doMC;

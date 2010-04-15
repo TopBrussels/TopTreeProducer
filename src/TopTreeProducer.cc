@@ -32,7 +32,6 @@ void TopTreeProducer::beginJob()
 	// Load Config parameters	
 	verbosity = myConfig_.getUntrackedParameter<int>("verbosity", 0);
 	rootFileName_ = myConfig_.getUntrackedParameter<string>("RootFileName","noname.root");
-	isCSA07Soup = myConfig_.getUntrackedParameter<bool>("isCSA07Soup",false);
 	doHLT8E29 = myConfig_.getUntrackedParameter<bool>("doHLT8E29",false);
 	doHLT = myConfig_.getUntrackedParameter<bool>("doHLT",false);
 	doMC = myConfig_.getUntrackedParameter<bool>("doMC",false);
@@ -309,23 +308,6 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		rootEvent->setNHighPurityTracks(numhighpurity);
 	}
 
-	/*
-	// CSA07 Process Id and Event Weight
-	if(isCSA07Soup)
-	{
-		edm::Handle< double> weightHandle;
-		iEvent.getByLabel ("csaweightproducer","weight", weightHandle);
-		double weight = * weightHandle;
-		int processId = csa07::csa07ProcessId(iEvent, 1000., "csaweightproducer");
-		char * pname= csa07::csa07ProcessName(processId);
-		if(verbosity>1) cout << "CSA07 Soup - id=" << processId << " - "<< pname << " - weight=" << weight << endl;
-		rootEvent->setCsa07id(processId);
-		rootEvent->setCsa07weight(weight);
-		rootEvent->setCsa07process(pname);	
-	}
-	*/
-        
-	
 	// Trigger
 	rootEvent->setGlobalHLT(true);
 	rootEvent->setGlobalHLT8E29(true);

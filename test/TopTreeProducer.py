@@ -69,12 +69,9 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		# name of output root file
 		RootFileName = cms.untracked.string('TTbar_Summer09_7TeV_TopTree.root'),
 
-		# Is PoolSource coming from CSA07 Soup Production ? (needed to get CSA07 Process Id and weights)
-		isCSA07Soup = cms.untracked.bool(False),
-
 		# What is written to rootuple		    
 		doHLT = cms.untracked.bool(True),
-		doHLT8E29 = cms.untracked.bool(True),
+		doHLT8E29 = cms.untracked.bool(False),
 		doMC = cms.untracked.bool(True),
 		doPDFInfo = cms.untracked.bool(False),
 		signalGenerator = cms.untracked.string('PYTHIA'),
