@@ -196,7 +196,7 @@ int main()
 	clock_t start = clock();
 
 	// set verbosity equal to 0 (silent), 1 or 2 (debug)
-	unsigned int verbosity = 2;
+	unsigned int verbosity = 0;
 
 	// xml file
 	char xmlfile[]="skim.xml";
