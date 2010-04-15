@@ -12,9 +12,9 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
 	dataType_ = myConfig_.getUntrackedParameter<string>("dataType","unknown");
 	cout << "dataType: " << dataType_ << endl;
 	if( dataType_=="RECO" )				producersNames_ = iConfig.getParameter<ParameterSet>("producersNamesRECO");
-	else if( dataType_=="AOD" )			producersNames_ = iConfig.getParameter<ParameterSet>("producersNamesAOD");
+	else if( dataType_=="AOD" )		producersNames_ = iConfig.getParameter<ParameterSet>("producersNamesAOD");
 	else if( dataType_=="PATAOD" )	producersNames_ = iConfig.getParameter<ParameterSet>("producersNamesPATAOD");
-	else if( dataType_=="PAT" )			producersNames_ = iConfig.getParameter<ParameterSet>("producersNamesPAT");
+	else if( dataType_=="PAT" )		producersNames_ = iConfig.getParameter<ParameterSet>("producersNamesPAT");
 	else { cout << "TopTreeProducer::TopTreeProducer...   dataType is unknown...  exiting..." << endl; exit(1); }
 }
 
@@ -33,6 +33,7 @@ void TopTreeProducer::beginJob()
 	verbosity = myConfig_.getUntrackedParameter<int>("verbosity", 0);
 	rootFileName_ = myConfig_.getUntrackedParameter<string>("RootFileName","noname.root");
 	isCSA07Soup = myConfig_.getUntrackedParameter<bool>("isCSA07Soup",false);
+	doHLT8E29 = myConfig_.getUntrackedParameter<bool>("doHLT8E29",false);
 	doHLT = myConfig_.getUntrackedParameter<bool>("doHLT",false);
 	doMC = myConfig_.getUntrackedParameter<bool>("doMC",false);
 	doPDFInfo = myConfig_.getUntrackedParameter<bool>("doPDFInfo",false);
@@ -96,9 +97,9 @@ void TopTreeProducer::beginJob()
 	eventTree_->Branch ("Event", "TopTree::TRootEvent", &rootEvent);
 	if(verbosity>0) cout << "EventTree is created" << endl;
 
-	if(doHLT)
+	if(doHLT8E29 || doHLT)
 	{
-		hltAnalyzer_ = new HLTAnalyzer(producersNames_);
+		hltAnalyzer_ = new HLTAnalyzer(producersNames_, myConfig_);
 		hltAnalyzer_->setVerbosity(verbosity);
 	}
 
@@ -246,7 +247,7 @@ void TopTreeProducer::endJob()
 {
 
 	// Trigger Summary Tables
-	if(doHLT)
+	if(doHLT8E29 || doHLT)
 	{	
 		cout << "Trigger Summary Tables" << endl;
 		hltAnalyzer_->copySummary(runInfos_);
@@ -327,7 +328,8 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	
 	// Trigger
 	rootEvent->setGlobalHLT(true);
-	if(doHLT)
+	rootEvent->setGlobalHLT8E29(true);
+	if(doHLT8E29 || doHLT)
 	{
 		if(verbosity>1) cout << endl << "Get TriggerResults..." << endl;
 		if (nTotEvt_==1) hltAnalyzer_->init(iEvent, rootEvent);

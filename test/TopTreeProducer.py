@@ -74,7 +74,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 
 		# What is written to rootuple		    
 		doHLT = cms.untracked.bool(True),
-#		doHLTStudy = cms.untracked.bool(False),#to add different hlt menus
+		doHLT8E29 = cms.untracked.bool(True),
 		doMC = cms.untracked.bool(True),
 		doPDFInfo = cms.untracked.bool(False),
 		signalGenerator = cms.untracked.string('PYTHIA'),
@@ -123,12 +123,12 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		muonMC_ptMin = cms.double(0.0),
 		jetMC_etaMax = cms.double(6.0),
 		jetMC_ptMin = cms.double(5.0),
-
 	),
 
 	producersNamesRECO = cms.PSet(
 		dataType = cms.untracked.string("RECO"), 
 		hltProducer = cms.InputTag("TriggerResults","","HLT"),
+		hltProducer8E29 = cms.InputTag("TriggerResults","","HLT8E29"),
 		genParticlesProducer = cms.InputTag("genParticles"),
 		primaryVertexProducer = cms.InputTag("offlinePrimaryVertices"),
 		caloJetProducer = cms.InputTag("iterativeCone5CaloJets"),
@@ -148,6 +148,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 	producersNamesAOD = cms.PSet(
 		dataType = cms.untracked.string("AOD"), 
 		hltProducer = cms.InputTag("TriggerResults","","HLT"),
+		hltProducer8E29 = cms.InputTag("TriggerResults","","HLT8E29"),
 		genParticlesProducer = cms.InputTag("genParticles"),
 		primaryVertexProducer = cms.InputTag("offlinePrimaryVertices"),
 		caloJetProducer = cms.InputTag("iterativeCone5CaloJets"),
@@ -167,6 +168,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 	producersNamesPATAOD = cms.PSet(
 		dataType = cms.untracked.string("PATAOD"), 
 		hltProducer = cms.InputTag("TriggerResults","","HLT"),
+		hltProducer8E29 = cms.InputTag("TriggerResults","","HLT8E29"),
 		genParticlesProducer = cms.InputTag("genParticles"),
 		primaryVertexProducer = cms.InputTag("offlinePrimaryVertices"),
 		caloJetProducer = cms.InputTag("selectedPatJets"),
@@ -185,6 +187,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 	producersNamesPAT = cms.PSet(
 		dataType = cms.untracked.string("PAT"), 
 		hltProducer = cms.InputTag("TriggerResults","","HLT"),
+		hltProducer8E29 = cms.InputTag("TriggerResults","","HLT8E29"),
 		genParticlesProducer = cms.InputTag("genParticles"),
 		primaryVertexProducer = cms.InputTag("offlinePrimaryVertices"),
 		caloJetProducer = cms.InputTag("selectedPatJets"),

@@ -196,7 +196,7 @@ int main()
 	clock_t start = clock();
 
 	// set verbosity equal to 0 (silent), 1 or 2 (debug)
-	unsigned int verbosity = 0;
+	unsigned int verbosity = 2;
 
 	// xml file
 	char xmlfile[]="skim.xml";
@@ -261,8 +261,8 @@ int main()
 	
 	outEventTree->GetUserInfo()->Add( userInfo );
 
-	unsigned int nOutEvents = 0, nInEvents = 0, NHLTAccept = 0; 
-	vector<unsigned int> hltAccept;
+	unsigned int nOutEvents = 0, nInEvents = 0, NHLTAccept = 0, NHLT8E29Accept = 0; 
+	vector<unsigned int> hltAccept, hlt8E29Accept;
 	
 	for(unsigned int nFile = 0; nFile < inFileName.size(); nFile++)
 	{
@@ -282,15 +282,17 @@ int main()
 		TRootEvent* inEvent = 0;
 		inEventBranch->SetAddress(&inEvent);
 	
-		if( verbosity > 0 ) cout << "inRunTree->GetEntries()=" << inRunTree->GetEntries()<<endl;
+		if( verbosity > 0 ) cout << "inRunTree->GetEntries() = " << inRunTree->GetEntries()<<endl;
 		inRunTree->GetEvent(0);
 		
 		if( verbosity > 1 ) cout << "outRunInfos->nHLTEvents() = " << outRunInfos->nHLTEvents() << endl;
+		if( verbosity > 1 ) cout << "outRunInfos->nHLT8E29Events() = " << outRunInfos->nHLT8E29Events() << endl;
 		
 		if(nFile == 0)
 		{
 			outRunInfos = inRunInfos; // To fix!!!!!
 			hltAccept.resize(inRunInfos->nHLTPaths()); //initialized with zero's
+			hlt8E29Accept.resize(inRunInfos->nHLT8E29Paths()); //initialized with zero's
 		}
 		else
 		{
@@ -309,6 +311,26 @@ int main()
 					{
 						cerr << "Different name of the HLT paths between two files???" << endl;
 						cerr << "inRunInfos->hltNames("<<i<<")" << inRunInfos->hltNames(i) << "outRunInfos->hltNames("<<i<<")" << outRunInfos->hltNames(i) << endl;
+						exit (4);
+					}
+				}
+			}
+
+			if(outRunInfos->nHLT8E29Paths() != inRunInfos->nHLT8E29Paths())
+			{
+				cerr << "Different number of HLT8E29 Paths in two files???" << endl;
+				cerr << "outRunInfos->nHLT8E29Paths() = " << outRunInfos->nHLT8E29Paths() << "inRunInfos->nHLT8E29Paths() = " << inRunInfos->nHLT8E29Paths() << endl;
+				cerr << "Check the input files!" << endl;
+				exit (4);
+			}
+			else
+			{
+				for(unsigned int i=0; i!=outRunInfos->nHLT8E29Paths(); i++)
+				{
+					if(inRunInfos->hlt8E29Names(i) != outRunInfos->hlt8E29Names(i))
+					{
+						cerr << "Different name of the HLT8E29 paths between two files???" << endl;
+						cerr << "inRunInfos->hlt8E29Names("<<i<<")" << inRunInfos->hlt8E29Names(i) << "outRunInfos->hlt8E29Names("<<i<<")" << outRunInfos->hlt8E29Names(i) << endl;
 						exit (4);
 					}
 				}
@@ -346,10 +368,12 @@ int main()
 		//loop over events
 		for(unsigned int ievt=0; ievt<nTempEvents; ievt++)
 		{
+			if( verbosity > 1 ) cout << ">>> Trying to get event " << ievt << endl;
+
 			inEventTree->GetEvent(ievt);
-			if((int) ievt/10000 == (double) ievt/10000)  cout << ">>> analyzing event " << ievt << endl;
-		
-			if( verbosity > 1 ) cout << ">>> analyzing event " << ievt << endl;
+
+			if( verbosity > 1 ) cout << ">>> Analyzing event " << ievt << endl;
+			else if((int) ievt/10000 == (double) ievt/10000)  cout << ">>> Analyzing event " << ievt << endl;
 		
 			outFile->cd();
 		
@@ -799,41 +823,78 @@ int main()
 				}
 				if(passHLT) NHLTAccept++;
 
+//				Calculate HLT8E29 stuff
+				bool passHLT8E29 = false;
+				for(unsigned int k=0; k!=hlt8E29Accept.size() ;k++)
+				{
+					if(outRootEvent->trigHLT8E29(k))
+					{
+						hlt8E29Accept[k]++;
+						passHLT8E29 = true;
+					}
+				}
+				if(passHLT8E29) NHLT8E29Accept++;
+
 				if( verbosity > 1 ) cout << "Filling the outEventTree" << endl;
 			
 				outEventTree->Fill();
+				
+				if( verbosity > 1 ) cout << "outEventTree is filled" << endl;
+				
 			}
 		
 			for(vector<keepObjects>::const_iterator iter=objectsToKeep.begin(); iter!=objectsToKeep.end(); iter++)
 			{
 //				if( verbosity > 1 ) cout << "(iter->outArray)->GetEntriesFast() = "  << (iter->outArray)->GetEntriesFast() << endl;
 //				if( verbosity > 1 ) cout << "iter->outArray: " << iter->outArray << endl;
+
 				( *(iter->outArray) ).Delete();
+
+				if( verbosity > 1 ) cout << "Deleted the output TClonesArray" << endl;
+
 			}
+
+			if( verbosity > 1 ) cout << "Analyzing event is " << ievt << " finished!" << endl;
 		
 		} // loop over events
 	
+		if( verbosity > 1 ) cout << "Analyzing input file " << inFileName[nFile] << " finished!" << endl;
+
 	} // loop over input files
 	
 //	Some HLT related variables are impossible to calculate with the present information
 //	Set them to 987654321
-	vector<unsigned int> tempVector;
+	if(verbosity > 0) cout << "Setting dummy HLT stuff to 987654321" << endl;
+
+	vector<unsigned int> tempVector, tempVector8E29;
 	tempVector.resize(outRunInfos->nHLTPaths());
+	tempVector8E29.resize(outRunInfos->nHLT8E29Paths());
 	for(unsigned int i=0; i!=outRunInfos->nHLTPaths(); i++)
 	{
 		tempVector[i] = 987654321;
 	}
+	for(unsigned int i=0; i!=outRunInfos->nHLT8E29Paths(); i++)
+	{
+		tempVector8E29[i] = 987654321;
+	}
+
+	if(verbosity > 0) cout << "Setting HLT stuff in TRootRun" << endl;
 
 	outRunInfos->setNHLTWasRun(987654321);
 	outRunInfos->setNHLTErrors(987654321);
 	outRunInfos->setHLTWasRun(tempVector);
 	outRunInfos->setHLTErrors(tempVector);
+	outRunInfos->setNHLT8E29WasRun(987654321);
+	outRunInfos->setNHLT8E29Errors(987654321);
+	outRunInfos->setHLT8E29WasRun(tempVector8E29);
+	outRunInfos->setHLT8E29Errors(tempVector8E29);
 	
 	outRunInfos->setNHLTEvents(nOutEvents);
-
-//	TODO: Handle and calculate NHLTAccept and hltAccept
 	outRunInfos->setHLTAccept(hltAccept);
 	outRunInfos->setNHLTAccept(NHLTAccept);
+	outRunInfos->setNHLT8E29Events(nOutEvents);
+	outRunInfos->setHLT8E29Accept(hlt8E29Accept);
+	outRunInfos->setNHLT8E29Accept(NHLT8E29Accept);
 
 	cout << "Filling outRunTree" << endl;
 	

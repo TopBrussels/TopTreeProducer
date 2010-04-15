@@ -31,7 +31,6 @@ void Macro(){
 	//4 Info for each event
 	//5 Debug
 
-	bool isCSA07Soup              = false;
 	bool doHLT                    = false;
 	bool doMC                     = false;
 	bool doCaloJet                = true;
@@ -155,7 +154,6 @@ void Macro(){
 		eventTree->GetEvent(ievt);
 		if(verbosity>3) cout <<"event "<< ievt <<endl;
 		if(verbosity>3) cout<<"event->nb()="<<event->nb()<<endl;
-		if (isCSA07Soup && verbosity>3) cout << "CSA07 Soup:  pid=" << event->csa07id() << " - " << event->csa07process() << " - weight=" << event->csa07weight() << endl;
 
 		if (doHLT)
 		{
