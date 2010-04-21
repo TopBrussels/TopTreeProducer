@@ -13,7 +13,9 @@
 <use name=DataFormats/TrackReco>
 <use name=DataFormats/BeamSpot>
 <use name=DataFormats/GsfTrackReco>
-
+<use name=TrackingTools/IPTools>
+<use name=TrackingTools/Records>
+<use name=TrackingTools/TransientTrack>
 <use name=DataFormats/L1GlobalTrigger>
 <use name=DataFormats/L1Trigger>
 <use name=HLTrigger/HLTcore>
@@ -21,7 +23,7 @@
 
 <use name=RecoEgamma/EgammaTools>
 <use name=RecoEgamma/EgammaMCTools>
- <use name=RecoEcal/EgammaCoreTools>
+<use name=RecoEcal/EgammaCoreTools>
 #<use name=Geometry/CaloEventSetup>
 <use name=Geometry/CaloGeometry>
 <use name=MagneticField/Engine>
@@ -38,7 +40,7 @@
 <flags LDFLAGS="-lTMVA">
 <flags EDM_PLUGIN=1>
 <export>
-#	<lib name=TopTreeProducer>
+#	<lib name=TopBrussels/TopTreeProducer>
 	<use name=FWCore/Framework>
 	<use name=FWCore/PluginManager>
 	<use name=FWCore/ParameterSet>
@@ -50,7 +52,9 @@
 #	<use name=SimDataFormats/HepMCProduct>
 	<use name=DataFormats/HepMCCandidate>
 	<use name=SimGeneral/HepPDTRecord>
-	
+	<use name=TrackingTools/IPTools>	
+	<use name=TrackingTools/Records>
+	<use name=TrackingTools/TransientTrack>
 	<use name=DataFormats/L1GlobalTrigger>
 	<use name=DataFormats/L1Trigger>
 	<use name=HLTrigger/HLTcore>
@@ -70,6 +74,6 @@
 	<use name=RecoCaloTools/MetaCollections>
 	<use name=clhep>
 	<use name=root>
-        <use name=DataFormats/PatCandidates>
-        <use name=AnalysisDataFormats/TopObjects>
+	<use name=DataFormats/PatCandidates>
+	<use name=AnalysisDataFormats/TopObjects>
 </export>

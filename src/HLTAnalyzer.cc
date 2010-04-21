@@ -28,18 +28,22 @@ void HLTAnalyzer::init(const edm::Event& iEvent, TRootEvent* rootEvent)
 	{
 		edm::Handle<edm::TriggerResults> trigResults;
 		try {iEvent.getByLabel(triggerResultsTag8E29_,trigResults);} catch (...) {;}
-		triggerNames8E29_.init(*trigResults);
-		hltNames8E29_=triggerNames8E29_.triggerNames();
-		const unsigned int n(hltNames8E29_.size());
-		hltWasRun8E29_.resize(n);
-		hltAccept8E29_.resize(n);
-		hltErrors8E29_.resize(n);
-		for (unsigned int i=0; i!=n; ++i)
+		if(trigResults.isValid())
 		{
-			hltWasRun8E29_[i]=0;
-			hltAccept8E29_[i]=0;
-			hltErrors8E29_[i]=0;
+			triggerNames8E29_.init(*trigResults);
+			hltNames8E29_=triggerNames8E29_.triggerNames();
+			const unsigned int n(hltNames8E29_.size());
+			hltWasRun8E29_.resize(n);
+			hltAccept8E29_.resize(n);
+			hltErrors8E29_.resize(n);
+			for (unsigned int i=0; i!=n; ++i)
+			{
+				hltWasRun8E29_[i]=0;
+				hltAccept8E29_[i]=0;
+				hltErrors8E29_[i]=0;
+			}
 		}
+		else doHLT8E29_ = false;
 	}
 	
 }

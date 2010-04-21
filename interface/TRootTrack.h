@@ -90,6 +90,7 @@ namespace TopTree
 		{
 			outerPosition_.setx(x);
 			outerPosition_.sety(y);
+			outerPosition_.setz(z);
 		}
 
 		void SetNofValidHits (Int_t n)

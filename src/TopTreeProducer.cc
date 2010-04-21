@@ -429,7 +429,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	{
 		if(verbosity>1) cout << endl << "Analysing muons collection..." << endl;
 		MuonAnalyzer* myMuonAnalyzer = new MuonAnalyzer(producersNames_, myConfig_, verbosity);
-		myMuonAnalyzer->Process(iEvent, muons);
+		myMuonAnalyzer->Process(iEvent, iSetup, muons);
 		delete myMuonAnalyzer;
 	}
 

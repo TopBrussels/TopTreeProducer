@@ -35,13 +35,17 @@ void VertexAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootVertex)
 		const reco::Vertex * vertex = 0;
 		vertex = &((*recoVertex)[j]);
 		
-		TRootVertex localVertex(vertex->x(), vertex->xError(), vertex->y(), vertex->yError(), vertex->z(), vertex->zError());
+		TRootVertex localVertex(vertex->x(), vertex->y(), vertex->z());
 
 		localVertex.setIsValid(vertex->isValid());
 		localVertex.setIsFake(vertex->isFake());
 		localVertex.setChi2(vertex->chi2());
 		localVertex.setNdof(vertex->ndof());
 		localVertex.setTracksSize(vertex->tracksSize());
+		
+		localVertex.setXError(vertex->xError());
+		localVertex.setYError(vertex->yError());
+		localVertex.setZError(vertex->zError());
 
 		new ((*rootVertex)[j]) TRootVertex (localVertex);
 	}

@@ -25,6 +25,9 @@ process.GlobalTag.globaltag = cms.string('MC_3XY_V20::All')
 # pi0 discrimination variables
 #process.load("RecoEcal.EgammaClusterProducers.piZeroDiscriminators_cfi")
 
+# necessary for special calculation of impact parameter
+process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
+
 process.maxEvents = cms.untracked.PSet(
     input = cms.untracked.int32(-1)
 )
@@ -71,7 +74,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 
 		# What is written to rootuple		    
 		doHLT = cms.untracked.bool(True),
-		doHLT8E29 = cms.untracked.bool(False),
+		doHLT8E29 = cms.untracked.bool(True),
 		doMC = cms.untracked.bool(True),
 		doPDFInfo = cms.untracked.bool(False),
 		signalGenerator = cms.untracked.string('PYTHIA'),
@@ -88,7 +91,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		doCaloJet = cms.untracked.bool(False),
 		doCaloJetStudy = cms.untracked.bool(True),
 		doGenJet = cms.untracked.bool(True),
-		doCaloJetId = cms.untracked.bool(True),
+		doCaloJetId = cms.untracked.bool(False),
 		doPFJet = cms.untracked.bool(False),
 		doPFJetStudy = cms.untracked.bool(True),
 		doMuon = cms.untracked.bool(True),
@@ -96,8 +99,8 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		doElectron = cms.untracked.bool(False),
 		runSuperCluster = cms.untracked.bool(False),#true only if SuperCluster are stored
 		doMET = cms.untracked.bool(True),
-		doGenEvent = cms.untracked.bool(True),#put on False when running non-ttbar
-		doNPGenEvent = cms.untracked.bool(True),#put on True when running New Physics sample
+		doGenEvent = cms.untracked.bool(False),#put on False when running non-ttbar
+		doNPGenEvent = cms.untracked.bool(False),#put on True when running New Physics sample
 		doSpinCorrGen = cms.untracked.bool(False),#put on True only if you need SpinCorrelation Variables
 		doSemiLepEvent = cms.untracked.bool(False),#put on True only if you need TtSemiLeptonicEvent Collection exist in PAT-uples (L2)
 
@@ -129,10 +132,10 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		genParticlesProducer = cms.InputTag("genParticles"),
 		primaryVertexProducer = cms.InputTag("offlinePrimaryVertices"),
 		caloJetProducer = cms.InputTag("iterativeCone5CaloJets"),
-		vcaloJetProducer = cms.untracked.vstring("iterativeCone5CaloJets","sisCone5CaloJets","ak5CaloJets"),
-		genJetProducer = cms.InputTag("ak5GenJets"),
+		vcaloJetProducer = cms.untracked.vstring("iterativeCone5CaloJets","sisCone5CaloJets","antikt5CaloJets"),
+		genJetProducer = cms.InputTag("antikt5GenJets"),
 		pfJetProducer = cms.InputTag("iterativeCone5PFJets"),
-		vpfJetProducer = cms.untracked.vstring("iterativeCone5PFJets","sisCone5PFJets","ak5PFJets"),
+		vpfJetProducer = cms.untracked.vstring("iterativeCone5PFJets","sisCone5PFJets","antikt5PFJets"),
 		muonProducer = cms.InputTag("muons"),
 		vcosmicMuonProducer = cms.untracked.vstring("muons"),
 		electronProducer = cms.InputTag("pixelMatchGsfElectrons"),
