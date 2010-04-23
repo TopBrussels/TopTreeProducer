@@ -25,6 +25,10 @@ namespace TopTree
 			isGsfCtfConsistent_(false),
 			trackerDrivenSeed(false),
 			ecalDrivenSeed(false),
+			impactParameter3D_(-9999.),
+			impactParameter3DError_(-9999.),
+			transverseImpactParameter_(-9999.),
+			transverseImpactParameterError_(-9999.),
 			eSuperClusterOverPin_(-9999.),
 			eSuperClusterOverPout_(-9999.),
 			eSeedClusterOverPin_(-9999.),
@@ -141,6 +145,10 @@ namespace TopTree
 			isGsfCtfConsistent_(e.isGsfCtfConsistent()),
 			trackerDrivenSeed(e.isTrackerDrivenSeed()),
 			ecalDrivenSeed(e.isEcalDrivenSeed()),
+			impactParameter3D_(e.impactParameter3D_),
+			impactParameter3DError_(e.impactParameter3DError_),
+			transverseImpactParameter_(e.transverseImpactParameter_),
+			transverseImpactParameterError_(e.transverseImpactParameterError_),
 			eSuperClusterOverPin_(e.eScOverPin()),
 			eSuperClusterOverPout_(e.eScOverPout()),
 			eSeedClusterOverPin_(e.eSeedOverPin()),
@@ -251,6 +259,10 @@ namespace TopTree
 			isGsfCtfConsistent_(false),
 			trackerDrivenSeed(false),
 			ecalDrivenSeed(false),
+			impactParameter3D_(-9999.),
+			impactParameter3DError_(-9999.),
+			transverseImpactParameter_(-9999.),
+			transverseImpactParameterError_(-9999.),
 			eSuperClusterOverPin_(-9999.),
 			eSuperClusterOverPout_(-9999.),
 			eSeedClusterOverPin_(-9999.),
@@ -368,6 +380,10 @@ namespace TopTree
 			isGsfCtfConsistent_(false),
 			trackerDrivenSeed(false),
 			ecalDrivenSeed(false),
+			impactParameter3D_(-9999.),
+			impactParameter3DError_(-9999.),
+			transverseImpactParameter_(-9999.),
+			transverseImpactParameterError_(-9999.),
 			eSuperClusterOverPin_(-9999.),
 			eSuperClusterOverPout_(-9999.),
 			eSeedClusterOverPin_(-9999.),
@@ -484,6 +500,10 @@ namespace TopTree
 			isGsfCtfConsistent_(false),
 			trackerDrivenSeed(false),
 			ecalDrivenSeed(false),
+			impactParameter3D_(-9999.),
+			impactParameter3DError_(-9999.),
+			transverseImpactParameter_(-9999.),
+			transverseImpactParameterError_(-9999.),
 			eSuperClusterOverPin_(-9999.),
 			eSuperClusterOverPout_(-9999.),
 			eSeedClusterOverPin_(-9999.),
@@ -600,6 +620,10 @@ namespace TopTree
 			isGsfCtfConsistent_(false),
 			trackerDrivenSeed(false),
 			ecalDrivenSeed(false),
+			impactParameter3D_(-9999.),
+			impactParameter3DError_(-9999.),
+			transverseImpactParameter_(-9999.),
+			transverseImpactParameterError_(-9999.),
 			eSuperClusterOverPin_(-9999.),
 			eSuperClusterOverPout_(-9999.),
 			eSeedClusterOverPin_(-9999.),
@@ -716,6 +740,10 @@ namespace TopTree
 			isGsfCtfConsistent_(false),
 			trackerDrivenSeed(false),
 			ecalDrivenSeed(false),
+			impactParameter3D_(-9999.),
+			impactParameter3DError_(-9999.),
+			transverseImpactParameter_(-9999.),
+			transverseImpactParameterError_(-9999.),
 			eSuperClusterOverPin_(-9999.),
 			eSuperClusterOverPout_(-9999.),
 			eSeedClusterOverPin_(-9999.),
@@ -826,9 +854,7 @@ namespace TopTree
 
 		~TRootElectron() {;}
 
-	        
 		virtual TString typeName() const { return "TRootElectron"; }
-
 
 		friend std::ostream& operator<< (std::ostream& stream, const TRootElectron& electron) {
 			stream << "TRootElectron - Charge=" << electron.charge() << " (Et,eta,phi)=("<< electron.Et() <<","<< electron.Eta() <<","<< electron.Phi() << ")"
@@ -843,6 +869,13 @@ namespace TopTree
 		bool isGsfCtfConsistent_;
 		bool trackerDrivenSeed;
 		bool ecalDrivenSeed;
+
+// Special Impact parameter stuff, more info, see:
+// https://hypernews.cern.ch/HyperNews/CMS/get/top-leptonplusjets/26/1.html
+		Float_t impactParameter3D_;
+		Float_t impactParameter3DError_;
+		Float_t transverseImpactParameter_;
+		Float_t transverseImpactParameterError_;
 
 //    TrackClusterMatching myTrackClusterMatching;
 		float eSuperClusterOverPin_ ;        // the supercluster energy / track momentum at the PCA to the beam spot
@@ -865,7 +898,7 @@ namespace TopTree
 		Float_t momentumAtVtxWithConstraint_ ;     // the track momentum at the PCA to the beam spot using bs constraint
 		Int_t pixelLayersWithMeasurement_; // Number of pixel layers with at least one valid hit
 		Int_t stripLayersWithMeasurement_; // Number of strip layers with at least one valid hit
-		Float_t d0_;
+		Float_t d0_;	// Original d0
 		Int_t missingHits_;// Conversion Rejection: number of missing hits near beginning of track (also rejects really bad tracks)
                        //https://twiki.cern.ch/twiki/bin/viewauth/CMS/SWGuideCategoryBasedElectronID#The_Cut_Variables
 		Float_t ip_;//Track vertex: Impact Parameter w.r.t. reco vertex , same wiki page
@@ -990,12 +1023,16 @@ namespace TopTree
 
 
         //ChargeInfo===================================
-public:
-
+	public:
 		int Charge()const{return scPixCharge;}
 		bool isGsfCtfScPixConsistent()const{return isGsfCtfScPixConsistent_;}
 		bool isGsfScPixConsistent()const{return isGsfScPixConsistent_;}
 		bool isGsfCtfConsistent()const{return isGsfCtfConsistent_;}
+
+		Float_t impactParameter3D() const { return impactParameter3D_; } 
+		Float_t impactParameter3DError() const { return impactParameter3DError_; } 
+		Float_t transverseImpactParameter() const { return transverseImpactParameter_; } 
+		Float_t transverseImpactParameterError() const { return transverseImpactParameterError_; } 
 
 		//getters
 		bool isEcalDrivenSeed()const{
@@ -1006,6 +1043,11 @@ public:
 		}
 
 		//setters
+		void setImpactParameter3D(Float_t impactParameter3D) { impactParameter3D_ = impactParameter3D; } 
+		void setImpactParameter3DError(Float_t impactParameter3DError) { impactParameter3DError_ = impactParameter3DError; } 
+		void setTransverseImpactParameter(Float_t transverseImpactParameter) { transverseImpactParameter_ = transverseImpactParameter; } 
+		void setTransverseImpactParameterError(Float_t transverseImpactParameterError) { transverseImpactParameterError_ = transverseImpactParameterError; } 
+
 		void setChargeInfo(int scPix,bool GsfCftScPix, bool GsfScPix, bool GsfCtf )
 		{
 			scPixCharge = scPix;

@@ -98,6 +98,7 @@ private:
 	bool doCaloJet;
 	bool doCaloJetStudy;
 	bool doGenJet;
+	bool doGenJetStudy;
 	bool doPFJet;
 	bool doPFJetStudy;
 	bool doMuon;
@@ -109,6 +110,7 @@ private:
 	bool doSpinCorrGen;
 	bool doSemiLepEvent;
 	bool drawMCTree;
+	std::vector<std::string> vGenJetProducer;
 	std::vector<std::string> vCaloJetProducer;
 	std::vector<std::string> vPFJetProducer;
 	std::vector<std::string> vCosmicMuonProducer;
@@ -121,6 +123,7 @@ private:
 	TClonesArray* caloJets;
 	std::vector<TClonesArray*> vcaloJets;
 	TClonesArray* genJets;
+	std::vector<TClonesArray*> vgenJets;
 	TClonesArray* pfJets;
 	std::vector<TClonesArray*> vpfJets;
 	TClonesArray* muons;

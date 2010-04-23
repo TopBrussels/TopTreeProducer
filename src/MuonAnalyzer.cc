@@ -110,10 +110,10 @@ MuonAnalyzer::Process (const edm::Event & iEvent, const edm::EventSetup& iSetup,
 				std::pair<bool,Measurement1D> resultTransverse = IPTools::absoluteTransverseImpactParameter(tt, primaryVertex);
 				std::pair<bool,Measurement1D> result3D = IPTools::absoluteImpactParameter3D(tt, primaryVertex);
 
-				localMuon.setImpactParameter3D(resultTransverse.second.value());
-				localMuon.setImpactParameter3DError(resultTransverse.second.error());
-				localMuon.setTransverseImpactParameter(result3D.second.value()); 
-				localMuon.setTransverseImpactParameterError(result3D.second.error());
+				localMuon.setImpactParameter3D(result3D.second.value());
+				localMuon.setImpactParameter3DError(result3D.second.error());
+				localMuon.setTransverseImpactParameter(resultTransverse.second.value()); 
+				localMuon.setTransverseImpactParameterError(resultTransverse.second.error());
 			}
 		}
       

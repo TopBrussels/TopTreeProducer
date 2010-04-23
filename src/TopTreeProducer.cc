@@ -41,6 +41,7 @@ void TopTreeProducer::beginJob()
 	doCaloJet = myConfig_.getUntrackedParameter<bool>("doCaloJet",false);
 	doCaloJetStudy = myConfig_.getUntrackedParameter<bool>("doCaloJetStudy",false);
 	doGenJet = myConfig_.getUntrackedParameter<bool>("doGenJet",false);
+	doGenJetStudy = myConfig_.getUntrackedParameter<bool>("doGenJetStudy",false);
 	doPFJet = myConfig_.getUntrackedParameter<bool>("doPFJet",false);
 	doPFJetStudy = myConfig_.getUntrackedParameter<bool>("doPFJetStudy",false);
 	doMuon = myConfig_.getUntrackedParameter<bool>("doMuon",false);
@@ -54,9 +55,15 @@ void TopTreeProducer::beginJob()
 	doSemiLepEvent = myConfig_.getUntrackedParameter<bool>("doSemiLepEvent",false);
 	vector<string> defaultVec;
 	vector<string> defaultVecCM;
+	vGenJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vgenJetProducer",defaultVec);
 	vCaloJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vcaloJetProducer",defaultVec);
 	vPFJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vpfJetProducer",defaultVec);
 	vCosmicMuonProducer = producersNames_.getUntrackedParameter<vector<string> >("vcosmicMuonProducer",defaultVecCM);
+
+	for(unsigned int s=0;s<vGenJetProducer.size();s++){
+		TClonesArray* a;
+		vgenJets.push_back(a);
+	}
 
 	for(unsigned int s=0;s<vCaloJetProducer.size();s++){
 		TClonesArray* a;
@@ -119,18 +126,32 @@ void TopTreeProducer::beginJob()
 	if(doCaloJetStudy)
 	{
 		if(verbosity>0) cout << "CaloJets info will be added to rootuple (for CaloJetStudy)" << endl;
-		for(unsigned int s=0;s<vCaloJetProducer.size();s++){
+		for(unsigned int s=0;s<vCaloJetProducer.size();s++)
+		{
 			vcaloJets[s] = new TClonesArray("TopTree::TRootCaloJet", 1000);
 			char name[100];
 			sprintf(name,"CaloJets_%s",vCaloJetProducer[s].c_str());
 			eventTree_->Branch (name, "TClonesArray", &vcaloJets[s]);
 		}
 	}
+
 	if(doGenJet)
 	{
 		if(verbosity>0) cout << "GenJets info will be added to rootuple" << endl;
 		genJets = new TClonesArray("TopTree::TRootGenJet", 1000);
 		eventTree_->Branch ("GenJets", "TClonesArray", &genJets);
+	}
+
+	if(doGenJetStudy)
+	{
+		if(verbosity>0) cout << "GenJets info will be added to rootuple (for GenJetStudy)" << endl;
+		for(unsigned int s=0; s<vGenJetProducer.size(); s++)
+		{
+			vgenJets[s] = new TClonesArray("TopTree::TRootGenJet", 1000);
+			char name[100];
+			sprintf(name,"GenJets_%s",vGenJetProducer[s].c_str());
+			eventTree_->Branch (name, "TClonesArray", &vgenJets[s]);
+		}
 	}
 
 	if(doPFJet)
@@ -143,7 +164,8 @@ void TopTreeProducer::beginJob()
 	if(doPFJetStudy)
 	{
 		if(verbosity>0) cout << "PFJets info will be added to rootuple (for PFJetStudy)" << endl;
-		for(unsigned int s=0;s<vPFJetProducer.size();s++){
+		for(unsigned int s=0;s<vPFJetProducer.size();s++)
+		{
 			vpfJets[s] = new TClonesArray("TopTree::TRootPFJet", 1000);
 			char name[100];
 			sprintf(name,"PFJets_%s",vPFJetProducer[s].c_str());
@@ -352,11 +374,12 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	{
 		if(verbosity>1) cout << endl << "Analysing Calojets collection (for JetStudy)..." << endl;
 		for(unsigned int s=0;s<vCaloJetProducer.size();s++){
-			CaloJetAnalyzer* myCaloJetAnalyzer = new CaloJetAnalyzer(producersNames_, s,  myConfig_, verbosity);
+			CaloJetAnalyzer* myCaloJetAnalyzer = new CaloJetAnalyzer(producersNames_, s, myConfig_, verbosity);
 			myCaloJetAnalyzer->Process(iEvent, vcaloJets[s]);
 			delete myCaloJetAnalyzer;
 		}
 	}
+
 	// GenJet
 	if(doGenJet)
 	{
@@ -364,6 +387,17 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		GenJetAnalyzer* myGenJetAnalyzer = new GenJetAnalyzer(producersNames_, myConfig_, verbosity);
 		myGenJetAnalyzer->Process(iEvent, genJets);
 		delete myGenJetAnalyzer;
+	}
+
+	if(doGenJetStudy)
+	{
+		if(verbosity>1) cout << endl << "Analysing GenJets collection (for GenJetStudy)..." << endl;
+		for(unsigned int s=0; s<vGenJetProducer.size(); s++)
+		{
+			GenJetAnalyzer* myGenJetAnalyzer = new GenJetAnalyzer(producersNames_, s, myConfig_, verbosity);
+			myGenJetAnalyzer->Process(iEvent, vgenJets[s]);
+			delete myGenJetAnalyzer;
+		}
 	}
 
 	// PFJet
@@ -447,7 +481,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	}
 	
 
-        // Lazy Tools to calculate Cluster shape variables
+	// Lazy Tools to calculate Cluster shape variables
 	EcalClusterLazyTools* lazyTools = 0;
 	if( (dataType_=="RECO" || dataType_=="AOD" || dataType_=="PATAOD") && ( doElectron )  )
 	{
@@ -502,12 +536,21 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	delete rootEvent;
 	if(doMC) (*mcParticles).Delete();
 	if(doCaloJet) (*caloJets).Delete();
-	if(doCaloJetStudy){
-		for(unsigned int s=0;s<vCaloJetProducer.size();s++){
+	if(doCaloJetStudy)
+	{
+		for(unsigned int s=0;s<vCaloJetProducer.size();s++)
+		{
 			(*vcaloJets[s]).Delete();
 		}
 	}
 	if(doGenJet) (*genJets).Delete();
+	if(doGenJetStudy)
+	{
+		for(unsigned int s=0;s<vGenJetProducer.size();s++)
+		{
+			(*vgenJets[s]).Delete();
+		}		
+	}
 	if(doPFJet) (*pfJets).Delete();
 	if(doPFJetStudy){
 		for(unsigned int s=0;s<vPFJetProducer.size();s++){

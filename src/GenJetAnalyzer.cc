@@ -26,7 +26,7 @@ GenJetAnalyzer::GenJetAnalyzer(const edm::ParameterSet& producersNames, const ed
 GenJetAnalyzer::GenJetAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
 {
 	dataType_ = producersNames.getUntrackedParameter<string>("dataType","unknown");
-	vGenJetProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("vcaloJetProducer");
+	vGenJetProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("vgenJetProducer");
 	genJetProducer_ = edm::InputTag(vGenJetProducer[iter]);
 }
 
@@ -51,47 +51,49 @@ void GenJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenJets
 	) jetType="CALO";
 
 	edm::Handle < edm::View <reco::GenJet> > recoGenJets;
-	if( (dataType_=="RECO" || dataType_=="AOD" || dataType_=="PAT" || dataType_=="PATAOD") && jetType=="CALO" )
+	try {iEvent.getByLabel(genJetProducer_, recoGenJets);} catch (...) {;}
+	
+	if(recoGenJets.isValid())
 	{
-		iEvent.getByLabel(genJetProducer_, recoGenJets);
 		nJets = recoGenJets->size();
-	}
 
-	if(verbosity_>1) std::cout << "   Number of jets = " << nJets << "   Label: " << genJetProducer_.label() << "   Instance: " << genJetProducer_.instance() << std::endl;
+		if(verbosity_>1) std::cout << "   Number of jets = " << nJets << "   Label: " << genJetProducer_.label() << "   Instance: " << genJetProducer_.instance() << std::endl;
 
-	for (unsigned int j=0; j<nJets; j++)
-	{
-		const reco::GenJet* genJet = 0;	
-		if( (dataType_=="RECO" || dataType_=="AOD" || dataType_=="PAT" || dataType_=="PATAOD") && jetType=="CALO" ) genJet = (const reco::GenJet*) ( & ((*recoGenJets)[j]) );
+		for (unsigned int j=0; j<nJets; j++)
+		{
+			const reco::GenJet* genJet = 0;	
+			if( (dataType_=="RECO" || dataType_=="AOD" || dataType_=="PAT" || dataType_=="PATAOD") && jetType=="CALO" ) genJet = (const reco::GenJet*) ( & ((*recoGenJets)[j]) );
 			
-		// Call JetAnalyzer to fill the basic Jet Properties
-//		TRootJet tempJet = (TRootJet) myJetAnalyzer->Process( &( *(genJet) ), dataType_);
+			// Call JetAnalyzer to fill the basic Jet Properties
+//			TRootJet tempJet = (TRootJet) myJetAnalyzer->Process( &( *(genJet) ), dataType_);
 
-		TRootGenJet localGenJet(
-			genJet->px()
-			,genJet->py()
-			,genJet->pz()
-			,genJet->energy()
-			,genJet->vx()
-			,genJet->vy()
-			,genJet->vz()
-			,genJet->pdgId()
-			,genJet->charge()
-		);
+			TRootGenJet localGenJet(
+				genJet->px()
+				,genJet->py()
+				,genJet->pz()
+				,genJet->energy()
+				,genJet->vx()
+				,genJet->vy()
+				,genJet->vz()
+				,genJet->pdgId()
+				,genJet->charge()
+			);
 
-		localGenJet.setNConstituents(genJet->nConstituents());
-		localGenJet.setMaxDistance(genJet->maxDistance());
-		localGenJet.setN90(genJet->nCarrying(0.9));
-		localGenJet.setN60(genJet->nCarrying(0.6));
-		localGenJet.setetaetaMoment(genJet->etaetaMoment());
-		localGenJet.setphiphiMoment(genJet->phiphiMoment());
-		localGenJet.setEMEnergy(genJet->emEnergy());
-		localGenJet.setHadEnergy(genJet->hadEnergy());
-		localGenJet.setInvisibleEnergy(genJet->invisibleEnergy());
+			localGenJet.setNConstituents(genJet->nConstituents());
+			localGenJet.setMaxDistance(genJet->maxDistance());
+			localGenJet.setN90(genJet->nCarrying(0.9));
+			localGenJet.setN60(genJet->nCarrying(0.6));
+			localGenJet.setetaetaMoment(genJet->etaetaMoment());
+			localGenJet.setphiphiMoment(genJet->phiphiMoment());
+			localGenJet.setEMEnergy(genJet->emEnergy());
+			localGenJet.setHadEnergy(genJet->hadEnergy());
+			localGenJet.setInvisibleEnergy(genJet->invisibleEnergy());
 				
-		new( (*rootGenJets)[j] ) TRootGenJet(localGenJet);
-		if(verbosity_>2) cout << "   ["<< setw(3) << j << "] " << localGenJet << endl;
+			new( (*rootGenJets)[j] ) TRootGenJet(localGenJet);
+			if(verbosity_>2) cout << "   ["<< setw(3) << j << "] " << localGenJet << endl;
 		
+		}
+	
 	}
 
 }

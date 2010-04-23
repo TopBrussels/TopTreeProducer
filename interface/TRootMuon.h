@@ -394,8 +394,7 @@ namespace TopTree
 		};
 
 	
-		private:
-	
+	private:
 		// Variables from reco::Muon
 		Float_t et_em_;
 		Float_t et_had_;
