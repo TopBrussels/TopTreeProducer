@@ -146,7 +146,7 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 		{
 			if(electron->gsfTrack().isNonnull())
 			{
-				cout << "electron track is non null" << endl;
+//				cout << "electron track is non null" << endl;
 				reco::TransientTrack tt = trackBuilder->build(electron->gsfTrack());
 				std::pair<bool,Measurement1D> resultTransverse = IPTools::absoluteTransverseImpactParameter(tt, primaryVertex);
 				std::pair<bool,Measurement1D> result3D = IPTools::absoluteImpactParameter3D(tt, primaryVertex);

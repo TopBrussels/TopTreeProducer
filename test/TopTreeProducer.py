@@ -81,7 +81,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 #		signalGenerator = cms.untracked.string('ALPGEN'),
 #		signalGenerator = cms.untracked.string('MADGRAPH'),
 
-		doElectronMC = cms.untracked.bool(False),
+		doElectronMC = cms.untracked.bool(True),
 		doMuonMC = cms.untracked.bool(False),
 		doJetMC = cms.untracked.bool(False),
 		doMETMC = cms.untracked.bool(False),
