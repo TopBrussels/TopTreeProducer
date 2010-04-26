@@ -31,6 +31,7 @@ void Macro(){
 	//4 Info for each event
 	//5 Debug
 
+	bool realData						= true;
 	bool doHLT                    = false;
 	bool doMC                     = false;
 	bool doCaloJet                = true;
@@ -140,12 +141,69 @@ void Macro(){
 		cout << endl;
 	}
 
-
-
    //Declaration of histograms
    TH1F h_PtJets("PtCaloJets","Pt of caloJets",50,0,500); 
 	TH1F h_distrib("distrib","",100,-1,1);
 	//
+
+	if(realData)
+	{
+		if(verbosity > 3) cout << "Reading in JSON file " << endl;
+
+		vector< vector<int> > runLumiInfo;
+		string inputJSON;
+
+		ifstream myfile ("JSON_test.txt");
+		if (myfile.is_open())
+		{
+			getline (myfile,inputJSON); // Only the first line is needed
+			myfile.close();
+		}
+	
+		vector<string> splittedInputJSON;
+		size_t begin = 2, end = 2;
+
+		while(end < inputJSON.size())
+		{
+			end = inputJSON.find("]], \"",begin);
+			string splitted = inputJSON.substr(begin, end - begin + 1);
+			begin = end + 5;
+		
+			size_t tempEnd = splitted.find("\": [[", 0);
+			string runNr = splitted.substr(0, tempEnd);
+			stringstream ss(runNr);
+			int runNumber = 0;
+			ss >> runNumber;
+		
+			string remain = splitted.substr(tempEnd + 4, splitted.size() - ( tempEnd + 3 ) );
+			size_t tempEnd2 = remain.find("]", 0);
+			size_t tempBegin2 = 0;
+
+			while(tempEnd2 < remain.size())
+			{
+				string lumiInfo = remain.substr(tempBegin2 + 1, tempEnd2 - tempBegin2 - 1);
+				tempBegin2 = tempEnd2 + 3;
+				tempEnd2 = remain.find("]", tempBegin2);
+			
+				// parse lumiInfo string
+				size_t tempBegin3 = lumiInfo.find(", ",0);
+				string minLS = lumiInfo.substr(0,tempBegin3);
+				string maxLS = lumiInfo.substr(tempBegin3 + 2, lumiInfo.size());
+				int minLumiSection = 0;
+				int maxLumiSection = 0;
+				stringstream ssMin(minLS);		
+				stringstream ssMax(maxLS);
+				ssMin >> minLumiSection;
+				ssMax >> maxLumiSection;
+		
+				vector<int> tempInfo;
+				tempInfo.push_back(runNumber);
+				tempInfo.push_back(minLumiSection);
+				tempInfo.push_back(maxLumiSection);
+				runLumiInfo.push_back(tempInfo);
+			}
+		}
+	}
 
 	unsigned int nEvents = (int)eventTree->GetEntries();
 	
@@ -154,6 +212,19 @@ void Macro(){
 		eventTree->GetEvent(ievt);
 		if(verbosity>3) cout <<"event "<< ievt <<endl;
 		if(verbosity>3) cout<<"event->nb()="<<event->nb()<<endl;
+
+		bool goodEvent = true;
+		if(realData)
+		{
+			goodEvent = false;
+			for(unsigned int k=0; k<runLumiInfo.size(); k++)
+			{
+				if(event->runId() == runLumiInfo[k][0] && event->lumiBlockId() > runLumiInfo[k][1] && event->lumiBlockId() < runLumiInfo[k][2])
+					goodEvent = true;
+			}
+		}
+		
+		if(goodEvent == false) continue;
 
 		if (doHLT)
 		{

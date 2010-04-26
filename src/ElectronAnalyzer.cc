@@ -186,7 +186,7 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 		reco::SuperClusterRef superCluster = electron->superCluster();
 		if ( superCluster.isNonnull() && runSuperCluster_ )
 		{
-                        localElectron.setNbClusters(superCluster->clustersSize ());
+			localElectron.setNbClusters(superCluster->clustersSize ());
 			localElectron.setSuperClusterRawEnergy(superCluster->rawEnergy());
 			localElectron.setPreshowerEnergy(superCluster->preshowerEnergy());
 			reco::CaloClusterPtr seedBasicCluster = superCluster->seed();
@@ -199,7 +199,7 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 			}
 			// FIXME - if no BasicCluster collection, init to -999.
 			localElectron.setCaloConeSize(caloConeSize);
-			if ( seedBasicCluster.isNonnull() )
+			if ( seedBasicCluster.isNonnull() && (dataType_=="RECO" || dataType_=="AOD" || dataType_=="PATAOD") )
 			{
 				localElectron.setE2x2(lazyTools.e2x2(*seedBasicCluster));
 				localElectron.setE3x3(lazyTools.e3x3(*seedBasicCluster));

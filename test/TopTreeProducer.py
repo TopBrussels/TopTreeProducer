@@ -39,7 +39,7 @@ process.source = cms.Source("PoolSource",
 # AOD
 # PATAOD
 # PAT
-	fileNames = cms.untracked.vstring('file:TTbar_Summer09_7TeV_PAT.root')
+	fileNames = cms.untracked.vstring('file:/user/blyweert/AutomaticProduction/AutoMaticTopTreeProducer/CMSSW_3_5_7/src/ConfigurationFiles/TTbar/Summer09-MC_3XY_V25_preproduction-v1/26042010_162638/26042010_162638_PAT.root')
 	#fileNames = cms.untracked.vstring('/store/data/CRAFT09/Cosmics/RAW-RECO/SuperPointing-CRAFT09_R_V4_CosmicsSeq_v1/0009/763782DB-DCB9-DE11-A238-003048678B30.root')
 	#fileNames = cms.untracked.vstring('file:/user/echabert/CMSSW/CMSSW_2_2_3/src/TopQuarkAnalysis/TopEventProducers/test/toto2.root')
 	#fileNames = cms.untracked.vstring('file:/user/echabert/CMSSW/CMSSW_2_2_6/src/NewPhysicsAnalysis/SUSYAnalysis/TopSUSYEvents.root')
@@ -70,7 +70,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
  		verbosity = cms.untracked.int32(0),
 
 		# name of output root file
-		RootFileName = cms.untracked.string('TTbar_Summer09_7TeV_TopTree.root'),
+		RootFileName = cms.untracked.string('MinBias_test_TopTree.root'),
 
 		# What is written to rootuple		    
 		doHLT = cms.untracked.bool(True),
@@ -82,26 +82,26 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 #		signalGenerator = cms.untracked.string('MADGRAPH'),
 
 		doElectronMC = cms.untracked.bool(True),
-		doMuonMC = cms.untracked.bool(False),
-		doJetMC = cms.untracked.bool(False),
-		doMETMC = cms.untracked.bool(False),
-		doUnstablePartsMC = cms.untracked.bool(False),
+		doMuonMC = cms.untracked.bool(True),
+		doJetMC = cms.untracked.bool(True),
+		doMETMC = cms.untracked.bool(True),
+		doUnstablePartsMC = cms.untracked.bool(True),
 		doPrimaryVertex = cms.untracked.bool(True),
 		runGeneralTracks = cms.untracked.bool(True),#true only if generalTracks are stored.
 		doCaloJet = cms.untracked.bool(False),
 		doCaloJetStudy = cms.untracked.bool(True),
 		doGenJet = cms.untracked.bool(False),
 		doGenJetStudy = cms.untracked.bool(True),
-		doCaloJetId = cms.untracked.bool(False),
+		doCaloJetId = cms.untracked.bool(True),
 		doPFJet = cms.untracked.bool(False),
 		doPFJetStudy = cms.untracked.bool(True),
 		doMuon = cms.untracked.bool(True),
 		doCosmicMuon = cms.untracked.bool(False),
 		doElectron = cms.untracked.bool(True),
-		runSuperCluster = cms.untracked.bool(False),#true only if SuperCluster are stored
+		runSuperCluster = cms.untracked.bool(True),#true only if SuperCluster are stored
 		doMET = cms.untracked.bool(True),
 		doGenEvent = cms.untracked.bool(False),#put on False when running non-ttbar
-		doNPGenEvent = cms.untracked.bool(False),#put on True when running New Physics sample
+		doNPGenEvent = cms.untracked.bool(True),#put on True when running New Physics sample
 		doSpinCorrGen = cms.untracked.bool(False),#put on True only if you need SpinCorrelation Variables
 		doSemiLepEvent = cms.untracked.bool(False),#put on True only if you need TtSemiLeptonicEvent Collection exist in PAT-uples (L2)
 
@@ -197,7 +197,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		caloJetProducer = cms.InputTag("selectedPatJets"),
 		vcaloJetProducer = cms.untracked.vstring("selectedPatJetsAK5Calo","selectedPatJetsSC5Calo"),
 		genJetProducer = cms.InputTag("ak5GenJets"),
-		vgenJetProducer = cms.untracked.vstring("ak5GenJets","blablajets"),
+		vgenJetProducer = cms.untracked.vstring("ak5GenJets"),
 		pfJetProducer = cms.InputTag("selectedPatJets"),
 		vpfJetProducer = cms.untracked.vstring("selectedPatJetsAK5PF","selectedPatJetsSC5PF"),
 		muonProducer = cms.InputTag("selectedPatMuons"),
