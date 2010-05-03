@@ -217,7 +217,7 @@ int main(){
 			goodEvent = false;
 			for(unsigned int k=0; k<runLumiInfo.size(); k++)
 			{
-				if(event->runId() == runLumiInfo[k][0] && event->lumiBlockId() > runLumiInfo[k][1] && event->lumiBlockId() < runLumiInfo[k][2])
+				if(event->runId() == runLumiInfo[k][0] && event->lumiBlockId() >= runLumiInfo[k][1] && event->lumiBlockId() <= runLumiInfo[k][2])
 					goodEvent = true;
 			}
 		}
