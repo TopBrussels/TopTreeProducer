@@ -1,5 +1,3 @@
-#include <FWCore/Framework/interface/TriggerNames.h>
-
 #include "../interface/ElectronAnalyzer.h"
 
 using namespace std;

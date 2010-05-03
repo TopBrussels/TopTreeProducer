@@ -69,7 +69,7 @@ void MCAnalyzer::PDFInfo(const edm::Event& iEvent, TRootEvent* rootEvent)
 	edm::Handle<edm::HepMCProduct> mcProduct;
 	iEvent.getByType( mcProduct );
 	const HepMC::GenEvent * genEvent = mcProduct->GetEvent();
-	HepMC::PdfInfo* pdfInfo = genEvent->pdf_info();
+	const HepMC::PdfInfo* pdfInfo = genEvent->pdf_info();
 	if (pdfInfo != 0 && verbosity_>1)
 	{
 		cout << "   First incoming parton:  flavour=" << pdfInfo->id1() << " x1 = " << pdfInfo->x1() << endl;

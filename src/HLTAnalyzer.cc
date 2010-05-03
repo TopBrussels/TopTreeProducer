@@ -10,7 +10,7 @@ void HLTAnalyzer::init(const edm::Event& iEvent, TRootEvent* rootEvent)
 	{
 		edm::Handle<edm::TriggerResults> trigResults;
 		try {iEvent.getByLabel(triggerResultsTag_,trigResults);} catch (...) {;}
-		triggerNames_.init(*trigResults);
+		triggerNames_=iEvent.triggerNames(*trigResults);
 		hltNames_=triggerNames_.triggerNames();
 		const unsigned int n(hltNames_.size());
 		hltWasRun_.resize(n);
@@ -30,7 +30,7 @@ void HLTAnalyzer::init(const edm::Event& iEvent, TRootEvent* rootEvent)
 		try {iEvent.getByLabel(triggerResultsTag8E29_,trigResults);} catch (...) {;}
 		if(trigResults.isValid())
 		{
-			triggerNames8E29_.init(*trigResults);
+			triggerNames8E29_=iEvent.triggerNames(*trigResults);
 			hltNames8E29_=triggerNames8E29_.triggerNames();
 			const unsigned int n(hltNames8E29_.size());
 			hltWasRun8E29_.resize(n);
