@@ -37,10 +37,8 @@ namespace TopTree
 			,chi2_(-9999.)
 			,nofValidHits_(-9999)
 			,innerTrack_(TLorentzVector())
-			,impactParameter3D_(-9999.)
-			,impactParameter3DError_(-9999.) 
-			,transverseImpactParameter_(-9999.)
-			,transverseImpactParameterError_(-9999.)
+			,dB_(-9999.)
+			,dBError_(-9999.)
 			,direction_(-9999)
 			,algo_(-9999)
 			,id_(-9999)
@@ -71,10 +69,8 @@ namespace TopTree
 			,chi2_(muon.chi2_)
 			,nofValidHits_(muon.nofValidHits_)
 			,innerTrack_(muon.innerTrack_)
-			,impactParameter3D_(muon.impactParameter3D_)
-			,impactParameter3DError_(muon.impactParameter3DError_) 
-			,transverseImpactParameter_(muon.transverseImpactParameter_)
-			,transverseImpactParameterError_(muon.transverseImpactParameterError_)
+			,dB_(muon.dB_)
+			,dBError_(muon.dBError_)
 			,direction_(muon.direction_)
 			,algo_(muon.algo_)
 			,id_(muon.id_)
@@ -105,10 +101,8 @@ namespace TopTree
 			,chi2_(-9999.)
 			,nofValidHits_(-9999)
 			,innerTrack_(TLorentzVector())
-			,impactParameter3D_(-9999.)
-			,impactParameter3DError_(-9999.) 
-			,transverseImpactParameter_(-9999.)
-			,transverseImpactParameterError_(-9999.)
+			,dB_(-9999.)
+			,dBError_(-9999.)
 			,direction_(-9999)
 			,algo_(-9999)
 			,id_(-9999)
@@ -139,10 +133,8 @@ namespace TopTree
 			,chi2_(-9999.)
 			,nofValidHits_(-9999)
 			,innerTrack_(TLorentzVector())
-			,impactParameter3D_(-9999.)
-			,impactParameter3DError_(-9999.) 
-			,transverseImpactParameter_(-9999.)
-			,transverseImpactParameterError_(-9999.)
+			,dB_(-9999.)
+			,dBError_(-9999.)
 			,direction_(-9999)
 			,algo_(-9999)
 			,id_(-9999)
@@ -172,11 +164,8 @@ namespace TopTree
 			,dzerror_(-9999.)
 			,chi2_(-9999.)
 			,nofValidHits_(-9999)
-			,innerTrack_(TLorentzVector())
-			,impactParameter3D_(-9999.)
-			,impactParameter3DError_(-9999.) 
-			,transverseImpactParameter_(-9999.)
-			,transverseImpactParameterError_(-9999.)
+			,dB_(-9999.)
+			,dBError_(-9999.)
 			,direction_(-9999)
 			,algo_(-9999)
 			,id_(-9999)
@@ -207,10 +196,8 @@ namespace TopTree
 			,chi2_(-9999.)
 			,nofValidHits_(-9999)
 			,innerTrack_(TLorentzVector())
-			,impactParameter3D_(-9999.)
-			,impactParameter3DError_(-9999.) 
-			,transverseImpactParameter_(-9999.)
-			,transverseImpactParameterError_(-9999.)
+			,dB_(-9999.)
+			,dBError_(-9999.)
 			,direction_(-9999)
 			,algo_(-9999)
 			,id_(-9999)
@@ -241,10 +228,8 @@ namespace TopTree
 			,chi2_(-9999.)
 			,nofValidHits_(-9999)
 			,innerTrack_(TLorentzVector())
-			,impactParameter3D_(-9999.)
-			,impactParameter3DError_(-9999.) 
-			,transverseImpactParameter_(-9999.)
-			,transverseImpactParameterError_(-9999.)
+			,dB_(-9999.)
+			,dBError_(-9999.)
 			,direction_(-9999)
 			,algo_(-9999)
 			,id_(-9999)
@@ -265,7 +250,7 @@ namespace TopTree
 		Int_t isoR03_nTracks() const { return isoR03_nTracks_;}
 		Int_t isoR03_nJets() const { return isoR03_nJets_;}
 
-		Float_t relativeIso03() const { return( ((TLorentzVector)(*this)).Pt()/(isoR03_emEt_+isoR03_hadEt_+isoR03_sumPt_));}
+		Float_t relativeIso03() const { return( (isoR03_emEt_+isoR03_hadEt_+isoR03_sumPt_)/((TLorentzVector)(*this)).Pt() );}
 	
 		Bool_t energyValid() const { return energyValid_;}
 		Bool_t matchesValid() const { return matchesValid_;}
@@ -288,12 +273,13 @@ namespace TopTree
 		Bool_t idGlobalMuonPromptTight() const { return id_ & 32; }
 		Bool_t idTMLastStationLoose() const { return id_ & 64; }
 		Bool_t idTMLastStationTight() const { return id_ & 128; }
-		Bool_t idTMOneStationLoose() const { return id_ & 256; }
-		Bool_t idTMOneStationTight() const { return id_ & 512; }
-		Bool_t idTMLastStationOptimizedLowPtLoose() const { return id_ & 1024; }
-		Bool_t idTMLastStationOptimizedLowPtTight() const { return id_ & 2048; }
-		Bool_t idTM2DCompatibilityLoose() const { return id_ & 4096; }
-		Bool_t idTM2DCompatibilityTight() const { return id_ & 8192; }
+		Bool_t idTMLastStationAngTight() const { return id_ & 256; }
+		Bool_t idTMOneStationLoose() const { return id_ & 512; }
+		Bool_t idTMOneStationTight() const { return id_ & 1024; }
+		Bool_t idTMLastStationOptimizedLowPtLoose() const { return id_ & 2048; }
+		Bool_t idTMLastStationOptimizedLowPtTight() const { return id_ & 4096; }
+		Bool_t idTM2DCompatibilityLoose() const { return id_ & 8192; }
+		Bool_t idTM2DCompatibilityTight() const { return id_ & 16384; }
 
 		Bool_t vetoIso() const { return vetoIso_;} 
 		Float_t vetoEm() const { return vetoEm_;} 
@@ -306,14 +292,11 @@ namespace TopTree
 		Int_t nofValidHits() const { return nofValidHits_;}  
 		TLorentzVector innerTrack() const { return innerTrack_;}
 
-		Float_t impactParameter3D() const { return impactParameter3D_; } 
-		Float_t impactParameter3DError() const { return impactParameter3DError_; } 
-		Float_t transverseImpactParameter() const { return transverseImpactParameter_; } 
-		Float_t transverseImpactParameterError() const { return transverseImpactParameterError_; } 
+		Float_t dB() const { return dB_; }
+		Float_t dBError() const { return dBError_; }
 
 		//TObject* genMuon() const { return genMuon_.GetObject() ;}
 		virtual TString typeName() const { return "TRootMuon"; }
-
 
 		void setCaloEnergy(Float_t et_em, Float_t et_had, Float_t et_ho, Float_t caloCompatibility)
 		{
@@ -344,31 +327,31 @@ namespace TopTree
 		void setAlgo(Int_t algo) { algo_ = algo; }
 		void setID(Int_t id) { id_ = id; }
 		void setID(
-		
-		Int_t AllGlobalMuons,
-		Int_t AllTrackerMuons,
-		Int_t AllStandAloneMuons,
-		Int_t TrackerMuonArbitrated,
-		Int_t AllArbitrated,
-		Int_t GlobalMuonPromptTight,
-		Int_t TMLastStationLoose,
-		Int_t TMLastStationTight,
-		Int_t TMOneStationLoose,
-		Int_t TMOneStationTight,
-		Int_t TMLastStationOptimizedLowPtLoose,
-		Int_t TMLastStationOptimizedLowPtTight,
-		Int_t TM2DCompatibilityLoose,
-		Int_t TM2DCompatibilityTight) 
+			Int_t AllGlobalMuons,
+			Int_t AllTrackerMuons,
+			Int_t AllStandAloneMuons,
+			Int_t TrackerMuonArbitrated,
+			Int_t AllArbitrated,
+			Int_t GlobalMuonPromptTight,
+			Int_t TMLastStationLoose,
+			Int_t TMLastStationTight,
+			Int_t TMLastStationAngTight,
+			Int_t TMOneStationLoose,
+			Int_t TMOneStationTight,
+			Int_t TMLastStationOptimizedLowPtLoose,
+			Int_t TMLastStationOptimizedLowPtTight,
+			Int_t TM2DCompatibilityLoose,
+			Int_t TM2DCompatibilityTight)
 		{
 			id_ = AllGlobalMuons*1 + AllTrackerMuons*2 + AllStandAloneMuons*4 + TrackerMuonArbitrated*8 + AllArbitrated*16 + GlobalMuonPromptTight*32
-				+ TMLastStationLoose*64 + TMLastStationTight*128 + TMOneStationLoose*256 + TMOneStationTight*512 + TMLastStationOptimizedLowPtLoose*1024 
-				+ TMLastStationOptimizedLowPtTight*2048 + TM2DCompatibilityLoose*4096 + TM2DCompatibilityTight*8192;
+				+ TMLastStationLoose*64 + TMLastStationTight*128 + TMLastStationAngTight*256 + TMOneStationLoose*512 + TMOneStationTight*1024 + TMLastStationOptimizedLowPtLoose*2048 
+				+ TMLastStationOptimizedLowPtTight*4096 + TM2DCompatibilityLoose*8192 + TM2DCompatibilityTight*16384;
 		}
         
 		void SetVetoIso(Bool_t vetoIso) { vetoIso_ = vetoIso;}
 		void SetVetoEm(Float_t vetoEm) { vetoEm_ = vetoEm;}
 		void SetVetoHad(Float_t vetoHad) { vetoHad_ = vetoHad;}
-		void SetD0(Float_t d0) { d0_ = d0;}    
+		void SetD0(Float_t d0) { d0_ = d0;}
 		void SetD0Error(Float_t d0Error) { d0error_ = d0Error;}   
 		void SetDZ(Float_t dz) { dz_ = dz;}    
 		void SetDZError(Float_t dzError) { dzerror_ = dzError;}
@@ -376,10 +359,8 @@ namespace TopTree
 		void SetNofValidHits(Int_t nofValidHits){ nofValidHits_ = nofValidHits;}
 		void SetInnerTrack (TLorentzVector innerTrack) { innerTrack_ = innerTrack;}
 
-		void setImpactParameter3D(Float_t impactParameter3D) { impactParameter3D_ = impactParameter3D; } 
-		void setImpactParameter3DError(Float_t impactParameter3DError) { impactParameter3DError_ = impactParameter3DError; } 
-		void setTransverseImpactParameter(Float_t transverseImpactParameter) { transverseImpactParameter_ = transverseImpactParameter; } 
-		void setTransverseImpactParameterError(Float_t transverseImpactParameterError) { transverseImpactParameterError_ = transverseImpactParameterError; } 
+		void SetdB(Float_t dB) { dB_ = dB; }
+		void SetdBError(Float_t dBError) { dBError_ = dBError; }
 
 		friend std::ostream& operator<< (std::ostream& stream, const TRootMuon& muon)
 		{
@@ -417,20 +398,18 @@ namespace TopTree
 											 // if true-> Isolated
 		Float_t vetoEm_;            // veto conesize is 0.07  in the ecal
 		Float_t vetoHad_;           // veto conesize is 0.1  in the hcal
-		Float_t d0_;                // d0 of global Muon
-		Float_t d0error_;           // d0 error of global Muon
-		Float_t dz_;                // dZ of global Muon
-		Float_t dzerror_;           // dZ error of global Muon
+		Float_t d0_;                // d0 of Muon innertrack
+		Float_t d0error_;           // d0 error of Muon innertrack
+		Float_t dz_;                // dZ of Muon innertrack
+		Float_t dzerror_;           // dZ error of Muon innertrack
 		Float_t chi2_;              // chi2 of global Muon
 		Int_t nofValidHits_;        // nof hits of inner track
 		TLorentzVector innerTrack_; // inner track 
 
-		// Next values are calculated according to the following recipe:
-		// https://hypernews.cern.ch/HyperNews/CMS/get/top-leptonplusjets/26/1.html
-		Float_t impactParameter3D_;
-		Float_t impactParameter3DError_;
-		Float_t transverseImpactParameter_;
-		Float_t transverseImpactParameterError_;
+		// In the standard PAT configuration, dB and edB are calculated wrt the primary vertex
+		// If this was not the case, dB is calculated wrt the beamspot and edb = -1 all the time
+		Float_t dB_;                // dB from PAT muon
+		Float_t dBError_;           // dBError from PAT muon
 
 		Int_t direction_;	//  OutsideIn = -1, Undefined = 0, InsideOut = 1
 		Int_t algo_; // binary => GlobalMuon=00010 , TrackerMuon=00100 , StandAloneMuon=01000 , CaloMuon=10000
