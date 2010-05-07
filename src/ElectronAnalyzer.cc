@@ -208,9 +208,6 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 		localElectron.setFiducialFlags(electron->isEB(),electron->isEE(), electron->isEBEEGap(),electron->isEBEtaGap(),electron->isEBPhiGap(),electron->isEEDeeGap(),electron->isEERingGap());
 
 		//Isolation
-		//localElectron.setIsolation(1, electron->getIsolation(1));
-		//localElectron.setIsolation(2, electron->getIsolation(2));
-
 		localElectron.setIsoR03_Depth1HadEt(electron->dr03HcalDepth1TowerSumEt());
 		localElectron.setIsoR03_Depth2HadEt(electron->dr03HcalDepth2TowerSumEt());
 		localElectron.setIsoR03_emEt(electron->dr03EcalRecHitSumEt());
@@ -221,7 +218,6 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 		localElectron.setIsoR04_emEt(electron->dr04EcalRecHitSumEt());
 		localElectron.setIsoR04_sumPt(electron->dr04TkSumPt());
 
-		// localElectron.setIsolation(5, electron->getIsolation(5));
 		// TLorentzVector tmpP4(-1000.,-1000.,-1000.,-1000);
 
 		localElectron.setClassification(electron->classification());

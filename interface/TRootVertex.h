@@ -76,7 +76,7 @@ namespace TopTree
 		void setIsFake(Bool_t isFake) { isFake_ = isFake; }
 		void setChi2(Float_t chi2) { chi2_ = chi2; }
 		void setNdof(Float_t ndof) { ndof_ = ndof; }
-		void setTracksSize(Float_t tracksSize) { tracksSize_ = tracksSize; }
+		void setTracksSize(Int_t tracksSize) { tracksSize_ = tracksSize; }
 
 		void setXError(Float_t xError) { xError_ = xError; }
 		void setYError(Float_t yError) { yError_ = yError; }
