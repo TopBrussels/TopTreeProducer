@@ -12,7 +12,6 @@
 #include "FWCore/Framework/interface/EventSetup.h"
 #include "FWCore/Common/interface/TriggerNames.h"
 
-
 #include "DataFormats/TrackReco/interface/Track.h"
 #include "DataFormats/TrackReco/interface/TrackFwd.h"
 #include "DataFormats/TrackReco/interface/HitPattern.h"
@@ -23,10 +22,6 @@
 #include "DataFormats/EgammaReco/interface/BasicCluster.h"
 #include "DataFormats/RecoCandidate/interface/IsoDeposit.h"
 #include "RecoEcal/EgammaCoreTools/interface/EcalClusterLazyTools.h"
-#include "TrackingTools/IPTools/interface/IPTools.h"
-#include "TrackingTools/Records/interface/TransientTrackRecord.h"
-#include "TrackingTools/TransientTrack/interface/TransientTrack.h"
-#include "TrackingTools/TransientTrack/interface/TransientTrackBuilder.h"
 
 #include "DataFormats/VertexReco/interface/Vertex.h"
 #include "DataFormats/VertexReco/interface/VertexFwd.h"

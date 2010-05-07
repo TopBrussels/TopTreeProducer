@@ -25,10 +25,6 @@ namespace TopTree
 			isGsfCtfConsistent_(false),
 			trackerDrivenSeed_(false),
 			ecalDrivenSeed_(false),
-			impactParameter3D_(-9999.),
-			impactParameter3DError_(-9999.),
-			transverseImpactParameter_(-9999.),
-			transverseImpactParameterError_(-9999.),
 			eSuperClusterOverPin_(-9999.),
 			eSuperClusterOverPout_(-9999.),
 			eSeedClusterOverPin_(-9999.),
@@ -50,6 +46,8 @@ namespace TopTree
 			dsz_(-9999.),
 			d0Error_(-9999.),
 			dszError_(-9999.),
+			dB_(-9999.),
+			dBError_(-9999.),
 			missingHits_(-9999),
 			ip_(-9999.),
 			positionAtVtx_(-9999.,-9999.,-9999.),
@@ -123,10 +121,6 @@ namespace TopTree
 			isGsfCtfConsistent_(e.isGsfCtfConsistent_),
 			trackerDrivenSeed_(e.trackerDrivenSeed_),
 			ecalDrivenSeed_(e.ecalDrivenSeed_),
-			impactParameter3D_(e.impactParameter3D_),
-			impactParameter3DError_(e.impactParameter3DError_),
-			transverseImpactParameter_(e.transverseImpactParameter_),
-			transverseImpactParameterError_(e.transverseImpactParameterError_),
 			eSuperClusterOverPin_(e.eSuperClusterOverPin_),
 			eSuperClusterOverPout_(e.eSuperClusterOverPout_),
 			eSeedClusterOverPin_(e.eSeedClusterOverPin_),
@@ -148,6 +142,8 @@ namespace TopTree
 			dsz_(e.dsz_),
 			d0Error_(e.d0Error_),
 			dszError_(e.dszError_),
+			dB_(e.dB_),
+			dBError_(e.dBError_),
 			missingHits_(e.missingHits_),
 			ip_(e.ip_),
 			positionAtVtx_(e.positionAtVtx_),
@@ -221,10 +217,6 @@ namespace TopTree
 			isGsfCtfConsistent_(false),
 			trackerDrivenSeed_(false),
 			ecalDrivenSeed_(false),
-			impactParameter3D_(-9999.),
-			impactParameter3DError_(-9999.),
-			transverseImpactParameter_(-9999.),
-			transverseImpactParameterError_(-9999.),
 			eSuperClusterOverPin_(-9999.),
 			eSuperClusterOverPout_(-9999.),
 			eSeedClusterOverPin_(-9999.),
@@ -246,6 +238,8 @@ namespace TopTree
 			dsz_(-9999.),
 			d0Error_(-9999.),
 			dszError_(-9999.),
+			dB_(-9999.),
+			dBError_(-9999.),
 			missingHits_(-9999),
 			ip_(-9999.),
 			positionAtVtx_(-9999.,-9999.,-9999.),
@@ -319,10 +313,6 @@ namespace TopTree
 			isGsfCtfConsistent_(false),
 			trackerDrivenSeed_(false),
 			ecalDrivenSeed_(false),
-			impactParameter3D_(-9999.),
-			impactParameter3DError_(-9999.),
-			transverseImpactParameter_(-9999.),
-			transverseImpactParameterError_(-9999.),
 			eSuperClusterOverPin_(-9999.),
 			eSuperClusterOverPout_(-9999.),
 			eSeedClusterOverPin_(-9999.),
@@ -344,6 +334,8 @@ namespace TopTree
 			dsz_(-9999.),
 			d0Error_(-9999.),
 			dszError_(-9999.),
+			dB_(-9999.),
+			dBError_(-9999.),
 			missingHits_(-9999),
 			ip_(-9999.),
 			positionAtVtx_(-9999.,-9999.,-9999.),
@@ -417,10 +409,6 @@ namespace TopTree
 			isGsfCtfConsistent_(false),
 			trackerDrivenSeed_(false),
 			ecalDrivenSeed_(false),
-			impactParameter3D_(-9999.),
-			impactParameter3DError_(-9999.),
-			transverseImpactParameter_(-9999.),
-			transverseImpactParameterError_(-9999.),
 			eSuperClusterOverPin_(-9999.),
 			eSuperClusterOverPout_(-9999.),
 			eSeedClusterOverPin_(-9999.),
@@ -442,6 +430,8 @@ namespace TopTree
 			dsz_(-9999.),
 			d0Error_(-9999.),
 			dszError_(-9999.),
+			dB_(-9999.),
+			dBError_(-9999.),
 			missingHits_(-9999),
 			ip_(-9999.),
 			positionAtVtx_(-9999.,-9999.,-9999.),
@@ -515,10 +505,6 @@ namespace TopTree
 			isGsfCtfConsistent_(false),
 			trackerDrivenSeed_(false),
 			ecalDrivenSeed_(false),
-			impactParameter3D_(-9999.),
-			impactParameter3DError_(-9999.),
-			transverseImpactParameter_(-9999.),
-			transverseImpactParameterError_(-9999.),
 			eSuperClusterOverPin_(-9999.),
 			eSuperClusterOverPout_(-9999.),
 			eSeedClusterOverPin_(-9999.),
@@ -540,6 +526,8 @@ namespace TopTree
 			dsz_(-9999.),
 			d0Error_(-9999.),
 			dszError_(-9999.),
+			dB_(-9999.),
+			dBError_(-9999.),
 			missingHits_(-9999),
 			ip_(-9999.),
 			positionAtVtx_(-9999.,-9999.,-9999.),
@@ -613,10 +601,6 @@ namespace TopTree
 			isGsfCtfConsistent_(false),
 			trackerDrivenSeed_(false),
 			ecalDrivenSeed_(false),
-			impactParameter3D_(-9999.),
-			impactParameter3DError_(-9999.),
-			transverseImpactParameter_(-9999.),
-			transverseImpactParameterError_(-9999.),
 			eSuperClusterOverPin_(-9999.),
 			eSuperClusterOverPout_(-9999.),
 			eSeedClusterOverPin_(-9999.),
@@ -638,6 +622,8 @@ namespace TopTree
 			dsz_(-9999.),
 			d0Error_(-9999.),
 			dszError_(-9999.),
+			dB_(-9999.),
+			dBError_(-9999.),
 			missingHits_(-9999),
 			ip_(-9999.),
 			positionAtVtx_(-9999.,-9999.,-9999.),
@@ -714,11 +700,6 @@ namespace TopTree
 		Bool_t isGsfScPixConsistent() const { return isGsfScPixConsistent_; }
 		Bool_t isGsfCtfConsistent() const { return isGsfCtfConsistent_; }
 
-		Float_t impactParameter3D() const { return impactParameter3D_; } 
-		Float_t impactParameter3DError() const { return impactParameter3DError_; } 
-		Float_t transverseImpactParameter() const { return transverseImpactParameter_; } 
-		Float_t transverseImpactParameterError() const { return transverseImpactParameterError_; } 
-
 		Bool_t isEcalDrivenSeed() const { return ecalDrivenSeed_; }
 		Bool_t isTrackerDrivenSeed() const { return trackerDrivenSeed_; }
 
@@ -741,11 +722,16 @@ namespace TopTree
 		Int_t trackPixelLayersWithMeasurement() const { return pixelLayersWithMeasurement_; }
 		Int_t trackStripLayersWithMeasurement() const { return stripLayersWithMeasurement_; }
 		Float_t d0() const { return d0_; }
+		Float_t d0Error()const { return d0Error_; }
+		Float_t trackDsz()const { return dsz_; }
+		Float_t dszError()const { return dszError_; }
+		Float_t dB() const { return dB_; }
+		Float_t dBError() const { return dBError_; }
+		
 		Int_t missingHits() const { return missingHits_; }
 		Float_t impactParameter() const { return ip_; }
 		TVector3 trackPositionAtVtx() const { return positionAtVtx_; }
 		TVector3 trackPositionAtCalo() const { return positionAtCalo_; }
-		Float_t trackDsz()const { return dsz_; }
 		Float_t trackNormalizedChi2() const { return normalizedChi2_; }
 		Float_t trackPtError() const { return ptError_; }
 
@@ -755,8 +741,6 @@ namespace TopTree
 		Bool_t isCaloEnergyCorrected() const { return isEcalEnergyCorrected_; }
 		Bool_t isMomentumCorrected() const { return isMomentumCorrected_; }
 		Float_t electronMomentumError() const { return electronMomentumError_; }
-		Float_t d0Error()const { return d0Error_; }
-		Float_t dszError()const { return dszError_; }
 
 		TVector3 caloPosition() const { return caloPosition_; }
 		Int_t basicClusterSize() const { return basicClusterSize_; }
@@ -890,11 +874,6 @@ namespace TopTree
 
 
 		//setters
-		void setImpactParameter3D(Float_t impactParameter3D) { impactParameter3D_ = impactParameter3D; } 
-		void setImpactParameter3DError(Float_t impactParameter3DError) { impactParameter3DError_ = impactParameter3DError; } 
-		void setTransverseImpactParameter(Float_t transverseImpactParameter) { transverseImpactParameter_ = transverseImpactParameter; } 
-		void setTransverseImpactParameterError(Float_t transverseImpactParameterError) { transverseImpactParameterError_ = transverseImpactParameterError; } 
-
 		void setChargeInfo(Int_t scPix, Bool_t GsfCftScPix, Bool_t GsfScPix, Bool_t GsfCtf )
 		{
 			scPixCharge_ = scPix;
@@ -938,10 +917,12 @@ namespace TopTree
 		void setEnergySuperClusterOverPin(Float_t x) { eSuperClusterOverPin_ = x; }
 		void setEnergySuperClusterOverPout(Float_t x) { eSuperClusterOverPout_ = x; }
 
-		void setD0(Float_t x) { d0_ = x; }
-		void setDsz(Float_t x) { dsz_ = x; }
-		void setD0Error(Float_t d0Error) { d0Error_ = d0Error; }
-		void setDszError(Float_t x) { dszError_ = x; }
+		void setd0(Float_t x) { d0_ = x; }
+		void setdsz(Float_t x) { dsz_ = x; }
+		void setd0Error(Float_t d0Error) { d0Error_ = d0Error; }
+		void setdszError(Float_t x) { dszError_ = x; }
+		void setdB(Float_t dB) { dB_ = dB; }
+		void setdBError(Float_t dBError) { dBError_ = dBError; }
 		void setImpactParameter(Float_t x) { ip_ = x; }
 		void setTrackMissingHits(Int_t x) { missingHits_ = x; }
 		void setTrackMomentumAtCalo(Float_t x) { momentumAtCalo_ = x; }
@@ -1077,13 +1058,6 @@ namespace TopTree
 		Bool_t trackerDrivenSeed_;
 		Bool_t ecalDrivenSeed_;
 
-// Special Impact parameter stuff, more info, see:
-// https://hypernews.cern.ch/HyperNews/CMS/get/top-leptonplusjets/26/1.html
-		Float_t impactParameter3D_;
-		Float_t impactParameter3DError_;
-		Float_t transverseImpactParameter_;
-		Float_t transverseImpactParameterError_;
-
 //    TrackClusterMatching myTrackClusterMatching;
 		Float_t eSuperClusterOverPin_;             // the supercluster energy / track momentum at the PCA to the beam spot
 		Float_t eSuperClusterOverPout_;            // the electron cluster energy / track momentum at calo extrapolated from the outermost track state
@@ -1109,8 +1083,14 @@ namespace TopTree
 		Float_t dsz_;                          // dsz parameter
 		Float_t d0Error_;                      // error on d0_
 		Float_t dszError_;
+
+		// In the standard PAT configuration, dB and edB are calculated wrt the primary vertex
+		// If this was not the case, dB is calculated wrt the beamspot and edb = -1 all the time
+		Float_t dB_;                           // dB from PAT muon
+		Float_t dBError_;                      // dBError from PAT muon
+
 		Int_t missingHits_;                    // Conversion Rejection: number of missing hits near beginning of track (also rejects really bad tracks)
-                       //https://twiki.cern.ch/twiki/bin/viewauth/CMS/SWGuideCategoryBasedElectronID#The_Cut_Variables
+      //https://twiki.cern.ch/twiki/bin/viewauth/CMS/SWGuideCategoryBasedElectronID#The_Cut_Variables
 
 		Float_t ip_;                           //Track vertex: Impact Parameter w.r.t. reco vertex , same wiki page
 		TVector3  positionAtVtx_;              // the track PCA to the beam spot
