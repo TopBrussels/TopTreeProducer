@@ -75,20 +75,20 @@ namespace TopTree
 		};
 		~TRootGenTop(){;};
 
-		bool isHadronic() const {return isHadronic_;};
-		bool isLeptonic() const {return isLeptonic_;};
-		bool isLeptonicMu() const { if(isLeptonic_ && abs(lepton().type())==13) return true ; else return false ;};
-		bool isLeptonicEl() const { if(isLeptonic_ && abs(lepton().type())==11) return true ; else return false ;};
-		bool isLeptonicTau() const { if(isLeptonic_ && abs(lepton().type())==15) return true ; else return false ;};
+		Bool_t isHadronic() const { return isHadronic_; }
+		Bool_t isLeptonic() const { return isLeptonic_; }
+		Bool_t isLeptonicMu() const { if(isLeptonic_ && abs(lepton().type())==13) return true ; else return false ;}
+		Bool_t isLeptonicEl() const { if(isLeptonic_ && abs(lepton().type())==11) return true ; else return false ;}
+		Bool_t isLeptonicTau() const { if(isLeptonic_ && abs(lepton().type())==15) return true ; else return false ;}
 
-		bool isHadronicWellSeparated(float deltaMin = 1.0) const;
-		float DeltaRMinHadronicTop() const;
+		Bool_t isHadronicWellSeparated(float deltaMin = 1.0) const;
+		Float_t DeltaRMinHadronicTop() const;
  
-		void Production() { cout<<production_<<endl; };
-		int From() const { return this->motherType();};
-		bool FromGluino() const {return this->motherType()==1000021 ? true:false;}
-		bool FromStop() const {return (abs(this->motherType())==1000006 || abs(this->motherType())==2000006 ) ? true:false;}
-		bool FromSbottom() const {return (abs(this->motherType())==1000005 || abs(this->motherType())==2000005 ) ? true:false;}
+		void Production() { cout<<production_<<endl; }
+		Int_t From() const { return this->motherType(); }
+		Bool_t FromGluino() const { return this->motherType()==1000021 ? true:false; }
+		Bool_t FromStop() const { return (abs(this->motherType())==1000006 || abs(this->motherType())==2000006 ) ? true:false; }
+		Bool_t FromSbottom() const { return (abs(this->motherType())==1000005 || abs(this->motherType())==2000005 ) ? true:false; }
  
 		const TRootMCParticle W() const {return W_;};
 		const TRootMCParticle bquark() const {return bquark_;};
@@ -113,8 +113,8 @@ namespace TopTree
  
 	private:
  
-		bool isHadronic_;
-		bool isLeptonic_;
+		Bool_t isHadronic_;
+		Bool_t isLeptonic_;
 		TRootMCParticle W_;
 		TRootMCParticle bquark_;
 		TRootMCParticle quark_;

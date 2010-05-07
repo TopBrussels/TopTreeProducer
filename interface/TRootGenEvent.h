@@ -55,26 +55,26 @@ namespace TopTree
 	
 		~TRootGenEvent(){;}
 
-		Bool_t isTtBar() const {return isTtBar_;};
-		Bool_t isFullHadronic() const {return isFullHadronic_;};
-		Bool_t isSemiLeptonic() const {return isSemiLeptonic_;};
-		Bool_t isFullLeptonic() const {return isFullLeptonic_;};
-		LeptonType semiLeptonicChannel() const { return semiLeptonicChannel_;};
-		bool isSemiLeptonic(LeptonType typeA) const { return (semiLeptonicChannel()==typeA ? true : false); };
+		Bool_t isTtBar() const {return isTtBar_;}
+		Bool_t isFullHadronic() const {return isFullHadronic_;}
+		Bool_t isSemiLeptonic() const {return isSemiLeptonic_;}
+		Bool_t isFullLeptonic() const {return isFullLeptonic_;}
+		LeptonType semiLeptonicChannel() const { return semiLeptonicChannel_;}
+		Bool_t isSemiLeptonic(LeptonType typeA) const { return (semiLeptonicChannel()==typeA ? true : false); }
 	  
-		const TLorentzVector neutrino() const { return neutrino_;};
-		const TLorentzVector lepton() const { return lepton_;};
-		const TLorentzVector leptonicDecayW() const { return leptonicDecayW_;};
-		const TLorentzVector leptonicDecayB() const { return leptonicDecayB_;};
-		const TLorentzVector leptonicDecayTop() const { return leptonicDecayTop_;};
-		const TLorentzVector hadronicDecayW() const {return hadronicDecayW_;};
-		const TLorentzVector hadronicDecayB() const {return hadronicDecayB_;};
-		const TLorentzVector hadronicDecayTop() const {return hadronicDecayTop_;};
-		const TLorentzVector hadronicDecayQuark() const {return hadronicDecayQuark_;};
-		const TLorentzVector hadronicDecayQuarkBar() const {return hadronicDecayQuarkBar_;};
-		const std::vector<TLorentzVector> leptonicDecayTopRadiation() const { return leptonicDecayTopRadiation_;};
-		const std::vector<TLorentzVector> hadronicDecayTopRadiation() const { return leptonicDecayTopRadiation_;};
-		const std::vector<TLorentzVector> ISR()const { return ISR_;};
+		const TLorentzVector neutrino() const { return neutrino_;}
+		const TLorentzVector lepton() const { return lepton_;}
+		const TLorentzVector leptonicDecayW() const { return leptonicDecayW_;}
+		const TLorentzVector leptonicDecayB() const { return leptonicDecayB_;}
+		const TLorentzVector leptonicDecayTop() const { return leptonicDecayTop_;}
+		const TLorentzVector hadronicDecayW() const {return hadronicDecayW_;}
+		const TLorentzVector hadronicDecayB() const {return hadronicDecayB_;}
+		const TLorentzVector hadronicDecayTop() const {return hadronicDecayTop_;}
+		const TLorentzVector hadronicDecayQuark() const {return hadronicDecayQuark_;}
+		const TLorentzVector hadronicDecayQuarkBar() const {return hadronicDecayQuarkBar_;}
+		const std::vector<TLorentzVector> leptonicDecayTopRadiation() const { return leptonicDecayTopRadiation_;}
+		const std::vector<TLorentzVector> hadronicDecayTopRadiation() const { return leptonicDecayTopRadiation_;}
+		const std::vector<TLorentzVector> ISR()const { return ISR_;}
  
 
 		void SetBoolean(Bool_t isTtBar, Bool_t isFullHadronic, Bool_t isSemiLeptonic, Bool_t isFullLeptonic)
@@ -83,8 +83,8 @@ namespace TopTree
 			isFullHadronic_ = isFullHadronic;
 			isSemiLeptonic_ = isSemiLeptonic;
 			isFullLeptonic_ = isFullLeptonic;
-		};
-		void SetSemiLeptonicChannel(LeptonType type){ semiLeptonicChannel_ = type;};
+		}
+		void SetSemiLeptonicChannel(LeptonType type){ semiLeptonicChannel_ = type;}
 		void SetTLorentzVector(TLorentzVector &lepton, TLorentzVector &neutrino, TLorentzVector &leptonicDecayW, TLorentzVector &leptonicDecayB, TLorentzVector &leptonicDecayTop, TLorentzVector &hadronicDecayW, TLorentzVector &hadronicDecayB, TLorentzVector &hadronicDecayTop, TLorentzVector &hadronicDecayQuark, TLorentzVector &hadronicDecayQuarkBar)
 		{
 			lepton_ = lepton;
@@ -97,13 +97,13 @@ namespace TopTree
 			hadronicDecayTop_ = hadronicDecayTop;
 			hadronicDecayQuark_ = hadronicDecayQuark;
 			hadronicDecayQuarkBar_ = hadronicDecayQuarkBar; 
-		};
+		}
 		void SetRadiation(std::vector<TLorentzVector> leptonicDecayTopRadiation, std::vector<TLorentzVector> hadronicDecayTopRadiation, std::vector<TLorentzVector> ISR)
 		{
 			leptonicDecayTopRadiation_ = leptonicDecayTopRadiation; 
 			hadronicDecayTopRadiation_ = hadronicDecayTopRadiation;
 			ISR_ = ISR; 
-		};
+		}
 
 		virtual TString typeName() const { return "TRootGenEvent"; }
 

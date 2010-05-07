@@ -60,13 +60,13 @@ namespace TopTree
 
 	private:
 
-		double cosThetaTLHel_;
-		double cosThetaTBHel_;
-		double cosThetaTQHel_;
-		double cosPhi_;
-		double topsZMFMass_ ; 
+		Double_t cosThetaTLHel_;
+		Double_t cosThetaTBHel_;
+		Double_t cosThetaTQHel_;
+		Double_t cosPhi_;
+		Double_t topsZMFMass_ ; 
 	
-	  ClassDef (TRootSpinCorrGen,2);
+		ClassDef (TRootSpinCorrGen,2);
 	};
 }
 

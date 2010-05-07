@@ -3,13 +3,13 @@
 <inputdatasets>
 <!-- <i file="../test/TopTree_CRAFT09_test.root"/> -->
 <!-- <i file="TTbar_Summer09_7TeV_TopTree_1.root"/> -->
-<i file="TTbar_Summer09_7TeV_TopTree.root"/>
+<i file="TTbar-Summer09_preproduction-v1_TOPTREE.root"/>
 </inputdatasets>
 
 <outputfilename>
 <!-- <o file="TopTree_CRAFT09_Skimmed_test.root"/> -->
 <!-- <o file="TTbar_Summer09_7TeV_TopTree_Skimmed.root"/> -->
-<o file="TTbar_Summer09_7TeV_TopTree_Skimmed.root"/>
+<o file="TTbar-Summer09_preproduction-v1_TOPTREE_Skimmed.root"/>
 </outputfilename>
 
 <keepbranches>
@@ -18,9 +18,8 @@
 <k type="TopTree::TRootMuon" name="Muons" minPt="15" maxEta="2.4" skipObjects="0" minNObjects="0"/>
 <k type="TopTree::TRootMET" name="MET" minPt="15" maxEta="2.4" skipObjects="0" minNObjects="0"/>
 <k type="TopTree::TRootCaloJet" name="CaloJets_selectedPatJetsAK5Calo" minPt="15" maxEta="2.4" skipObjects="0" minNObjects="0"/>
-<k type="TopTree::TRootCaloJet" name="CaloJets_selectedPatJetsSC5Calo" minPt="15" maxEta="2.4" skipObjects="0" minNObjects="0"/>
+<k type="TopTree::TRootCaloJet" name="CaloJets_selectedPatJetsIC5Calo" minPt="15" maxEta="2.4" skipObjects="0" minNObjects="0"/>
 <k type="TopTree::TRootPFJet" name="PFJets_selectedPatJetsAK5PF" minPt="15" maxEta="2.4" skipObjects="0" minNObjects="0"/>
 <k type="TopTree::TRootGenJet" name="GenJets_ak5GenJets" minPt="15" maxEta="2.4" skipObjects="0" minNObjects="0"/>
 <k type="TopTree::TRootVertex" name="PrimaryVertex" minPt="0" maxEta="9999" skipObjects="0" minNObjects="0"/>
-<k type="TopTree::TRootGenJet" name="GenJets_blablajets" minPt="0" maxEta="9999" skipObjects="0" minNObjects="0"/>
 </keepbranches>

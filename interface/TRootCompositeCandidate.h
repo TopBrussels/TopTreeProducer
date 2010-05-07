@@ -44,7 +44,7 @@ namespace TopTree
 		};
 
 		std::vector< std::pair<TRootTopCandidate,std::string> > daughters() const { return daughters_;};
-		int NofDaughters() const { return daughters_.size(); };
+		Int_t NofDaughters() const { return daughters_.size(); };
 		void SetDaughters( std::vector< std::pair<TRootTopCandidate,std::string> > daughters) { daughters_ = daughters; };
         
 

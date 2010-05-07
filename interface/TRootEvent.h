@@ -50,7 +50,7 @@ namespace TopTree
 		Int_t nHighPurityTracks() const { return nHighPurityTracks_; }
 		// Trigger decision
 		Bool_t passGlobalHLT8E29() const { return passGlobalHLT8E29_; }
-		unsigned int nHLT8E29Paths() const { return trigHLT8E29_.size(); }
+		UInt_t nHLT8E29Paths() const { return trigHLT8E29_.size(); }
 		std::vector<Bool_t> trigHLT8E29() const { return trigHLT8E29_; }
 		Bool_t trigHLT8E29(unsigned int i) const
 		{
@@ -65,9 +65,9 @@ namespace TopTree
 			}
 		}
 		Bool_t passGlobalHLT() const { return passGlobalHLT_; }
-		unsigned int nHLTPaths() const { return trigHLT_.size(); }
+		UInt_t nHLTPaths() const { return trigHLT_.size(); }
 		std::vector<Bool_t> trigHLT() const { return trigHLT_; }
-		Bool_t trigHLT(unsigned int i) const
+		Bool_t trigHLT(UInt_t i) const
 		{
 			if (trigHLT_.size()>i)
 			{

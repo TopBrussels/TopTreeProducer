@@ -17,7 +17,8 @@ namespace TopTree
 
 	public:
 //		void Print(Option_t* option = "") const;
-		TRootElectron() : TRootParticle(),
+		TRootElectron() :
+			TRootParticle(),
 			scPixCharge_(-9999),
 			isGsfCtfScPixConsistent_(false),
 			isGsfScPixConsistent_(false),
@@ -114,7 +115,8 @@ namespace TopTree
 			HLT_Ele15_SW_L1R_(false)
 			{;}
 
-		TRootElectron(const TRootElectron& e) :TRootParticle(e),
+		TRootElectron(const TRootElectron& e) :
+			TRootParticle(e),
 			scPixCharge_(e.scPixCharge_),
 			isGsfCtfScPixConsistent_(e.isGsfCtfScPixConsistent_),
 			isGsfScPixConsistent_(e.isGsfScPixConsistent_),
@@ -211,7 +213,8 @@ namespace TopTree
 			HLT_Ele15_SW_L1R_(e.HLT_Ele15_SW_L1R_)
 			{;}
 
-		TRootElectron(Double_t px, Double_t py, Double_t pz, Double_t e) :TRootParticle(px,py,pz,e),
+		TRootElectron(Double_t px, Double_t py, Double_t pz, Double_t e) :
+			TRootParticle(px,py,pz,e),
 			scPixCharge_(-9999),
 			isGsfCtfScPixConsistent_(false),
 			isGsfScPixConsistent_(false),
@@ -408,7 +411,7 @@ namespace TopTree
 
 		TRootElectron(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z, Int_t type, Int_t charge) :
 			TRootParticle(px,py,pz,e,vtx_x,vtx_y,vtx_z,type,charge),
-			scPixCharge_(charge),
+			scPixCharge_(-9999),
 			isGsfCtfScPixConsistent_(false),
 			isGsfScPixConsistent_(false),
 			isGsfCtfConsistent_(false),
@@ -603,8 +606,8 @@ namespace TopTree
 			{;}
 
 		TRootElectron(const TLorentzVector &momentum, const TVector3 &vertex, Int_t type, Float_t charge) :
-			TRootParticle(momentum, vertex, type,charge),
-			scPixCharge_(charge),
+			TRootParticle(momentum, vertex, type, charge),
+			scPixCharge_(-9999),
 			isGsfCtfScPixConsistent_(false),
 			isGsfScPixConsistent_(false),
 			isGsfCtfConsistent_(false),
@@ -706,29 +709,29 @@ namespace TopTree
 	public:
 		virtual TString typeName() const { return "TRootElectron"; }
 
-		int Charge() const { return scPixCharge_; }
-		bool isGsfCtfScPixConsistent() const { return isGsfCtfScPixConsistent_; }
-		bool isGsfScPixConsistent() const { return isGsfScPixConsistent_; }
-		bool isGsfCtfConsistent() const { return isGsfCtfConsistent_; }
+		Int_t Charge() const { return scPixCharge_; }
+		Bool_t isGsfCtfScPixConsistent() const { return isGsfCtfScPixConsistent_; }
+		Bool_t isGsfScPixConsistent() const { return isGsfScPixConsistent_; }
+		Bool_t isGsfCtfConsistent() const { return isGsfCtfConsistent_; }
 
 		Float_t impactParameter3D() const { return impactParameter3D_; } 
 		Float_t impactParameter3DError() const { return impactParameter3DError_; } 
 		Float_t transverseImpactParameter() const { return transverseImpactParameter_; } 
 		Float_t transverseImpactParameterError() const { return transverseImpactParameterError_; } 
 
-		bool isEcalDrivenSeed() const { return ecalDrivenSeed_; }
-		bool isTrackerDrivenSeed() const { return trackerDrivenSeed_; }
+		Bool_t isEcalDrivenSeed() const { return ecalDrivenSeed_; }
+		Bool_t isTrackerDrivenSeed() const { return trackerDrivenSeed_; }
 
-		float eScOverPin() const { return eSuperClusterOverPin_; }
-		float eScOverPout() const { return eSuperClusterOverPout_; }
-		float eSeedOverPin() const { return eSeedClusterOverPin_; }
-		float eSeedOverPout() const { return eSeedClusterOverPout_; }
-		float deltaEtaIn() const { return deltaEtaIn_; }
-		float deltaEtaOut() const { return deltaEtaOut_; }
-		float deltaPhiIn() const { return deltaPhiIn_; }
-		float deltaPhiOut() const { return deltaPhiOut_; }
-		float deltaPhiScTrkOut() const { return deltaPhiSuperClusterTrackAtCalo_; }
-		float deltaEtaScTrkOut() const { return deltaEtaSuperClusterTrackAtCalo_; }
+		Float_t eScOverPin() const { return eSuperClusterOverPin_; }
+		Float_t eScOverPout() const { return eSuperClusterOverPout_; }
+		Float_t eSeedOverPin() const { return eSeedClusterOverPin_; }
+		Float_t eSeedOverPout() const { return eSeedClusterOverPout_; }
+		Float_t deltaEtaIn() const { return deltaEtaIn_; }
+		Float_t deltaEtaOut() const { return deltaEtaOut_; }
+		Float_t deltaPhiIn() const { return deltaPhiIn_; }
+		Float_t deltaPhiOut() const { return deltaPhiOut_; }
+		Float_t deltaPhiScTrkOut() const { return deltaPhiSuperClusterTrackAtCalo_; }
+		Float_t deltaEtaScTrkOut() const { return deltaEtaSuperClusterTrackAtCalo_; }
 
 		Float_t trackMomentum() const { return trackMomentum_; }
 		Float_t trackMomentumAtSuperClusterPosition() const { return momentumAtCalo_; }
@@ -749,8 +752,8 @@ namespace TopTree
 		Float_t trackMomentumError() const { return trackMomentumError_; }
 		Float_t caloEnergyError() const { return ecalEnergyError_; }
 		Float_t caloEnergy() const { return ecalEnergy_; }
-		bool isCaloEnergyCorrected() const { return isEcalEnergyCorrected_; }
-		bool isMomentumCorrected() const { return isMomentumCorrected_; }
+		Bool_t isCaloEnergyCorrected() const { return isEcalEnergyCorrected_; }
+		Bool_t isMomentumCorrected() const { return isMomentumCorrected_; }
 		Float_t electronMomentumError() const { return electronMomentumError_; }
 		Float_t d0Error()const { return d0Error_; }
 		Float_t dszError()const { return dszError_; }
@@ -775,13 +778,13 @@ namespace TopTree
 		Float_t hadronicDepth1OverEm() const { return hcalDepth1OverEcal_; }
 		Float_t hadronicDepth2OverEm() const { return hcalDepth2OverEcal_; }
 
-		bool isEB() const { return isEB_; }
-		bool isEE() const { return isEE_; }
-		bool isEBEEGap() const { return isEBEEGap_; }
-		bool isEBEtaGap() const { return isEBEtaGap_; }
-		bool isEBPhiGap() const { return isEBPhiGap_; }
-		bool isEEDeeGap() const { return isEEDeeGap_; }
-		bool isEERingGap() const { return isEERingGap_; }
+		Bool_t isEB() const { return isEB_; }
+		Bool_t isEE() const { return isEE_; }
+		Bool_t isEBEEGap() const { return isEBEEGap_; }
+		Bool_t isEBEtaGap() const { return isEBEtaGap_; }
+		Bool_t isEBPhiGap() const { return isEBPhiGap_; }
+		Bool_t isEEDeeGap() const { return isEEDeeGap_; }
+		Bool_t isEERingGap() const { return isEERingGap_; }
 
 		Float_t ecalIso(unsigned int cone) const
 		{
@@ -876,9 +879,9 @@ namespace TopTree
 		Float_t fbrem() const { return fBrem_; };
 		Int_t numberOfBrems() const { return (basicClusterSize() - 1); }
 		Int_t classification() const { return classification_; }
-		bool isFromConversion() const	{ return ((bool)isConversion_); }
+		Bool_t isFromConversion() const	{ return ((bool)isConversion_); }
 
-		bool hasTriggerMatch(std::string input) const
+		Bool_t hasTriggerMatch(std::string input) const
 		{
 			if(input == "HLT_Ele10_SW_L1R") return HLT_Ele10_SW_L1R_;
 			if(input == "HLT_Ele15_SW_L1R") return HLT_Ele15_SW_L1R_;
@@ -892,26 +895,26 @@ namespace TopTree
 		void setTransverseImpactParameter(Float_t transverseImpactParameter) { transverseImpactParameter_ = transverseImpactParameter; } 
 		void setTransverseImpactParameterError(Float_t transverseImpactParameterError) { transverseImpactParameterError_ = transverseImpactParameterError; } 
 
-		void setChargeInfo(int scPix,bool GsfCftScPix, bool GsfScPix, bool GsfCtf )
+		void setChargeInfo(Int_t scPix, Bool_t GsfCftScPix, Bool_t GsfScPix, Bool_t GsfCtf )
 		{
 			scPixCharge_ = scPix;
 			isGsfCtfScPixConsistent_ = GsfCftScPix;
 			isGsfScPixConsistent_ = GsfScPix;
 			isGsfCtfConsistent_ = GsfCtf;
 		}
-		void setSuperClusterPixelCharge(int scPix ){ scPixCharge_ = scPix; }
-		void setSuperClusterPixelCtfGsfConsistency(bool GsfCftScPix){ isGsfCtfScPixConsistent_ = GsfCftScPix; }
-		void setSuperClusterPixelGsfConsistency(bool GsfScPix){ isGsfScPixConsistent_ = GsfScPix; }
-		void setGsfCtfConsistency(bool GsfCtf){ isGsfCtfConsistent_ = GsfCtf; }
-		void setSeedingInfo(bool isEcal, bool isTracker)
+		void setSuperClusterPixelCharge(Int_t scPix ){ scPixCharge_ = scPix; }
+		void setSuperClusterPixelCtfGsfConsistency(Bool_t GsfCftScPix){ isGsfCtfScPixConsistent_ = GsfCftScPix; }
+		void setSuperClusterPixelGsfConsistency(Bool_t GsfScPix){ isGsfScPixConsistent_ = GsfScPix; }
+		void setGsfCtfConsistency(Bool_t GsfCtf){ isGsfCtfConsistent_ = GsfCtf; }
+		void setSeedingInfo(Bool_t isEcal, Bool_t isTracker)
 		{
 			ecalDrivenSeed_ = isEcal;
 			trackerDrivenSeed_ = isTracker;
 		}
-		void setEcalSeeding(bool isEcal){ ecalDrivenSeed_ = isEcal; }
-		void setTrackerSeeding(bool isTracker){ trackerDrivenSeed_ = isTracker; }
-		void setTrackClusterMatching(float eScOverPin,float eScOverPout,float eSeedOverPin,float eSeedOverPout,float dEtaIn,
-			float dEtaOut,float dPhiIn,float dPhiOut,float dPhiScTrkOut,float dEtaScTrkOut)
+		void setEcalSeeding(Bool_t isEcal){ ecalDrivenSeed_ = isEcal; }
+		void setTrackerSeeding(Bool_t isTracker){ trackerDrivenSeed_ = isTracker; }
+		void setTrackClusterMatching(Float_t eScOverPin, Float_t eScOverPout, Float_t eSeedOverPin, Float_t eSeedOverPout,
+			Float_t dEtaIn, Float_t dEtaOut, Float_t dPhiIn, Float_t dPhiOut, Float_t dPhiScTrkOut, Float_t dEtaScTrkOut)
 		{
 			eSuperClusterOverPin_ = eScOverPin;
 			eSuperClusterOverPout_ = eScOverPout;
@@ -955,7 +958,7 @@ namespace TopTree
 		void setTrackPtError(Float_t x) { ptError_ = x; }
 		void setTrackMomentum(Float_t x) { trackMomentum_ = x; }
 
-		void setCorrections(float tme, float cee, float ce, bool cc, bool mc, float eMc, float d0e, float dsze)
+		void setCorrections(Float_t tme, Float_t cee, Float_t ce, Float_t cc, Float_t mc, Float_t eMc, Float_t d0e, Float_t dsze)
 		{
 			trackMomentumError_ = tme;			// Error on trackMomentum_
 			ecalEnergyError_ = cee;				// Error on caloEnergy_
@@ -970,8 +973,8 @@ namespace TopTree
 		void setCaloEnergyError(Float_t x) { ecalEnergyError_ = x; }
 		void setCaloEnergy(Float_t x) { ecalEnergy_ = x; }
 		void setElectronMomentumError(Float_t x) { electronMomentumError_ = x; }
-		void setEnergyScaleCorrected(bool x) { isEcalEnergyCorrected_ = x; }
-		void setMomentumCorrected(bool x) { isMomentumCorrected_ = x; }
+		void setEnergyScaleCorrected(Bool_t x) { isEcalEnergyCorrected_ = x; }
+		void setMomentumCorrected(Bool_t x) { isMomentumCorrected_ = x; }
 		void setTrackMomentumError(Float_t x) { trackMomentumError_ = x; }
 
 		void setSuperCluster(TVector3 pos, Int_t bcs, Int_t ca, Float_t ccs, Int_t nC, Float_t scRawE, Float_t PSE)
@@ -1003,7 +1006,7 @@ namespace TopTree
 		void setHoverEDepth2(Float_t HoE2) { hcalDepth2OverEcal_ = HoE2; }
 		void setSigmaEtaEta(Float_t see) { sigmaEtaEta_ = see; }
 		void setSigmaIetaIeta(Float_t sieie) { sigmaIetaIeta_ = sieie; }
-		void setFiducialFlags(bool eb, bool ee, bool ebeegap, bool ebetagap, bool ebphigap, bool eedeegap, bool eeR)
+		void setFiducialFlags(Bool_t eb, Bool_t ee, Bool_t ebeegap, Bool_t ebetagap, Bool_t ebphigap, Bool_t eedeegap, Bool_t eeR)
 		{
 			isEB_ = eb;
 			isEE_ = ee;
@@ -1014,13 +1017,13 @@ namespace TopTree
 			isEERingGap_ = eeR;
 		}
 
-		void setEB(bool is) { isEB_ = is; }
-		void setEE(bool is) { isEE_ = is; }
-		void setEBEEGap(bool is) { isEBEEGap_ = is; }
-		void setEBEtaGap(bool is) { isEBEtaGap_ = is; }
-		void setEBPhiGap(bool is) { isEBPhiGap_ = is; }
-		void setEEDeeGap(bool is) { isEEDeeGap_ = is; }
-		void setEERingGap(bool is) { isEERingGap_ = is; }
+		void setEB(Bool_t is) { isEB_ = is; }
+		void setEE(Bool_t is) { isEE_ = is; }
+		void setEBEEGap(Bool_t is) { isEBEEGap_ = is; }
+		void setEBEtaGap(Bool_t is) { isEBEtaGap_ = is; }
+		void setEBPhiGap(Bool_t is) { isEBPhiGap_ = is; }
+		void setEEDeeGap(Bool_t is) { isEEDeeGap_ = is; }
+		void setEERingGap(Bool_t is) { isEERingGap_ = is; }
 
 		void setIsoR03_emEt(Float_t isoR03_emEt) { ecalRecHitSumEt03_ = isoR03_emEt; }
 		void setIsoR03_Depth1HadEt(Float_t isoR03_hadEt1) { hcalDepth1TowerSumEt03_ = isoR03_hadEt1; }
@@ -1050,10 +1053,10 @@ namespace TopTree
 		void setIDCiCHyperTight3(Int_t cicHT3) { idCiCHyperTight3_ = cicHT3; }
 		void setIDCiCHyperTight4(Int_t cicHT4) { idCiCHyperTight4_ = cicHT4; }
 
-		void setFbrem(float f) { fBrem_ = f; }
-		void setClassification(int i) { classification_ = i; }
-		void setConversion(bool is) {	isConversion_ = is; }
-		void setTriggerinfo(std::string input, bool is)
+		void setFbrem(Float_t f) { fBrem_ = f; }
+		void setClassification(Int_t i) { classification_ = i; }
+		void setConversion(Bool_t is) {	isConversion_ = is; }
+		void setTriggerinfo(std::string input, Bool_t is)
 		{
 			if(input == "HLT_Ele10_SW_L1R") HLT_Ele10_SW_L1R_ = is;
 			if(input == "HLT_Ele15_SW_L1R") HLT_Ele15_SW_L1R_ = is;
@@ -1067,12 +1070,12 @@ namespace TopTree
 
 
 	private:
-		int scPixCharge_;
-		bool isGsfCtfScPixConsistent_;
-		bool isGsfScPixConsistent_;
-		bool isGsfCtfConsistent_;
-		bool trackerDrivenSeed_;
-		bool ecalDrivenSeed_;
+		Int_t scPixCharge_;
+		Bool_t isGsfCtfScPixConsistent_;
+		Bool_t isGsfScPixConsistent_;
+		Bool_t isGsfCtfConsistent_;
+		Bool_t trackerDrivenSeed_;
+		Bool_t ecalDrivenSeed_;
 
 // Special Impact parameter stuff, more info, see:
 // https://hypernews.cern.ch/HyperNews/CMS/get/top-leptonplusjets/26/1.html
@@ -1082,16 +1085,16 @@ namespace TopTree
 		Float_t transverseImpactParameterError_;
 
 //    TrackClusterMatching myTrackClusterMatching;
-		float eSuperClusterOverPin_;             // the supercluster energy / track momentum at the PCA to the beam spot
-		float eSuperClusterOverPout_;            // the electron cluster energy / track momentum at calo extrapolated from the outermost track state
-		float eSeedClusterOverPin_;              // the seed cluster energy / track momentum at the PCA to the beam spot
-		float eSeedClusterOverPout_;             // the seed cluster energy / track momentum at calo extrapolated from the outermost track state
-		float deltaEtaIn_;                       // the supercluster eta - track eta position at calo extrapolated from innermost track state
-		float deltaEtaOut_;                      // the seed cluster eta - track eta position at calo extrapolated from the outermost track state
-		float deltaPhiIn_;                       // the supercluster phi - track phi position at calo extrapolated from the innermost track state
-		float deltaPhiOut_;                      // the seed cluster phi - track phi position at calo extrapolated from the outermost track state
-		float deltaPhiSuperClusterTrackAtCalo_;  // the electron cluster phi - track phi position at calo extrapolated from the outermost track state
-		float deltaEtaSuperClusterTrackAtCalo_;  // the electron cluster eta - t
+		Float_t eSuperClusterOverPin_;             // the supercluster energy / track momentum at the PCA to the beam spot
+		Float_t eSuperClusterOverPout_;            // the electron cluster energy / track momentum at calo extrapolated from the outermost track state
+		Float_t eSeedClusterOverPin_;              // the seed cluster energy / track momentum at the PCA to the beam spot
+		Float_t eSeedClusterOverPout_;             // the seed cluster energy / track momentum at calo extrapolated from the outermost track state
+		Float_t deltaEtaIn_;                       // the supercluster eta - track eta position at calo extrapolated from innermost track state
+		Float_t deltaEtaOut_;                      // the seed cluster eta - track eta position at calo extrapolated from the outermost track state
+		Float_t deltaPhiIn_;                       // the supercluster phi - track phi position at calo extrapolated from the innermost track state
+		Float_t deltaPhiOut_;                      // the seed cluster phi - track phi position at calo extrapolated from the outermost track state
+		Float_t deltaPhiSuperClusterTrackAtCalo_;  // the electron cluster phi - track phi position at calo extrapolated from the outermost track state
+		Float_t deltaEtaSuperClusterTrackAtCalo_;  // the electron cluster eta - t
 
 
 //		TrackProperties================================
@@ -1122,8 +1125,8 @@ namespace TopTree
 		Float_t trackMomentumError_;        // Error on trackMomentum_
 		Float_t ecalEnergyError_;           // Error on caloEnergy_
 		Float_t ecalEnergy_;                // ecal corrected energy (if !isEcalEnergyCorrected this value is identical to the supercluster energy)
-		bool isEcalEnergyCorrected_ ;       // true if ecal energy has been corrected
-		bool isMomentumCorrected_ ;         // true if E-p combination has been applied (if not the electron momentum is the ecal corrected energy)
+		Bool_t isEcalEnergyCorrected_ ;       // true if ecal energy has been corrected
+		Bool_t isMomentumCorrected_ ;         // true if E-p combination has been applied (if not the electron momentum is the ecal corrected energy)
 		Float_t electronMomentumError_ ;    // the final electron momentum error
 
 //SuperClusterProperties ===============================
@@ -1155,13 +1158,13 @@ namespace TopTree
 //FiducialFlags=================================
 
 //    FiducialFlags myFiducialFlags_;
-		bool isEB_;        // true if particle is in ECAL Barrel
-		bool isEE_;        // true if particle is in ECAL Endcaps
-		bool isEBEEGap_;   // true if particle is in the crack between EB and EE
-		bool isEBEtaGap_;  // true if particle is in EB, and inside the eta gaps between modules
-		bool isEBPhiGap_;  // true if particle is in EB, and inside the phi gaps between modules
-		bool isEEDeeGap_;  // true if particle is in EE, and inside the gaps between dees
-		bool isEERingGap_; // true if particle is in EE, and inside the gaps between rings
+		Bool_t isEB_;        // true if particle is in ECAL Barrel
+		Bool_t isEE_;        // true if particle is in ECAL Endcaps
+		Bool_t isEBEEGap_;   // true if particle is in the crack between EB and EE
+		Bool_t isEBEtaGap_;  // true if particle is in EB, and inside the eta gaps between modules
+		Bool_t isEBPhiGap_;  // true if particle is in EB, and inside the phi gaps between modules
+		Bool_t isEEDeeGap_;  // true if particle is in EE, and inside the gaps between dees
+		Bool_t isEERingGap_; // true if particle is in EE, and inside the gaps between rings
 
 //Isolation ==================================
 
@@ -1182,7 +1185,7 @@ namespace TopTree
 		Int_t idCutBasedRobustHighEnergy_; // Simple cut based ID - Thresholds optimized for high energy electron (~TeV)
 		Int_t idCategorizedLoose_;         // Category based ID - Different loose thresholds on H/E, DeltaEta, DeltaPhi, SigmaEtaEta, eSeedOverPin for differents regions in the E/p vs fBrem plane
 		Int_t idCategorizedTight_;         // Category based ID - Different tight thresholds on H/E, DeltaEta, DeltaPhi, SigmaEtaEta, eSeedOverPin for differents regions in the E/p vs fBrem plane
-		Int_t idCiCVeryLoose_; //Cuts in Categories for 35x: https://twiki.cern.ch/twiki/bin/viewauth/CMS/SWGuideCategoryBasedElectronID#The_Cut_Variables
+		Int_t idCiCVeryLoose_;             //Cuts in Categories for 35x: https://twiki.cern.ch/twiki/bin/viewauth/CMS/SWGuideCategoryBasedElectronID#The_Cut_Variables
 		Int_t idCiCLoose_;
 		Int_t idCiCMedium_;
 		Int_t idCiCTight_;
@@ -1195,11 +1198,11 @@ namespace TopTree
 // Electron classification && fBrem ====================
 		Int_t classification_;             
 		Float_t fBrem_;
-		bool isConversion_;
+		Bool_t isConversion_;
 
 //Trigger Info ======================================
-		bool HLT_Ele10_SW_L1R_;
-		bool HLT_Ele15_SW_L1R_;
+		Bool_t HLT_Ele10_SW_L1R_;
+		Bool_t HLT_Ele15_SW_L1R_;
 	
 		ClassDef (TRootElectron,9);
 	};

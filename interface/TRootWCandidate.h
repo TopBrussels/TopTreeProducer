@@ -45,9 +45,9 @@ namespace TopTree
 
 		virtual TString typeName() const { return "TRootWCandidate"; }
        
-		bool isTLFormat() const { return TLFormat_;};
-		bool isLeptonic() const { return isLeptonic_; };
-		bool isHadronic() const { return!isLeptonic_; };
+		Bool_t isTLFormat() const { return TLFormat_;};
+		Bool_t isLeptonic() const { return isLeptonic_; };
+		Bool_t isHadronic() const { return!isLeptonic_; };
         
 		const TRootJet* QuarkP() const {return quarkP_;};
 		const TRootJet* QuarkQ() const {return quarkQ_;};
@@ -83,8 +83,8 @@ namespace TopTree
 		TLorentzVector TLquarkQ_;
 		TLorentzVector TLlepton_;
 		TLorentzVector neutrino_;
-		bool isLeptonic_;
-		bool TLFormat_;
+		Bool_t isLeptonic_;
+		Bool_t TLFormat_;
 
 		ClassDef (TRootWCandidate,1);
 	};

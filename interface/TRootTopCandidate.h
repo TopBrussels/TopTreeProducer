@@ -31,7 +31,7 @@ namespace TopTree
 		const TRootJet* B() const {return bquark_;};
 		TLorentzVector TLB() const {return TLbquark_;};
        
-		bool isTLFormat()const {return TLFormat_;};
+		Bool_t isTLFormat()const {return TLFormat_;};
 
 		friend std::ostream& operator<< (std::ostream& stream, const TRootTopCandidate& part)
 		{
@@ -45,7 +45,7 @@ namespace TopTree
 		TRootWCandidate Wcand_;
 		const TRootJet* bquark_;
 		TLorentzVector TLbquark_;
-		bool TLFormat_;
+		Bool_t TLFormat_;
 
 		ClassDef (TRootTopCandidate,1);
 	};

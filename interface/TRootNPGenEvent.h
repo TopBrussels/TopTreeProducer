@@ -17,7 +17,7 @@ namespace TopTree
 
 	public:
 		TRootNPGenEvent(){isNewPhysics_ = false;};
-		TRootNPGenEvent(const bool isNewPhysics, const vector<TRootGenTop> tops, const vector<TRootMCParticle> leptons, const vector<TRootMCParticle> quarks, const vector<TRootMCParticle> bquarks, const vector<TRootMCParticle> invisibleParticles, const vector<TRootMCParticle> neutrinos, const vector<TRootMCParticle> gluinos, const vector<TRootMCParticle> stops)
+		TRootNPGenEvent(const Bool_t isNewPhysics, const vector<TRootGenTop> tops, const vector<TRootMCParticle> leptons, const vector<TRootMCParticle> quarks, const vector<TRootMCParticle> bquarks, const vector<TRootMCParticle> invisibleParticles, const vector<TRootMCParticle> neutrinos, const vector<TRootMCParticle> gluinos, const vector<TRootMCParticle> stops)
 		{
 			isNewPhysics_ = isNewPhysics;
 			tops_ = tops;
@@ -46,17 +46,17 @@ namespace TopTree
 
 		virtual TString typeName() const { return "TRootNPGenEvent"; }
 
-		bool isNewPhysics() const {return isNewPhysics_;};
-		bool isThereTop() const {return tops_.size()>0? true:false;};
+		Bool_t isNewPhysics() const {return isNewPhysics_;};
+		Bool_t isThereTop() const {return tops_.size()>0? true:false;};
 
-		int numberOfTops() const {return tops_.size();};
-		int numberOfLeptons() const {return leptons_.size();};
-		int numberOfQuarks() const {return quarks_.size();};
-		int numberOfBQuarks() const {return bquarks_.size();};
-		int numberOfInvisibleParticles() const {return invisibleParticles_.size();};
-		int numberOfNeutrinos() const {return neutrinos_.size();};
-		int numberOfGluinos() const{ return gluinos_.size();};
-		int numberOfStops() const{ return stops_.size();};
+		Int_t numberOfTops() const {return tops_.size();};
+		Int_t numberOfLeptons() const {return leptons_.size();};
+		Int_t numberOfQuarks() const {return quarks_.size();};
+		Int_t numberOfBQuarks() const {return bquarks_.size();};
+		Int_t numberOfInvisibleParticles() const {return invisibleParticles_.size();};
+		Int_t numberOfNeutrinos() const {return neutrinos_.size();};
+		Int_t numberOfGluinos() const{ return gluinos_.size();};
+		Int_t numberOfStops() const{ return stops_.size();};
 
 		vector<TRootGenTop> tops() const {return tops_;};
 		vector<TRootMCParticle> leptons() const {return leptons_;};
@@ -79,7 +79,7 @@ namespace TopTree
 
 	private:
   
-		bool isNewPhysics_;
+		Bool_t isNewPhysics_;
 		vector<TRootGenTop> tops_;
 		vector<TRootMCParticle> leptons_;
 		vector<TRootMCParticle> quarks_;
