@@ -244,7 +244,7 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 			localElectron.setIDCategorizedTight(int(patElectron->electronID("eidTight")));
 			if(newId_)
 			{
-				localElectron.setIDCiCVeryLoose(int(patElectron->electronID("eidCiCVeryLoose")));
+/*				localElectron.setIDCiCVeryLoose(int(patElectron->electronID("eidCiCVeryLoose")));
 				localElectron.setIDCiCLoose(int(patElectron->electronID("eidCiCLoose")));
 				localElectron.setIDCiCMedium(int(patElectron->electronID("eidCiCMedium")));
 				localElectron.setIDCiCTight(int(patElectron->electronID("eidCiCTight")));
@@ -253,7 +253,7 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 				localElectron.setIDCiCHyperTight2(int(patElectron->electronID("eidCiCHyperTight2")));
 				localElectron.setIDCiCHyperTight3(int(patElectron->electronID("eidCiCHyperTight3")));
 				localElectron.setIDCiCHyperTight4(int(patElectron->electronID("eidCiCHyperTight4")));                           
-			}
+*/			}
 
 			if(patElectron->gsfTrack().isNonnull() && patElectron->gsfTrack().isAvailable())
 			{

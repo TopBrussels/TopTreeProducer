@@ -97,7 +97,7 @@ namespace TopTree
 			idCutBasedRobustHighEnergy_(-9999),
 			idCategorizedLoose_(-9999),
 			idCategorizedTight_(-9999),
-			idCiCVeryLoose_(-9999),
+/*			idCiCVeryLoose_(-9999),
 			idCiCLoose_(-9999),
 			idCiCMedium_(-9999),
 			idCiCTight_(-9999),
@@ -105,7 +105,7 @@ namespace TopTree
 			idCiCHyperTight1_(-9999),
 			idCiCHyperTight2_(-9999),
 			idCiCHyperTight3_(-9999),
-			idCiCHyperTight4_(-9999),
+			idCiCHyperTight4_(-9999),*/
 			classification_(-9999),
 			fBrem_(-9999.),
 			isConversion_(true),
@@ -193,7 +193,7 @@ namespace TopTree
 			idCutBasedRobustHighEnergy_(e.idCutBasedRobustHighEnergy_),
 			idCategorizedLoose_(e.idCategorizedLoose_),
 			idCategorizedTight_(e.idCategorizedTight_),
-			idCiCVeryLoose_(e.idCiCVeryLoose_),
+/*			idCiCVeryLoose_(e.idCiCVeryLoose_),
 			idCiCLoose_(e.idCiCLoose_),
 			idCiCMedium_(e.idCiCMedium_),
 			idCiCTight_(e.idCiCTight_),
@@ -201,7 +201,7 @@ namespace TopTree
 			idCiCHyperTight1_(e.idCiCHyperTight1_),
 			idCiCHyperTight2_(e.idCiCHyperTight2_),
 			idCiCHyperTight3_(e.idCiCHyperTight3_),
-			idCiCHyperTight4_(e.idCiCHyperTight4_),
+			idCiCHyperTight4_(e.idCiCHyperTight4_),*/
 			classification_(e.classification_),
 			fBrem_(e.fBrem_),
 			isConversion_(e.isConversion_),
@@ -289,7 +289,7 @@ namespace TopTree
 			idCutBasedRobustHighEnergy_(-9999),
 			idCategorizedLoose_(-9999),
 			idCategorizedTight_(-9999),
-			idCiCVeryLoose_(-9999),
+/*			idCiCVeryLoose_(-9999),
 			idCiCLoose_(-9999),
 			idCiCMedium_(-9999),
 			idCiCTight_(-9999),
@@ -297,7 +297,7 @@ namespace TopTree
 			idCiCHyperTight1_(-9999),
 			idCiCHyperTight2_(-9999),
 			idCiCHyperTight3_(-9999),
-			idCiCHyperTight4_(-9999),
+			idCiCHyperTight4_(-9999),*/
 			classification_(-9999),
 			fBrem_(-9999.),
 			isConversion_(true),
@@ -385,7 +385,7 @@ namespace TopTree
 			idCutBasedRobustHighEnergy_(-9999),
 			idCategorizedLoose_(-9999),
 			idCategorizedTight_(-9999),
-			idCiCVeryLoose_(-9999),
+/*			idCiCVeryLoose_(-9999),
 			idCiCLoose_(-9999),
 			idCiCMedium_(-9999),
 			idCiCTight_(-9999),
@@ -393,7 +393,7 @@ namespace TopTree
 			idCiCHyperTight1_(-9999),
 			idCiCHyperTight2_(-9999),
 			idCiCHyperTight3_(-9999),
-			idCiCHyperTight4_(-9999),
+			idCiCHyperTight4_(-9999),*/
 			classification_(-9999),
 			fBrem_(-9999.),
 			isConversion_(true),
@@ -481,7 +481,7 @@ namespace TopTree
 			idCutBasedRobustHighEnergy_(-9999),
 			idCategorizedLoose_(-9999),
 			idCategorizedTight_(-9999),
-			idCiCVeryLoose_(-9999),
+/*			idCiCVeryLoose_(-9999),
 			idCiCLoose_(-9999),
 			idCiCMedium_(-9999),
 			idCiCTight_(-9999),
@@ -489,7 +489,7 @@ namespace TopTree
 			idCiCHyperTight1_(-9999),
 			idCiCHyperTight2_(-9999),
 			idCiCHyperTight3_(-9999),
-			idCiCHyperTight4_(-9999),
+			idCiCHyperTight4_(-9999),*/
 			classification_(-9999),
 			fBrem_(-9999.),
 			isConversion_(true),
@@ -577,7 +577,7 @@ namespace TopTree
 			idCutBasedRobustHighEnergy_(-9999),
 			idCategorizedLoose_(-9999),
 			idCategorizedTight_(-9999),
-			idCiCVeryLoose_(-9999),
+/*			idCiCVeryLoose_(-9999),
 			idCiCLoose_(-9999),
 			idCiCMedium_(-9999),
 			idCiCTight_(-9999),
@@ -585,7 +585,7 @@ namespace TopTree
 			idCiCHyperTight1_(-9999),
 			idCiCHyperTight2_(-9999),
 			idCiCHyperTight3_(-9999),
-			idCiCHyperTight4_(-9999),
+			idCiCHyperTight4_(-9999),*/
 			classification_(-9999),
 			fBrem_(-9999.),
 			isConversion_(true),
@@ -673,7 +673,7 @@ namespace TopTree
 			idCutBasedRobustHighEnergy_(-9999),
 			idCategorizedLoose_(-9999),
 			idCategorizedTight_(-9999),
-			idCiCVeryLoose_(-9999),
+/*			idCiCVeryLoose_(-9999),
 			idCiCLoose_(-9999),
 			idCiCMedium_(-9999),
 			idCiCTight_(-9999),
@@ -681,7 +681,7 @@ namespace TopTree
 			idCiCHyperTight1_(-9999),
 			idCiCHyperTight2_(-9999),
 			idCiCHyperTight3_(-9999),
-			idCiCHyperTight4_(-9999),
+			idCiCHyperTight4_(-9999),*/
 			classification_(-9999),
 			fBrem_(-9999.),
 			isConversion_(true),
@@ -850,7 +850,7 @@ namespace TopTree
 		Int_t isRobustHighEnergy() const{ return idCutBasedRobustHighEnergy_; }
 		Int_t isLoose() const { return idCategorizedLoose_; }
 		Int_t isTight() const { return idCategorizedTight_; }
-		Int_t CiCVeryLooseId() const { return idCiCVeryLoose_; }
+/*		Int_t CiCVeryLooseId() const { return idCiCVeryLoose_; }
 		Int_t CiCLooseId() const { return idCiCLoose_; }
 		Int_t CiCMediumId() const { return idCiCMedium_; }
 		Int_t CiCTightId() const { return idCiCTight_; }
@@ -858,7 +858,7 @@ namespace TopTree
 		Int_t CiCHyperTightId_1() const { return idCiCHyperTight1_; }
 		Int_t CiCHyperTightId_2() const{ return idCiCHyperTight2_; }
 		Int_t CiCHyperTightId_3() const{ return idCiCHyperTight3_; }
-		Int_t CiCHyperTightId_4() const{ return idCiCHyperTight4_; }
+		Int_t CiCHyperTightId_4() const{ return idCiCHyperTight4_; } */
 
 		Float_t fbrem() const { return fBrem_; };
 		Int_t numberOfBrems() const { return (basicClusterSize() - 1); }
@@ -1024,7 +1024,7 @@ namespace TopTree
 		void setIDCategorizedLoose(Int_t idCutBasedCategorizedLoose) { idCategorizedLoose_ = idCutBasedCategorizedLoose; }
 		void setIDCategorizedTight(Int_t idCutBasedCategorizedTight) { idCategorizedTight_ = idCutBasedCategorizedTight; }
 
-		void setIDCiCVeryLoose(Int_t cicVL) { idCiCVeryLoose_ = cicVL; }
+/*		void setIDCiCVeryLoose(Int_t cicVL) { idCiCVeryLoose_ = cicVL; }
 		void setIDCiCLoose(Int_t cicL) { idCiCLoose_ = cicL; }
 		void setIDCiCMedium(Int_t cicM) { idCiCMedium_ = cicM; }
 		void setIDCiCTight(Int_t cicT) { idCiCTight_ = cicT; }
@@ -1032,7 +1032,7 @@ namespace TopTree
 		void setIDCiCHyperTight1(Int_t cicHT1) { idCiCHyperTight1_ = cicHT1; }
 		void setIDCiCHyperTight2(Int_t cicHT2) { idCiCHyperTight2_ = cicHT2; }
 		void setIDCiCHyperTight3(Int_t cicHT3) { idCiCHyperTight3_ = cicHT3; }
-		void setIDCiCHyperTight4(Int_t cicHT4) { idCiCHyperTight4_ = cicHT4; }
+		void setIDCiCHyperTight4(Int_t cicHT4) { idCiCHyperTight4_ = cicHT4; } */
 
 		void setFbrem(Float_t f) { fBrem_ = f; }
 		void setClassification(Int_t i) { classification_ = i; }
@@ -1165,7 +1165,9 @@ namespace TopTree
 		Int_t idCutBasedRobustHighEnergy_; // Simple cut based ID - Thresholds optimized for high energy electron (~TeV)
 		Int_t idCategorizedLoose_;         // Category based ID - Different loose thresholds on H/E, DeltaEta, DeltaPhi, SigmaEtaEta, eSeedOverPin for differents regions in the E/p vs fBrem plane
 		Int_t idCategorizedTight_;         // Category based ID - Different tight thresholds on H/E, DeltaEta, DeltaPhi, SigmaEtaEta, eSeedOverPin for differents regions in the E/p vs fBrem plane
-		Int_t idCiCVeryLoose_;             //Cuts in Categories for 35x: https://twiki.cern.ch/twiki/bin/viewauth/CMS/SWGuideCategoryBasedElectronID#The_Cut_Variables
+
+// New Identification
+/*		Int_t idCiCVeryLoose_;             //Cuts in Categories for 35x: https://twiki.cern.ch/twiki/bin/viewauth/CMS/SWGuideCategoryBasedElectronID#The_Cut_Variables
 		Int_t idCiCLoose_;
 		Int_t idCiCMedium_;
 		Int_t idCiCTight_;
@@ -1173,7 +1175,7 @@ namespace TopTree
 		Int_t idCiCHyperTight1_;
 		Int_t idCiCHyperTight2_;
 		Int_t idCiCHyperTight3_;
-		Int_t idCiCHyperTight4_;
+		Int_t idCiCHyperTight4_;*/
 
 // Electron classification && fBrem ====================
 		Int_t classification_;             
