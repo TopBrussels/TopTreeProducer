@@ -18,7 +18,7 @@ then
 	
 	if [ $1 == "dcap" ];then
 
-	  for i in $(ls $2);do
+	  for i in $(ls $2 | grep -v BADFILE);do
 
 	    file="$file;dcap://maite.iihe.ac.be$2/$i"
 

@@ -77,7 +77,7 @@ int main(int argc, char** argv){
 
   for (int fileID=0; fileID < fileNames.size(); fileID++) {
   
-    cout << fileNames.at(fileID) << endl;
+    //cout << fileNames.at(fileID) << endl;
 
     TFile* f = TFile::Open(fileNames.at(fileID).c_str());
     
@@ -132,14 +132,14 @@ int main(int argc, char** argv){
 	  className="TopTree::TRootVertex";
 	
 
-	cout << setw(8) << "- " << className << setw(5) << " -> " << "\"" << ObjName.substr(0,position) << "\""  << endl;
+	cout << "- " << className << setw(5) << " -> " << "\"" << ObjName.substr(0,position) << "\""  << endl;
    
       }
     }
 
   }
 
-  cout << "\n* The TopTree file contains " << nEvents << " events\n" << endl;
+  //cout << "\n* The TopTree file contains " << nEvents << " events\n" << endl;
 
 
 }
