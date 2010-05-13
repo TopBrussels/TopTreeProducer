@@ -28,7 +28,8 @@ public:
 	
 	HLTAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig) :
 		verbosity_(0)
-		,triggerResultsTag_(producersNames.getParameter<edm::InputTag> ("hltProducer"))
+		,triggerResultsTag1st_(producersNames.getParameter<edm::InputTag> ("hltProducer1st"))
+		,triggerResultsTag2nd_(producersNames.getParameter<edm::InputTag> ("hltProducer2nd"))
 		,triggerResultsTag8E29_(producersNames.getParameter<edm::InputTag> ("hltProducer8E29"))
   		,triggerNames_()
   		,triggerNames8E29_()
@@ -80,11 +81,13 @@ public:
 private:
 	int verbosity_;
 	
-	edm::InputTag triggerResultsTag_;				// Input tag for TriggerResults
-	edm::InputTag triggerResultsTag8E29_;			// Input tag for TriggerResults8E29
+	edm::InputTag triggerResultsTag_;		// Input tag for TriggerResults, final choice
+	edm::InputTag triggerResultsTag1st_;	// Input tag for TriggerResults, 1st choice
+	edm::InputTag triggerResultsTag2nd_;	// Input tag for TriggerResults, 2nd choice
+	edm::InputTag triggerResultsTag8E29_;	// Input tag for TriggerResults8E29
 
-	edm::TriggerNames triggerNames_;					// TriggerNames class
-	edm::TriggerNames triggerNames8E29_;			// TriggerNames8E29 class
+	edm::TriggerNames triggerNames_;			// TriggerNames class
+	edm::TriggerNames triggerNames8E29_;	// TriggerNames8E29 class
 
 	bool doHLT_;
 	bool doHLT8E29_;

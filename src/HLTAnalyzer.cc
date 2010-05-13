@@ -8,8 +8,24 @@ void HLTAnalyzer::init(const edm::Event& iEvent, TRootEvent* rootEvent)
 	
 	if(doHLT_)
 	{
-		edm::Handle<edm::TriggerResults> trigResults;
-		try {iEvent.getByLabel(triggerResultsTag_,trigResults);} catch (...) {;}
+		edm::Handle<edm::TriggerResults> trigResults, trigResults1st, trigResults2nd;
+		try {iEvent.getByLabel(triggerResultsTag1st_,trigResults1st);} catch (...) {;}
+		try {iEvent.getByLabel(triggerResultsTag2nd_,trigResults2nd);} catch (...) {;}
+		if(trigResults1st.isValid())
+		{
+			trigResults = trigResults1st;
+			triggerResultsTag_ = triggerResultsTag1st_;
+		}
+		else if(trigResults2nd.isValid())
+		{
+			trigResults = trigResults2nd;
+			triggerResultsTag_ = triggerResultsTag2nd_;
+		}
+		else
+		{
+			trigResults = trigResults1st;
+			triggerResultsTag_ = triggerResultsTag1st_;
+		}
 		triggerNames_=iEvent.triggerNames(*trigResults);
 		hltNames_=triggerNames_.triggerNames();
 		const unsigned int n(hltNames_.size());

@@ -25,13 +25,9 @@ process.GlobalTag.globaltag = cms.string('MC_3XY_V25::All')
 # pi0 discrimination variables
 #process.load("RecoEcal.EgammaClusterProducers.piZeroDiscriminators_cfi")
 
-# necessary for special calculation of impact parameter
-process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
-
 process.maxEvents = cms.untracked.PSet(
     input = cms.untracked.int32(-1)
 )
-
 
 process.source = cms.Source("PoolSource",
 #        duplicateCheckMode = cms.untracked.string('noDuplicateCheck'),
@@ -74,7 +70,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 
 		# What is written to rootuple		    
 		doHLT = cms.untracked.bool(True),
-		doHLT8E29 = cms.untracked.bool(True),
+		doHLT8E29 = cms.untracked.bool(False),
 		doMC = cms.untracked.bool(True),
 		doPDFInfo = cms.untracked.bool(False),
 		signalGenerator = cms.untracked.string('PYTHIA'),
@@ -128,7 +124,8 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 
 	producersNamesRECO = cms.PSet(
 		dataType = cms.untracked.string("RECO"), 
-		hltProducer = cms.InputTag("TriggerResults","","HLT"),
+		hltProducer1st = cms.InputTag("TriggerResults","","REDIGI"),
+		hltProducer2nd = cms.InputTag("TriggerResults","","HLT2"),
 		hltProducer8E29 = cms.InputTag("TriggerResults","","HLT8E29"),
 		genParticlesProducer = cms.InputTag("genParticles"),
 		primaryVertexProducer = cms.InputTag("offlinePrimaryVertices"),
@@ -149,7 +146,8 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 
 	producersNamesAOD = cms.PSet(
 		dataType = cms.untracked.string("AOD"), 
-		hltProducer = cms.InputTag("TriggerResults","","HLT"),
+		hltProducer1st = cms.InputTag("TriggerResults","","REDIGI"),
+		hltProducer2nd = cms.InputTag("TriggerResults","","HLT2"),
 		hltProducer8E29 = cms.InputTag("TriggerResults","","HLT8E29"),
 		genParticlesProducer = cms.InputTag("genParticles"),
 		primaryVertexProducer = cms.InputTag("offlinePrimaryVertices"),
@@ -170,7 +168,8 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 
 	producersNamesPATAOD = cms.PSet(
 		dataType = cms.untracked.string("PATAOD"), 
-		hltProducer = cms.InputTag("TriggerResults","","HLT"),
+		hltProducer1st = cms.InputTag("TriggerResults","","REDIGI"),
+		hltProducer2nd = cms.InputTag("TriggerResults","","HLT2"),
 		hltProducer8E29 = cms.InputTag("TriggerResults","","HLT8E29"),
 		genParticlesProducer = cms.InputTag("genParticles"),
 		primaryVertexProducer = cms.InputTag("offlinePrimaryVertices"),
@@ -190,7 +189,8 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 
 	producersNamesPAT = cms.PSet(
 		dataType = cms.untracked.string("PAT"), 
-		hltProducer = cms.InputTag("TriggerResults","","HLT"),
+		hltProducer1st = cms.InputTag("TriggerResults","","HLT2"),
+		hltProducer2nd = cms.InputTag("TriggerResults","","REDIGI"),
 		hltProducer8E29 = cms.InputTag("TriggerResults","","HLT8E29"),
 		genParticlesProducer = cms.InputTag("genParticles"),
 		primaryVertexProducer = cms.InputTag("offlinePrimaryVertices"),

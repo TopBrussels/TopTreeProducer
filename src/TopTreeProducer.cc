@@ -24,7 +24,6 @@ TopTreeProducer::~TopTreeProducer()
 }
 
 
-
 // ------------ method called once each job just before starting event loop  ------------
 void TopTreeProducer::beginJob()
 {
@@ -105,6 +104,7 @@ void TopTreeProducer::beginJob()
 
 	if(doHLT8E29 || doHLT)
 	{
+		if(verbosity>0) cout << "HLT info will be added to rootuple" << endl;
 		hltAnalyzer_ = new HLTAnalyzer(producersNames_, myConfig_);
 		hltAnalyzer_->setVerbosity(verbosity);
 	}
@@ -330,12 +330,13 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		rootEvent->setNHighPurityTracks(numhighpurity);
 	}
 
+
 	// Trigger
 	rootEvent->setGlobalHLT(true);
 	rootEvent->setGlobalHLT8E29(true);
 	if(doHLT8E29 || doHLT)
 	{
-		if(verbosity>1) cout << endl << "Get TriggerResults..." << endl;
+		if(verbosity>1) std::cout << endl << "Get TriggerResults..." << std::endl;
 		if (nTotEvt_==1) hltAnalyzer_->init(iEvent, rootEvent);
 		hltAnalyzer_->process(iEvent, rootEvent);
 	}
