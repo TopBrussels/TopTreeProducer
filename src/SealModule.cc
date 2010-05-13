@@ -3,6 +3,6 @@
 
 #include "../interface/TopTreeProducer.h"
 
-DEFINE_SEAL_MODULE();
+//DEFINE_SEAL_MODULE();
 
-DEFINE_ANOTHER_FWK_MODULE(TopTreeProducer);
+DEFINE_FWK_MODULE(TopTreeProducer);
