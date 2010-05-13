@@ -26,8 +26,8 @@ class TowerRemover : public edm::EDProducer {
 
 	double DeltaR(double ,double,double ,double);
 	double DREleTwr_;
-	edm::InputTag src;
 	std::string electronCriteria;
+	edm::InputTag src;
 
 };
 
