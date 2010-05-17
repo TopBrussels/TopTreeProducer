@@ -6,6 +6,8 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
+#include <cstdlib>
+#include <cmath>
 
 using namespace std;
 

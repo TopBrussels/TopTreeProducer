@@ -205,7 +205,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		metProducer = cms.InputTag("patMETs"),
 		genEventProducer = cms.InputTag("genEvt"),
 		generalTrackLabel = cms.InputTag("generalTracks"), # to calculate the conversion flag
-		electronNewId = cms.untracked.bool(False), #for recent electronID recommanded by EGamma. still Not accepted by Top group
+		electronNewId = cms.untracked.bool(True), #for recent electronID recommanded by EGamma. still Not accepted by Top group
 		electronTriggerMatching = cms.untracked.bool(True), # to keep the triggerMatching Info -- Only for "PAT" data type
 		electronTriggerPaths = cms.untracked.vstring('HLT_Ele10_SW_L1R','HLT_Ele15_SW_L1R',)# for triggerMatching in electron. For the moment accept only two paths. To be fixed in future
 	)
