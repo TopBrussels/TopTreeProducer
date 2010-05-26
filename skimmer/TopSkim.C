@@ -1,3 +1,4 @@
+
 #include <memory>
 #include <string>
 #include <iostream>
@@ -287,55 +288,7 @@ int main()
 		
 		if( verbosity > 1 ) cout << "outRunInfos->nHLTEvents() = " << outRunInfos->nHLTEvents() << endl;
 		if( verbosity > 1 ) cout << "outRunInfos->nHLT8E29Events() = " << outRunInfos->nHLT8E29Events() << endl;
-		
-		if(nFile == 0)
-		{
-			outRunInfos = inRunInfos; // To fix!!!!!
-			hltAccept.resize(inRunInfos->nHLTPaths()); //initialized with zero's
-			hlt8E29Accept.resize(inRunInfos->nHLT8E29Paths()); //initialized with zero's
-		}
-		else
-		{
-			if(outRunInfos->nHLTPaths() != inRunInfos->nHLTPaths())
-			{
-				cerr << "Different number of HLT Paths in two files???" << endl;
-				cerr << "outRunInfos->nHLTPaths() = " << outRunInfos->nHLTPaths() << "inRunInfos->nHLTPaths() = " << inRunInfos->nHLTPaths() << endl;
-				cerr << "Check the input files!" << endl;
-				exit (4);
-			}
-			else
-			{
-				for(unsigned int i=0; i!=outRunInfos->nHLTPaths(); i++)
-				{
-					if(inRunInfos->hltNames(i) != outRunInfos->hltNames(i))
-					{
-						cerr << "Different name of the HLT paths between two files???" << endl;
-						cerr << "inRunInfos->hltNames("<<i<<")" << inRunInfos->hltNames(i) << "outRunInfos->hltNames("<<i<<")" << outRunInfos->hltNames(i) << endl;
-						exit (4);
-					}
-				}
-			}
-
-			if(outRunInfos->nHLT8E29Paths() != inRunInfos->nHLT8E29Paths())
-			{
-				cerr << "Different number of HLT8E29 Paths in two files???" << endl;
-				cerr << "outRunInfos->nHLT8E29Paths() = " << outRunInfos->nHLT8E29Paths() << "inRunInfos->nHLT8E29Paths() = " << inRunInfos->nHLT8E29Paths() << endl;
-				cerr << "Check the input files!" << endl;
-				exit (4);
-			}
-			else
-			{
-				for(unsigned int i=0; i!=outRunInfos->nHLT8E29Paths(); i++)
-				{
-					if(inRunInfos->hlt8E29Names(i) != outRunInfos->hlt8E29Names(i))
-					{
-						cerr << "Different name of the HLT8E29 paths between two files???" << endl;
-						cerr << "inRunInfos->hlt8E29Names("<<i<<")" << inRunInfos->hlt8E29Names(i) << "outRunInfos->hlt8E29Names("<<i<<")" << outRunInfos->hlt8E29Names(i) << endl;
-						exit (4);
-					}
-				}
-			}
-		}
+	      
 	
 		for(unsigned int j=0; j !=objectsToKeep.size(); j++)
 		{
@@ -365,12 +318,33 @@ int main()
 		unsigned int nTempEvents = (int) inEventTree->GetEntries();
 		nInEvents += nTempEvents;
 
+		vector<TopTree::TRootHLTInfo> tmpRunInfos = outRunInfos->copyHLTinfos();
+		vector<TopTree::TRootHLTInfo> tmpRunInfos8E29 = outRunInfos->copyHLTinfos8E29();
+
 		//loop over events
 		for(unsigned int ievt=0; ievt<nTempEvents; ievt++)
 		{
 			if( verbosity > 1 ) cout << ">>> Trying to get event " << ievt << endl;
 
 			inEventTree->GetEvent(ievt);
+
+			// updating HLT info
+
+			// The HLT info is stored per in the TRootRun. For file > 0, we just copy the elements from the hltInfos vector and it's done...
+			
+			if (outRunInfos->getHLTinfo(inEvent->runId()).RunID() == 0) // if this run is not yet in the vector, add it.
+			  tmpRunInfos.push_back(inRunInfos->getHLTinfo(inEvent->runId()));
+
+			outRunInfos->setHLTinfos(tmpRunInfos); // put the new vector in TRootRun
+
+			if (inRunInfos->copyHLTinfos8E29().size() > 0)
+			  if (outRunInfos->getHLTinfo8E29(inEvent->runId()).RunID() == 0) // if this run is not yet in the vector, add it.
+			    tmpRunInfos8E29.push_back(inRunInfos->getHLTinfo8E29(inEvent->runId()));
+
+			outRunInfos->setHLTinfos8E29(tmpRunInfos8E29); // put the new vector in TRootRun
+
+			if( verbosity > 1 ) cout << "outRunInfos->copyHLTinfos().size(): " << outRunInfos->copyHLTinfos().size() << endl;
+			if( verbosity > 1 ) cout << "outRunInfos->copyHLTinfos8E29().size(): " << outRunInfos->copyHLTinfos8E29().size() << endl;
 
 			if( verbosity > 1 ) cout << ">>> Analyzing event " << ievt << endl;
 			else if((int) ievt/10000 == (double) ievt/10000)  cout << ">>> Analyzing event " << ievt << endl;
@@ -861,40 +835,7 @@ int main()
 		if( verbosity > 1 ) cout << "Analyzing input file " << inFileName[nFile] << " finished!" << endl;
 
 	} // loop over input files
-	
-//	Some HLT related variables are impossible to calculate with the present information
-//	Set them to 987654321
-	if(verbosity > 0) cout << "Setting dummy HLT stuff to 987654321" << endl;
-
-	vector<unsigned int> tempVector, tempVector8E29;
-	tempVector.resize(outRunInfos->nHLTPaths());
-	tempVector8E29.resize(outRunInfos->nHLT8E29Paths());
-	for(unsigned int i=0; i!=outRunInfos->nHLTPaths(); i++)
-	{
-		tempVector[i] = 987654321;
-	}
-	for(unsigned int i=0; i!=outRunInfos->nHLT8E29Paths(); i++)
-	{
-		tempVector8E29[i] = 987654321;
-	}
-
-	if(verbosity > 0) cout << "Setting HLT stuff in TRootRun" << endl;
-
-	outRunInfos->setNHLTWasRun(987654321);
-	outRunInfos->setNHLTErrors(987654321);
-	outRunInfos->setHLTWasRun(tempVector);
-	outRunInfos->setHLTErrors(tempVector);
-	outRunInfos->setNHLT8E29WasRun(987654321);
-	outRunInfos->setNHLT8E29Errors(987654321);
-	outRunInfos->setHLT8E29WasRun(tempVector8E29);
-	outRunInfos->setHLT8E29Errors(tempVector8E29);
-	
-	outRunInfos->setNHLTEvents(nOutEvents);
-	outRunInfos->setHLTAccept(hltAccept);
-	outRunInfos->setNHLTAccept(NHLTAccept);
-	outRunInfos->setNHLT8E29Events(nOutEvents);
-	outRunInfos->setHLT8E29Accept(hlt8E29Accept);
-	outRunInfos->setNHLT8E29Accept(NHLT8E29Accept);
+       
 
 	cout << "Filling outRunTree" << endl;
 	
