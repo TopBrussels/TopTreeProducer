@@ -23,6 +23,7 @@
 #include "../interface/TRootSemiLepEvent.h"
 #include "../interface/TRootXYZPoint.h"
 #include "../interface/TRootVertex.h"
+#include "../interface/TRootHLTInfo.h"
 #else
 #include "../interface/TRootRun.h"
 #include "../interface/TRootEvent.h"
@@ -48,6 +49,7 @@
 #include "../interface/TRootSemiLepEvent.h"
 #include "../interface/TRootXYZPoint.h"
 #include "../interface/TRootVertex.h"
+#include "../interface/TRootHLTInfo.h"
 #endif
 
 #ifdef __CINT__
@@ -79,5 +81,6 @@
 #pragma link C++ class TopTree::TRootSemiLepEvent;
 #pragma link C++ class TopTree::TRootXYZPoint;
 #pragma link C++ class TopTree::TRootVertex;
+#pragma link C++ class TopTree::TRootHLTInfo;
 
 #endif
