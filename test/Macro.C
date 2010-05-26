@@ -1,7 +1,7 @@
 #include <iomanip>
 #include "../interface/TRootMuon.h"
 #include "../interface/TRootElectron.h"
-#include "../interface/TRootJet.h"
+#include "../interface/TRootJe t.h"
 #include "../interface/TRootCaloJet.h"
 #include "../interface/TRootPFJet.h"
 #include "../interface/TRootMET.h"
@@ -12,6 +12,7 @@
 #include "../interface/TRootParticle.h"
 #include "../interface/TRootMCParticle.h"
 #include "../interface/TRootVertex.h"
+#include "../interface/TRootHLTInfo.h"
 
 #include <TFile.h>
 #include <TH1.h>
@@ -20,10 +21,13 @@
 #include <TBranch.h>
 #include <TTree.h>
 
+#include <fstream>
+#include <sstream>
+
 using namespace TopTree;
 
-void Macro(){
-        int verbosity                 = 5;
+int main(){
+        int verbosity                 = 1;
 	//0 muet
 	//1 Main Info
 	//2
@@ -31,8 +35,8 @@ void Macro(){
 	//4 Info for each event
 	//5 Debug
 
-	bool realData						= true;
-	bool doHLT                    = false;
+	bool realData						= false;
+	bool doHLT                    = true;
 	bool doMC                     = false;
 	bool doCaloJet                = true;
 	bool doMuon                   = false;
@@ -41,7 +45,7 @@ void Macro(){
 	bool doGenEvent               = false;
 
 	cout << "Opening file" << endl;
-	TFile* f = new TFile("TopTree_TTbar_Summer09_7TeV_fromPAT.root");
+	TFile* f = new TFile("21052010_123157_TOPTREE.root");
 	//TFile* f=new TFile("TopTree_pythia.root");
 	//TFile* f=new TFile("/user/jmmaes/CMSSW/CMSSW_2_2_4_Sanity/CMSSW_2_2_4/src/TopBrussels/TopTreeProducer/test/TopTree.root");
 	TTree* runTree = (TTree*) f->Get("runTree");
@@ -117,9 +121,9 @@ void Macro(){
 	// HLT Run Summary
 	if (doHLT)
 	{
-		cout << "runTree->GetEntries()="<<runTree->GetEntries()<<endl;
-		runTree->GetEvent(0);
-		cout << dec << endl;
+	  cout << "runTree->GetEntries()="<<runTree->GetEntries()<<endl;
+	  runTree->GetEvent(0);
+	  cout << dec << endl;
 		cout << "HLT-Report " << "---------- Event  Summary ------------\n";
 		cout << "HLT-Report"
 				<< " Events total = " << runInfos->nHLTEvents()
@@ -129,28 +133,19 @@ void Macro(){
 				<< "\n";
 
 		cout << endl;
-		cout << "HLT-Report " << "---------- HLTrig Summary ------------\n";
-		cout << "HLT-Report   HLT Bit#     WasRun     Passed     Errors  Name\n";
-
-		for (unsigned int i=0; i!=runInfos->nHLTPaths(); ++i)
-		{
-			printf("HLT-Report %10u %10u %10u %10u  ", i, runInfos->hltWasRun(i), runInfos->hltAccept(i), runInfos->hltErrors(i));
-			cout << runInfos->hltNames(i) << endl;
-		}
-
-		cout << endl;
+	
 	}
 
    //Declaration of histograms
    TH1F h_PtJets("PtCaloJets","Pt of caloJets",50,0,500); 
 	TH1F h_distrib("distrib","",100,-1,1);
 	//
+		vector< vector<int> > runLumiInfo;
 
 	if(realData)
 	{
 		if(verbosity > 3) cout << "Reading in JSON file " << endl;
 
-		vector< vector<int> > runLumiInfo;
 		string inputJSON;
 
 		ifstream myfile ("JSON_test.txt");
@@ -206,10 +201,15 @@ void Macro(){
 	}
 
 	unsigned int nEvents = (int)eventTree->GetEntries();
-	
+
+	//nEvents = 5000;
+
+	int previous_run = 0;
+
 	for(unsigned int ievt=0; ievt<nEvents; ievt++)
 	{
 		eventTree->GetEvent(ievt);
+		runTree->GetEvent(0);
 		if(verbosity>3) cout <<"event "<< ievt <<endl;
 		if(verbosity>3) cout<<"event->nb()="<<event->nb()<<endl;
 
@@ -224,12 +224,46 @@ void Macro(){
 			}
 		}
 		
-		if(goodEvent == false) continue;
-
 		if (doHLT)
 		{
-			for(unsigned int ipath=36; ipath<40; ipath++) cout << "   " << runInfos->hltNames(ipath) << " decision=" << event->trigHLT(ipath) <<endl;
+
+		  TopTree::TRootHLTInfo hltInfo = runInfos->getHLTinfo(event->runId()); // get the triggerconfiguration for this run
+		  
+		  // get the trigger bits
+		  
+		  int HLT_Muon_bit = hltInfo.hltPath("HLT_Mu9");
+		  
+		  if(verbosity>5) cout << "HLT_Muon_bit: " <<  HLT_Muon_bit << endl;
+
+		  if( !event->trigHLT(HLT_Muon_bit) ) // skip event if it doesn't pass our selected muon trigger
+
+		    goodEvent=false;
+
+		  // print hlt summary for every new run 
+
+		  if ( event->runId() != previous_run ) {
+
+		    previous_run = event->runId();
+
+		    stringstream runID; runID << event->runId();
+		  
+		    cout << "HLT-Report " << "---------- HLTrig Summary for RUN "+runID.str()+" ------------\n";
+		    cout << "HLT-Report   HLT Bit#     WasRun     Passed     Errors  Name\n";
+
+		    for (unsigned int i=0; i!=hltInfo.nHLTPaths(); ++i)
+		      {
+
+			printf("HLT-Report %10u %10u %10u %10u  ", i, hltInfo.hltWasRun(i), hltInfo.hltAccept(i), hltInfo.hltErrors(i));
+			cout << hltInfo.hltNames(i) << endl;
+		      }
+		    
+		    cout << endl;
+		    //for(unsigned int ipath=36; ipath<40; ipath++) cout << "   " << runInfos->hltNames(ipath) << " decision=" << event->trigHLT(ipath) <<endl;
+		  }
+
 		}
+
+		if(goodEvent == false) continue; // skip events that don't pass JSON or HLT
 
 		//access to muons
 		if(doMuon){
