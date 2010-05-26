@@ -109,6 +109,12 @@ private:
 	std::vector<unsigned int> hltAccept8E29_;		// # of events accepted by HLT[i]
 	std::vector<unsigned int> hltErrors8E29_;		// # of events with error in HLT[i]
 	std::vector<std::string>  hltNames8E29_;		// name of each HLT algorithm
+
+
+	// new HLTInfo container
+
+	vector<TopTree::TRootHLTInfo> hltInfos_;
+	vector<TopTree::TRootHLTInfo> hltInfos8E29_;
 	
 };
 
