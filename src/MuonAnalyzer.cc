@@ -48,7 +48,7 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
 
 	edm::Handle<reco::BeamSpot> beamSpotHandle;
 	iEvent.getByLabel("offlineBeamSpot", beamSpotHandle);
-	const TrackBase::Point & beamSpot = beamSpotHandle->position();
+	const reco::TrackBase::Point & beamSpot = reco::TrackBase::Point(beamSpotHandle->x0(), beamSpotHandle->y0(), beamSpotHandle->z0());
 
 	if (verbosity_ > 1)
 		std::cout << "   Number of muons = " << nMuons << "   Label: " << muonProducer_.label () << "   Instance: " << muonProducer_.instance () << std::endl;
@@ -70,7 +70,6 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
 
 		localMuon.setIsoR03 (muon->isolationR03 ().emEt, muon->isolationR03 ().hadEt, muon->isolationR03 ().hoEt, muon->isolationR03 ().sumPt, muon->isolationR03 ().nTracks, muon->isolationR03 ().nJets);
 
-
 		localMuon.setValidity (muon->isEnergyValid (), muon->isMatchesValid (), muon->isIsolationValid ());
 
 		localMuon.setDirection (muon->time ().direction ());
@@ -79,7 +78,7 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
 
 		if(muon->innerTrack().isNonnull() && muon->innerTrack().isAvailable())
 		{
-			localMuon.SetD0 (muon->innerTrack()->dxy(beamSpot));
+			localMuon.SetD0 ( - (muon->innerTrack()->dxy(beamSpot)) );
 			localMuon.SetD0Error (sqrt(pow(muon->innerTrack()->dxyError(),2)+pow(beamSpotHandle->BeamWidthX(),2)+ pow(beamSpotHandle->BeamWidthY(),2)));
 			localMuon.SetDZ (muon->innerTrack()->dz(beamSpot));
 			localMuon.SetDZError (muon->innerTrack()->dzError());
