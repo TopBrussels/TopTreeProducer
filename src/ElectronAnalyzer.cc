@@ -59,6 +59,10 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 
 	edm::Handle< reco::VertexCollection > pvHandle;
 
+	edm::Handle<reco::BeamSpot> beamSpotHandle;
+	iEvent.getByLabel("offlineBeamSpot", beamSpotHandle);
+	const reco::TrackBase::Point & beamSpot = reco::TrackBase::Point(beamSpotHandle->x0(), beamSpotHandle->y0(), beamSpotHandle->z0());
+
 	if(verbosity_>1) std::cout << "   Number of electrons = " << nElectrons << "   Label: " << electronProducer_.label() << "   Instance: " << electronProducer_.instance() << std::endl;
 
 	for (unsigned int j=0; j<nElectrons; j++)
@@ -118,8 +122,8 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 			localElectron.setPixelLayersWithMeasurement(hit.pixelLayersWithMeasurement());
 			localElectron.setStripLayersWithMeasurement(hit.stripLayersWithMeasurement());
 
-			localElectron.setd0(gsfTrack->d0());
-			localElectron.setd0Error(gsfTrack->d0Error());
+			localElectron.setd0( gsfTrack->dxy(beamSpot) );
+			localElectron.setd0Error( sqrt( pow(gsfTrack->dxyError(),2) + pow(beamSpotHandle->BeamWidthX(),2) + pow(beamSpotHandle->BeamWidthY(),2) ) );
 			localElectron.setdsz(gsfTrack->dsz());
 			localElectron.setdszError(gsfTrack->dszError());
 
