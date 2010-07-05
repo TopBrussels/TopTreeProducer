@@ -57,17 +57,17 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet, std::string dataType)
 		localJet.setMaxDistance(jet->maxDistance());
 
 		// Variables from pat::Jet (Basic)
-		localJet.setBtag_combinedSecondaryVertexBJetTags(patJet->bDiscriminator("combinedSecondaryVertexBJetTags"));
-		localJet.setBtag_combinedSecondaryVertexMVABJetTags(patJet->bDiscriminator("combinedSecondaryVertexMVABJetTags"));
-		localJet.setBtag_impactParameterMVABJetTags(patJet->bDiscriminator("impactParameterMVABJetTags"));
 		localJet.setBtag_jetBProbabilityBJetTags(patJet->bDiscriminator("jetBProbabilityBJetTags"));
 		localJet.setBtag_jetProbabilityBJetTags(patJet->bDiscriminator("jetProbabilityBJetTags"));
-		localJet.setBtag_simpleSecondaryVertexBJetTags(patJet->bDiscriminator("simpleSecondaryVertexBJetTags"));
-		localJet.setBtag_softElectronBJetTags(patJet->bDiscriminator("softElectronBJetTags"));
-		localJet.setBtag_softMuonBJetTags(patJet->bDiscriminator("softMuonBJetTags"));
-		localJet.setBtag_softMuonNoIPBJetTags(patJet->bDiscriminator("softMuonNoIPBJetTags"));
-		localJet.setBtag_trackCountingHighEffBJetTags(patJet->bDiscriminator("trackCountingHighEffBJetTags"));
 		localJet.setBtag_trackCountingHighPurBJetTags(patJet->bDiscriminator("trackCountingHighPurBJetTags"));
+		localJet.setBtag_trackCountingHighEffBJetTags(patJet->bDiscriminator("trackCountingHighEffBJetTags"));
+		localJet.setBtag_simpleSecondaryVertexHighEffBJetTags(patJet->bDiscriminator("simpleSecondaryVertexHighEffBJetTags"));
+		localJet.setBtag_simpleSecondaryVertexHighPurBJetTags(patJet->bDiscriminator("simpleSecondaryVertexHighPurBJetTags"));
+		localJet.setBtag_combinedSecondaryVertexBJetTags(patJet->bDiscriminator("combinedSecondaryVertexBJetTags"));
+		localJet.setBtag_combinedSecondaryVertexMVABJetTags(patJet->bDiscriminator("combinedSecondaryVertexMVABJetTags"));
+		localJet.setBtag_softMuonBJetTags(patJet->bDiscriminator("softMuonBJetTags"));
+		localJet.setBtag_softMuonByPtBJetTags(patJet->bDiscriminator("softMuonByPtBJetTags"));
+		localJet.setBtag_softMuonByIP3dBJetTags(patJet->bDiscriminator("softMuonByIP3dBJetTags"));
 
 		localJet.setBCorrection(patJet->corrFactor(patJet->corrStep(), "b"));
 		localJet.setCCorrection(patJet->corrFactor(patJet->corrStep(), "c"));
