@@ -110,7 +110,8 @@ namespace TopTree
 			fBrem_(-9999.),
 			isConversion_(true),
 			HLT_Ele10_SW_L1R_(false),
-			HLT_Ele15_SW_L1R_(false)
+			HLT_Ele15_SW_L1R_(false),
+			swissCross_(-9999.)
 			{;}
 
 		TRootElectron(const TRootElectron& e) :
@@ -206,7 +207,8 @@ namespace TopTree
 			fBrem_(e.fBrem_),
 			isConversion_(e.isConversion_),
 			HLT_Ele10_SW_L1R_(e.HLT_Ele10_SW_L1R_),
-			HLT_Ele15_SW_L1R_(e.HLT_Ele15_SW_L1R_)
+			HLT_Ele15_SW_L1R_(e.HLT_Ele15_SW_L1R_),
+			swissCross_(e.swissCross_)
 			{;}
 
 		TRootElectron(Double_t px, Double_t py, Double_t pz, Double_t e) :
@@ -302,7 +304,8 @@ namespace TopTree
 			fBrem_(-9999.),
 			isConversion_(true),
 			HLT_Ele10_SW_L1R_(false),
-			HLT_Ele15_SW_L1R_(false)
+			HLT_Ele15_SW_L1R_(false),
+			swissCross_(-9999.)
 			{;}
 	
 		TRootElectron(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z) :
@@ -398,7 +401,8 @@ namespace TopTree
 			fBrem_(-9999.),
 			isConversion_(true),
 			HLT_Ele10_SW_L1R_(false),
-			HLT_Ele15_SW_L1R_(false)
+			HLT_Ele15_SW_L1R_(false),
+			swissCross_(-9999.)
 			{;}
 
 		TRootElectron(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z, Int_t type, Int_t charge) :
@@ -494,7 +498,8 @@ namespace TopTree
 			fBrem_(-9999.),
 			isConversion_(true),
 			HLT_Ele10_SW_L1R_(false),
-			HLT_Ele15_SW_L1R_(false)
+			HLT_Ele15_SW_L1R_(false),
+			swissCross_(-9999.)
 			{;}
 
 		TRootElectron(const TLorentzVector &momentum) :
@@ -590,7 +595,8 @@ namespace TopTree
 			fBrem_(-9999.),
 			isConversion_(true),
 			HLT_Ele10_SW_L1R_(false),
-			HLT_Ele15_SW_L1R_(false)
+			HLT_Ele15_SW_L1R_(false),
+			swissCross_(-9999.)
 			{;}
 
 		TRootElectron(const TLorentzVector &momentum, const TVector3 &vertex, Int_t type, Float_t charge) :
@@ -686,7 +692,8 @@ namespace TopTree
 			fBrem_(-9999.),
 			isConversion_(true),
 			HLT_Ele10_SW_L1R_(false),
-			HLT_Ele15_SW_L1R_(false)
+			HLT_Ele15_SW_L1R_(false),
+			swissCross_(-9999.)
 			{;}
 
 		~TRootElectron() {;}
@@ -871,6 +878,8 @@ namespace TopTree
 			if(input == "HLT_Ele15_SW_L1R") return HLT_Ele15_SW_L1R_;
 			return false;
 		}
+		
+		Float_t swissCross() const { return swissCross_; }
 
 
 		//setters
@@ -1042,6 +1051,8 @@ namespace TopTree
 			if(input == "HLT_Ele10_SW_L1R") HLT_Ele10_SW_L1R_ = is;
 			if(input == "HLT_Ele15_SW_L1R") HLT_Ele15_SW_L1R_ = is;
 		}
+		
+		void setSwissCross(Float_t swissCross) { swissCross_ = swissCross; }
 
 		friend std::ostream& operator<< (std::ostream& stream, const TRootElectron& electron) {
 			stream << "TRootElectron - Charge=" << electron.charge() << " (Et,eta,phi)=("<< electron.Et() <<","<< electron.Eta() <<","<< electron.Phi() << ")"
@@ -1185,6 +1196,9 @@ namespace TopTree
 //Trigger Info ======================================
 		Bool_t HLT_Ele10_SW_L1R_;
 		Bool_t HLT_Ele15_SW_L1R_;
+
+// Noise Cleanin
+		Float_t swissCross_;		// swissCross variable to reject electrons fron ECAL spikes
 	
 		ClassDef (TRootElectron,9);
 	};

@@ -63,6 +63,10 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 	iEvent.getByLabel("offlineBeamSpot", beamSpotHandle);
 	const reco::TrackBase::Point & beamSpot = reco::TrackBase::Point(beamSpotHandle->x0(), beamSpotHandle->y0(), beamSpotHandle->z0());
 
+	edm::Handle<EcalRecHitCollection> recHits;
+	iEvent.getByLabel(edm::InputTag("ecalRecHit","EcalRecHitsEB"), recHits);
+	const EcalRecHitCollection *myRecHits = recHits.product();
+
 	if(verbosity_>1) std::cout << "   Number of electrons = " << nElectrons << "   Label: " << electronProducer_.label() << "   Instance: " << electronProducer_.instance() << std::endl;
 
 	for (unsigned int j=0; j<nElectrons; j++)
@@ -113,6 +117,15 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 		localElectron.setEnergyScaleCorrected( electron->isEcalEnergyCorrected());
 		localElectron.setMomentumCorrected( electron->isMomentumCorrected()) ;
 		localElectron.setTrackMomentumError(electron->trackMomentumError());
+
+		if(electron->ecalDrivenSeed()>0 && fabs(electron->superCluster()->eta())<1.4442)
+		{
+			const reco::CaloClusterPtr seed = electron->superCluster()->seed(); // seed cluster                                 
+			const   DetId seedId = seed->seed();
+			EcalSeverityLevelAlgo severity;
+			double mySwissCross =  severity.swissCross(seedId, *myRecHits);
+			localElectron.setSwissCross(mySwissCross);
+		}
 
 		reco::GsfTrackRef gsfTrack = electron->gsfTrack();
 		if ( gsfTrack.isNonnull() )
