@@ -121,7 +121,7 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 		if(electron->ecalDrivenSeed()>0 && fabs(electron->superCluster()->eta())<1.4442)
 		{
 			const reco::CaloClusterPtr seed = electron->superCluster()->seed(); // seed cluster                                 
-			const   DetId seedId = seed->seed();
+			const DetId seedId = seed->seed();
 			EcalSeverityLevelAlgo severity;
 			double mySwissCross =  severity.swissCross(seedId, *myRecHits);
 			localElectron.setSwissCross(mySwissCross);

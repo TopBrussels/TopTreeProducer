@@ -89,7 +89,7 @@ void METAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootMET)
 
 		}
 
-		if( dataType_=="PATAOD" )
+		if( dataType_=="PAT" )
 		{
 			// Some specific methods to pat::MET
 			const pat::MET *patMET = dynamic_cast<const pat::MET*>(&*met);
@@ -114,6 +114,8 @@ void METAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootMET)
 				,patMET->CaloMETPhiInpHF()
 				,patMET->CaloMETPhiInmHF()
 			);
+			
+			localMET.setSumEt(patMET->sumEt());
 
 			//pat::MET::UncorectionType ix;
 			//ix = pat::MET::uncorrALL;
