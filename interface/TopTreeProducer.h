@@ -36,6 +36,7 @@
 #include "../interface/CosmicMuonAnalyzer.h"
 #include "../interface/ElectronAnalyzer.h"
 #include "../interface/METAnalyzer.h"
+#include "../interface/MHTAnalyzer.h"
 #include "../interface/GenEventAnalyzer.h"
 #include "../interface/NPGenEventAnalyzer.h"
 #include "../interface/SpinCorrGenAnalyzer.h"
@@ -54,6 +55,7 @@
 #include "../interface/TRootCosmicMuon.h"
 #include "../interface/TRootElectron.h"
 #include "../interface/TRootMET.h"
+#include "../interface/TRootMHT.h"
 #include "../interface/TRootGenEvent.h"
 #include "../interface/TRootNPGenEvent.h"
 #include "../interface/TRootSpinCorrGen.h"
@@ -105,6 +107,7 @@ private:
 	bool doCosmicMuon;
 	bool doElectron;
 	bool doMET;
+	bool doMHT;
 	bool doGenEvent;
 	bool doNPGenEvent;
 	bool doSpinCorrGen;
@@ -131,6 +134,7 @@ private:
 	std::vector<std::vector<TClonesArray*> > vcosmicMuonTracks;
 	TClonesArray* electrons;
 	TClonesArray* met;
+	TClonesArray* mht;
 	TClonesArray* genEvent;
 	TClonesArray* NPgenEvent;
 	TClonesArray* spinCorrGen;
