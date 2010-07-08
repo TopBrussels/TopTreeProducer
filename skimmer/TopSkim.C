@@ -1,7 +1,7 @@
-
 #include <memory>
 #include <string>
 #include <iostream>
+#include <fstream>
 #include <sstream>
 #include <iomanip>
 #include <vector>
@@ -20,6 +20,7 @@
 #include "../interface/TRootCaloJet.h"
 #include "../interface/TRootGenJet.h"
 #include "../interface/TRootMET.h"
+#include "../interface/TRootMHT.h"
 #include "../interface/TRootGenEvent.h"
 #include "../interface/TRootNPGenEvent.h"
 #include "../interface/TRootSpinCorrGen.h"
@@ -51,6 +52,17 @@ struct keepObjects
 	float maxEta;
 	bool skipObjects;
 	int minNObjects;
+};
+
+struct options
+{
+	bool skimOnHLT;
+	string HLTPath1;
+	string HLTPath2;
+	bool HLTApplyAnd;
+	string TriggerMenu;
+	bool useJSON;
+	string JSONFile;
 };
 
 vector<keepObjects> parseObjects(TiXmlDocument doc, TTree* outEventTree)
@@ -192,6 +204,69 @@ vector<TString> parseFileName(TiXmlDocument doc, string name)
 	return inFileName;
 }
 
+options parseOptions(TiXmlDocument doc)
+{
+	options tempOptions;
+	TiXmlHandle hdl (&doc);
+	TiXmlNode *node = 0;
+	TiXmlElement *elem = 0;
+	bool nodeFound = false;
+	node = hdl.Node ();
+	for( node = node->FirstChild(); node; node = node->NextSibling() )
+	{
+		if (node->Value () == string("options") )
+		{
+			nodeFound = true;
+			elem = node->FirstChildElement ();
+			if(!elem)
+			{
+				cerr << "The node doesn't exist" << endl;
+				delete node;
+				delete elem;
+				exit (3);
+			}
+			while (elem)
+			{
+				int skimOnHLT = 0;
+				elem->QueryIntAttribute("skimOnHLT", &skimOnHLT);
+				if(skimOnHLT == 1)
+				{
+					tempOptions.skimOnHLT = true;
+					tempOptions.HLTPath1 = elem->Attribute("HLTPath1");
+					tempOptions.HLTPath2 = elem->Attribute("HLTPath2");
+					tempOptions.TriggerMenu = elem->Attribute("TriggerMenu");
+					int HLTApplyAnd = 0;
+					elem->QueryIntAttribute("HLTApplyAnd", &HLTApplyAnd);
+					if(HLTApplyAnd == 1) tempOptions.HLTApplyAnd = true;
+					else tempOptions.HLTApplyAnd = false;
+				}
+				else tempOptions.skimOnHLT = false;
+				
+				int useJSON = 0;
+				elem->QueryIntAttribute("useJSON", &useJSON);
+				if(useJSON == 1)
+				{
+					tempOptions.useJSON = true;
+					tempOptions.JSONFile = elem->Attribute("JSONFile");
+				}
+				else tempOptions.useJSON = false;
+				
+				elem = elem->NextSiblingElement ();	// iteration 
+			}
+		}
+	}
+
+	if(!nodeFound)
+	{
+		cerr << "The node doesn't exist" << endl;
+		delete node;
+		delete elem;
+		exit (2);
+	}
+	
+	return tempOptions;
+}
+
 int main()
 {
 	clock_t start = clock();
@@ -214,6 +289,13 @@ int main()
 	vector<TString> inFileName = parseFileName(doc, "inputdatasets");
 	
 	vector<TString> outFileName = parseFileName(doc, "outputfilename");
+	
+	options optionsToUse = parseOptions(doc);
+	cout << "options:" << endl;
+	cout << "HLTPath1 = " << optionsToUse.HLTPath1 << endl;
+	cout << "HLTPath2 = " << optionsToUse.HLTPath2 << endl;
+	cout << "HLTApplyAnd = " << optionsToUse.HLTApplyAnd << endl;
+	cout << "JSONFile = " << optionsToUse.JSONFile << endl;
 
 	cout << "output file: " << outFileName[0] << endl;
 
@@ -228,7 +310,7 @@ int main()
 	TRootEvent* outRootEvent = 0;
 	TTree* outEventTree = new TTree("eventTree", "Event Infos");
 	outEventTree->SetMaxTreeSize(ULONG_MAX);
-	outEventTree->Branch ("Event", "TopTree::TRootEvent", &outRootEvent);
+	outEventTree->Branch("Event", "TopTree::TRootEvent", &outRootEvent);
 	
 	cout << "Parsing objectsToKeep from xml file..." << endl;
 	
@@ -261,6 +343,66 @@ int main()
 	cout << "userInfo that will be added to the outEventTree:\n" << userInfo->GetString() << endl;
 	
 	outEventTree->GetUserInfo()->Add( userInfo );
+	
+	vector< vector<int> > runLumiInfo; // To store the info from the JSON file
+	
+	if(optionsToUse.useJSON)
+	{
+		if(verbosity > 3) cout << "Reading in JSON file " << endl;
+
+		string inputJSON;
+
+		ifstream myfile ( (optionsToUse.JSONFile).c_str() );
+		if (myfile.is_open())
+		{
+			getline (myfile,inputJSON); // Only the first line is needed
+			myfile.close();
+		}
+	
+		vector<string> splittedInputJSON;
+		size_t begin = 2, end = 2;
+
+		while(end < inputJSON.size())
+		{
+			end = inputJSON.find("]], \"",begin);
+			string splitted = inputJSON.substr(begin, end - begin + 1);
+			begin = end + 5;
+		
+			size_t tempEnd = splitted.find("\": [[", 0);
+			string runNr = splitted.substr(0, tempEnd);
+			stringstream ss(runNr);
+			int runNumber = 0;
+			ss >> runNumber;
+		
+			string remain = splitted.substr(tempEnd + 4, splitted.size() - ( tempEnd + 3 ) );
+			size_t tempEnd2 = remain.find("]", 0);
+			size_t tempBegin2 = 0;
+
+			while(tempEnd2 < remain.size())
+			{
+				string lumiInfo = remain.substr(tempBegin2 + 1, tempEnd2 - tempBegin2 - 1);
+				tempBegin2 = tempEnd2 + 3;
+				tempEnd2 = remain.find("]", tempBegin2);
+			
+				// parse lumiInfo string
+				size_t tempBegin3 = lumiInfo.find(", ",0);
+				string minLS = lumiInfo.substr(0,tempBegin3);
+				string maxLS = lumiInfo.substr(tempBegin3 + 2, lumiInfo.size());
+				int minLumiSection = 0;
+				int maxLumiSection = 0;
+				stringstream ssMin(minLS);		
+				stringstream ssMax(maxLS);
+				ssMin >> minLumiSection;
+				ssMax >> maxLumiSection;
+		
+				vector<int> tempInfo;
+				tempInfo.push_back(runNumber);
+				tempInfo.push_back(minLumiSection);
+				tempInfo.push_back(maxLumiSection);
+				runLumiInfo.push_back(tempInfo);
+			}
+		}
+	}
 
 	unsigned int nOutEvents = 0, nInEvents = 0, NHLTAccept = 0, NHLT8E29Accept = 0; 
 	vector<unsigned int> hltAccept, hlt8E29Accept;
@@ -327,7 +469,7 @@ int main()
 			if( verbosity > 1 ) cout << ">>> Trying to get event " << ievt << endl;
 
 			inEventTree->GetEvent(ievt);
-
+			
 			// updating HLT info
 
 			// The HLT info is stored per in the TRootRun. For file > 0, we just copy the elements from the hltInfos vector and it's done...
@@ -349,26 +491,84 @@ int main()
 			if( verbosity > 1 ) cout << ">>> Analyzing event " << ievt << endl;
 			else if((int) ievt/10000 == (double) ievt/10000)  cout << ">>> Analyzing event " << ievt << endl;
 		
+			bool keepEvent = true;
+
+			// apply JSON
+			if(optionsToUse.useJSON)
+			{
+				bool goodEvent = false;
+				for(unsigned int k=0; k<runLumiInfo.size(); k++)
+				{
+					if(inEvent->runId() == runLumiInfo[k][0] && inEvent->lumiBlockId() >= runLumiInfo[k][1] && inEvent->lumiBlockId() <= runLumiInfo[k][2])
+						goodEvent = true;
+				}
+				if(goodEvent == false) keepEvent = false;
+			}
+			
+			if(!keepEvent) continue;
+			
+			// apply selection based on HLT trigger
+			if(optionsToUse.skimOnHLT)
+			{
+				int HLT1Bit = -1, HLT2Bit = -1;
+				if(optionsToUse.TriggerMenu == inRunInfos->hltInputTag())
+				{
+					TopTree::TRootHLTInfo hltInfo = inRunInfos->getHLTinfo(inEvent->runId());
+					HLT1Bit = hltInfo.hltPath((optionsToUse.HLTPath1).c_str());
+					if(optionsToUse.HLTPath2 != "")
+					{
+						HLT2Bit = hltInfo.hltPath((optionsToUse.HLTPath2).c_str());
+						bool passed1 = inEvent->trigHLT(HLT1Bit);
+						bool passed2 = inEvent->trigHLT(HLT2Bit);
+						if(keepEvent && optionsToUse.HLTApplyAnd)
+							keepEvent = passed1 && passed2;
+						else if(keepEvent)
+							keepEvent = passed1 || passed2;
+					}
+					else
+						keepEvent = inEvent->trigHLT(HLT1Bit);
+				}
+				else if(optionsToUse.TriggerMenu == inRunInfos->hlt8E29InputTag())
+				{
+					TopTree::TRootHLTInfo hltInfo = inRunInfos->getHLTinfo8E29(inEvent->runId());
+					HLT1Bit = hltInfo.hltPath((optionsToUse.HLTPath1).c_str());
+					if(optionsToUse.HLTPath2 != "")
+					{
+						HLT2Bit = hltInfo.hltPath((optionsToUse.HLTPath2).c_str());				
+						bool passed1 = inEvent->trigHLT8E29(HLT1Bit);
+						bool passed2 = inEvent->trigHLT8E29(HLT2Bit);
+						if(keepEvent && optionsToUse.HLTApplyAnd)
+							keepEvent = passed1 && passed2;
+						else if(keepEvent)
+							keepEvent = passed1 || passed2;
+					}
+					else
+						keepEvent = inEvent->trigHLT(HLT1Bit);
+				}
+				else
+					cerr << "Unknown HLT InputTag: " << optionsToUse.TriggerMenu << endl;
+			}
+			
 			outFile->cd();
 		
 			outRootEvent = inEvent;
+			
+			for(unsigned int j=0; j !=objectsToKeep.size(); j++)
+			{
+				if( verbosity > 0 )
+				{
+					cout << "objectsToKeep[" << j << "] : " <<endl;
+					cout << "name = " << objectsToKeep[j].name << " type = " << objectsToKeep[j].type << endl;
+					cout << "minPt = " << objectsToKeep[j].minPt << " maxEta = " << objectsToKeep[j].maxEta << endl;
+					if(objectsToKeep[j].skipObjects) cout << "skipObjects = true" << endl;
+					else cout << "skipObjects = false" << endl;
+				}
+			}
 		
-			bool keepEvent = true;
+			if(!keepEvent) continue;
 		
 			for(unsigned int j=0; j !=objectsToKeep.size(); j++)
 			{
-				if(ievt == 0)
-				{
-					if( verbosity > 0 )
-					{
-						cout << "objectsToKeep[" << j << "] : " <<endl;
-						cout << "name = " << objectsToKeep[j].name << " type = " << objectsToKeep[j].type << endl;
-						cout << "minPt = " << objectsToKeep[j].minPt << " maxEta = " << objectsToKeep[j].maxEta << endl;
-						if(objectsToKeep[j].skipObjects) cout << "skipObjects = true" << endl;
-						else cout << "skipObjects = false" << endl;
-					}
-				}
-
 				if(objectsToKeep[j].type == "TopTree::TRootVertex")
 				{
 					TRootVertex* vertex;
@@ -631,6 +831,40 @@ int main()
 					{
 						keepEvent = false;
 						if( verbosity > 1 ) cout << "Too small number of selected MET: METKeeped = " << METKeeped << endl;
+					}
+
+					if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
+					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
+				}
+			
+				else if(objectsToKeep[j].type == "TopTree::TRootMHT")
+				{
+					TRootMHT* mht;
+					int MHTKeeped=0;
+					mht = (TRootMHT*) (objectsToKeep[j].inArray)->At(0);
+					bool keepMHT = true;
+					if(mht)
+					{
+						if(mht->Pt() < objectsToKeep[j].minPt || fabs(mht->Eta()) > objectsToKeep[j].maxEta)
+						{
+							if(objectsToKeep[j].skipObjects)
+							{
+								keepMHT = false;
+								if( verbosity > 1 ) cout << "skip MHT with pT = " << mht->Pt() << " and eta = " << mht->Eta() << endl;
+							}
+						}
+				
+						if(keepMHT)
+						{
+							new( (*(objectsToKeep[j].outArray))[0] ) TRootMHT(*mht);
+							MHTKeeped++;
+						}
+
+						if(MHTKeeped < objectsToKeep[j].minNObjects)
+						{
+							keepEvent = false;
+							if( verbosity > 1 ) cout << "Too small number of selected MHT: MHTKeeped = " << MHTKeeped << endl;
+						}
 					}
 
 					if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;

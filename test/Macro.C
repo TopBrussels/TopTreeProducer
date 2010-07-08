@@ -137,7 +137,7 @@ int main(){
 	}
 
    //Declaration of histograms
-   TH1F h_PtJets("PtCaloJets","Pt of caloJets",50,0,500); 
+   TH1F h_PtJets("PtCaloJets","Pt of caloJets",50,0,500);
 	TH1F h_distrib("distrib","",100,-1,1);
 	//
 		vector< vector<int> > runLumiInfo;
