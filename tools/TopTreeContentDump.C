@@ -5,6 +5,7 @@
 #include "../interface/TRootCaloJet.h"
 #include "../interface/TRootPFJet.h"
 #include "../interface/TRootMET.h"
+#include "../interface/TRootMHT.h"
 #include "../interface/TRootGenEvent.h"
 #include "../interface/TRootSignalEvent.h"
 #include "../interface/TRootEvent.h"
@@ -128,13 +129,25 @@ int main(int argc, char** argv){
 	  className="TopTree::TRootElectron";
 	else if (strstr(ObjName.c_str(),"MET"))
 	  className="TopTree::TRootMET";
+	else if (strstr(ObjName.c_str(),"MHT"))
+	  className="TopTree::TRootMHT";
 	else if (strstr(ObjName.c_str(),"PrimaryVertex"))
 	  className="TopTree::TRootVertex";
 	
 
 	cout << "- " << className << setw(5) << " -> " << "\"" << ObjName.substr(0,position) << "\""  << endl;
    
-      }
+	    }
+
+     //runinfos
+
+     runTree->GetEvent(0);
+
+     if (runInfos->hltInputTag() != "")
+       cout << "- " << "TopTree::TRootRun" << setw(5) << " -> " << "\"" << runInfos->hltInputTag() << "\""  << endl;
+     if (runInfos->hlt8E29InputTag() != "")
+       cout << "- " << "TopTree::TRootRun" << setw(5) << " -> " << "\"" << runInfos->hlt8E29InputTag() << "\""  << endl; 
+
     }
 
   }
