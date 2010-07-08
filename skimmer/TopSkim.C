@@ -470,9 +470,31 @@ int main()
 
 			inEventTree->GetEvent(ievt);
 			
+			// updating the outRunTree info
+			if(ievt == 0 && nFile == 0)
+			{
+				outRunInfos->setHLTInputTag(inRunInfos->hltInputTag());
+				outRunInfos->setHLT8E29InputTag(inRunInfos->hlt8E29InputTag());
+			}
+			else
+			{
+				if(inRunInfos->hltInputTag() != outRunInfos->hltInputTag())
+				{
+					cout << "Different HLT inputTags!" << endl;
+					cout << "inRunInfos->hltInputTag() = " << inRunInfos->hltInputTag() << "  outRunInfos->hltInputTag() = " << outRunInfos->hltInputTag() << endl;
+					exit (4);
+				}
+				if(inRunInfos->hlt8E29InputTag() != outRunInfos->hlt8E29InputTag())
+				{
+					cout << "Different HLT8E29 inputTags!" << endl;
+					cout << "inRunInfos->hlt8E29InputTag() = " << inRunInfos->hlt8E29InputTag() << "  outRunInfos->hlt8E29InputTag() = " << outRunInfos->hlt8E29InputTag() << endl;
+					exit (4);
+				}
+			}
+			
 			// updating HLT info
 
-			// The HLT info is stored per in the TRootRun. For file > 0, we just copy the elements from the hltInfos vector and it's done...
+			// The HLT info is stored per run in the TRootRun. For file >= 0, we just copy the elements from the hltInfos vector and it's done...
 			
 			if (outRunInfos->getHLTinfo(inEvent->runId()).RunID() == 0) // if this run is not yet in the vector, add it.
 			  tmpRunInfos.push_back(inRunInfos->getHLTinfo(inEvent->runId()));
@@ -546,7 +568,10 @@ int main()
 						keepEvent = inEvent->trigHLT(HLT1Bit);
 				}
 				else
+				{
 					cerr << "Unknown HLT InputTag: " << optionsToUse.TriggerMenu << endl;
+					exit(5);
+				}
 			}
 			
 			outFile->cd();
