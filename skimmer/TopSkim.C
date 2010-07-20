@@ -1093,6 +1093,9 @@ int main()
 	
 		if( verbosity > 1 ) cout << "Analyzing input file " << inFileName[nFile] << " finished!" << endl;
 
+		if(inRunInfos) inRunInfos->Delete();
+		if(inFile) inFile->Delete();
+
 	} // loop over input files
        
 
@@ -1107,6 +1110,10 @@ int main()
 	cout << "Closing output file" << endl;
 	
 	outFile->Close();
+
+	delete outFile;
+	delete outRunInfos;
+	delete outRootEvent;
 
 //	WARNING! Don't remove or modify the next line!!! The Automatic TopTree Producer depends on it!
 	cout << "--> Skimmed " << nOutEvents << " out of a total of " << nInEvents << " events" << endl;
