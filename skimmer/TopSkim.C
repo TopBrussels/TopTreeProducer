@@ -598,20 +598,23 @@ int main()
 				{
 					TRootVertex* vertex;
 					int verticesKeeped=0;
-					
-					vertex = (TRootVertex*) (objectsToKeep[j].inArray)->At(0);
-					bool keepPrimaryVertex = true;
-					
-					if(objectsToKeep[j].skipObjects)
+
+					for(int i=0; i<(objectsToKeep[j].inArray)->GetEntriesFast(); i++)
 					{
-						keepPrimaryVertex = false;
-						if( verbosity > 1 ) cout << "skip Primary Vertex" << endl;
-					}
+						vertex = (TRootVertex*) (objectsToKeep[j].inArray)->At(i);
+						bool keepPrimaryVertex = true;
 					
-					if(keepPrimaryVertex)
-					{
-						new( (*(objectsToKeep[j].outArray))[0] ) TRootVertex(*vertex);
-						verticesKeeped++;					
+						if(objectsToKeep[j].skipObjects)
+						{
+							keepPrimaryVertex = false;
+							if( verbosity > 1 ) cout << "skip Primary Vertex" << endl;
+						}
+					
+						if(keepPrimaryVertex)
+						{
+							new( (*(objectsToKeep[j].outArray))[verticesKeeped] ) TRootVertex(*vertex);
+							verticesKeeped++;					
+						}
 					}
 
 					if(verticesKeeped < objectsToKeep[j].minNObjects)
