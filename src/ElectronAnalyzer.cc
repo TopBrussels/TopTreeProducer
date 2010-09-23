@@ -179,6 +179,7 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 		{
 			localElectron.setNbClusters(superCluster->clustersSize ());
 			localElectron.setSuperClusterRawEnergy(superCluster->rawEnergy());
+			localElectron.setSuperClusterEta(superCluster->eta());
 			localElectron.setPreshowerEnergy(superCluster->preshowerEnergy());
 			reco::CaloClusterPtr seedBasicCluster = superCluster->seed();
 			if ( seedBasicCluster.isNonnull() ) localElectron.setClusterAlgo(seedBasicCluster->algo());
@@ -259,6 +260,8 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 			localElectron.setIDCutBasedRobustHighEnergy(int(patElectron->electronID("eidRobustHighEnergy")));
 			localElectron.setIDCategorizedLoose(int(patElectron->electronID("eidLoose")));
 			localElectron.setIDCategorizedTight(int(patElectron->electronID("eidTight")));
+			localElectron.setIDVBTFW70(int(patElectron->electronID("simpleEleId70cIso")));
+			localElectron.setIDVBTFW95(int(patElectron->electronID("simpleEleId95cIso")));
 			if(newId_)
 			{
 /*				localElectron.setIDCiCVeryLoose(int(patElectron->electronID("eidCiCVeryLoose")));
