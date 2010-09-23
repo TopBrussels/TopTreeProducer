@@ -52,7 +52,8 @@ void TopTreeProducer::beginJob()
 	doCosmicMuon = myConfig_.getUntrackedParameter<bool>("doCosmicMuon",false);
 	doElectron = myConfig_.getUntrackedParameter<bool>("doElectron",false);	
 	doCaloMET = myConfig_.getUntrackedParameter<bool>("doCaloMET",false);
-	doPFMET = myConfig_.getUntrackedParameter<bool>("doCaloMET",false);
+	doPFMET = myConfig_.getUntrackedParameter<bool>("doPFMET",false);
+	doTCMET = myConfig_.getUntrackedParameter<bool>("doTCMET",false);
 	doMHT = myConfig_.getUntrackedParameter<bool>("doMHT",false);
 	drawMCTree = myConfig_.getUntrackedParameter<bool>("drawMCTree",false);
 	doGenEvent = myConfig_.getUntrackedParameter<bool>("doGenEvent",false);
@@ -290,6 +291,13 @@ void TopTreeProducer::beginJob()
 		if(verbosity>0) cout << "ParticleFlowMET info will be added to rootuple" << endl;
 		PFmet = new TClonesArray("TopTree::TRootPFMET", 1000);
 		eventTree_->Branch ("PFMET", "TClonesArray", &PFmet);
+	}
+
+	if(doTCMET)
+	{
+		if(verbosity>0) cout << "Track Corrected MET info will be added to rootuple" << endl;
+		TCmet = new TClonesArray("TopTree::TRootMET", 1000);
+		eventTree_->Branch ("TCMET", "TClonesArray", &TCmet);
 	}
 	
 	if(doMHT && (dataType_ == "PAT" || dataType_ == "PATAOD"))
@@ -613,6 +621,14 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		myMETAnalyzer->Process(iEvent, PFmet);
 		delete myMETAnalyzer;
 	}
+
+	if(doTCMET)
+	{
+		if(verbosity>1) cout << endl << "Analysing Track Corrected Missing Et..." << endl;
+		TCMETAnalyzer* myMETAnalyzer = new TCMETAnalyzer(producersNames_, myConfig_, verbosity);
+		myMETAnalyzer->Process(iEvent, TCmet);
+		delete myMETAnalyzer;
+	}
 	
 	// MHT 
 	if(doMHT && (dataType_ == "PAT" || dataType_ == "PATAOD"))
@@ -688,6 +704,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	if(doElectron) (*electrons).Delete();
 	if(doCaloMET) (*CALOmet).Delete();
 	if(doPFMET) (*PFmet).Delete();
+	if(doTCMET) (*TCmet).Delete();
 	if(doMHT && (dataType_ == "PAT" || dataType_ == "PATAOD")) (*mht).Delete();
 	if(doGenEvent) (*genEvent).Delete();
 	if(doNPGenEvent) (*NPgenEvent).Delete();

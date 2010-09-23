@@ -39,6 +39,7 @@
 #include "../interface/METAnalyzer.h"
 #include "../interface/CaloMETAnalyzer.h"
 #include "../interface/PFMETAnalyzer.h"
+#include "../interface/TCMETAnalyzer.h"
 #include "../interface/MHTAnalyzer.h"
 #include "../interface/GenEventAnalyzer.h"
 #include "../interface/NPGenEventAnalyzer.h"
@@ -115,6 +116,7 @@ private:
 	bool doElectron;
 	bool doCaloMET;
 	bool doPFMET;
+	bool doTCMET;
 	bool doMHT;
 	bool doGenEvent;
 	bool doNPGenEvent;
@@ -146,6 +148,7 @@ private:
 	TClonesArray* electrons;
 	TClonesArray* CALOmet;
 	TClonesArray* PFmet;
+	TClonesArray* TCmet;
 	TClonesArray* mht;
 	TClonesArray* genEvent;
 	TClonesArray* NPgenEvent;
