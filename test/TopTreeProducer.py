@@ -1,3 +1,22 @@
+# for all pflow stuff, we use PAT+PF2PAT now. put the following in your PAT cfg to have the PF2PAT running
+
+# Configure PAT to use PF2PAT instead of AOD sources
+# this function will modify the PAT sequences. It is currently
+# not possible to run PF2PAT+PAT and standart PAT at the same time
+
+#from PhysicsTools.PatAlgos.tools.pfTools import *
+
+# An empty postfix means that only PF2PAT is run,  
+# otherwise both standard PAT and PF2PAT are run. In the latter case PF2PAT
+## collections have standard names + postfix (e.g. patElectronPFlow)
+
+#postfix = "PF"
+#usePF2PAT(process,runPF2PAT=True, jetAlgo='AK5', runOnMC=False, postfix=postfix)
+#getattr(process, "patElectrons"+postfix).embedGenMatch = False
+#getattr(process, "patMuons"+postfix).embedGenMatch = False
+
+# finally you need to add getattr(process,"patPF2PATSequence"+postfix) to your path.
+
 import FWCore.ParameterSet.Config as cms
 
 process = cms.Process("NewProcess")
@@ -91,11 +110,34 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		doCaloJetId = cms.untracked.bool(True),
 		doPFJet = cms.untracked.bool(False),
 		doPFJetStudy = cms.untracked.bool(True),
+                doJPTJet = cms.untracked.bool(False),
+		doJPTJetStudy = cms.untracked.bool(False),
 		doMuon = cms.untracked.bool(True),
 		doCosmicMuon = cms.untracked.bool(False),
+
+                # if you enable electron, please add the following to your pat config
+
+                #process.load("TopBrussels.TopTreeProducer.simpleEleIdSequence_cff")
+
+                #process.patElectronIDs = cms.Sequence(process.simpleEleIdSequence) 
+                
+                #process.patElectrons.addElectronID = cms.bool(True)
+                #process.patElectrons.electronIDSources = cms.PSet(
+                #  simpleEleId70cIso= cms.InputTag("simpleEleId70cIso"),
+                #  simpleEleId95cIso= cms.InputTag("simpleEleId95cIso"),
+                #  eidRobustLoose = cms.InputTag("eidRobustLoose"),
+                #  eidRobustTight = cms.InputTag("eidRobustTight"),
+                #  eidRobustHighEnergy = cms.InputTag("eidRobustHighEnergy"),
+                #  eidLoose = cms.InputTag("eidLoose"),
+                #  eidTight = cms.InputTag("eidTight"),
+                #)
+
+                # and add process.patElectronIDs to your path
+                
 		doElectron = cms.untracked.bool(True),
 		runSuperCluster = cms.untracked.bool(True),#true only if SuperCluster are stored
-		doMET = cms.untracked.bool(True),
+		doCaloMET = cms.untracked.bool(False),
+		doPFMET = cms.untracked.bool(False),
 		doMHT = cms.untracked.bool(True),# MHT only present in PAT, so will run if dataType is PAT or PATAOD
 		doGenEvent = cms.untracked.bool(False),#put on False when running non-ttbar
 		doNPGenEvent = cms.untracked.bool(False),#put on True when running New Physics sample
@@ -139,7 +181,8 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		muonProducer = cms.InputTag("muons"),
 		vcosmicMuonProducer = cms.untracked.vstring("muons"),
 		electronProducer = cms.InputTag("pixelMatchGsfElectrons"),
-		metProducer = cms.InputTag("met"),
+		CalometProducer = cms.InputTag("met"),
+		PFmetProducer = cms.InputTag("pfmet"),
 		genEventProducer = cms.InputTag("genEvt"),
 		generalTrackLabel = cms.InputTag("generalTracks"),
 		electronNewId = cms.untracked.bool(False)
@@ -161,7 +204,8 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		muonProducer = cms.InputTag("muons"),
 		vcosmicMuonProducer = cms.untracked.vstring("muons","muons1Leg"),
 		electronProducer = cms.InputTag("pixelMatchGsfElectrons"),
-		metProducer = cms.InputTag("met"),
+                CalometProducer = cms.InputTag("met"),
+		PFmetProducer = cms.InputTag("pfmet"),
 		genEventProducer = cms.InputTag("genEvt"),
 		generalTrackLabel = cms.InputTag("generalTracks"),
 		electronNewId = cms.untracked.bool(False)
@@ -182,7 +226,8 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		vpfJetProducer = cms.untracked.vstring("selectedPatJets"),
 		muonProducer = cms.InputTag("selectedPatMuons"),
 		electronProducer = cms.InputTag("selectedPatElectrons"),
-		metProducer = cms.InputTag("selectedPatMETs"),
+		CalometProducer = cms.InputTag("selectedPatMETs"),
+		PFmetProducer = cms.InputTag("selectedPatMETsPF"),
 		mhtProducer = cms.InputTag("patMHTs"),
 		genEventProducer = cms.InputTag("genEvt"),
 		generalTrackLabel = cms.InputTag("generalTracks"),
@@ -204,7 +249,8 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		vpfJetProducer = cms.untracked.vstring("selectedPatJetsAK5PF","selectedPatJetsIC5PF","selectedPatJetsKT4PF"),
 		muonProducer = cms.InputTag("selectedPatMuons"),
 		electronProducer = cms.InputTag("selectedPatElectrons"),# if electronTriggerMatching == true, change the electron inputTag to "cleanPatElectronsTriggerMatch"
-		metProducer = cms.InputTag("patMETs"),
+		CalometProducer = cms.InputTag("patMETs"),
+                PFmetProducer = cms.InputTag("patMETsPF"),
 		mhtProducer = cms.InputTag("patMHTs"),
 		genEventProducer = cms.InputTag("genEvt"),
 		generalTrackLabel = cms.InputTag("generalTracks"), # to calculate the conversion flag
