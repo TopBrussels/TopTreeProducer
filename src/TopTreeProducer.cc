@@ -1,5 +1,8 @@
 #include "../interface/TopTreeProducer.h"
 
+#include "DataFormats/HLTReco/interface/TriggerEvent.h"
+#include "DataFormats/Common/interface/Handle.h"
+
 using namespace std;
 using namespace TopTree;
 using namespace reco;
@@ -43,10 +46,13 @@ void TopTreeProducer::beginJob()
 	doGenJetStudy = myConfig_.getUntrackedParameter<bool>("doGenJetStudy",false);
 	doPFJet = myConfig_.getUntrackedParameter<bool>("doPFJet",false);
 	doPFJetStudy = myConfig_.getUntrackedParameter<bool>("doPFJetStudy",false);
+	doJPTJet = myConfig_.getUntrackedParameter<bool>("doJPTJet",false);
+	doJPTJetStudy = myConfig_.getUntrackedParameter<bool>("doJPTJetStudy",false);
 	doMuon = myConfig_.getUntrackedParameter<bool>("doMuon",false);
 	doCosmicMuon = myConfig_.getUntrackedParameter<bool>("doCosmicMuon",false);
 	doElectron = myConfig_.getUntrackedParameter<bool>("doElectron",false);	
-	doMET = myConfig_.getUntrackedParameter<bool>("doMET",false);
+	doCaloMET = myConfig_.getUntrackedParameter<bool>("doCaloMET",false);
+	doPFMET = myConfig_.getUntrackedParameter<bool>("doCaloMET",false);
 	doMHT = myConfig_.getUntrackedParameter<bool>("doMHT",false);
 	drawMCTree = myConfig_.getUntrackedParameter<bool>("drawMCTree",false);
 	doGenEvent = myConfig_.getUntrackedParameter<bool>("doGenEvent",false);
@@ -58,6 +64,7 @@ void TopTreeProducer::beginJob()
 	vGenJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vgenJetProducer",defaultVec);
 	vCaloJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vcaloJetProducer",defaultVec);
 	vPFJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vpfJetProducer",defaultVec);
+	vJPTJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vJPTJetProducer",defaultVec);
 	vCosmicMuonProducer = producersNames_.getUntrackedParameter<vector<string> >("vcosmicMuonProducer",defaultVecCM);
 
 	for(unsigned int s=0;s<vGenJetProducer.size();s++){
@@ -73,6 +80,11 @@ void TopTreeProducer::beginJob()
 	for(unsigned int s=0;s<vPFJetProducer.size();s++){
 		TClonesArray* a;
 		vpfJets.push_back(a);
+	}
+
+	for(unsigned int s=0;s<vJPTJetProducer.size();s++){
+		TClonesArray* a;
+		vjptJets.push_back(a);
 	}
 
 	for(unsigned int s=0;s<vCosmicMuonProducer.size();s++){
@@ -173,6 +185,25 @@ void TopTreeProducer::beginJob()
 			eventTree_->Branch (name, "TClonesArray", &vpfJets[s]);
 		}
 	}
+
+	if(doJPTJet)
+	{
+		if(verbosity>0) cout << "JPTJets info will be added to rootuple" << endl;
+		jptJets = new TClonesArray("TopTree::TRootJPTJet", 1000);
+		eventTree_->Branch ("JPTJets", "TClonesArray", &jptJets);
+	}
+
+	if(doJPTJetStudy)
+	{
+		if(verbosity>0) cout << "JPT Jets info will be added to rootuple (for JPTJetStudy)" << endl;
+		for(unsigned int s=0;s<vJPTJetProducer.size();s++)
+		{
+			vjptJets[s] = new TClonesArray("TopTree::TRootJPTJet", 1000);
+			char name[100];
+			sprintf(name,"JPTJets_%s",vJPTJetProducer[s].c_str());
+			eventTree_->Branch (name, "TClonesArray", &vjptJets[s]);
+		}
+	}
 	
 	if(doGenEvent)
 	{
@@ -247,11 +278,18 @@ void TopTreeProducer::beginJob()
 		eventTree_->Branch ("Electrons", "TClonesArray", &electrons);
 	}
 
-	if(doMET)
+	if(doCaloMET)
 	{
-		if(verbosity>0) cout << "MET info will be added to rootuple" << endl;
-		met = new TClonesArray("TopTree::TRootMET", 1000);
-		eventTree_->Branch ("MET", "TClonesArray", &met);
+		if(verbosity>0) cout << "CaloMET info will be added to rootuple" << endl;
+		CALOmet = new TClonesArray("TopTree::TRootCaloMET", 1000);
+		eventTree_->Branch ("CaloMET", "TClonesArray", &CALOmet);
+	}
+
+	if(doPFMET)
+	{
+		if(verbosity>0) cout << "ParticleFlowMET info will be added to rootuple" << endl;
+		PFmet = new TClonesArray("TopTree::TRootPFMET", 1000);
+		eventTree_->Branch ("PFMET", "TClonesArray", &PFmet);
 	}
 	
 	if(doMHT && (dataType_ == "PAT" || dataType_ == "PATAOD"))
@@ -296,7 +334,6 @@ void TopTreeProducer::endJob()
 // ------------ method called to for each event  ------------
 void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
-
 	rootFile_->cd();
 	nTotEvt_++;
 	if( (verbosity>1) || (verbosity>0 && nTotEvt_%10==0 && nTotEvt_<=100)  || (verbosity>0 && nTotEvt_%100==0 && nTotEvt_>100) )
@@ -312,6 +349,36 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	rootEvent->setEventId(iEvent.id().event());
 	rootEvent->setRunId(iEvent.id().run());
 	rootEvent->setLumiBlockId(iEvent.luminosityBlock());
+
+	// we need to store some triggerFilter info to be able to emulate triggers on older data
+
+	std::map<std::string, std::vector<double> > triggerFilters;
+
+	// get Trigger summary from Event
+	edm::Handle<trigger::TriggerEvent> summary;
+	edm::InputTag summaryTag_("hltTriggerSummaryAOD","","HLT");
+	iEvent.getByLabel(summaryTag_,summary);
+	
+	for (unsigned int i=0; i<summary->sizeFilters(); i++) {
+	  //cout << i << " -> " << summary->filterTag(i).label() << endl;
+
+	  // get all trigger objects corresponding to this module.
+	  // loop through them and see how many objects match the selection
+	  const trigger::Keys& KEYS (summary->filterKeys(i));
+	  const int n1(KEYS.size());
+	    
+	  for (int i=0; i!=n1; ++i) {
+	    const trigger::TriggerObject& triggerObject( summary-> 
+							 getObjects().at(KEYS[i]) );
+	    //cout << "pt " << triggerObject.pt() << endl;
+	    
+	    triggerFilters[string(summary->filterTag(i).label())].push_back(triggerObject.pt());
+	    
+	  }
+	
+	}
+
+	rootEvent->setTriggerFilters(triggerFilters);
 
 	if(runGeneralTracks) // Calculate and fill number of tracks and number of high purity tracks
 	{
@@ -428,6 +495,26 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		}
 	}
 
+	// JPT Jets
+
+	if(doJPTJet)
+	{
+		if(verbosity>1) cout << endl << "Analysing JPTJets collection..." << endl;
+		JPTJetAnalyzer* myJPTJetAnalyzer = new JPTJetAnalyzer(producersNames_, myConfig_, verbosity);
+		myJPTJetAnalyzer->Process(iEvent, jptJets);
+		delete myJPTJetAnalyzer;
+	}
+
+	if(doJPTJetStudy)
+	{
+		if(verbosity>1) cout << endl << "Analysing JPT jets collection (for JetStudy)..." << endl;
+		for(unsigned int s=0;s<vJPTJetProducer.size();s++){
+			JPTJetAnalyzer* myJPTJetAnalyzer = new JPTJetAnalyzer(producersNames_, s,  myConfig_, verbosity);
+			myJPTJetAnalyzer->Process(iEvent, vjptJets[s]);
+			delete myJPTJetAnalyzer;
+		}
+	}
+
 	// GenEvent
 	if(doGenEvent)
 	{
@@ -511,11 +598,19 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	}
 
 	// MET 
-	if(doMET)
+	if(doCaloMET)
 	{
-		if(verbosity>1) cout << endl << "Analysing Missing Et..." << endl;
-		METAnalyzer* myMETAnalyzer = new METAnalyzer(producersNames_, myConfig_, verbosity);
-		myMETAnalyzer->Process(iEvent, met);
+		if(verbosity>1) cout << endl << "Analysing Calorimeter Missing Et..." << endl;
+		CaloMETAnalyzer* myMETAnalyzer = new CaloMETAnalyzer(producersNames_, myConfig_, verbosity);
+		myMETAnalyzer->Process(iEvent, CALOmet);
+		delete myMETAnalyzer;
+	}
+
+	if(doPFMET)
+	{
+		if(verbosity>1) cout << endl << "Analysing ParticleFlow Missing Et..." << endl;
+		PFMETAnalyzer* myMETAnalyzer = new PFMETAnalyzer(producersNames_, myConfig_, verbosity);
+		myMETAnalyzer->Process(iEvent, PFmet);
 		delete myMETAnalyzer;
 	}
 	
@@ -538,12 +633,12 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		// FIXME: do MC association if multiple jets are used (with jetStudy stuff)
 		if(doMuon) myMCAssociator->process(muons);
 		if(doElectron) myMCAssociator->process(electrons);
-		if(doMET) myMCAssociator->process(met);
+		if(doCaloMET) myMCAssociator->process(CALOmet);
 		//if(verbosity>2 && doJet) myMCAssociator->printParticleAssociation(jets);
 		//if(verbosity>2 && doMuon) myMCAssociator->printParticleAssociation(muons);
 		//if(verbosity>2 && doElectron) myMCAssociator->printParticleAssociation(electrons);
 		//if(verbosity>2 && doPhoton) myMCAssociator->printParticleAssociation(photons);
-		//if(verbosity>2 && doMET) myMCAssociator->printParticleAssociation(met);
+		//if(verbosity>2 && doCaloMET) myMCAssociator->printParticleAssociation(CALOmet);
 		delete myMCAssociator;
 	}
 
@@ -575,6 +670,12 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 			(*vpfJets[s]).Delete();
 		}
 	}
+	if(doJPTJet) (*jptJets).Delete();
+	if(doJPTJetStudy){
+		for(unsigned int s=0;s<vJPTJetProducer.size();s++){
+			(*vjptJets[s]).Delete();
+		}
+	}
 	if(doMuon) (*muons).Delete();
        	if(doCosmicMuon) {
 	
@@ -585,7 +686,8 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	}
 
 	if(doElectron) (*electrons).Delete();
-	if(doMET) (*met).Delete();
+	if(doCaloMET) (*CALOmet).Delete();
+	if(doPFMET) (*PFmet).Delete();
 	if(doMHT && (dataType_ == "PAT" || dataType_ == "PATAOD")) (*mht).Delete();
 	if(doGenEvent) (*genEvent).Delete();
 	if(doNPGenEvent) (*NPgenEvent).Delete();
