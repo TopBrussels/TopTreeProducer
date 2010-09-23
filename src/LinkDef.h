@@ -4,6 +4,7 @@
 #include "../interface/TRootParticle.h"
 #include "../interface/TRootMCParticle.h"
 #include "../interface/TRootJet.h"
+#include "../interface/TRootJPTJet.h"
 #include "../interface/TRootCaloJet.h"
 #include "../interface/TRootGenJet.h"
 #include "../interface/TRootPFJet.h"
@@ -13,6 +14,8 @@
 #include "../interface/TRootElectron.h"
 #include "../interface/TRootSignalEvent.h"
 #include "../interface/TRootMET.h"
+#include "../interface/TRootCaloMET.h"
+#include "../interface/TRootPFMET.h"
 #include "../interface/TRootMHT.h"
 #include "../interface/TRootGenEvent.h"
 #include "../interface/TRootNPGenEvent.h"
@@ -31,6 +34,7 @@
 #include "../interface/TRootParticle.h"
 #include "../interface/TRootMCParticle.h"
 #include "../interface/TRootJet.h"
+#include "../interface/TRootJPTJet.h"
 #include "../interface/TRootCaloJet.h"
 #include "../interface/TRootGenJet.h"
 #include "../interface/TRootPFJet.h"
@@ -40,6 +44,8 @@
 #include "../interface/TRootElectron.h"
 #include "../interface/TRootSignalEvent.h"
 #include "../interface/TRootMET.h"
+#include "../interface/TRootCaloMET.h"
+#include "../interface/TRootPFMET.h"
 #include "../interface/TRootMHT.h"
 #include "../interface/TRootGenEvent.h"
 #include "../interface/TRootNPGenEvent.h"
@@ -64,6 +70,7 @@
 #pragma link C++ class TopTree::TRootParticle;
 #pragma link C++ class TopTree::TRootMCParticle;
 #pragma link C++ class TopTree::TRootJet;
+#pragma link C++ class TopTree::TRootJPTJet;
 #pragma link C++ class TopTree::TRootCaloJet;
 #pragma link C++ class TopTree::TRootGenJet;
 #pragma link C++ class TopTree::TRootPFJet;
@@ -73,6 +80,8 @@
 #pragma link C++ class TopTree::TRootElectron;
 #pragma link C++ class TopTree::TRootSignalEvent;
 #pragma link C++ class TopTree::TRootMET;
+#pragma link C++ class TopTree::TRootCaloMET;
+#pragma link C++ class TopTree::TRootPFMET;
 #pragma link C++ class TopTree::TRootMHT;
 #pragma link C++ class TopTree::TRootGenEvent;
 #pragma link C++ class TopTree::TRootNPGenEvent;

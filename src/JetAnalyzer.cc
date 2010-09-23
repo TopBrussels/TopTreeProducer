@@ -65,9 +65,26 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet, std::string dataType)
 		localJet.setBtag_simpleSecondaryVertexHighPurBJetTags(patJet->bDiscriminator("simpleSecondaryVertexHighPurBJetTags"));
 		localJet.setBtag_combinedSecondaryVertexBJetTags(patJet->bDiscriminator("combinedSecondaryVertexBJetTags"));
 		localJet.setBtag_combinedSecondaryVertexMVABJetTags(patJet->bDiscriminator("combinedSecondaryVertexMVABJetTags"));
+		localJet.setBtag_combinedMVABJetTags(patJet->bDiscriminator("combinedMVABJetTags"));
 		localJet.setBtag_softMuonBJetTags(patJet->bDiscriminator("softMuonBJetTags"));
 		localJet.setBtag_softMuonByPtBJetTags(patJet->bDiscriminator("softMuonByPtBJetTags"));
 		localJet.setBtag_softMuonByIP3dBJetTags(patJet->bDiscriminator("softMuonByIP3dBJetTags"));
+		localJet.setBtag_softElectronBJetTags(patJet->bDiscriminator("softElectronBJetTags"));
+		localJet.setBtag_softElectronByPtBJetTags(patJet->bDiscriminator("softElectronByPtBJetTags"));
+		localJet.setBtag_softElectronByIP3dBJetTags(patJet->bDiscriminator("softElectronByIP3dBJetTags"));
+		localJet.setBtag_ghostTrackBJetTags(patJet->bDiscriminator("ghostTrackBJetTags"));
+		
+		/*cout << "******** BTAGGING INFO *******" << endl;
+		cout << "jetBProbabilityBJetTags -> " << patJet->bDiscriminator("jetBProbabilityBJetTags") << endl;
+		cout << "jetProbabilityBJetTags -> " << patJet->bDiscriminator("jetProbabilityBJetTags") << endl;
+		cout << "simpleSecondaryVertexHighEffBJetTags -> " << patJet->bDiscriminator("simpleSecondaryVertexHighEffBJetTags") << endl;
+		cout << "simpleSecondaryVertexHighPurBJetTags -> " << patJet->bDiscriminator("simpleSecondaryVertexHighPurBJetTags") << endl;
+		cout << "trackCountingHighEffBJetTags -> " << patJet->bDiscriminator("trackCountingHighEffBJetTags") << endl;
+		cout << "trackCountingHighPurBJetTags -> " << patJet->bDiscriminator("trackCountingHighPurBJetTags") << endl;
+		cout << "combinedSecondaryVertexBJetTags -> " << patJet->bDiscriminator("combinedSecondaryVertexBJetTags") << endl;	
+		cout << "combinedSecondaryVertexMVABJetTags -> " << patJet->bDiscriminator("combinedSecondaryVertexMVABJetTags") << endl;
+		cout << "softMuonBJetTags -> " << patJet->bDiscriminator("softMuonBJetTags") << endl;
+		cout << "softElectronBJetTags -> " << patJet->bDiscriminator("softElectronBJetTags") << endl;*/
 
 		localJet.setBCorrection(patJet->corrFactor(patJet->corrStep(), "b"));
 		localJet.setCCorrection(patJet->corrFactor(patJet->corrStep(), "c"));
