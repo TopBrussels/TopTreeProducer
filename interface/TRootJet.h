@@ -36,9 +36,14 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
+		  	,btag_combinedMVABJetTags_(-9999.)
 			,btag_softMuonBJetTags_(-9999.)
 			,btag_softMuonByPtBJetTags_(-9999.)
 			,btag_softMuonByIP3dBJetTags_(-9999.)
+		        ,btag_softElectronBJetTags_(-9999.)
+			,btag_softElectronByPtBJetTags_(-9999.)
+			,btag_softElectronByIP3dBJetTags_(-9999.)
+		        ,btag_ghostTrackBJetTags_(-9999.)
 			,bCorrection_(-9999.)
 			,cCorrection_(-9999.)
 			,udsCorrection_(-9999.)
@@ -64,9 +69,14 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighPurBJetTags_(jet.btag_simpleSecondaryVertexHighPurBJetTags_)
 			,btag_combinedSecondaryVertexBJetTags_(jet.btag_combinedSecondaryVertexBJetTags_)
 			,btag_combinedSecondaryVertexMVABJetTags_(jet.btag_combinedSecondaryVertexMVABJetTags_)
+			,btag_combinedMVABJetTags_(jet.btag_combinedMVABJetTags_)
 			,btag_softMuonBJetTags_(jet.btag_softMuonBJetTags_)
 			,btag_softMuonByPtBJetTags_(jet.btag_softMuonByPtBJetTags_)
 			,btag_softMuonByIP3dBJetTags_(jet.btag_softMuonByIP3dBJetTags_)
+		        ,btag_softElectronBJetTags_(jet.btag_softElectronBJetTags_)
+			,btag_softElectronByPtBJetTags_(jet.btag_softElectronByPtBJetTags_)
+			,btag_softElectronByIP3dBJetTags_(jet.btag_softElectronByIP3dBJetTags_)
+		        ,btag_ghostTrackBJetTags_(jet.btag_ghostTrackBJetTags_)
 			,bCorrection_(jet.bCorrection_)
 			,cCorrection_(jet.cCorrection_)
 			,udsCorrection_(jet.udsCorrection_)
@@ -92,9 +102,14 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
+		        ,btag_combinedMVABJetTags_(-9999.)
 			,btag_softMuonBJetTags_(-9999.)
 			,btag_softMuonByPtBJetTags_(-9999.)
 			,btag_softMuonByIP3dBJetTags_(-9999.)
+		        ,btag_softElectronBJetTags_(-9999.)
+			,btag_softElectronByPtBJetTags_(-9999.)
+			,btag_softElectronByIP3dBJetTags_(-9999.)
+		        ,btag_ghostTrackBJetTags_(-9999.)
 			,bCorrection_(-9999.)
 			,cCorrection_(-9999.)
 			,udsCorrection_(-9999.)
@@ -120,9 +135,14 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
+		        ,btag_combinedMVABJetTags_(-9999.)
 			,btag_softMuonBJetTags_(-9999.)
 			,btag_softMuonByPtBJetTags_(-9999.)
 			,btag_softMuonByIP3dBJetTags_(-9999.)
+		        ,btag_softElectronBJetTags_(-9999.)
+			,btag_softElectronByPtBJetTags_(-9999.)
+			,btag_softElectronByIP3dBJetTags_(-9999.)
+		        ,btag_ghostTrackBJetTags_(-9999.)
 			,bCorrection_(-9999.)
 			,cCorrection_(-9999.)
 			,udsCorrection_(-9999.)
@@ -148,9 +168,14 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
+		        ,btag_combinedMVABJetTags_(-9999.)
 			,btag_softMuonBJetTags_(-9999.)
 			,btag_softMuonByPtBJetTags_(-9999.)
 			,btag_softMuonByIP3dBJetTags_(-9999.)
+		        ,btag_softElectronBJetTags_(-9999.)
+			,btag_softElectronByPtBJetTags_(-9999.)
+			,btag_softElectronByIP3dBJetTags_(-9999.)
+		        ,btag_ghostTrackBJetTags_(-9999.)
 			,bCorrection_(-9999.)
 			,cCorrection_(-9999.)
 			,udsCorrection_(-9999.)
@@ -176,9 +201,14 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
+		        ,btag_combinedMVABJetTags_(-9999.)
 			,btag_softMuonBJetTags_(-9999.)
 			,btag_softMuonByPtBJetTags_(-9999.)
 			,btag_softMuonByIP3dBJetTags_(-9999.)
+		        ,btag_softElectronBJetTags_(-9999.)
+			,btag_softElectronByPtBJetTags_(-9999.)
+			,btag_softElectronByIP3dBJetTags_(-9999.)
+		        ,btag_ghostTrackBJetTags_(-9999.)
 			,bCorrection_(-9999.)
 			,cCorrection_(-9999.)
 			,udsCorrection_(-9999.)
@@ -204,9 +234,14 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
+		        ,btag_combinedMVABJetTags_(-9999.)
 			,btag_softMuonBJetTags_(-9999.)
 			,btag_softMuonByPtBJetTags_(-9999.)
 			,btag_softMuonByIP3dBJetTags_(-9999.)
+		        ,btag_softElectronBJetTags_(-9999.)
+			,btag_softElectronByPtBJetTags_(-9999.)
+			,btag_softElectronByIP3dBJetTags_(-9999.)
+		        ,btag_ghostTrackBJetTags_(-9999.)
 			,bCorrection_(-9999.)
 			,cCorrection_(-9999.)
 			,udsCorrection_(-9999.)
@@ -233,9 +268,14 @@ namespace TopTree
 		Float_t btag_simpleSecondaryVertexHighPurBJetTags() const { return btag_simpleSecondaryVertexHighPurBJetTags_; }
 		Float_t btag_combinedSecondaryVertexBJetTags() const { return btag_combinedSecondaryVertexBJetTags_; }
 		Float_t btag_combinedSecondaryVertexMVABJetTags() const { return btag_combinedSecondaryVertexMVABJetTags_; }
+		Float_t btag_combinedMVABJetTags() const { return btag_combinedMVABJetTags_; }
 		Float_t btag_softMuonBJetTags() const { return btag_softMuonBJetTags_; }
 		Float_t btag_softMuonByPtBJetTags() const { return btag_softMuonByPtBJetTags_; }
 		Float_t btag_softMuonByIP3dBJetTags() const { return btag_softMuonByIP3dBJetTags_; }
+		Float_t btag_softElectronBJetTags() const { return btag_softElectronBJetTags_; }
+		Float_t btag_softElectronByPtBJetTags() const { return btag_softElectronByPtBJetTags_; }
+		Float_t btag_softElectronByIP3dBJetTags() const { return btag_softElectronByIP3dBJetTags_; }
+		Float_t btag_ghostTrackBJetTags() const { return btag_ghostTrackBJetTags_; }
 		Float_t bCorrection() const { return bCorrection_; }
 		Float_t cCorrection() const { return cCorrection_; }
 		Float_t udsCorrection() const { return udsCorrection_; }
@@ -263,9 +303,15 @@ namespace TopTree
 		void setBtag_simpleSecondaryVertexHighPurBJetTags(Float_t btag_simpleSecondaryVertexHighPurBJetTags) { btag_simpleSecondaryVertexHighPurBJetTags_ = btag_simpleSecondaryVertexHighPurBJetTags; }
 		void setBtag_combinedSecondaryVertexBJetTags(Float_t btag_combinedSecondaryVertexBJetTags) { btag_combinedSecondaryVertexBJetTags_ = btag_combinedSecondaryVertexBJetTags; }
 		void setBtag_combinedSecondaryVertexMVABJetTags(Float_t btag_combinedSecondaryVertexMVABJetTags) { btag_combinedSecondaryVertexMVABJetTags_ = btag_combinedSecondaryVertexMVABJetTags; }
+		void setBtag_combinedMVABJetTags(Float_t btag_combinedMVABJetTags) { btag_combinedMVABJetTags_ = btag_combinedMVABJetTags; }
 		void setBtag_softMuonBJetTags(Float_t btag_softMuonBJetTags) { btag_softMuonBJetTags_ = btag_softMuonBJetTags; }
 		void setBtag_softMuonByPtBJetTags(Float_t btag_softMuonByPtBJetTags) { btag_softMuonByPtBJetTags_ = btag_softMuonByPtBJetTags; }
 		void setBtag_softMuonByIP3dBJetTags(Float_t btag_softMuonByIP3dBJetTags) { btag_softMuonByIP3dBJetTags_ = btag_softMuonByIP3dBJetTags; }
+		void setBtag_softElectronBJetTags(Float_t btag_softElectronBJetTags) { btag_softElectronBJetTags_ = btag_softElectronBJetTags; }
+		void setBtag_softElectronByPtBJetTags(Float_t btag_softElectronByPtBJetTags) { btag_softElectronByPtBJetTags_ = btag_softElectronByPtBJetTags; }
+		void setBtag_softElectronByIP3dBJetTags(Float_t btag_softElectronByIP3dBJetTags) { btag_softElectronByIP3dBJetTags_ = btag_softElectronByIP3dBJetTags; }
+		void setBtag_ghostTrackBJetTags(Float_t btag_ghostTrackBJetTags) { btag_ghostTrackBJetTags_ = btag_ghostTrackBJetTags; }
+		
 		void setBCorrection(Float_t bCorrection) { bCorrection_ = bCorrection; }
 		void setCCorrection(Float_t cCorrection) { cCorrection_ = cCorrection; }
 		void setUDSCorrection(Float_t udsCorrection) { udsCorrection_ = udsCorrection; }
@@ -302,9 +348,14 @@ namespace TopTree
 		Float_t btag_simpleSecondaryVertexHighPurBJetTags_;
 		Float_t btag_combinedSecondaryVertexBJetTags_;
 		Float_t btag_combinedSecondaryVertexMVABJetTags_;
+		Float_t btag_combinedMVABJetTags_;
 		Float_t btag_softMuonBJetTags_;
 		Float_t btag_softMuonByPtBJetTags_;
 		Float_t btag_softMuonByIP3dBJetTags_;
+		Float_t btag_softElectronBJetTags_;
+		Float_t btag_softElectronByPtBJetTags_;
+		Float_t btag_softElectronByIP3dBJetTags_;
+		Float_t btag_ghostTrackBJetTags_;
 
 		//Correction Info
 		Float_t bCorrection_;               // correction factor for b hypothesis

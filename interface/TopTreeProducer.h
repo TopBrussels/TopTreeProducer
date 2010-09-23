@@ -29,6 +29,7 @@
 #include "../interface/MCAssociator.h"
 #include "../interface/VertexAnalyzer.h"
 #include "../interface/JetAnalyzer.h"
+#include "../interface/JPTJetAnalyzer.h"
 #include "../interface/CaloJetAnalyzer.h"
 #include "../interface/GenJetAnalyzer.h"
 #include "../interface/PFJetAnalyzer.h"
@@ -36,6 +37,8 @@
 #include "../interface/CosmicMuonAnalyzer.h"
 #include "../interface/ElectronAnalyzer.h"
 #include "../interface/METAnalyzer.h"
+#include "../interface/CaloMETAnalyzer.h"
+#include "../interface/PFMETAnalyzer.h"
 #include "../interface/MHTAnalyzer.h"
 #include "../interface/GenEventAnalyzer.h"
 #include "../interface/NPGenEventAnalyzer.h"
@@ -55,6 +58,8 @@
 #include "../interface/TRootCosmicMuon.h"
 #include "../interface/TRootElectron.h"
 #include "../interface/TRootMET.h"
+#include "../interface/TRootCaloMET.h"
+#include "../interface/TRootPFMET.h"
 #include "../interface/TRootMHT.h"
 #include "../interface/TRootGenEvent.h"
 #include "../interface/TRootNPGenEvent.h"
@@ -103,10 +108,13 @@ private:
 	bool doGenJetStudy;
 	bool doPFJet;
 	bool doPFJetStudy;
+	bool doJPTJet;
+	bool doJPTJetStudy;
 	bool doMuon;
 	bool doCosmicMuon;
 	bool doElectron;
-	bool doMET;
+	bool doCaloMET;
+	bool doPFMET;
 	bool doMHT;
 	bool doGenEvent;
 	bool doNPGenEvent;
@@ -116,6 +124,7 @@ private:
 	std::vector<std::string> vGenJetProducer;
 	std::vector<std::string> vCaloJetProducer;
 	std::vector<std::string> vPFJetProducer;
+	std::vector<std::string> vJPTJetProducer;
 	std::vector<std::string> vCosmicMuonProducer;
 	int nTotEvt_;
 	HLTAnalyzer* hltAnalyzer_;
@@ -129,11 +138,14 @@ private:
 	std::vector<TClonesArray*> vgenJets;
 	TClonesArray* pfJets;
 	std::vector<TClonesArray*> vpfJets;
+	TClonesArray* jptJets;
+	std::vector<TClonesArray*> vjptJets;
 	TClonesArray* muons;
 	std::vector<TClonesArray*> vcosmicMuons;
 	std::vector<std::vector<TClonesArray*> > vcosmicMuonTracks;
 	TClonesArray* electrons;
-	TClonesArray* met;
+	TClonesArray* CALOmet;
+	TClonesArray* PFmet;
 	TClonesArray* mht;
 	TClonesArray* genEvent;
 	TClonesArray* NPgenEvent;

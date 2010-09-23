@@ -66,6 +66,7 @@ namespace TopTree
 			caloConeSize_(9999),
 			nbClusters_(9999),
 			superClusterRawEnergy_(-9999.),
+		        superClusterEta_(-9999.),
 			preshowerEnergy_(-9999.),
 			sigmaEtaEta_(-9999.),
 			sigmaIetaIeta_(-9999.),
@@ -106,6 +107,8 @@ namespace TopTree
 			idCiCHyperTight2_(-9999),
 			idCiCHyperTight3_(-9999),
 			idCiCHyperTight4_(-9999),*/
+		        idVBTFW70_(-9999),
+		        idVBTFW95_(-9999),
 			classification_(-9999),
 			fBrem_(-9999.),
 			isConversion_(true),
@@ -163,6 +166,7 @@ namespace TopTree
 			caloConeSize_(e.caloConeSize_),
 			nbClusters_(e.nbClusters_),
 			superClusterRawEnergy_(e.superClusterRawEnergy_),
+		        superClusterEta_(e.superClusterEta_),    
 			preshowerEnergy_(e.preshowerEnergy_),
 			sigmaEtaEta_(e.sigmaEtaEta_),
 			sigmaIetaIeta_(e.sigmaIetaIeta_),
@@ -203,6 +207,8 @@ namespace TopTree
 			idCiCHyperTight2_(e.idCiCHyperTight2_),
 			idCiCHyperTight3_(e.idCiCHyperTight3_),
 			idCiCHyperTight4_(e.idCiCHyperTight4_),*/
+  		        idVBTFW70_(e.idVBTFW70_),
+		        idVBTFW95_(e.idVBTFW95_),
 			classification_(e.classification_),
 			fBrem_(e.fBrem_),
 			isConversion_(e.isConversion_),
@@ -260,7 +266,8 @@ namespace TopTree
 			caloConeSize_(9999),
 			nbClusters_(9999),
 			superClusterRawEnergy_(-9999.),
-			preshowerEnergy_(-9999.),
+		        superClusterEta_(-9999.),
+		        preshowerEnergy_(-9999.),
 			sigmaEtaEta_(-9999.),
 			sigmaIetaIeta_(-9999.),
 			e1x5_(-9999.),
@@ -300,7 +307,9 @@ namespace TopTree
 			idCiCHyperTight2_(-9999),
 			idCiCHyperTight3_(-9999),
 			idCiCHyperTight4_(-9999),*/
-			classification_(-9999),
+		        idVBTFW70_(-9999),
+			idVBTFW95_(-9999),
+		        classification_(-9999),
 			fBrem_(-9999.),
 			isConversion_(true),
 			HLT_Ele10_SW_L1R_(false),
@@ -357,7 +366,8 @@ namespace TopTree
 			caloConeSize_(9999),
 			nbClusters_(9999),
 			superClusterRawEnergy_(-9999.),
-			preshowerEnergy_(-9999.),
+  		        superClusterEta_(-9999.),
+                        preshowerEnergy_(-9999.),
 			sigmaEtaEta_(-9999.),
 			sigmaIetaIeta_(-9999.),
 			e1x5_(-9999.),
@@ -397,7 +407,9 @@ namespace TopTree
 			idCiCHyperTight2_(-9999),
 			idCiCHyperTight3_(-9999),
 			idCiCHyperTight4_(-9999),*/
-			classification_(-9999),
+		        idVBTFW70_(-9999),
+			idVBTFW95_(-9999),
+		        classification_(-9999),
 			fBrem_(-9999.),
 			isConversion_(true),
 			HLT_Ele10_SW_L1R_(false),
@@ -454,7 +466,8 @@ namespace TopTree
 			caloConeSize_(9999),
 			nbClusters_(9999),
 			superClusterRawEnergy_(-9999.),
-			preshowerEnergy_(-9999.),
+		        superClusterEta_(-9999.),
+		        preshowerEnergy_(-9999.),
 			sigmaEtaEta_(-9999.),
 			sigmaIetaIeta_(-9999.),
 			e1x5_(-9999.),
@@ -494,7 +507,9 @@ namespace TopTree
 			idCiCHyperTight2_(-9999),
 			idCiCHyperTight3_(-9999),
 			idCiCHyperTight4_(-9999),*/
-			classification_(-9999),
+		        idVBTFW70_(-9999),
+			idVBTFW95_(-9999),
+		        classification_(-9999),
 			fBrem_(-9999.),
 			isConversion_(true),
 			HLT_Ele10_SW_L1R_(false),
@@ -551,7 +566,8 @@ namespace TopTree
 			caloConeSize_(9999),
 			nbClusters_(9999),
 			superClusterRawEnergy_(-9999.),
-			preshowerEnergy_(-9999.),
+		        superClusterEta_(-9999.),
+		        preshowerEnergy_(-9999.),
 			sigmaEtaEta_(-9999.),
 			sigmaIetaIeta_(-9999.),
 			e1x5_(-9999.),
@@ -591,7 +607,9 @@ namespace TopTree
 			idCiCHyperTight2_(-9999),
 			idCiCHyperTight3_(-9999),
 			idCiCHyperTight4_(-9999),*/
-			classification_(-9999),
+		        idVBTFW70_(-9999),
+			idVBTFW95_(-9999),
+		       classification_(-9999),
 			fBrem_(-9999.),
 			isConversion_(true),
 			HLT_Ele10_SW_L1R_(false),
@@ -648,7 +666,8 @@ namespace TopTree
 			caloConeSize_(9999),
 			nbClusters_(9999),
 			superClusterRawEnergy_(-9999.),
-			preshowerEnergy_(-9999.),
+		        superClusterEta_(-9999.),
+		        preshowerEnergy_(-9999.),
 			sigmaEtaEta_(-9999.),
 			sigmaIetaIeta_(-9999.),
 			e1x5_(-9999.),
@@ -688,7 +707,9 @@ namespace TopTree
 			idCiCHyperTight2_(-9999),
 			idCiCHyperTight3_(-9999),
 			idCiCHyperTight4_(-9999),*/
-			classification_(-9999),
+                        idVBTFW70_(-9999),
+			idVBTFW95_(-9999),
+		        classification_(-9999),
 			fBrem_(-9999.),
 			isConversion_(true),
 			HLT_Ele10_SW_L1R_(false),
@@ -755,6 +776,7 @@ namespace TopTree
 		Float_t caloConeSize() const { return caloConeSize_; }
 		Int_t nClusters() const { return nbClusters_; }
 		Float_t superClusterRawEnergy() const { return superClusterRawEnergy_; }
+		Float_t superClusterEta() const { return superClusterEta_; }
 		Float_t preshowerEnergy() const { return preshowerEnergy_; }
 
 		Float_t sigmaEtaEta() const { return sigmaEtaEta_; }
@@ -867,6 +889,9 @@ namespace TopTree
 		Int_t CiCHyperTightId_3() const{ return idCiCHyperTight3_; }
 		Int_t CiCHyperTightId_4() const{ return idCiCHyperTight4_; } */
 
+		Int_t isIDVBTFW70() const { return idVBTFW70_; }
+		Int_t isIDVBTFW95() const { return idVBTFW95_; }
+
 		Float_t fbrem() const { return fBrem_; };
 		Int_t numberOfBrems() const { return (basicClusterSize() - 1); }
 		Int_t classification() const { return classification_; }
@@ -967,7 +992,7 @@ namespace TopTree
 		void setMomentumCorrected(Bool_t x) { isMomentumCorrected_ = x; }
 		void setTrackMomentumError(Float_t x) { trackMomentumError_ = x; }
 
-		void setSuperCluster(TVector3 pos, Int_t bcs, Int_t ca, Float_t ccs, Int_t nC, Float_t scRawE, Float_t PSE)
+		void setSuperCluster(TVector3 pos, Int_t bcs, Int_t ca, Float_t ccs, Int_t nC, Float_t scRawE, Float_t scEta, Float_t PSE)
 		{
 			caloPosition_ = pos;
 			basicClusterSize_ = bcs;
@@ -975,6 +1000,7 @@ namespace TopTree
 			caloConeSize_ = ccs;
 			nbClusters_ = nC;
 			superClusterRawEnergy_ = scRawE;
+			superClusterEta_ = scEta;
 			preshowerEnergy_ = PSE;
 		}
 
@@ -986,6 +1012,7 @@ namespace TopTree
 		void setNbClusters(Int_t x) { nbClusters_ = x; }
 		void setPreshowerEnergy(Float_t x) { preshowerEnergy_ = x; }
 		void setSuperClusterRawEnergy(Float_t x) { superClusterRawEnergy_ = x; }
+		void setSuperClusterEta(Float_t x) { superClusterEta_ = x; }
 
 		void setE1x5(Float_t e1x5) { e1x5_ = e1x5; }
 		void setE2x2(Float_t e2x2) { e2x2_ = e2x2; }
@@ -1032,6 +1059,10 @@ namespace TopTree
 		void setIDCutBasedRobustHighEnergy(Int_t idCutBasedFixedThresholdHighEnergy) { idCutBasedRobustHighEnergy_ = idCutBasedFixedThresholdHighEnergy; }
 		void setIDCategorizedLoose(Int_t idCutBasedCategorizedLoose) { idCategorizedLoose_ = idCutBasedCategorizedLoose; }
 		void setIDCategorizedTight(Int_t idCutBasedCategorizedTight) { idCategorizedTight_ = idCutBasedCategorizedTight; }
+
+		void setIDVBTFW70(Int_t idVBTFW70) { idVBTFW70_ = idVBTFW70; }
+		void setIDVBTFW95(Int_t idVBTFW95) { idVBTFW95_ = idVBTFW95; }
+		
 
 /*		void setIDCiCVeryLoose(Int_t cicVL) { idCiCVeryLoose_ = cicVL; }
 		void setIDCiCLoose(Int_t cicL) { idCiCLoose_ = cicL; }
@@ -1129,6 +1160,7 @@ namespace TopTree
 		// need reco::SuperCluster and reco::BasicCluster and reduced Ecal RecHits Collections for EcalClusterLazyTools
 		Int_t nbClusters_;               // Number of related brem clusters
 		Float_t superClusterRawEnergy_;
+		Float_t superClusterEta_;
 		Float_t preshowerEnergy_;
 
 
@@ -1187,6 +1219,9 @@ namespace TopTree
 		Int_t idCiCHyperTight2_;
 		Int_t idCiCHyperTight3_;
 		Int_t idCiCHyperTight4_;*/
+
+		Int_t idVBTFW70_; // VBTF simple cut-based e-ID for working point with 70% efficiency (simpleEleId70c!Iso!)
+		Int_t idVBTFW95_; // VBTF simple cut-based e-ID for working point with 95% efficiency (simpleEleId95c)
 
 // Electron classification && fBrem ====================
 		Int_t classification_;             

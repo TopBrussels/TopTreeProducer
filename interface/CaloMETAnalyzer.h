@@ -1,5 +1,5 @@
-#ifndef METAnalyzer_h
-#define METAnalyzer_h
+#ifndef CaloMETAnalyzer_h
+#define CaloMETAnalyzer_h
 
 // system include files
 #include <iostream>
@@ -13,30 +13,33 @@
 //#include "DataFormats/METReco/interface/METFwd.h"
 #include "DataFormats/METReco/interface/CaloMET.h"
 #include "DataFormats/METReco/interface/CaloMETCollection.h"
-#include "DataFormats/METReco/interface/PFMET.h"
-#include "DataFormats/METReco/interface/PFMETCollection.h"
 #include "DataFormats/PatCandidates/interface/MET.h"
 
 #include "../interface/TRootEvent.h"
-#include "../interface/TRootMET.h"
+#include "../interface/TRootCaloMET.h"
+
+#include "../interface/METAnalyzer.h"
 
 #include "TClonesArray.h"
 
 
-class METAnalyzer{
+class CaloMETAnalyzer{
 	
 public:
-	METAnalyzer(const edm::ParameterSet& producersNames);
-	METAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity);
-	~METAnalyzer();
+	CaloMETAnalyzer(const edm::ParameterSet& producersNames);
+	CaloMETAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity);
+	~CaloMETAnalyzer();
 	void SetVerbosity(int verbosity) {verbosity_ = verbosity; };
-	TopTree::TRootMET Process(const reco::Candidate* met, std::string dataType_);
+	void Process(const edm::Event& iEvent, TClonesArray* rootMET);
 
 private:
 	int verbosity_;
 	std::string dataType_ ;
 	edm::InputTag metProducer_;
 	bool useMC_;
+
+	METAnalyzer* myMETAnalyzer;
 };
 
 #endif
+

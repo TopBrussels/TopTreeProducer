@@ -92,6 +92,8 @@ namespace TopTree
 		// Factorization Scale Q
 		Float_t factorizationScale() const { return factorizationScale_; }
 
+		std::map<std::string, std::vector<double> >  getTriggerFilters() const { return triggerFilters_;}
+
 
 		void setNb(Int_t nb) { nb_ = nb; }
 		void setEventId(Int_t eventId) { eventId_ = eventId; }
@@ -118,6 +120,8 @@ namespace TopTree
 		void setIdParton2(Int_t idParton2) { idParton2_=idParton2; }
 		void setXParton2(Float_t xParton2) { xParton2_=xParton2; }
 		void setFactorizationScale(Float_t factorizationScale) { factorizationScale_=factorizationScale; }
+
+		void setTriggerFilters(std::map<std::string, std::vector<double> > filters) { triggerFilters_ = filters; }
 
 		/*
 		// FIXME
@@ -150,6 +154,10 @@ namespace TopTree
 		Int_t idParton2_;
 		Float_t xParton2_;
 		Float_t factorizationScale_;
+
+		// store the pT of the EG objects for the last module in each passed trigger path
+
+		std::map<std::string, std::vector<double> > triggerFilters_;
 
 		ClassDef (TRootEvent,2);
 	};
