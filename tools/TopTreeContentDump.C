@@ -115,6 +115,8 @@ int main(int argc, char** argv){
 	  className="TopTree::TRootCaloJet";
 	else if (strstr(ObjName.c_str(),"PFJet"))
 	  className="TopTree::TRootPFJet";
+	else if (strstr(ObjName.c_str(),"JPTJet"))
+	  className="TopTree::TRootJPTJet";
 	else if (strstr(ObjName.c_str(),"GenJet"))
 	  className="TopTree::TRootGenJet";
 	else if (strstr(ObjName.c_str(),"MCParticles"))
@@ -127,6 +129,12 @@ int main(int argc, char** argv){
 	  className="TopTree::TRootMuon";
 	else if (strstr(ObjName.c_str(),"Electron"))
 	  className="TopTree::TRootElectron";
+	else if (strstr(ObjName.c_str(),"TCMET"))
+	  className="TopTree::TRootMET";
+	else if (strstr(ObjName.c_str(),"CaloMET"))
+	  className="TopTree::TRootCaloMET";
+	else if (strstr(ObjName.c_str(),"PFMET"))
+	  className="TopTree::TRootPFMET";
 	else if (strstr(ObjName.c_str(),"MET"))
 	  className="TopTree::TRootMET";
 	else if (strstr(ObjName.c_str(),"MHT"))
