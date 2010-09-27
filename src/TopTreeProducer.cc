@@ -396,7 +396,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 							     getObjects().at(KEYS[j]) );
 		//cout << "pt " << triggerObject.pt() << endl;
 		
-		cout << string(summary->filterTag(i).label()) << endl;
+		//cout << string(summary->filterTag(i).label()) << endl;
 		triggerFilters[string(summary->filterTag(i).label())].push_back(triggerObject.pt());
 		
 	      }
