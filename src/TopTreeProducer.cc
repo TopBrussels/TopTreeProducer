@@ -360,34 +360,53 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 
 	// we need to store some triggerFilter info to be able to emulate triggers on older data
 
-	std::map<std::string, std::vector<double> > triggerFilters;
+	if (doHLT) {
+	  std::map<std::string, std::vector<double> > triggerFilters;
+	  
+	  // get Trigger summary from Event
+	  edm::Handle<trigger::TriggerEvent> summary, summary1st, summary2nd;
+	  edm::InputTag summaryTag1st_("hltTriggerSummaryAOD","",(producersNames_.getParameter < edm::InputTag > ("hltProducer1st")).process());
+	  edm::InputTag summaryTag2nd_("hltTriggerSummaryAOD","",(producersNames_.getParameter < edm::InputTag > ("hltProducer2nd")).process());
+	  
+	  try { iEvent.getByLabel(summaryTag1st_,summary1st);} catch (...) {;}
+	  try { iEvent.getByLabel(summaryTag2nd_,summary2nd);} catch (...) {;}
 
-	// get Trigger summary from Event
-	edm::Handle<trigger::TriggerEvent> summary;
-	edm::InputTag summaryTag_("hltTriggerSummaryAOD","","HLT");
-	iEvent.getByLabel(summaryTag_,summary);
-	
-	for (unsigned int i=0; i<summary->sizeFilters(); i++) {
-	  //cout << i << " -> " << summary->filterTag(i).label() << endl;
+	  //cout << summaryTag1st_ << " " << summaryTag2nd_ << endl;
+	  //cout << summaryTag1st_.process() << " " << summaryTag2nd_.process() << endl;
+	  //cout << summary1st.isValid() << " " << summary2nd.isValid()<< endl;
 
-	  // get all trigger objects corresponding to this module.
-	  // loop through them and see how many objects match the selection
-	  const trigger::Keys& KEYS (summary->filterKeys(i));
-	  const int n1(KEYS.size());
+	  if (summary1st.isValid()) 
+	    summary = summary1st;
+	  else if (summary2nd.isValid())
+	    summary = summary2nd;
+	  else
+	    if (verbosity > 1) cout << "TopTreeProducer::Analyze ERROR: Could not store info for trigger emulation: provided HLTproducerNames are null" << endl;
 	    
-	  for (int i=0; i!=n1; ++i) {
-	    const trigger::TriggerObject& triggerObject( summary-> 
-							 getObjects().at(KEYS[i]) );
-	    //cout << "pt " << triggerObject.pt() << endl;
+	  if (summary.isValid()) {
+	    for (unsigned int i=0; i<summary->sizeFilters(); i++) {
+	      //cout << i << " -> " << summary->filterTag(i).label() << endl;
+	      
+	      // get all trigger objects corresponding to this module.
+	      // loop through them and see how many objects match the selection
+	      const trigger::Keys& KEYS (summary->filterKeys(i));
+	      const int n1(KEYS.size());
+	      
+	      for (int j=0; j!=n1; ++j) {
+		const trigger::TriggerObject& triggerObject( summary-> 
+							     getObjects().at(KEYS[j]) );
+		//cout << "pt " << triggerObject.pt() << endl;
+		
+		cout << string(summary->filterTag(i).label()) << endl;
+		triggerFilters[string(summary->filterTag(i).label())].push_back(triggerObject.pt());
+		
+	      }
+	      
+	    }
 	    
-	    triggerFilters[string(summary->filterTag(i).label())].push_back(triggerObject.pt());
-	    
+	    rootEvent->setTriggerFilters(triggerFilters);
 	  }
-	
 	}
-
-	rootEvent->setTriggerFilters(triggerFilters);
-
+	
 	if(runGeneralTracks) // Calculate and fill number of tracks and number of high purity tracks
 	{
 		// get GeneralTracks collection
