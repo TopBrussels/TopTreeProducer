@@ -260,8 +260,20 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 			localElectron.setIDCutBasedRobustHighEnergy(int(patElectron->electronID("eidRobustHighEnergy")));
 			localElectron.setIDCategorizedLoose(int(patElectron->electronID("eidLoose")));
 			localElectron.setIDCategorizedTight(int(patElectron->electronID("eidTight")));
-			localElectron.setIDVBTFW70(int(patElectron->electronID("simpleEleId70cIso")));
-			localElectron.setIDVBTFW95(int(patElectron->electronID("simpleEleId95cIso")));
+		
+			localElectron.setIDVBTF("simpleEleId60cIso",int(patElectron->electronID("simpleEleId60cIso")));
+			localElectron.setIDVBTF("simpleEleId70cIso",int(patElectron->electronID("simpleEleId70cIso")));
+			localElectron.setIDVBTF("simpleEleId80cIso",int(patElectron->electronID("simpleEleId80cIso")));
+			localElectron.setIDVBTF("simpleEleId85cIso",int(patElectron->electronID("simpleEleId85cIso")));
+			localElectron.setIDVBTF("simpleEleId90cIso",int(patElectron->electronID("simpleEleId90cIso")));
+			localElectron.setIDVBTF("simpleEleId95cIso",int(patElectron->electronID("simpleEleId95cIso")));
+			localElectron.setIDVBTF("simpleEleId60relIso",int(patElectron->electronID("simpleEleId60relIso")));
+			localElectron.setIDVBTF("simpleEleId70relIso",int(patElectron->electronID("simpleEleId70relIso")));
+			localElectron.setIDVBTF("simpleEleId80relIso",int(patElectron->electronID("simpleEleId80relIso")));
+			localElectron.setIDVBTF("simpleEleId85relIso",int(patElectron->electronID("simpleEleId85relIso")));
+			localElectron.setIDVBTF("simpleEleId90relIso",int(patElectron->electronID("simpleEleId90relIso")));
+			localElectron.setIDVBTF("simpleEleId95relIso",int(patElectron->electronID("simpleEleId95relIso")));
+
 			if(newId_)
 			{
 /*				localElectron.setIDCiCVeryLoose(int(patElectron->electronID("eidCiCVeryLoose")));

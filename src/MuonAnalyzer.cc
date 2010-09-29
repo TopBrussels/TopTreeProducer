@@ -85,11 +85,16 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
 
 			localMuon.SetNofValidHits (muon->innerTrack()->numberOfValidHits ());
 			localMuon.SetInnerTrack (TLorentzVector (muon->innerTrack()->px (), muon->innerTrack ()->py(), muon->innerTrack()->pz (), muon->innerTrack()->p ()));
+			localMuon.SetNofPixelLayersWithMeasurement(muon->innerTrack()->hitPattern().pixelLayersWithMeasurement());
 		}
-      
+
+
 		if(muon->isGlobalMuon ())
 		{
-			localMuon.SetChi2 (muon->globalTrack()->normalizedChi2 ());
+		  //localMuon.SetNofValidMuHits(muon->numberOfValidHits());
+		  localMuon.SetNofMatches(muon->numberOfMatches());
+		  
+		  localMuon.SetChi2 (muon->globalTrack()->normalizedChi2 ());
 		}
 
 		if (dataType_ == "RECO" || dataType_ == "AOD")
@@ -123,7 +128,11 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
 				if (patMuon->ecalIsoDeposit ()->candEnergy () < 4 && patMuon->hcalIsoDeposit ()->candEnergy () < 6)
 					localMuon.SetVetoIso (true);
 			}
-
+			
+			if(patMuon->isGlobalMuon ()) {
+			    localMuon.SetNofValidMuHits(patMuon->numberOfValidHits());
+			}
+		
 			if (useMC_)
 			{
 				// MC truth associator index
