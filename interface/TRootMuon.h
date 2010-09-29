@@ -35,7 +35,10 @@ namespace TopTree
 			,dz_(-9999.)
 			,dzerror_(-9999.)
 			,chi2_(-9999.)
-			,nofValidHits_(-9999)
+		        ,nofValidHits_(-9999)
+		        ,nofValidMuHits_(-9999.)
+		        ,nofMatches_(-9999.)
+		        ,nofPixelLayersWithMeasurement_(-9999.)
 			,innerTrack_(TLorentzVector())
 			,dB_(-9999.)
 			,dBError_(-9999.)
@@ -68,6 +71,9 @@ namespace TopTree
 			,dzerror_(muon.dzerror_)
 			,chi2_(muon.chi2_)
 			,nofValidHits_(muon.nofValidHits_)
+		        ,nofValidMuHits_(muon.nofValidMuHits_)
+		        ,nofMatches_(muon.nofMatches_)
+		        ,nofPixelLayersWithMeasurement_(muon.nofPixelLayersWithMeasurement_)
 			,innerTrack_(muon.innerTrack_)
 			,dB_(muon.dB_)
 			,dBError_(muon.dBError_)
@@ -100,6 +106,9 @@ namespace TopTree
 			,dzerror_(-9999.)
 			,chi2_(-9999.)
 			,nofValidHits_(-9999)
+		        ,nofValidMuHits_(-9999.)
+		        ,nofMatches_(-9999.)
+		        ,nofPixelLayersWithMeasurement_(-9999.)
 			,innerTrack_(TLorentzVector())
 			,dB_(-9999.)
 			,dBError_(-9999.)
@@ -132,6 +141,9 @@ namespace TopTree
 			,dzerror_(-9999.)
 			,chi2_(-9999.)
 			,nofValidHits_(-9999)
+		        ,nofValidMuHits_(-9999.)
+		        ,nofMatches_(-9999.)
+		        ,nofPixelLayersWithMeasurement_(-9999.)
 			,innerTrack_(TLorentzVector())
 			,dB_(-9999.)
 			,dBError_(-9999.)
@@ -164,6 +176,9 @@ namespace TopTree
 			,dzerror_(-9999.)
 			,chi2_(-9999.)
 			,nofValidHits_(-9999)
+		        ,nofValidMuHits_(-9999.)
+		        ,nofMatches_(-9999.)
+		        ,nofPixelLayersWithMeasurement_(-9999.)
 			,dB_(-9999.)
 			,dBError_(-9999.)
 			,direction_(-9999)
@@ -195,6 +210,9 @@ namespace TopTree
 			,dzerror_(-9999.)
 			,chi2_(-9999.)
 			,nofValidHits_(-9999)
+		        ,nofValidMuHits_(-9999.)
+		        ,nofMatches_(-9999.)
+		        ,nofPixelLayersWithMeasurement_(-9999.)
 			,innerTrack_(TLorentzVector())
 			,dB_(-9999.)
 			,dBError_(-9999.)
@@ -227,6 +245,9 @@ namespace TopTree
 			,dzerror_(-9999.)
 			,chi2_(-9999.)
 			,nofValidHits_(-9999)
+		        ,nofValidMuHits_(-9999.)
+		        ,nofMatches_(-9999.)
+		        ,nofPixelLayersWithMeasurement_(-9999.)
 			,innerTrack_(TLorentzVector())
 			,dB_(-9999.)
 			,dBError_(-9999.)
@@ -289,7 +310,11 @@ namespace TopTree
 		Float_t dz() const { return dz_;}
 		Float_t dzerror() const { return dzerror_;}
 		Float_t chi2() const { return chi2_;}
-		Int_t nofValidHits() const { return nofValidHits_;}  
+		Int_t nofValidHits() const { return nofValidHits_;} 
+		Int_t nofValidMuHits() const { return nofValidMuHits_;}
+		Int_t nofMatches() const { return nofMatches_;}
+		Int_t nofPixelLayersWithMeasurement(Int_t x) const { return nofPixelLayersWithMeasurement_;}
+
 		TLorentzVector innerTrack() const { return innerTrack_;}
 
 		Float_t dB() const { return dB_; }
@@ -357,6 +382,9 @@ namespace TopTree
 		void SetDZError(Float_t dzError) { dzerror_ = dzError;}
 		void SetChi2(Float_t chi2){ chi2_ = chi2;}
 		void SetNofValidHits(Int_t nofValidHits){ nofValidHits_ = nofValidHits;}
+		void SetNofValidMuHits(Int_t x){ nofValidMuHits_ = x;}
+		void SetNofMatches(Int_t x){ nofMatches_ = x;}
+		void SetNofPixelLayersWithMeasurement(Int_t x){ nofPixelLayersWithMeasurement_ = x;}
 		void SetInnerTrack (TLorentzVector innerTrack) { innerTrack_ = innerTrack;}
 
 		void SetdB(Float_t dB) { dB_ = dB; }
@@ -404,6 +432,9 @@ namespace TopTree
 		Float_t dzerror_;           // dZ error of Muon innertrack
 		Float_t chi2_;              // chi2 of global Muon
 		Int_t nofValidHits_;        // nof hits of inner track
+		Int_t nofValidMuHits_;        // nof hits on the global fit
+		Int_t nofMatches_;        // Segments matched to a GlobalMuon in at least two muon stations, since DT require two-segments to trigger.
+		Int_t nofPixelLayersWithMeasurement_; 
 		TLorentzVector innerTrack_; // inner track 
 
 		// In the standard PAT configuration, dB and edB are calculated wrt the primary vertex

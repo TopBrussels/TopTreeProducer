@@ -107,8 +107,6 @@ namespace TopTree
 			idCiCHyperTight2_(-9999),
 			idCiCHyperTight3_(-9999),
 			idCiCHyperTight4_(-9999),*/
-		        idVBTFW70_(-9999),
-		        idVBTFW95_(-9999),
 			classification_(-9999),
 			fBrem_(-9999.),
 			isConversion_(true),
@@ -207,8 +205,7 @@ namespace TopTree
 			idCiCHyperTight2_(e.idCiCHyperTight2_),
 			idCiCHyperTight3_(e.idCiCHyperTight3_),
 			idCiCHyperTight4_(e.idCiCHyperTight4_),*/
-  		        idVBTFW70_(e.idVBTFW70_),
-		        idVBTFW95_(e.idVBTFW95_),
+		        idVBTF_(e.idVBTF_),
 			classification_(e.classification_),
 			fBrem_(e.fBrem_),
 			isConversion_(e.isConversion_),
@@ -307,8 +304,6 @@ namespace TopTree
 			idCiCHyperTight2_(-9999),
 			idCiCHyperTight3_(-9999),
 			idCiCHyperTight4_(-9999),*/
-		        idVBTFW70_(-9999),
-			idVBTFW95_(-9999),
 		        classification_(-9999),
 			fBrem_(-9999.),
 			isConversion_(true),
@@ -407,8 +402,6 @@ namespace TopTree
 			idCiCHyperTight2_(-9999),
 			idCiCHyperTight3_(-9999),
 			idCiCHyperTight4_(-9999),*/
-		        idVBTFW70_(-9999),
-			idVBTFW95_(-9999),
 		        classification_(-9999),
 			fBrem_(-9999.),
 			isConversion_(true),
@@ -507,8 +500,6 @@ namespace TopTree
 			idCiCHyperTight2_(-9999),
 			idCiCHyperTight3_(-9999),
 			idCiCHyperTight4_(-9999),*/
-		        idVBTFW70_(-9999),
-			idVBTFW95_(-9999),
 		        classification_(-9999),
 			fBrem_(-9999.),
 			isConversion_(true),
@@ -607,8 +598,6 @@ namespace TopTree
 			idCiCHyperTight2_(-9999),
 			idCiCHyperTight3_(-9999),
 			idCiCHyperTight4_(-9999),*/
-		        idVBTFW70_(-9999),
-			idVBTFW95_(-9999),
 		       classification_(-9999),
 			fBrem_(-9999.),
 			isConversion_(true),
@@ -707,8 +696,6 @@ namespace TopTree
 			idCiCHyperTight2_(-9999),
 			idCiCHyperTight3_(-9999),
 			idCiCHyperTight4_(-9999),*/
-                        idVBTFW70_(-9999),
-			idVBTFW95_(-9999),
 		        classification_(-9999),
 			fBrem_(-9999.),
 			isConversion_(true),
@@ -889,9 +876,22 @@ namespace TopTree
 		Int_t CiCHyperTightId_3() const{ return idCiCHyperTight3_; }
 		Int_t CiCHyperTightId_4() const{ return idCiCHyperTight4_; } */
 
-		Int_t isIDVBTFW70() const { return idVBTFW70_; }
-		Int_t isIDVBTFW95() const { return idVBTFW95_; }
+		Int_t isIDVBTF(std::string WP) {
 
+		  if (idVBTF_.find(WP) != idVBTF_.end())
+		    return idVBTF_[WP];
+		 
+		  else {
+		    cout << "Unknown VBTF eID Working Point: " << WP << ". Possible Working Points are: ";
+		    for (std::map<std::string,Int_t>::const_iterator it=idVBTF_.begin(); it != idVBTF_.end(); ++it)
+		      cout << it->first << " ";
+		    cout << endl;
+		  }
+
+		  return -1;
+
+		}
+		
 		Float_t fbrem() const { return fBrem_; };
 		Int_t numberOfBrems() const { return (basicClusterSize() - 1); }
 		Int_t classification() const { return classification_; }
@@ -1060,9 +1060,7 @@ namespace TopTree
 		void setIDCategorizedLoose(Int_t idCutBasedCategorizedLoose) { idCategorizedLoose_ = idCutBasedCategorizedLoose; }
 		void setIDCategorizedTight(Int_t idCutBasedCategorizedTight) { idCategorizedTight_ = idCutBasedCategorizedTight; }
 
-		void setIDVBTFW70(Int_t idVBTFW70) { idVBTFW70_ = idVBTFW70; }
-		void setIDVBTFW95(Int_t idVBTFW95) { idVBTFW95_ = idVBTFW95; }
-		
+		void setIDVBTF(std::string WP, Int_t idVBTF) { idVBTF_[WP] = idVBTF; }
 
 /*		void setIDCiCVeryLoose(Int_t cicVL) { idCiCVeryLoose_ = cicVL; }
 		void setIDCiCLoose(Int_t cicL) { idCiCLoose_ = cicL; }
@@ -1220,8 +1218,7 @@ namespace TopTree
 		Int_t idCiCHyperTight3_;
 		Int_t idCiCHyperTight4_;*/
 
-		Int_t idVBTFW70_; // VBTF simple cut-based e-ID for working point with 70% efficiency (simpleEleId70c!Iso!)
-		Int_t idVBTFW95_; // VBTF simple cut-based e-ID for working point with 95% efficiency (simpleEleId95c)
+		std::map<std::string,Int_t> idVBTF_; // VBTF simple cut-based e-ID -> string = working point
 
 // Electron classification && fBrem ====================
 		Int_t classification_;             
