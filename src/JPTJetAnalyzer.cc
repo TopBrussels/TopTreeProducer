@@ -72,7 +72,7 @@ void JPTJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets)
 
 		TRootJPTJet localJet = TRootJPTJet(tempJet);
 
-		//localJet.setJetType(3); // 3 = JPTJet
+		localJet.setJetType(3); // 3 = JPTJet
 		localJet.setN90(jet->nCarrying(0.9));
 		localJet.setN60(jet->nCarrying(0.6));
 
