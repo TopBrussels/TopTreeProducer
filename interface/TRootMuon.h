@@ -313,7 +313,7 @@ namespace TopTree
 		Int_t nofValidHits() const { return nofValidHits_;} 
 		Int_t nofValidMuHits() const { return nofValidMuHits_;}
 		Int_t nofMatches() const { return nofMatches_;}
-		Int_t nofPixelLayersWithMeasurement(Int_t x) const { return nofPixelLayersWithMeasurement_;}
+		Int_t nofPixelLayersWithMeasurement() const { return nofPixelLayersWithMeasurement_;}
 
 		TLorentzVector innerTrack() const { return innerTrack_;}
 
