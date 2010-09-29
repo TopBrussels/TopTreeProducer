@@ -16,6 +16,7 @@ namespace TopTree
 
 		TRootMET() :
 			TRootParticle()
+		        ,METType_(0)
 			,maxEtInEmTowers_(-9999.)
 			,maxEtInHadTowers_(-9999.)
 			,hadEtInHO_(-9999.)
@@ -54,7 +55,8 @@ namespace TopTree
 
 		TRootMET(const TRootMET& met) :
 			TRootParticle(met)
-			,maxEtInEmTowers_(met.maxEtInEmTowers_)
+			,METType_(met.METType_)
+		        ,maxEtInEmTowers_(met.maxEtInEmTowers_)
 			,maxEtInHadTowers_(met.maxEtInHadTowers_)
 			,hadEtInHO_(met.hadEtInHO_)
 			,hadEtInHB_(met.hadEtInHB_)
@@ -92,7 +94,8 @@ namespace TopTree
 
 		TRootMET(Double_t px, Double_t py, Double_t pz, Double_t e) :
 			TRootParticle(px,py,pz,e)
-			,maxEtInEmTowers_(-9999.)
+			,METType_(0)
+		        ,maxEtInEmTowers_(-9999.)
 			,maxEtInHadTowers_(-9999.)
 			,hadEtInHO_(-9999.)
 			,hadEtInHB_(-9999.)
@@ -130,7 +133,8 @@ namespace TopTree
 	
 		TRootMET(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z) :
 			TRootParticle(px,py,pz,e,vtx_x,vtx_y,vtx_z)
-			,maxEtInEmTowers_(-9999.)
+			,METType_(0)
+		        ,maxEtInEmTowers_(-9999.)
 			,maxEtInHadTowers_(-9999.)
 			,hadEtInHO_(-9999.)
 			,hadEtInHB_(-9999.)
@@ -168,7 +172,8 @@ namespace TopTree
 
 		TRootMET(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z, Int_t type, Float_t charge) :
 			TRootParticle(px,py,pz,e,vtx_x,vtx_y,vtx_z,type,charge)
-			,maxEtInEmTowers_(-9999.)
+			,METType_(0)
+		        ,maxEtInEmTowers_(-9999.)
 			,maxEtInHadTowers_(-9999.)
 			,hadEtInHO_(-9999.)
 			,hadEtInHB_(-9999.)
@@ -206,7 +211,8 @@ namespace TopTree
 
 		TRootMET(const TLorentzVector &momentum) :
 			TRootParticle(momentum)
-			,maxEtInEmTowers_(-9999.)
+			,METType_(0)
+		        ,maxEtInEmTowers_(-9999.)
 			,maxEtInHadTowers_(-9999.)
 			,hadEtInHO_(-9999.)
 			,hadEtInHB_(-9999.)
@@ -244,7 +250,8 @@ namespace TopTree
 
 		TRootMET(const TLorentzVector &momentum, const TVector3 &vertex, Int_t type, Float_t charge) :
 			TRootParticle(momentum, vertex, type, charge)
-			,maxEtInEmTowers_(-9999.)
+			,METType_(0)
+		        ,maxEtInEmTowers_(-9999.)
 			,maxEtInHadTowers_(-9999.)
 			,hadEtInHO_(-9999.)
 			,hadEtInHB_(-9999.)
@@ -282,6 +289,7 @@ namespace TopTree
 
 		~TRootMET() {;}
 		
+		Int_t METType() const { return METType_; }
 		Float_t maxEtInEmTowers() const { return maxEtInEmTowers_; }
 		Float_t maxEtInHadTowers() const { return maxEtInHadTowers_; }
 		Float_t hadEtInHO() const { return hadEtInHO_; }
@@ -319,7 +327,7 @@ namespace TopTree
 		//TObject* genMET() const { return genMET_.GetObject(); }
 		virtual TString typeName() const { return "TRootMET"; }
 
-
+		void setMETType(Int_t METType) { METType_ = METType; }
 		void setMaxEtInEmTowers(Float_t maxEtInEmTowers) { maxEtInEmTowers_ = maxEtInEmTowers; }
 		void setMaxEtInHadTowers(Float_t maxEtInHadTowers) { maxEtInHadTowers_ = maxEtInHadTowers; }
 		void setHadEtInHO(Float_t hadEtInHO) { hadEtInHO_ = hadEtInHO; }
@@ -409,6 +417,8 @@ namespace TopTree
 
 
 	private:
+
+		Int_t METType_;
 
 		Float_t maxEtInEmTowers_;    // Maximum ET in EM towers
 		Float_t maxEtInHadTowers_;   // Maximum ET in HCAL towers

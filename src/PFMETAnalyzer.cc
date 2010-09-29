@@ -56,6 +56,7 @@ void PFMETAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootMET)
 
 		TRootPFMET localMET = TRootPFMET(tempMET);
 
+		localMET.setMETType(2); // 2 = PFMET
 
 		if( dataType_=="RECO" || dataType_=="AOD" || dataType_=="PATAOD")
 		{

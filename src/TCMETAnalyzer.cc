@@ -56,7 +56,8 @@ void TCMETAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootMET)
 
 		TRootMET localMET = TRootMET(tempMET);
 
-
+		localMET.setMETType(3); // 3 = TCMET
+				
 		if( dataType_=="RECO" || dataType_=="AOD" || dataType_=="PATAOD")
 		{
 			// Some specific methods to reco::MET

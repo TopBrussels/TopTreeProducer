@@ -56,6 +56,7 @@ void CaloMETAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootMET)
 
 		TRootCaloMET localMET = TRootCaloMET(tempMET);
 
+		localMET.setMETType(1); // 1 = CaloMET
 
 		if( dataType_=="RECO" || dataType_=="AOD" || dataType_=="PATAOD")
 		{
