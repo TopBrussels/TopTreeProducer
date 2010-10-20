@@ -84,7 +84,13 @@ namespace TopTree
 			,partonFlavour_(jet.partonFlavour_)
 			,isTopJet_(jet.isTopJet_)
 			,genParton_(jet.genParton_)
-			{;}
+		        {
+			  unsigned int size = sizeof(JetCorrName_)/sizeof(JetCorrName_[0]);
+			  for (unsigned int i=0; i<size; i++) {
+			    JetCorrName_[i] = jet.JetCorrName_[i];
+			    JetCorrValue_[i] = jet.JetCorrValue_[i];
+			  }
+			}
 
 		TRootJet(Double_t px, Double_t py, Double_t pz, Double_t e) :
 			TRootParticle(px,py,pz,e)
@@ -285,6 +291,30 @@ namespace TopTree
 		//Float_t partonFlavour() const {return partonFlavour_; }
 		Bool_t isTopJet() const { return isTopJet_; }
 
+		float getJetCorrFactor(std::string name) {
+
+		  unsigned int size = sizeof(JetCorrName_)/sizeof(JetCorrName_[0]);
+
+		  for (unsigned int i=0; i<size; i++) {
+
+		    if ( JetCorrName_[i] == name )
+		      return JetCorrValue_[i];
+
+		  }
+
+		  // if we reach this point, the correction factor was not found -> print all possible names
+		  cout << "JetCorrFactor " << name << " was not found, possible names are: ";
+
+		  for (unsigned int i=0; i<size; i++)
+		    if (JetCorrName_[i] != "")
+		      cout << JetCorrName_[i] << endl;
+
+		  cout << endl;
+		  
+		  return 0;
+
+		}
+
 		virtual TString typeName() const { return "TRootJet"; }
 
 
@@ -327,6 +357,14 @@ namespace TopTree
 			return stream;
 		};
 
+		void setJetCorrFactor(int pos, std::string name, float factor) {
+		  
+		  //cout << "Setting factor " << name << " to " << factor << " in position " << pos << endl;
+		  JetCorrName_[pos] = name;
+		  JetCorrValue_[pos] = factor;
+		  
+		}
+
 
 	private:
 		//Jet Info
@@ -339,6 +377,11 @@ namespace TopTree
 		// Variables from pat::Jet
 		Float_t chargedBroadness_;          // DR of the cone containing 75% of the jet charged energy 
         
+		// jet correction factors
+
+		std::string JetCorrName_[17];
+		float JetCorrValue_[17];
+
 		//btag Info
 		Float_t btag_jetBProbabilityBJetTags_;
 		Float_t btag_jetProbabilityBJetTags_;

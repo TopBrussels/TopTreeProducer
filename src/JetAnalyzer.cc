@@ -43,7 +43,7 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet, std::string dataType)
 	); 
 
 	localJet.setNConstituents(jet->nConstituents());
-	localJet.setJetArea(jet->jetArea());
+	localJet.setJetArea(jet->jetArea()); 
 	localJet.setPileupEnergy(jet->pileup());
 	localJet.setMaxDistance(jet->maxDistance());
 
@@ -107,6 +107,9 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet, std::string dataType)
 			tracksPair.first = tracks[iTracks]->p();
 			tracksPair.second = deltaR;
 			tracksVPair.push_back(tracksPair);
+
+			//cout << "DeltaR " << deltaR << endl;
+
 		}
 	
 		sort(tracksVPair.begin(), tracksVPair.end(), Rsortrule);
@@ -121,9 +124,35 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet, std::string dataType)
 				break;
 			}
 		}
+		//cout << "Rmin " << Rmin << endl;
 		if (Rmin<1e-5) {Rmin=0.;}
 		localJet.setChargedBroadness(Rmin);
 
+		// jet correction factors
+
+		pat::Jet rawJet = patJet->correctedJet("raw");
+
+		localJet.setJetCorrFactor(0,"L1",rawJet.corrFactor("off"));
+		localJet.setJetCorrFactor(1,"L1L2",rawJet.corrFactor("rel"));
+		localJet.setJetCorrFactor(2,"L1L2L3",rawJet.corrFactor("abs"));
+		localJet.setJetCorrFactor(3,"L1L2L3L4",rawJet.corrFactor("emf"));
+
+		localJet.setJetCorrFactor(4,"L1L2L3L4L5_glu",rawJet.corrFactor("had","glu"));
+		localJet.setJetCorrFactor(5,"L1L2L3L4L5_uds",rawJet.corrFactor("had","uds"));
+		localJet.setJetCorrFactor(6,"L1L2L3L4L5_c",rawJet.corrFactor("had","c"));
+		localJet.setJetCorrFactor(7,"L1L2L3L4L5_b",rawJet.corrFactor("had","b"));
+
+		localJet.setJetCorrFactor(8,"L1L2L3L4L5L6_glu",rawJet.corrFactor("ue","glu"));
+		localJet.setJetCorrFactor(9,"L1L2L3L4L5L6_uds",rawJet.corrFactor("ue","uds"));
+		localJet.setJetCorrFactor(10,"L1L2L3L4L5L6_c",rawJet.corrFactor("ue","c"));
+		localJet.setJetCorrFactor(11,"L1L2L3L4L5L6_b",rawJet.corrFactor("ue","b"));
+
+		localJet.setJetCorrFactor(12,"L1L2L3L4L5L6L7_glu",rawJet.corrFactor("part","glu"));
+		localJet.setJetCorrFactor(13,"L1L2L3L4L5L6L7_uds",rawJet.corrFactor("part","uds"));
+		localJet.setJetCorrFactor(14,"L1L2L3L4L5L6L7_c",rawJet.corrFactor("part","c"));
+		localJet.setJetCorrFactor(15,"L1L2L3L4L5L6L7_b",rawJet.corrFactor("part","b"));
+
+		//cout << "Abs " << patJet->corrFactor("raw") << endl; 
 		// Matched genParticle
 		if (useMC_)
 		{
