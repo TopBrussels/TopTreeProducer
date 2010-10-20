@@ -111,8 +111,7 @@ namespace TopTree
 			fBrem_(-9999.),
 			isConversion_(true),
 			HLT_Ele10_SW_L1R_(false),
-			HLT_Ele15_SW_L1R_(false),
-			swissCross_(-9999.)
+			HLT_Ele15_SW_L1R_(false)
 			{;}
 
 		TRootElectron(const TRootElectron& e) :
@@ -205,13 +204,11 @@ namespace TopTree
 			idCiCHyperTight2_(e.idCiCHyperTight2_),
 			idCiCHyperTight3_(e.idCiCHyperTight3_),
 			idCiCHyperTight4_(e.idCiCHyperTight4_),*/
-		        idVBTF_(e.idVBTF_),
 			classification_(e.classification_),
 			fBrem_(e.fBrem_),
 			isConversion_(e.isConversion_),
 			HLT_Ele10_SW_L1R_(e.HLT_Ele10_SW_L1R_),
-			HLT_Ele15_SW_L1R_(e.HLT_Ele15_SW_L1R_),
-			swissCross_(e.swissCross_)
+			HLT_Ele15_SW_L1R_(e.HLT_Ele15_SW_L1R_)
 			{;}
 
 		TRootElectron(Double_t px, Double_t py, Double_t pz, Double_t e) :
@@ -308,8 +305,7 @@ namespace TopTree
 			fBrem_(-9999.),
 			isConversion_(true),
 			HLT_Ele10_SW_L1R_(false),
-			HLT_Ele15_SW_L1R_(false),
-			swissCross_(-9999.)
+			HLT_Ele15_SW_L1R_(false)
 			{;}
 	
 		TRootElectron(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z) :
@@ -406,8 +402,7 @@ namespace TopTree
 			fBrem_(-9999.),
 			isConversion_(true),
 			HLT_Ele10_SW_L1R_(false),
-			HLT_Ele15_SW_L1R_(false),
-			swissCross_(-9999.)
+			HLT_Ele15_SW_L1R_(false)
 			{;}
 
 		TRootElectron(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z, Int_t type, Int_t charge) :
@@ -504,8 +499,7 @@ namespace TopTree
 			fBrem_(-9999.),
 			isConversion_(true),
 			HLT_Ele10_SW_L1R_(false),
-			HLT_Ele15_SW_L1R_(false),
-			swissCross_(-9999.)
+			HLT_Ele15_SW_L1R_(false)
 			{;}
 
 		TRootElectron(const TLorentzVector &momentum) :
@@ -602,8 +596,7 @@ namespace TopTree
 			fBrem_(-9999.),
 			isConversion_(true),
 			HLT_Ele10_SW_L1R_(false),
-			HLT_Ele15_SW_L1R_(false),
-			swissCross_(-9999.)
+			HLT_Ele15_SW_L1R_(false)
 			{;}
 
 		TRootElectron(const TLorentzVector &momentum, const TVector3 &vertex, Int_t type, Float_t charge) :
@@ -700,8 +693,7 @@ namespace TopTree
 			fBrem_(-9999.),
 			isConversion_(true),
 			HLT_Ele10_SW_L1R_(false),
-			HLT_Ele15_SW_L1R_(false),
-			swissCross_(-9999.)
+			HLT_Ele15_SW_L1R_(false)
 			{;}
 
 		~TRootElectron() {;}
@@ -875,22 +867,6 @@ namespace TopTree
 		Int_t CiCHyperTightId_2() const{ return idCiCHyperTight2_; }
 		Int_t CiCHyperTightId_3() const{ return idCiCHyperTight3_; }
 		Int_t CiCHyperTightId_4() const{ return idCiCHyperTight4_; } */
-
-		Int_t isIDVBTF(std::string WP) {
-
-		  if (idVBTF_.find(WP) != idVBTF_.end())
-		    return idVBTF_[WP];
-		 
-		  else {
-		    cout << "Unknown VBTF eID Working Point: " << WP << ". Possible Working Points are: ";
-		    for (std::map<std::string,Int_t>::const_iterator it=idVBTF_.begin(); it != idVBTF_.end(); ++it)
-		      cout << it->first << " ";
-		    cout << endl;
-		  }
-
-		  return -1;
-
-		}
 		
 		Float_t fbrem() const { return fBrem_; };
 		Int_t numberOfBrems() const { return (basicClusterSize() - 1); }
@@ -904,9 +880,6 @@ namespace TopTree
 			return false;
 		}
 		
-		Float_t swissCross() const { return swissCross_; }
-
-
 		//setters
 		void setChargeInfo(Int_t scPix, Bool_t GsfCftScPix, Bool_t GsfScPix, Bool_t GsfCtf )
 		{
@@ -1060,8 +1033,6 @@ namespace TopTree
 		void setIDCategorizedLoose(Int_t idCutBasedCategorizedLoose) { idCategorizedLoose_ = idCutBasedCategorizedLoose; }
 		void setIDCategorizedTight(Int_t idCutBasedCategorizedTight) { idCategorizedTight_ = idCutBasedCategorizedTight; }
 
-		void setIDVBTF(std::string WP, Int_t idVBTF) { idVBTF_[WP] = idVBTF; }
-
 /*		void setIDCiCVeryLoose(Int_t cicVL) { idCiCVeryLoose_ = cicVL; }
 		void setIDCiCLoose(Int_t cicL) { idCiCLoose_ = cicL; }
 		void setIDCiCMedium(Int_t cicM) { idCiCMedium_ = cicM; }
@@ -1081,8 +1052,6 @@ namespace TopTree
 			if(input == "HLT_Ele15_SW_L1R") HLT_Ele15_SW_L1R_ = is;
 		}
 		
-		void setSwissCross(Float_t swissCross) { swissCross_ = swissCross; }
-
 		friend std::ostream& operator<< (std::ostream& stream, const TRootElectron& electron) {
 			stream << "TRootElectron - Charge=" << electron.charge() << " (Et,eta,phi)=("<< electron.Et() <<","<< electron.Eta() <<","<< electron.Phi() << ")"
 				<< " vertex(x,y,z)=("<< electron.vx() <<","<< electron.vy() <<","<< electron.vz() << ")";
@@ -1218,8 +1187,6 @@ namespace TopTree
 		Int_t idCiCHyperTight3_;
 		Int_t idCiCHyperTight4_;*/
 
-		std::map<std::string,Int_t> idVBTF_; // VBTF simple cut-based e-ID -> string = working point
-
 // Electron classification && fBrem ====================
 		Int_t classification_;             
 		Float_t fBrem_;
@@ -1230,7 +1197,6 @@ namespace TopTree
 		Bool_t HLT_Ele15_SW_L1R_;
 
 // Noise Cleanin
-		Float_t swissCross_;		// swissCross variable to reject electrons fron ECAL spikes
 	
 		ClassDef (TRootElectron,9);
 	};
