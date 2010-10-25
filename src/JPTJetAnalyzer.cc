@@ -23,7 +23,7 @@ JPTJetAnalyzer::JPTJetAnalyzer(const edm::ParameterSet& producersNames, const ed
 {
 	dataType_ = producersNames.getUntrackedParameter<string>("dataType","unknown");
 	JPTJetProducer_ = producersNames.getParameter<edm::InputTag>("JPTJetProducer");
-	//doJPTJetId_ = myConfig.getUntrackedParameter<bool>("doJPTJetId");
+	doJPTJetId_ = myConfig.getUntrackedParameter<bool>("doJPTJetId");
 	myJetAnalyzer = new JetAnalyzer(myConfig, verbosity);
 }
 
@@ -32,7 +32,7 @@ JPTJetAnalyzer::JPTJetAnalyzer(const edm::ParameterSet& producersNames, int iter
 	dataType_ = producersNames.getUntrackedParameter<string>("dataType","unknown");
 	vJPTJetProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("vJPTJetProducer");
 	JPTJetProducer_ = edm::InputTag(vJPTJetProducer[iter]);
-	//doJPTJetId_ = myConfig.getUntrackedParameter<bool>("doJPTJetId");
+	doJPTJetId_ = myConfig.getUntrackedParameter<bool>("doJPTJetId");
 	myJetAnalyzer = new JetAnalyzer(myConfig, verbosity);
 }
 
@@ -75,28 +75,44 @@ void JPTJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets)
 		localJet.setJetType(3); // 3 = JPTJet
 		localJet.setN90(jet->nCarrying(0.9));
 		localJet.setN60(jet->nCarrying(0.6));
+		localJet.setetaetaMoment(jet->etaetaMoment());
+		localJet.setphiphiMoment(jet->phiphiMoment());
 
 		if( dataType_=="PATAOD" || dataType_=="PAT" )
 		{
 			// Some specific methods to pat::Jet
 			const pat::Jet *patJet = dynamic_cast<const pat::Jet*>(&*jet);
-			localJet.setChargedMultiplicity(patJet->chargedMultiplicity()) ;
-			localJet.chargedHadronEnergy(patJet->chargedHadronEnergy());
-			localJet.chargedHadronEnergyFraction(patJet->chargedHadronEnergyFraction());
-			localJet.neutralHadronEnergy(patJet->neutralHadronEnergy());
-			localJet.neutralHadronEnergyFraction(patJet->neutralHadronEnergyFraction());
-			localJet.chargedEmEnergy(patJet->chargedEmEnergy());
-			localJet.chargedEmEnergyFraction(patJet->chargedEmEnergyFraction());
-			localJet.neutralEmEnergy(patJet->neutralEmEnergy());
-			localJet.neutralEmEnergyFraction(patJet->neutralEmEnergyFraction());
 			
+			localJet.setEcalEnergyFraction(patJet->emEnergyFraction());
+			localJet.setHcalEnergyFraction(patJet->energyFractionHadronic());
+			localJet.setMaxEInEmTowers(patJet->maxEInEmTowers());
+			localJet.setMaxEInHadTowers(patJet->maxEInHadTowers());
+			localJet.setTowersArea(patJet->towersArea());
 
-		
+			localJet.setChargedMultiplicity(patJet->chargedMultiplicity()) ;
+			localJet.setchargedHadronEnergy(patJet->chargedHadronEnergy());
+			localJet.setchargedHadronEnergyFraction(patJet->chargedHadronEnergyFraction());
+			localJet.setneutralHadronEnergy(patJet->neutralHadronEnergy());
+			localJet.setneutralHadronEnergyFraction(patJet->neutralHadronEnergyFraction());
+			localJet.setchargedEmEnergy(patJet->chargedEmEnergy());
+			localJet.setchargedEmEnergyFraction(patJet->chargedEmEnergyFraction());
+			localJet.setneutralEmEnergy(patJet->neutralEmEnergy());
+			localJet.setneutralEmEnergyFraction(patJet->neutralEmEnergyFraction());
+			
+			if(doJPTJetId_)
+			  {
+			    localJet.setfHPD(patJet->jetID().fHPD);
+			    localJet.setfRBX(patJet->jetID().fRBX);
+			    localJet.setn90Hits(patJet->jetID().n90Hits);
+			    localJet.setnHCALTowers(patJet->jetID().nHCALTowers);
+			    localJet.setnECALTowers(patJet->jetID().nECALTowers);
+			    
+			  } //end of if(doJPTJetId_)	
+			
 		} //end of if( dataType_=="PATAOD" || dataType_=="PAT" )
 		
 		new( (*rootJets)[j] ) TRootJPTJet(localJet);
 		if(verbosity_>2) cout << "   ["<< setw(3) << j << "] " << localJet << endl;
 		
 	}
-
 }

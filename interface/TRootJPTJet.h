@@ -20,6 +20,13 @@ namespace TopTree
 	public:
 		TRootJPTJet() :
 			TRootJet()
+			,etaetaMoment_(-9999.)
+			,phiphiMoment_(-9999.)
+			,ecalEnergyFraction_(-9999.)
+			,hcalEnergyFraction_(-9999.)
+			,maxEInEmTowers_(-9999.)
+   	                ,maxEInHadTowers_(-9999.)
+			,towersArea_(-9999.)
 			,n90_(-9999)
 			,n60_(-9999)
 			,fHPD_(-9999)
@@ -40,6 +47,13 @@ namespace TopTree
 		
 		TRootJPTJet(const TRootJPTJet& jet) :
 			TRootJet(jet)
+			,etaetaMoment_(jet.etaetaMoment_)
+			,phiphiMoment_(jet.phiphiMoment_)
+			,ecalEnergyFraction_(jet.ecalEnergyFraction_)
+			,hcalEnergyFraction_(jet.hcalEnergyFraction_)
+			,maxEInEmTowers_(jet.maxEInEmTowers_)
+			,maxEInHadTowers_(jet.maxEInHadTowers_)
+			,towersArea_(jet.towersArea_)
 			,n90_(jet.n90_)
 			,n60_(jet.n60_)
 			,fHPD_(jet.fHPD_)
@@ -60,6 +74,13 @@ namespace TopTree
 	
 		TRootJPTJet(const TRootJet& jet) :
 			TRootJet(jet)
+			,etaetaMoment_(-9999.)
+			,phiphiMoment_(-9999.)
+			,ecalEnergyFraction_(-9999.)
+			,hcalEnergyFraction_(-9999.)
+			,maxEInEmTowers_(-9999.)
+   	                ,maxEInHadTowers_(-9999.)
+			,towersArea_(-9999.)
 			,n90_(-9999)
 			,n60_(-9999)
 			,fHPD_(-9999)
@@ -80,6 +101,13 @@ namespace TopTree
 	
 		TRootJPTJet(Double_t px, Double_t py, Double_t pz, Double_t e) :
 			TRootJet(px,py,px,e)
+			,etaetaMoment_(-9999.)
+			,phiphiMoment_(-9999.)
+			,ecalEnergyFraction_(-9999.)
+			,hcalEnergyFraction_(-9999.)
+			,maxEInEmTowers_(-9999.)
+   	                ,maxEInHadTowers_(-9999.)
+			,towersArea_(-9999.)
 			,n90_(-9999)
 			,n60_(-9999)
 			,fHPD_(-9999)
@@ -100,6 +128,13 @@ namespace TopTree
 	
 		TRootJPTJet(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z) :
 			TRootJet(px,py,pz,e,vtx_x,vtx_y,vtx_z)
+			,etaetaMoment_(-9999.)
+			,phiphiMoment_(-9999.)
+			,ecalEnergyFraction_(-9999.)
+			,hcalEnergyFraction_(-9999.)
+			,maxEInEmTowers_(-9999.)
+   	                ,maxEInHadTowers_(-9999.)
+			,towersArea_(-9999.)
 			,n90_(-9999)
 			,n60_(-9999)
 			,fHPD_(-9999)
@@ -120,6 +155,13 @@ namespace TopTree
 	
 		TRootJPTJet(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z, Int_t type, Float_t charge) :
 			TRootJet(px,py,pz,e,vtx_x,vtx_y,vtx_z,type,charge)
+			,etaetaMoment_(-9999.)
+			,phiphiMoment_(-9999.)
+			,ecalEnergyFraction_(-9999.)
+			,hcalEnergyFraction_(-9999.)
+			,maxEInEmTowers_(-9999.)
+   	                ,maxEInHadTowers_(-9999.)
+			,towersArea_(-9999.)
 			,n60_(-9999)
 			,fHPD_(-9999)
 			,fRBX_(-9999.)
@@ -139,6 +181,13 @@ namespace TopTree
 	
 		TRootJPTJet(const TLorentzVector &momentum) :
 			TRootJet(momentum)
+			,etaetaMoment_(-9999.)
+			,phiphiMoment_(-9999.)
+			,ecalEnergyFraction_(-9999.)
+			,hcalEnergyFraction_(-9999.)
+			,maxEInEmTowers_(-9999.)
+   	                ,maxEInHadTowers_(-9999.)
+			,towersArea_(-9999.)
 			,n90_(-9999)
 			,n60_(-9999)
 			,fHPD_(-9999)
@@ -159,6 +208,13 @@ namespace TopTree
 	
 		TRootJPTJet(const TLorentzVector &momentum, const TVector3 &vertex, Int_t type, Float_t charge) :
 			TRootJet(momentum, vertex, type, charge)
+			,etaetaMoment_(-9999.)
+			,phiphiMoment_(-9999.)
+			,ecalEnergyFraction_(-9999.)
+			,hcalEnergyFraction_(-9999.)
+			,maxEInEmTowers_(-9999.)
+   	                ,maxEInHadTowers_(-9999.)
+			,towersArea_(-9999.)
 			,n90_(-9999)
 			,n60_(-9999)
 			,fHPD_(-9999)
@@ -178,8 +234,14 @@ namespace TopTree
 			{;}
 		
 		~TRootJPTJet() {;}
-	
-       
+		
+		Float_t etaetaMoment() const { return etaetaMoment_; }
+		Float_t phiphiMoment() const { return phiphiMoment_; }
+		Float_t ecalEnergyFraction() const { return ecalEnergyFraction_; }
+		Float_t hcalEnergyFraction() const { return hcalEnergyFraction_; }
+		Float_t maxEInEmTowers() const { return maxEInEmTowers_; }
+		Float_t maxEInHadTowers() const { return maxEInHadTowers_;}
+		Float_t towersArea() const { return towersArea_;} 
 		Int_t n90() const { return n90_; }
 		Int_t n60() const { return n60_; }
 		Float_t fHPD() const { return fHPD_; }
@@ -200,6 +262,13 @@ namespace TopTree
 
 		virtual TString typeName() const { return "TRootJPTJet"; }
 		
+		void setetaetaMoment(Float_t etaetaMoment) { etaetaMoment_ = etaetaMoment; }
+		void setphiphiMoment(Float_t phiphiMoment) { phiphiMoment_ = phiphiMoment; }
+		void setEcalEnergyFraction(Float_t ecalEnergyFraction) { ecalEnergyFraction_ = ecalEnergyFraction; }
+		void setHcalEnergyFraction(Float_t hcalEnergyFraction) { hcalEnergyFraction_ = hcalEnergyFraction; }
+		void setMaxEInEmTowers(Float_t maxEInEmTowers) { maxEInEmTowers_ = maxEInEmTowers; }
+		void setMaxEInHadTowers(Float_t maxEInHadTowers) { maxEInHadTowers_ = maxEInHadTowers; }
+		void setTowersArea(Float_t towersArea) {towersArea_ = towersArea; }
 		void setN90(Int_t n90) { n90_ = n90; }
 		void setN60(Int_t n60) { n60_ = n60; }
 		void setfHPD(Float_t fHPD) { fHPD_ = fHPD; }
@@ -209,14 +278,14 @@ namespace TopTree
 		void setnECALTowers(Int_t nECALTowers) { nECALTowers_ = nECALTowers; }
 		void setChargedMultiplicity(Int_t chargedMultiplicity) { chargedMultiplicity_ = chargedMultiplicity; }
 
-		void chargedHadronEnergy (Float_t x) { chargedHadronEnergy_ = x;}
-		void chargedHadronEnergyFraction (Float_t x) { chargedHadronEnergyFraction_ = x;}
-		void neutralHadronEnergy (Float_t x) { neutralHadronEnergy_ = x;}
-		void neutralHadronEnergyFraction (Float_t x) { neutralHadronEnergyFraction_ = x;}	
-		void chargedEmEnergy (Float_t x) { chargedEmEnergy_ = x;}
-		void chargedEmEnergyFraction (Float_t x) { chargedEmEnergyFraction_ = x;}
-		void neutralEmEnergy (Float_t x) { neutralEmEnergy_ = x;}
-		void neutralEmEnergyFraction (Float_t x) { neutralEmEnergyFraction_ = x;}
+		void setchargedHadronEnergy (Float_t x) { chargedHadronEnergy_ = x;}
+		void setchargedHadronEnergyFraction (Float_t x) { chargedHadronEnergyFraction_ = x;}
+		void setneutralHadronEnergy (Float_t x) { neutralHadronEnergy_ = x;}
+		void setneutralHadronEnergyFraction (Float_t x) { neutralHadronEnergyFraction_ = x;}	
+		void setchargedEmEnergy (Float_t x) { chargedEmEnergy_ = x;}
+		void setchargedEmEnergyFraction (Float_t x) { chargedEmEnergyFraction_ = x;}
+		void setneutralEmEnergy (Float_t x) { neutralEmEnergy_ = x;}
+		void setneutralEmEnergyFraction (Float_t x) { neutralEmEnergyFraction_ = x;}
 
 		
 		friend std::ostream& operator<< (std::ostream& stream, const TRootJPTJet& jet) {
@@ -228,7 +297,13 @@ namespace TopTree
 
 	private:
 
-   
+		Float_t etaetaMoment_;					// Added to CaloJet since they seem to be empty for PF
+		Float_t phiphiMoment_;					// Added to CaloJet since they seem to be empty for PF
+		Float_t ecalEnergyFraction_;        // ECAL Energy Fraction
+		Float_t hcalEnergyFraction_;        // HCAL Energy Fraction
+		Float_t maxEInEmTowers_;
+		Float_t maxEInHadTowers_;
+		Float_t towersArea_; 
 		Int_t n90_;                         // Number of constituents of the jet carrying 90% of tje jet energy
 		Int_t n60_;                         // Number of constituents of the jet carrying 60% of tje jet energy
 		Float_t fHPD_;
