@@ -5,7 +5,7 @@ using namespace TopTree;
 using namespace reco;
 using namespace edm;
 
-ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& producersNames):verbosity_(0),useMC_(false),runSuperCluster_(false),doPrimaryVertex_(false)
+ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& producersNames):verbosity_(0),useMC_(false),runSuperCluster_(false),doPrimaryVertex_(false),isData_(false)
 
 {
 	dataType_ = producersNames.getUntrackedParameter<string>("dataType","unknown");
@@ -24,6 +24,7 @@ ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& producersNames, cons
 	dataType_ = producersNames.getUntrackedParameter<string>("dataType","unknown");
 	electronProducer_ = producersNames.getParameter<edm::InputTag>("electronProducer");
 	useMC_ = myConfig.getUntrackedParameter<bool>("doElectronMC");
+	isData_ = myConfig.getUntrackedParameter<bool>("isData");
 	runSuperCluster_ = myConfig.getUntrackedParameter<bool>("runSuperCluster",false);
 	primaryVertexProducer_ = producersNames.getParameter<edm::InputTag>("primaryVertexProducer");
 	doPrimaryVertex_ = myConfig.getUntrackedParameter<bool>("doPrimaryVertex");
@@ -207,18 +208,42 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 //		localElectron.setConversion(electron->isFromConversion());
 
 		// Conversion:
-		//MagneticFiled at origin:
-		edm::ESHandle<MagneticField> magfield;
-		iSetup.get<IdealMagneticFieldRecord>().get(magfield);
-		GlobalPoint origin_point(0,0,0);
-		float Bfield = magfield.product()->inTesla(origin_point).mag();
+		
+		double evt_bField = 0;
 
-		edm::Handle<reco::TrackCollection> MyTrackHandle;
-		iEvent.getByLabel(TrackLabel_,MyTrackHandle);
-		double Dist = 9999.;
-		double DCot = 9999.;
-		reco::TrackRef partnerTrack = getConversionPartnerTrack(*electron,MyTrackHandle,Bfield,Dist,DCot);
-		localElectron.setConversion((bool)partnerTrack.isNonnull());
+		// need the magnetic field
+		//
+		// if isData_ then derive bfield using the
+		// magnet current from DcsStatus
+		// otherwise take it from the IdealMagneticFieldRecord
+
+		if (!isData_) {
+		  ESHandle<MagneticField> magneticField;
+		  iSetup.get<IdealMagneticFieldRecord>().get(magneticField);
+		  evt_bField = magneticField->inTesla(GlobalPoint(0.,0.,0.)).z();
+		} else {
+		  edm::Handle<DcsStatusCollection> dcsHandle;
+		  iEvent.getByLabel("scalersRawToDigi", dcsHandle);
+		  // scale factor = 3.801/18166.0 which are
+		  // average values taken over a stable two
+		  // week period
+		  float currentToBFieldScaleFactor = 2.09237036221512717e-04;
+		  float current = (*dcsHandle)[0].magnetCurrent();
+		  evt_bField = current*currentToBFieldScaleFactor;
+		}
+  
+		edm::Handle<reco::TrackCollection> tracks_h;
+		iEvent.getByLabel(TrackLabel_, tracks_h);
+
+		ConversionFinder convFinder;
+		ConversionInfo convInfo = convFinder.getConversionInfo(*electron, tracks_h, evt_bField,0.45);
+   
+		double Dist = convInfo.dist();
+		double DCot = convInfo.dcot();
+
+		localElectron.setDist(Dist);
+		localElectron.setDCot(DCot);
+		localElectron.setConversion(convFinder.isFromConversion(0.02, 0.02));
 
 		// Variables from reco::GsfTrack
 
@@ -298,98 +323,7 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 } 
 
 
-//methods for conversion============================================
 
-const reco::Track* ElectronAnalyzer::getElectronTrack(const reco::GsfElectron& electron, const float minFracSharedHits)
-{
-	if(electron.closestCtfTrackRef().isNonnull() && electron.shFracInnerHits() > minFracSharedHits)
-		return (const reco::Track*)electron.closestCtfTrackRef().get();
-	return (const reco::Track*)(electron.gsfTrack().get());
-}
 
-std::pair<double, double> ElectronAnalyzer::getConversionInfo(TLorentzVector trk1_p4,int trk1_q, float trk1_d0,TLorentzVector trk2_p4,int trk2_q, float trk2_d0,float bFieldAtOrigin)
-{
-	double tk1Curvature = -0.3*bFieldAtOrigin*(trk1_q/trk1_p4.Pt())/100.;
-	double rTk1 = fabs(1./tk1Curvature);
-	double xTk1 = (1./tk1Curvature - trk1_d0)*cos(trk1_p4.Phi());
-	double yTk1 = (1./tk1Curvature - trk1_d0)*sin(trk1_p4.Phi());
 
-	double tk2Curvature = -0.3*bFieldAtOrigin*(trk2_q/trk2_p4.Pt())/100.;
-	double rTk2 = fabs(1./tk2Curvature);
-	double xTk2 = (1./tk2Curvature - trk2_d0)*cos(trk2_p4.Phi());
-	double yTk2 = (1./tk2Curvature - trk2_d0)*sin(trk2_p4.Phi());
 
-	double dist = sqrt(pow(xTk1-xTk2, 2) + pow(yTk1-yTk2 , 2));
-	dist = dist - (rTk1 + rTk2);
-
-	double dcot = 1/tan(trk1_p4.Theta()) - 1/tan(trk2_p4.Theta());
-
-	return std::make_pair(dist, dcot);
-}
-
-reco::TrackRef ElectronAnalyzer::getConversionPartnerTrack(
-	const reco::GsfElectron& gsfElectron,
-	const edm::Handle<reco::TrackCollection>& track_h,
-	const float bFieldAtOrigin,
-	double& Dist,
-	double& DCot,
-	const float maxAbsDist,
-	const float maxAbsDCot,
-	const float minFracSharedHits)
-{
-	const reco::TrackRef el_ctftrack = gsfElectron.closestCtfTrackRef();
-	const TrackCollection *ctftracks = track_h.product();
-
-	const reco::Track* el_track = getElectronTrack(gsfElectron, minFracSharedHits);
-	int ctfidx = -999;
-	int el_q   = el_track->charge();
-	TLorentzVector el_tk_p4(el_track->px(), el_track->py(), el_track->pz(), el_track->p());
-	double el_d0 = el_track->d0();
-
-	if(el_ctftrack.isNonnull() && gsfElectron.shFracInnerHits() > minFracSharedHits)
-	ctfidx = static_cast<int>(el_ctftrack.key());
-
-	int tk_i = 0;
-	double mindR = 999;
-
-	//make a null Track Ref
-	TrackRef ctfTrackRef = TrackRef() ;
-
-	for(TrackCollection::const_iterator tk = ctftracks->begin(); tk != ctftracks->end(); tk++, tk_i++)
-	{
-		//if the general Track is the same one as made by the electron, skip it
-		if((tk_i == ctfidx)  &&  (gsfElectron.shFracInnerHits() > minFracSharedHits))
-			continue;
-
-		TLorentzVector tk_p4(tk->px(), tk->py(), tk->pz(), tk->p());
-
-		//look only in a cone of 0.3
-
-		double dR = deltaR(el_tk_p4.Eta(), el_tk_p4.Phi(), tk_p4.Eta(), tk_p4.Phi());
-		if(dR > 0.3)
-			continue;
-
-		int tk_q = tk->charge();
-		double tk_d0 = tk->d0();
-
-		//the electron and track must be opposite charge
-		if(tk_q + el_q != 0)
-			continue;
-
-		std::pair<double, double> convInfo =  getConversionInfo(el_tk_p4, el_q, el_d0,tk_p4, tk_q, tk_d0,bFieldAtOrigin);
-
-		double dist = convInfo.first;
-		double dcot = convInfo.second;
-
-		if(fabs(dist) < maxAbsDist && fabs(dcot) < maxAbsDCot && dR < mindR)
-		{
-			ctfTrackRef = reco::TrackRef(track_h, tk_i);
-			mindR = dR;
-			Dist = dist ;
-			DCot = dcot ;
-		}
-
-	}//track loop
-
-	return ctfTrackRef;
-}

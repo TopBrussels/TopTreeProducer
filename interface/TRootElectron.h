@@ -110,6 +110,8 @@ namespace TopTree
 			classification_(-9999),
 			fBrem_(-9999.),
 			isConversion_(true),
+		        Dist_(9999),
+		        DCot_(9999),
 			HLT_Ele10_SW_L1R_(false),
 			HLT_Ele15_SW_L1R_(false)
 			{;}
@@ -207,6 +209,8 @@ namespace TopTree
 			classification_(e.classification_),
 			fBrem_(e.fBrem_),
 			isConversion_(e.isConversion_),
+		        Dist_(e.Dist_),
+		        DCot_(e.DCot_),
 			HLT_Ele10_SW_L1R_(e.HLT_Ele10_SW_L1R_),
 			HLT_Ele15_SW_L1R_(e.HLT_Ele15_SW_L1R_)
 			{;}
@@ -304,6 +308,8 @@ namespace TopTree
 		        classification_(-9999),
 			fBrem_(-9999.),
 			isConversion_(true),
+		        Dist_(9999),
+		        DCot_(9999),
 			HLT_Ele10_SW_L1R_(false),
 			HLT_Ele15_SW_L1R_(false)
 			{;}
@@ -401,6 +407,8 @@ namespace TopTree
 		        classification_(-9999),
 			fBrem_(-9999.),
 			isConversion_(true),
+		        Dist_(9999),
+		        DCot_(9999),
 			HLT_Ele10_SW_L1R_(false),
 			HLT_Ele15_SW_L1R_(false)
 			{;}
@@ -498,6 +506,8 @@ namespace TopTree
 		        classification_(-9999),
 			fBrem_(-9999.),
 			isConversion_(true),
+		        Dist_(9999),
+		        DCot_(9999),
 			HLT_Ele10_SW_L1R_(false),
 			HLT_Ele15_SW_L1R_(false)
 			{;}
@@ -595,6 +605,8 @@ namespace TopTree
 		       classification_(-9999),
 			fBrem_(-9999.),
 			isConversion_(true),
+		        Dist_(9999),
+		        DCot_(9999),
 			HLT_Ele10_SW_L1R_(false),
 			HLT_Ele15_SW_L1R_(false)
 			{;}
@@ -692,6 +704,8 @@ namespace TopTree
 		        classification_(-9999),
 			fBrem_(-9999.),
 			isConversion_(true),
+		        Dist_(9999),
+		        DCot_(9999),
 			HLT_Ele10_SW_L1R_(false),
 			HLT_Ele15_SW_L1R_(false)
 			{;}
@@ -872,6 +886,8 @@ namespace TopTree
 		Int_t numberOfBrems() const { return (basicClusterSize() - 1); }
 		Int_t classification() const { return classification_; }
 		Bool_t isFromConversion() const	{ return ((bool)isConversion_); }
+		Float_t Dist() const { return Dist_; }
+		Float_t DCot() const { return DCot_; }
 
 		Bool_t hasTriggerMatch(std::string input) const
 		{
@@ -1046,6 +1062,8 @@ namespace TopTree
 		void setFbrem(Float_t f) { fBrem_ = f; }
 		void setClassification(Int_t i) { classification_ = i; }
 		void setConversion(Bool_t is) {	isConversion_ = is; }
+		void setDist(float dist) { Dist_ = dist; }
+		void setDCot(float dcot) { DCot_ = dcot; }
 		void setTriggerinfo(std::string input, Bool_t is)
 		{
 			if(input == "HLT_Ele10_SW_L1R") HLT_Ele10_SW_L1R_ = is;
@@ -1191,6 +1209,8 @@ namespace TopTree
 		Int_t classification_;             
 		Float_t fBrem_;
 		Bool_t isConversion_;
+		Float_t Dist_;
+		Float_t DCot_;
 
 //Trigger Info ======================================
 		Bool_t HLT_Ele10_SW_L1R_;
