@@ -605,19 +605,10 @@ int main()
 					for(int i=0; i<(objectsToKeep[j].inArray)->GetEntriesFast(); i++)
 					{
 						vertex = (TRootVertex*) (objectsToKeep[j].inArray)->At(i);
-						bool keepPrimaryVertex = true;
-					
-						if(objectsToKeep[j].skipObjects)
-						{
-							keepPrimaryVertex = false;
-							if( verbosity > 1 ) cout << "skip Primary Vertex" << endl;
-						}
-					
-						if(keepPrimaryVertex)
-						{
-							new( (*(objectsToKeep[j].outArray))[verticesKept] ) TRootVertex(*vertex);
-							verticesKept++;					
-						}
+						verticesKept++;					
+						
+						if( ! objectsToKeep[j].skipObjects )
+							new( (*(objectsToKeep[j].outArray))[i] ) TRootVertex(*vertex);
 					}
 
 					if(verticesKept < objectsToKeep[j].minNObjects)
@@ -628,69 +619,30 @@ int main()
 
 					if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
 					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
-
 				}
 
 				else if(objectsToKeep[j].type == "TopTree::TRootGenEvent")
 				{
 					TRootGenEvent* genEvt;
-					int genEvtKept=0;
-
 					genEvt = (TRootGenEvent*) (objectsToKeep[j].inArray)->At(0);
-					bool keepGenEvt = true;
 				
-					if(objectsToKeep[j].skipObjects)
-					{
-						keepGenEvt = false;
-						if( verbosity > 1 ) cout << "skip GenEvent" << endl;
-					}
-				
-					if(keepGenEvt)
-					{
+					if( ! objectsToKeep[j].skipObjects )
 						new( (*(objectsToKeep[j].outArray))[0] ) TRootGenEvent(*genEvt);
-						genEvtKept++;
-					}
-
-					if(genEvtKept < objectsToKeep[j].minNObjects)
-					{
-						keepEvent = false;
-						if( verbosity > 1 ) cout << "Too small number of selected GenEvent: genEvtKept = " << genEvtKept << endl;
-					}
 
 					if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
 					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
-				
 				}
 
 				else if(objectsToKeep[j].type == "TopTree::TRootNPGenEvent")
 				{
 					TRootNPGenEvent* npGenEvt;
-					int npGenEvtKept=0;
-
 					npGenEvt = (TRootNPGenEvent*) (objectsToKeep[j].inArray)->At(0);
-					bool keepNPGenEvt = true;
 				
-					if(objectsToKeep[j].skipObjects)
-					{
-						keepNPGenEvt = false;
-						if( verbosity > 1 ) cout << "skip NPGenEvent" << endl;
-					}
-				
-					if(keepNPGenEvt)
-					{
+					if( ! objectsToKeep[j].skipObjects )
 						new( (*(objectsToKeep[j].outArray))[0] ) TRootNPGenEvent(*npGenEvt);
-						npGenEvtKept++;
-					}
-
-					if(npGenEvtKept < objectsToKeep[j].minNObjects)
-					{
-						keepEvent = false;
-						if( verbosity > 1 ) cout << "Too small number of selected NPGenEvent: npGenEvtKept = " << npGenEvtKept << endl;
-					}
 
 					if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
 					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
-				
 				}
 
 				else if(objectsToKeep[j].type == "TopTree::TRootGenJet")
@@ -704,18 +656,15 @@ int main()
 					
 						if(genJet->Pt() < objectsToKeep[j].minPt || fabs(genJet->Eta()) > objectsToKeep[j].maxEta)
 						{
-							if(objectsToKeep[j].skipObjects)
-							{
-								keepGenJet = false;
-								if( verbosity > 1 ) cout << "skip genJet with pT = " << genJet->Pt() << " and eta = " << genJet->Eta() << endl;
-							}
+							keepGenJet = false;
+							if( verbosity > 1 ) cout << "skip genJet with pT = " << genJet->Pt() << " and eta = " << genJet->Eta() << endl;
 						}
-
-						if(keepGenJet)
-						{
-							new( (*(objectsToKeep[j].outArray))[genJetsKept] ) TRootGenJet(*genJet);			
-							genJetsKept++;
-						}
+						else genJetsKept++;
+						
+						if( ! objectsToKeep[j].skipObjects )
+							new( (*(objectsToKeep[j].outArray))[i] ) TRootGenJet(*genJet);
+						else if(keepGenJet)
+							new( (*(objectsToKeep[j].outArray))[genJetsKept-1] ) TRootGenJet(*genJet);
 					}
 				
 					if(genJetsKept < objectsToKeep[j].minNObjects)
@@ -726,7 +675,6 @@ int main()
 					
 					if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
 					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
-				
 				}
 
 				else if(objectsToKeep[j].type == "TopTree::TRootPFJet")
@@ -740,18 +688,15 @@ int main()
 						
 						if(pfJet->Pt() < objectsToKeep[j].minPt || fabs(pfJet->Eta()) > objectsToKeep[j].maxEta)
 						{
-							if(objectsToKeep[j].skipObjects)
-							{
-								keepPFJet = false;
-								if( verbosity > 1 ) cout << "skip PFJet with pT = " << pfJet->Pt() << " and eta = " << pfJet->Eta() << endl;
-							}
+							keepPFJet = false;
+							if( verbosity > 1 ) cout << "skip PFJet with pT = " << pfJet->Pt() << " and eta = " << pfJet->Eta() << endl;
 						}
-	
-						if(keepPFJet)
-						{
-							new( (*(objectsToKeep[j].outArray))[pfJetsKept] ) TRootPFJet(*pfJet);			
-							pfJetsKept++;
-						}
+						else pfJetsKept++;
+						
+						if( ! objectsToKeep[j].skipObjects )
+							new( (*(objectsToKeep[j].outArray))[i] ) TRootPFJet(*pfJet);
+						else if(keepPFJet)
+							new( (*(objectsToKeep[j].outArray))[pfJetsKept-1] ) TRootPFJet(*pfJet);			
 					}
 				
 					if(pfJetsKept < objectsToKeep[j].minNObjects)
@@ -762,7 +707,6 @@ int main()
 				
 					if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
 					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
-				
 				}
 
 				else if(objectsToKeep[j].type == "TopTree::TRootCaloJet")
@@ -776,18 +720,15 @@ int main()
 					
 						if(caloJet->Pt() < objectsToKeep[j].minPt || fabs(caloJet->Eta()) > objectsToKeep[j].maxEta)
 						{
-							if(objectsToKeep[j].skipObjects)
-							{
-								keepCaloJet = false;
-								if( verbosity > 1 ) cout << "skip CaloJet with pT = " << caloJet->Pt() << " and eta = " << caloJet->Eta() << endl;
-							}
+							keepCaloJet = false;
+							if( verbosity > 1 ) cout << "skip CaloJet with pT = " << caloJet->Pt() << " and eta = " << caloJet->Eta() << endl;
 						}
+						else caloJetsKept++;
 
-						if(keepCaloJet)
-						{
-							new( (*(objectsToKeep[j].outArray))[caloJetsKept] ) TRootCaloJet(*caloJet);			
-							caloJetsKept++;
-						}
+						if( ! objectsToKeep[j].skipObjects )
+							new( (*(objectsToKeep[j].outArray))[i] ) TRootCaloJet(*caloJet);
+						else if(keepCaloJet)
+							new( (*(objectsToKeep[j].outArray))[caloJetsKept-1] ) TRootCaloJet(*caloJet);			
 					}
 				
 					if(caloJetsKept < objectsToKeep[j].minNObjects)
@@ -798,7 +739,6 @@ int main()
 				
 					if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
 					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
-				
 				}
 
 				else if(objectsToKeep[j].type == "TopTree::TRootJPTJet")
@@ -812,18 +752,15 @@ int main()
 					
 						if(JPTJet->Pt() < objectsToKeep[j].minPt || fabs(JPTJet->Eta()) > objectsToKeep[j].maxEta)
 						{
-							if(objectsToKeep[j].skipObjects)
-							{
-								keepJPTJet = false;
-								if( verbosity > 1 ) cout << "skip JPTJet with pT = " << JPTJet->Pt() << " and eta = " << JPTJet->Eta() << endl;
-							}
+							keepJPTJet = false;
+							if( verbosity > 1 ) cout << "skip JPTJet with pT = " << JPTJet->Pt() << " and eta = " << JPTJet->Eta() << endl;
 						}
+						else JPTJetsKept++;
 
-						if(keepJPTJet)
-						{
-							new( (*(objectsToKeep[j].outArray))[JPTJetsKept] ) TRootJPTJet(*JPTJet);			
-							JPTJetsKept++;
-						}
+						if( ! objectsToKeep[j].skipObjects )
+							new( (*(objectsToKeep[j].outArray))[i] ) TRootJPTJet(*JPTJet);			
+						else if(keepJPTJet)
+							new( (*(objectsToKeep[j].outArray))[JPTJetsKept-1] ) TRootJPTJet(*JPTJet);			
 					}
 				
 					if(JPTJetsKept < objectsToKeep[j].minNObjects)
@@ -834,7 +771,6 @@ int main()
 				
 					if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
 					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
-				
 				}
 			
 				else if(objectsToKeep[j].type == "TopTree::TRootMCParticle")
@@ -848,18 +784,15 @@ int main()
 	
 						if(mcparticle->Pt() < objectsToKeep[j].minPt || fabs(mcparticle->Eta()) > objectsToKeep[j].maxEta)
 						{
-							if(objectsToKeep[j].skipObjects)
-							{
-								keepMCParticle = false;
-								if( verbosity > 1 ) cout << "skip MCparticle with pT = " << mcparticle->Pt() << " and eta = " << mcparticle->Eta() << endl;
-							}
+							keepMCParticle = false;
+							if( verbosity > 1 ) cout << "skip MCparticle with pT = " << mcparticle->Pt() << " and eta = " << mcparticle->Eta() << endl;
 						}
+						else mcparticlesKept++;
 					
-						if(keepMCParticle)
-						{
-							new( (*(objectsToKeep[j].outArray))[mcparticlesKept] ) TRootMCParticle(*mcparticle);
-							mcparticlesKept++;
-						}
+						if( ! objectsToKeep[j].skipObjects )
+							new( (*(objectsToKeep[j].outArray))[i] ) TRootMCParticle(*mcparticle);
+						else if(keepMCParticle)
+							new( (*(objectsToKeep[j].outArray))[mcparticlesKept-1] ) TRootMCParticle(*mcparticle);
 					}
 
 					if(mcparticlesKept < objectsToKeep[j].minNObjects)
@@ -881,18 +814,13 @@ int main()
 				
 					if(met->Pt() < objectsToKeep[j].minPt || fabs(met->Eta()) > objectsToKeep[j].maxEta)
 					{
-						if(objectsToKeep[j].skipObjects)
-						{
-							keepMET = false;
-							if( verbosity > 1 ) cout << "skip MET with pT = " << met->Pt() << " and eta = " << met->Eta() << endl;
-						}
+						keepMET = false;
+						if( verbosity > 1 ) cout << "skip MET with pT = " << met->Pt() << " and eta = " << met->Eta() << endl;
 					}
-				
-					if(keepMET)
-					{
-						new( (*(objectsToKeep[j].outArray))[0] ) TRootMET(*met);
-						METKept++;
-					}
+					else METKept++;
+					
+					if( ! objectsToKeep[j].skipObjects || keepMET )
+						new( (*(objectsToKeep[j].outArray))[0] ) TRootMET(*met);	
 
 					if(METKept < objectsToKeep[j].minNObjects)
 					{
@@ -913,18 +841,13 @@ int main()
 				
 					if(met->Pt() < objectsToKeep[j].minPt || fabs(met->Eta()) > objectsToKeep[j].maxEta)
 					{
-						if(objectsToKeep[j].skipObjects)
-						{
-							keepMET = false;
-							if( verbosity > 1 ) cout << "skip CaloMET with pT = " << met->Pt() << " and eta = " << met->Eta() << endl;
-						}
+						keepMET = false;
+						if( verbosity > 1 ) cout << "skip CaloMET with pT = " << met->Pt() << " and eta = " << met->Eta() << endl;
 					}
-				
-					if(keepMET)
-					{
+					else METKept++;
+					
+					if( ! objectsToKeep[j].skipObjects || keepMET )
 						new( (*(objectsToKeep[j].outArray))[0] ) TRootCaloMET(*met);
-						METKept++;
-					}
 
 					if(METKept < objectsToKeep[j].minNObjects)
 					{
@@ -945,18 +868,13 @@ int main()
 				
 					if(met->Pt() < objectsToKeep[j].minPt || fabs(met->Eta()) > objectsToKeep[j].maxEta)
 					{
-						if(objectsToKeep[j].skipObjects)
-						{
-							keepMET = false;
-							if( verbosity > 1 ) cout << "skip PFMET with pT = " << met->Pt() << " and eta = " << met->Eta() << endl;
-						}
+						keepMET = false;
+						if( verbosity > 1 ) cout << "skip PFMET with pT = " << met->Pt() << " and eta = " << met->Eta() << endl;
 					}
+					else METKept++;
 				
-					if(keepMET)
-					{
+					if( ! objectsToKeep[j].skipObjects || keepMET )
 						new( (*(objectsToKeep[j].outArray))[0] ) TRootMET(*met);
-						METKept++;
-					}
 
 					if(METKept < objectsToKeep[j].minNObjects)
 					{
@@ -978,18 +896,13 @@ int main()
 					{
 						if(mht->Pt() < objectsToKeep[j].minPt || fabs(mht->Eta()) > objectsToKeep[j].maxEta)
 						{
-							if(objectsToKeep[j].skipObjects)
-							{
-								keepMHT = false;
-								if( verbosity > 1 ) cout << "skip MHT with pT = " << mht->Pt() << " and eta = " << mht->Eta() << endl;
-							}
+							keepMHT = false;
+							if( verbosity > 1 ) cout << "skip MHT with pT = " << mht->Pt() << " and eta = " << mht->Eta() << endl;
 						}
+						else MHTKept++;
 				
-						if(keepMHT)
-						{
+						if( ! objectsToKeep[j].skipObjects || keepMHT )
 							new( (*(objectsToKeep[j].outArray))[0] ) TRootMHT(*mht);
-							MHTKept++;
-						}
 
 						if(MHTKept < objectsToKeep[j].minNObjects)
 						{
@@ -1013,18 +926,15 @@ int main()
 					
 						if(electron->Pt() < objectsToKeep[j].minPt || fabs(electron->Eta()) > objectsToKeep[j].maxEta)
 						{
-							if(objectsToKeep[j].skipObjects)
-							{
-								keepElectron = false;
-								if( verbosity > 1 ) cout << "skip Electron with pT = " << electron->Pt() << " and eta = " << electron->Eta() << endl;
-							}
+							keepElectron = false;
+							if( verbosity > 1 ) cout << "skip Electron with pT = " << electron->Pt() << " and eta = " << electron->Eta() << endl;
 						}
-					
-						if(keepElectron)
-						{
-							new( (*(objectsToKeep[j].outArray))[electronsKept] ) TRootElectron(*electron);
-							electronsKept++;
-						}
+						else electronsKept++;
+						
+						if( ! objectsToKeep[j].skipObjects )
+							new( (*(objectsToKeep[j].outArray))[i] ) TRootElectron(*electron);
+						else if(keepElectron)
+							new( (*(objectsToKeep[j].outArray))[electronsKept-1] ) TRootElectron(*electron);
 					}
 
 					if(electronsKept < objectsToKeep[j].minNObjects)
@@ -1048,18 +958,15 @@ int main()
 				
 						if(muon->Pt() < objectsToKeep[j].minPt || fabs(muon->Eta()) > objectsToKeep[j].maxEta)
 						{
-							if(objectsToKeep[j].skipObjects)
-							{
-								keepMuon = false;
-								if( verbosity > 1 ) cout << "skip Muon with pT = " << muon->Pt() << " and eta = " << muon->Eta() << endl;
-							}
+							keepMuon = false;
+							if( verbosity > 1 ) cout << "skip Muon with pT = " << muon->Pt() << " and eta = " << muon->Eta() << endl;
 						}
-					
-						if(keepMuon)
-						{
-							new( (*(objectsToKeep[j].outArray))[muonsKept] ) TRootMuon(*muon);
-							muonsKept++;
-						}
+						else muonsKept++;
+						
+						if( ! objectsToKeep[j].skipObjects )
+							new( (*(objectsToKeep[j].outArray))[i] ) TRootMuon(*muon);
+						else if(keepMuon)
+							new( (*(objectsToKeep[j].outArray))[muonsKept-1] ) TRootMuon(*muon);
 					}
 
 					if(muonsKept < objectsToKeep[j].minNObjects)
@@ -1075,7 +982,8 @@ int main()
 				else if(objectsToKeep[j].type == "TopTree::TRootCosmicMuon")
 				{
 					TRootCosmicMuon* muon;
-					int cosmicMuonsKept=0;
+					int cosmicMuonsKept = 0, nCosmicMuonGlobalTracks = 0, nCosmicMuonTrackerTracks = 0, nCosmicMuonStandaloneTracks = 0;
+
 					for(int i=0; i<(objectsToKeep[j].inArray)->GetEntriesFast(); i++)
 					{
 						muon = (TRootCosmicMuon*) (objectsToKeep[j].inArray)->At(i);
@@ -1083,24 +991,24 @@ int main()
 			
 						if(muon->Pt() < objectsToKeep[j].minPt || fabs(muon->Eta()) > objectsToKeep[j].maxEta)
 						{
-							if(objectsToKeep[j].skipObjects)
-							{
-								keepCosmicMuon = false;
-								if( verbosity > 1 ) cout << "skip CosmicMuon with pT = " << muon->Pt() << " and eta = " << muon->Eta() << endl;
-							}
+							keepCosmicMuon = false;
+							if( verbosity > 1 ) cout << "skip CosmicMuon with pT = " << muon->Pt() << " and eta = " << muon->Eta() << endl;
 						}
+						else cosmicMuonsKept++;
+						
+						int index = cosmicMuonsKept - 1;
+						if( ! objectsToKeep[j].skipObjects )
+							index = i;
 				
 						if(keepCosmicMuon)
 						{
-							new( (*(objectsToKeep[j].outArray))[cosmicMuonsKept] ) TRootCosmicMuon(*muon);
-							cosmicMuonsKept++;
+							new( (*(objectsToKeep[j].outArray))[index] ) TRootCosmicMuon(*muon);
 
 							j++;
-							int nCosmicMuonGlobalTracks = 0;
 							if(muon->globalTrack() != NULL)
 							{
 								TRootTrack* track = (TRootTrack*) muon->globalTrack();
-								new( (*(objectsToKeep[j].outArray))[cosmicMuonsKept] ) TRootTrack(*track);
+								new( (*(objectsToKeep[j].outArray))[index] ) TRootTrack(*track);
 					
 								muon->SetGlobalTrack( (TObject*) (objectsToKeep[j].outArray)->At(nCosmicMuonGlobalTracks));
 				
@@ -1108,11 +1016,10 @@ int main()
 							}
 					
 							j++;
-							int nCosmicMuonTrackerTracks = 0;
 							if(muon->trackerTrack() != NULL)
 							{
 								TRootTrack* track = (TRootTrack*) muon->trackerTrack();
-								new( (*(objectsToKeep[j].outArray))[cosmicMuonsKept] ) TRootTrack(*track);
+								new( (*(objectsToKeep[j].outArray))[index] ) TRootTrack(*track);
 				
 								muon->SetGlobalTrack( (TObject*) (objectsToKeep[j].outArray)->At(nCosmicMuonTrackerTracks));
 				
@@ -1120,11 +1027,11 @@ int main()
 							}
 					
 							j++;
-							int nCosmicMuonStandaloneTracks = 0;
+							
 							if(muon->trackerTrack() != NULL)
 							{
 								TRootTrack* track = (TRootTrack*) muon->trackerTrack();
-								new( (*(objectsToKeep[j].outArray))[cosmicMuonsKept] ) TRootTrack(*track);
+								new( (*(objectsToKeep[j].outArray))[index] ) TRootTrack(*track);
 				
 								muon->SetGlobalTrack( (TObject*) (objectsToKeep[j].outArray)->At(nCosmicMuonStandaloneTracks));
 				
