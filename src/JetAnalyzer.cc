@@ -86,11 +86,6 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet, std::string dataType)
 		cout << "softMuonBJetTags -> " << patJet->bDiscriminator("softMuonBJetTags") << endl;
 		cout << "softElectronBJetTags -> " << patJet->bDiscriminator("softElectronBJetTags") << endl;*/
 
-		localJet.setBCorrection(patJet->corrFactor(patJet->corrStep(), "b"));
-		localJet.setCCorrection(patJet->corrFactor(patJet->corrStep(), "c"));
-		localJet.setUDSCorrection(patJet->corrFactor(patJet->corrStep(), "uds"));
-		localJet.setGCorrection(patJet->corrFactor(patJet->corrStep(), "glu"));
-
 		// Use  associated tracks to calculate charged broadness of the jet
 		// FIXME - Check generalTracks collection is present
 		reco::TrackRefVector tracks =  patJet->associatedTracks() ;

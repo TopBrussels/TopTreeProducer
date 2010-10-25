@@ -44,10 +44,6 @@ namespace TopTree
 			,btag_softElectronByPtBJetTags_(-9999.)
 			,btag_softElectronByIP3dBJetTags_(-9999.)
 		        ,btag_ghostTrackBJetTags_(-9999.)
-			,bCorrection_(-9999.)
-			,cCorrection_(-9999.)
-			,udsCorrection_(-9999.)
-			,gCorrection_(-9999.)
 			,partonFlavour_(-999)
 			,isTopJet_(false)
 			,genParton_(0)
@@ -77,10 +73,6 @@ namespace TopTree
 			,btag_softElectronByPtBJetTags_(jet.btag_softElectronByPtBJetTags_)
 			,btag_softElectronByIP3dBJetTags_(jet.btag_softElectronByIP3dBJetTags_)
 		        ,btag_ghostTrackBJetTags_(jet.btag_ghostTrackBJetTags_)
-			,bCorrection_(jet.bCorrection_)
-			,cCorrection_(jet.cCorrection_)
-			,udsCorrection_(jet.udsCorrection_)
-			,gCorrection_(jet.gCorrection_)
 			,partonFlavour_(jet.partonFlavour_)
 			,isTopJet_(jet.isTopJet_)
 			,genParton_(jet.genParton_)
@@ -116,10 +108,6 @@ namespace TopTree
 			,btag_softElectronByPtBJetTags_(-9999.)
 			,btag_softElectronByIP3dBJetTags_(-9999.)
 		        ,btag_ghostTrackBJetTags_(-9999.)
-			,bCorrection_(-9999.)
-			,cCorrection_(-9999.)
-			,udsCorrection_(-9999.)
-			,gCorrection_(-9999.)
 			,partonFlavour_(-9999)
 			,isTopJet_(false)
 			,genParton_(0)
@@ -149,10 +137,6 @@ namespace TopTree
 			,btag_softElectronByPtBJetTags_(-9999.)
 			,btag_softElectronByIP3dBJetTags_(-9999.)
 		        ,btag_ghostTrackBJetTags_(-9999.)
-			,bCorrection_(-9999.)
-			,cCorrection_(-9999.)
-			,udsCorrection_(-9999.)
-			,gCorrection_(-9999.)
 			,partonFlavour_(-9999)
 			,isTopJet_(false)
 			,genParton_(0)
@@ -182,10 +166,6 @@ namespace TopTree
 			,btag_softElectronByPtBJetTags_(-9999.)
 			,btag_softElectronByIP3dBJetTags_(-9999.)
 		        ,btag_ghostTrackBJetTags_(-9999.)
-			,bCorrection_(-9999.)
-			,cCorrection_(-9999.)
-			,udsCorrection_(-9999.)
-			,gCorrection_(-9999.)
 			,partonFlavour_(-9999)
 			,isTopJet_(false)
 			,genParton_(0)
@@ -215,10 +195,6 @@ namespace TopTree
 			,btag_softElectronByPtBJetTags_(-9999.)
 			,btag_softElectronByIP3dBJetTags_(-9999.)
 		        ,btag_ghostTrackBJetTags_(-9999.)
-			,bCorrection_(-9999.)
-			,cCorrection_(-9999.)
-			,udsCorrection_(-9999.)
-			,gCorrection_(-9999.)
 			,partonFlavour_(-9999)
 			,isTopJet_(false)
 			,genParton_(0)
@@ -248,10 +224,6 @@ namespace TopTree
 			,btag_softElectronByPtBJetTags_(-9999.)
 			,btag_softElectronByIP3dBJetTags_(-9999.)
 		        ,btag_ghostTrackBJetTags_(-9999.)
-			,bCorrection_(-9999.)
-			,cCorrection_(-9999.)
-			,udsCorrection_(-9999.)
-			,gCorrection_(-9999.)
 			,partonFlavour_(-9999)
 			,isTopJet_(false)
 			,genParton_(0)
@@ -282,10 +254,7 @@ namespace TopTree
 		Float_t btag_softElectronByPtBJetTags() const { return btag_softElectronByPtBJetTags_; }
 		Float_t btag_softElectronByIP3dBJetTags() const { return btag_softElectronByIP3dBJetTags_; }
 		Float_t btag_ghostTrackBJetTags() const { return btag_ghostTrackBJetTags_; }
-		Float_t bCorrection() const { return bCorrection_; }
-		Float_t cCorrection() const { return cCorrection_; }
-		Float_t udsCorrection() const { return udsCorrection_; }
-		Float_t gCorrection() const { return gCorrection_; }
+
 		TObject* genParton() const { return genParton_.GetObject(); }
 		Int_t partonFlavour() const {return partonFlavour_; }
 		//Float_t partonFlavour() const {return partonFlavour_; }
@@ -342,10 +311,6 @@ namespace TopTree
 		void setBtag_softElectronByIP3dBJetTags(Float_t btag_softElectronByIP3dBJetTags) { btag_softElectronByIP3dBJetTags_ = btag_softElectronByIP3dBJetTags; }
 		void setBtag_ghostTrackBJetTags(Float_t btag_ghostTrackBJetTags) { btag_ghostTrackBJetTags_ = btag_ghostTrackBJetTags; }
 		
-		void setBCorrection(Float_t bCorrection) { bCorrection_ = bCorrection; }
-		void setCCorrection(Float_t cCorrection) { cCorrection_ = cCorrection; }
-		void setUDSCorrection(Float_t udsCorrection) { udsCorrection_ = udsCorrection; }
-		void setGCorrection(Float_t gCorrection) { gCorrection_ = gCorrection; }
 		void setPartonFlavour(Int_t partonFlavour) { partonFlavour_ = partonFlavour; }
 		void setIsTopJet(Bool_t isTopJet) { isTopJet_ = isTopJet; }
 		void setGenParton(TObject* genParton) { genParton_ = genParton; }
@@ -399,12 +364,6 @@ namespace TopTree
 		Float_t btag_softElectronByPtBJetTags_;
 		Float_t btag_softElectronByIP3dBJetTags_;
 		Float_t btag_ghostTrackBJetTags_;
-
-		//Correction Info
-		Float_t bCorrection_;               // correction factor for b hypothesis
-		Float_t cCorrection_;               // correction factor for c hypothesis
-		Float_t udsCorrection_;             // correction factor for uds hypothesis
-		Float_t gCorrection_;               // correction factor for gluon hypothesis
 
 		//MC info
 		Int_t partonFlavour_;
