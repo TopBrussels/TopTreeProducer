@@ -84,6 +84,9 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		# 		5 = Debug
  		verbosity = cms.untracked.int32(0),
 
+		# used in the electron to see if the magneticfield is taken from DCS or from IDEALMAGFIELDRECORD
+		isData = c√ms.untracked.bool(False,
+
 		# name of output root file
 		RootFileName = cms.untracked.string('test36X_TOPTREE.root'),
 
