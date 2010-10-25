@@ -115,28 +115,9 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		doPFJetStudy = cms.untracked.bool(True),
                 doJPTJet = cms.untracked.bool(False),
 		doJPTJetStudy = cms.untracked.bool(False),
+		doJPTJetId = cms.untracked.bool(True),
 		doMuon = cms.untracked.bool(True),
 		doCosmicMuon = cms.untracked.bool(False),
-
-                # if you enable electron, please add the following to your pat config
-
-                #process.load("TopBrussels.TopTreeProducer.simpleEleIdSequence_cff")
-
-                #process.patElectronIDs = cms.Sequence(process.simpleEleIdSequence) 
-                
-                #process.patElectrons.addElectronID = cms.bool(True)
-                #process.patElectrons.electronIDSources = cms.PSet(
-                #  simpleEleId70cIso= cms.InputTag("simpleEleId70cIso"),
-                #  simpleEleId95cIso= cms.InputTag("simpleEleId95cIso"),
-                #  eidRobustLoose = cms.InputTag("eidRobustLoose"),
-                #  eidRobustTight = cms.InputTag("eidRobustTight"),
-                #  eidRobustHighEnergy = cms.InputTag("eidRobustHighEnergy"),
-                #  eidLoose = cms.InputTag("eidLoose"),
-                #  eidTight = cms.InputTag("eidTight"),
-                #)
-
-                # and add process.patElectronIDs to your path
-                
 		doElectron = cms.untracked.bool(True),
 		runSuperCluster = cms.untracked.bool(True),#true only if SuperCluster are stored
 		doCaloMET = cms.untracked.bool(False),
