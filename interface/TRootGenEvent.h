@@ -73,7 +73,7 @@ namespace TopTree
 		const TLorentzVector hadronicDecayQuark() const {return hadronicDecayQuark_;}
 		const TLorentzVector hadronicDecayQuarkBar() const {return hadronicDecayQuarkBar_;}
 		const std::vector<TLorentzVector> leptonicDecayTopRadiation() const { return leptonicDecayTopRadiation_;}
-		const std::vector<TLorentzVector> hadronicDecayTopRadiation() const { return leptonicDecayTopRadiation_;}
+		const std::vector<TLorentzVector> hadronicDecayTopRadiation() const { return hadronicDecayTopRadiation_;}
 		const std::vector<TLorentzVector> ISR()const { return ISR_;}
  
 
