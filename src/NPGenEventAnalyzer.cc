@@ -114,11 +114,11 @@ NPGenEventAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootGenEv
 	    {
 	      isNewPhysics_ = true;
 	    }
-	  if (abs ((t->pdgId ()) == 11 || abs (t->pdgId ()) == 13 || abs (t->pdgId ()) == 15) &&
-	      ((abs (t->mother ()->pdgId ()) > 22 && abs (t->mother ()->pdgId ()) > 40) || (abs (t->mother ()->pdgId ()) > 999999 && abs (t->mother ()->pdgId ()) > 2999999)))
+	  if ((abs (t->pdgId ()) == 11 || abs (t->pdgId ()) == 13 || abs (t->pdgId ()) == 15) &&
+	      ((abs (t->mother ()->pdgId ()) > 22 && abs (t->mother ()->pdgId ()) < 40) || (abs (t->mother ()->pdgId ()) > 999999 && abs (t->mother ()->pdgId ()) < 2999999)))
 	    leptons_.push_back (ConvertMCPart(t));
 	  if ((abs (t->pdgId ()) == 12 || abs (t->pdgId ()) == 14 || abs (t->pdgId ()) == 16) &&
-	      ((abs (t->mother ()->pdgId ()) > 22 && abs (t->mother ()->pdgId ()) > 40) || (abs (t->mother ()->pdgId ()) > 999999 && abs (t->mother ()->pdgId ()) > 2999999)))
+	      ((abs (t->mother ()->pdgId ()) > 22 && abs (t->mother ()->pdgId ()) < 40) || (abs (t->mother ()->pdgId ()) > 999999 && abs (t->mother ()->pdgId ()) < 2999999)))
 	    neutrinos_.push_back (ConvertMCPart(t));
 	  if (abs (abs (t->pdgId ())) == 1000022 || abs (abs (t->pdgId ())) == 1000023 || abs (abs (t->pdgId ())) == 1000025 || abs (abs (t->pdgId ())) == 1000035)
 	    {
