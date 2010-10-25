@@ -107,6 +107,7 @@ void PFJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets)
 			// Some specific methods to pat::Jet
 			const pat::Jet *patJet = dynamic_cast<const pat::Jet*>(&*jet);
 
+			localJet.setnOfDaughters(patJet->numberOfDaughters());
 			localJet.setChargedHadronEnergyFraction(patJet->chargedHadronEnergyFraction());
 			localJet.setNeutralHadronEnergyFraction(patJet->neutralHadronEnergyFraction());
 			localJet.setChargedEmEnergyFraction(patJet->chargedEmEnergyFraction());

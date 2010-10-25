@@ -20,6 +20,7 @@ namespace TopTree
 	public:
 		TRootPFJet() :
 			TRootJet()
+		        ,nDaughters_(-9999.)
 			,chargedHadronEnergyFraction_(-9999.)
 			,neutralHadronEnergyFraction_(-9999.)
 			,chargedEmEnergyFraction_(-9999.)
@@ -32,6 +33,7 @@ namespace TopTree
 
 		TRootPFJet(const TRootPFJet& jet) :
 			TRootJet(jet)
+		        ,nDaughters_(jet.nDaughters_)
 			,chargedHadronEnergyFraction_(jet.chargedHadronEnergyFraction_)
 			,neutralHadronEnergyFraction_(jet.neutralHadronEnergyFraction_)
 			,chargedEmEnergyFraction_(jet.chargedEmEnergyFraction_)
@@ -43,7 +45,8 @@ namespace TopTree
 			{;}
 
 		TRootPFJet(const TRootJet& jet) :
-			TRootJet(jet)
+			TRootJet(jet)		        
+		        ,nDaughters_(-9999.)
 			,chargedHadronEnergyFraction_(-9999.)
 			,neutralHadronEnergyFraction_(-9999.)
 			,chargedEmEnergyFraction_(-9999.)
@@ -56,7 +59,8 @@ namespace TopTree
 
 		TRootPFJet(Double_t px, Double_t py, Double_t pz, Double_t e) :
 			TRootJet(px,py,px,e)
-			,chargedHadronEnergyFraction_(-9999.)
+		        ,nDaughters_(-9999.)
+		        ,chargedHadronEnergyFraction_(-9999.)
 			,neutralHadronEnergyFraction_(-9999.)
 			,chargedEmEnergyFraction_(-9999.)
 			,chargedMuEnergyFraction_(-9999.)
@@ -68,7 +72,8 @@ namespace TopTree
 
 		TRootPFJet(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z) :
 			TRootJet(px,py,pz,e,vtx_x,vtx_y,vtx_z)
-			,chargedHadronEnergyFraction_(-9999.)
+	      	        ,nDaughters_(-9999.)
+		        ,chargedHadronEnergyFraction_(-9999.)
 			,neutralHadronEnergyFraction_(-9999.)
 			,chargedEmEnergyFraction_(-9999.)
 			,chargedMuEnergyFraction_(-9999.)
@@ -80,7 +85,8 @@ namespace TopTree
 
 		TRootPFJet(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z, Int_t type, Float_t charge) :
 			TRootJet(px,py,pz,e,vtx_x,vtx_y,vtx_z,type,charge)
-			,chargedHadronEnergyFraction_(-9999.)
+      		        ,nDaughters_(-9999.)
+		        ,chargedHadronEnergyFraction_(-9999.)
 			,neutralHadronEnergyFraction_(-9999.)
 			,chargedEmEnergyFraction_(-9999.)
 			,chargedMuEnergyFraction_(-9999.)
@@ -92,6 +98,7 @@ namespace TopTree
 
 		TRootPFJet(const TLorentzVector &momentum) :
 			TRootJet(momentum)
+		        ,nDaughters_(-9999.)
 			,chargedHadronEnergyFraction_(-9999.)
 			,neutralHadronEnergyFraction_(-9999.)
 			,chargedEmEnergyFraction_(-9999.)
@@ -104,6 +111,7 @@ namespace TopTree
 
 		TRootPFJet(const TLorentzVector &momentum, const TVector3 &vertex, Int_t type, Float_t charge) :
 			TRootJet(momentum, vertex, type, charge)
+		        ,nDaughters_(-9999.)
 			,chargedHadronEnergyFraction_(-9999.)
 			,neutralHadronEnergyFraction_(-9999.)
 			,chargedEmEnergyFraction_(-9999.)
@@ -116,7 +124,7 @@ namespace TopTree
 
 		~TRootPFJet() {;}
 
-
+		Int_t nOfDaughters() const { return nDaughters_; }
 		Float_t chargedHadronEnergyFraction() const { return chargedHadronEnergyFraction_; }
 		Float_t neutralHadronEnergyFraction() const { return neutralHadronEnergyFraction_; }
 		Float_t chargedEmEnergyFraction() const { return chargedEmEnergyFraction_; }
@@ -127,6 +135,8 @@ namespace TopTree
 		Float_t muonMultiplicity() const { return muonMultiplicity_; }
 
 		virtual TString typeName() const { return "TRootPFJet"; }
+
+		void setnOfDaughters(int n) { nDaughters_ = n; }
 
 		void setChargedHadronEnergyFraction(Float_t chargedHadronEnergyFraction) { chargedHadronEnergyFraction_ = chargedHadronEnergyFraction; }
 		void setNeutralHadronEnergyFraction(Float_t neutralHadronEnergyFraction) { neutralHadronEnergyFraction_ = neutralHadronEnergyFraction; }
@@ -147,6 +157,7 @@ namespace TopTree
 
 	private:
 
+		Int_t nDaughters_;
 		Float_t chargedHadronEnergyFraction_;
 		Float_t neutralHadronEnergyFraction_;
 		Float_t chargedEmEnergyFraction_;
