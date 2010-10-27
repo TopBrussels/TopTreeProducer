@@ -23,10 +23,12 @@
 #include "DataFormats/RecoCandidate/interface/IsoDeposit.h"
 #include "RecoEcal/EgammaCoreTools/interface/EcalClusterLazyTools.h"
 #include "RecoLocalCalo/EcalRecAlgos/interface/EcalSeverityLevelAlgo.h"
+#include "DataFormats/Scalers/interface/DcsStatus.h"
 
 #include "DataFormats/VertexReco/interface/Vertex.h"
 #include "DataFormats/VertexReco/interface/VertexFwd.h"
 #include "MagneticField/Records/interface/IdealMagneticFieldRecord.h"
+#include "RecoEgamma/EgammaTools/interface/ConversionFinder.h"
 #include "../interface/TRootElectron.h"
 //#include "../interface/Conversion.h"
 #include "DataFormats/TrackReco/interface/Track.h"
@@ -75,6 +77,7 @@ private:
 	bool newId_;
 	bool doTriggerMatching;
 	bool doPrimaryVertex_;
+	bool isData_;
 	std::vector<std::string> pathNames;
 
 };
