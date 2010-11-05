@@ -112,8 +112,10 @@ private:
 	bool doJPTJet;
 	bool doJPTJetStudy;
 	bool doMuon;
+	bool doMuonStudy;
 	bool doCosmicMuon;
 	bool doElectron;
+	bool doElectronStudy;
 	bool doCaloMET;
 	bool doPFMET;
 	bool doTCMET;
@@ -128,6 +130,8 @@ private:
 	std::vector<std::string> vPFJetProducer;
 	std::vector<std::string> vJPTJetProducer;
 	std::vector<std::string> vCosmicMuonProducer;
+	std::vector<std::string> vMuonProducer;
+	std::vector<std::string> vElectronProducer;
 	int nTotEvt_;
 	HLTAnalyzer* hltAnalyzer_;
 	TRootRun* runInfos_;
@@ -145,7 +149,9 @@ private:
 	TClonesArray* muons;
 	std::vector<TClonesArray*> vcosmicMuons;
 	std::vector<std::vector<TClonesArray*> > vcosmicMuonTracks;
+	std::vector<TClonesArray*> vmuons;
 	TClonesArray* electrons;
+	std::vector<TClonesArray*> velectrons;
 	TClonesArray* CALOmet;
 	TClonesArray* PFmet;
 	TClonesArray* TCmet;

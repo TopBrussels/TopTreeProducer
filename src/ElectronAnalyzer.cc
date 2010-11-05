@@ -36,6 +36,24 @@ ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& producersNames, cons
 	pathNames = producersNames.getUntrackedParameter<std::vector<std::string> >("electronTriggerPaths",tmp); // electron trigger path names
 }
 
+ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
+{
+	dataType_ = producersNames.getUntrackedParameter<string>("dataType","unknown");
+	vElectronProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("vElectronProducer");
+	electronProducer_ =	edm::InputTag(vElectronProducer[iter]);
+	useMC_ = myConfig.getUntrackedParameter<bool>("doElectronMC");
+	isData_ = myConfig.getUntrackedParameter<bool>("isData");
+	runSuperCluster_ = myConfig.getUntrackedParameter<bool>("runSuperCluster",false);
+	primaryVertexProducer_ = producersNames.getParameter<edm::InputTag>("primaryVertexProducer");
+	doPrimaryVertex_ = myConfig.getUntrackedParameter<bool>("doPrimaryVertex");
+	TrackLabel_ = producersNames.getParameter<edm::InputTag>("generalTrackLabel");
+	newId_ = producersNames.getUntrackedParameter<bool>("electronNewId",false);
+	doTriggerMatching = producersNames.getUntrackedParameter<bool>("electronTriggerMatching",false);
+	std::vector<std::string> tmp;
+	tmp.clear();
+	pathNames = producersNames.getUntrackedParameter<std::vector<std::string> >("electronTriggerPaths",tmp); // electron trigger path names
+}
+
 ElectronAnalyzer::~ElectronAnalyzer()
 {
 }

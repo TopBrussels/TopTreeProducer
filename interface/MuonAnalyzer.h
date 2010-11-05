@@ -27,6 +27,7 @@ class MuonAnalyzer
 public:
 	MuonAnalyzer(const edm::ParameterSet& producersNames);
 	MuonAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity);
+	MuonAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity);
 	~MuonAnalyzer();
 	void SetVerbosity(int verbosity) { verbosity_ = verbosity; };
 	void Process(const edm::Event& iEvent, TClonesArray* rootMuons);
@@ -35,6 +36,7 @@ private:
 	int verbosity_;
 	std::string dataType_ ;
 	edm::InputTag muonProducer_;
+	std::vector<std::string> vMuonProducer;	
 	bool useMC_;
 };
 

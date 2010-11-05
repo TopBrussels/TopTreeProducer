@@ -49,8 +49,10 @@ void TopTreeProducer::beginJob()
 	doJPTJet = myConfig_.getUntrackedParameter<bool>("doJPTJet",false);
 	doJPTJetStudy = myConfig_.getUntrackedParameter<bool>("doJPTJetStudy",false);
 	doMuon = myConfig_.getUntrackedParameter<bool>("doMuon",false);
+	doMuonStudy = myConfig_.getUntrackedParameter<bool>("doMuonStudy",false);
 	doCosmicMuon = myConfig_.getUntrackedParameter<bool>("doCosmicMuon",false);
 	doElectron = myConfig_.getUntrackedParameter<bool>("doElectron",false);	
+	doElectronStudy = myConfig_.getUntrackedParameter<bool>("doElectronStudy",false);	
 	doCaloMET = myConfig_.getUntrackedParameter<bool>("doCaloMET",false);
 	doPFMET = myConfig_.getUntrackedParameter<bool>("doPFMET",false);
 	doTCMET = myConfig_.getUntrackedParameter<bool>("doTCMET",false);
@@ -67,6 +69,8 @@ void TopTreeProducer::beginJob()
 	vPFJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vpfJetProducer",defaultVec);
 	vJPTJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vJPTJetProducer",defaultVec);
 	vCosmicMuonProducer = producersNames_.getUntrackedParameter<vector<string> >("vcosmicMuonProducer",defaultVecCM);
+	vMuonProducer = producersNames_.getUntrackedParameter<vector<string> >("vMuonProducer",defaultVec);
+	vElectronProducer = producersNames_.getUntrackedParameter<vector<string> >("vElectronProducer",defaultVec);
 
 	for(unsigned int s=0;s<vGenJetProducer.size();s++){
 		TClonesArray* a;
@@ -97,6 +101,16 @@ void TopTreeProducer::beginJob()
 		  trackVector.push_back(a);
 
 		vcosmicMuonTracks.push_back(trackVector);
+	}
+
+	for(unsigned int s=0;s<vMuonProducer.size();s++){
+		TClonesArray* a;
+		vmuons.push_back(a);
+	}
+
+	for(unsigned int s=0;s<vElectronProducer.size();s++){
+		TClonesArray* a;
+		velectrons.push_back(a);
 	}
 
 	nTotEvt_ = 0;
@@ -241,6 +255,19 @@ void TopTreeProducer::beginJob()
 		eventTree_->Branch ("Muons", "TClonesArray", &muons);
 	}
 
+	if(doMuonStudy)
+	{
+		if(verbosity>0) cout << "Muons info will be added to rootuple (MuonStudy)" << endl;
+	     
+		for(unsigned int s=0;s<vMuonProducer.size();s++) {
+			vmuons[s] = new TClonesArray("TopTree::TRootMuon", 1000);
+			char name[100];
+			sprintf(name,"Muons_%s",vMuonProducer[s].c_str());
+			eventTree_->Branch (name, "TClonesArray", &vmuons[s]);
+
+		} 
+	}
+
 	if(doCosmicMuon)
 	{
 		if(verbosity>0) cout << "Cosmic Muons info will be added to rootuple" << endl;
@@ -277,6 +304,18 @@ void TopTreeProducer::beginJob()
 		if(verbosity>0) cout << "Electrons info will be added to rootuple" << endl;
 		electrons = new TClonesArray("TopTree::TRootElectron", 1000);
 		eventTree_->Branch ("Electrons", "TClonesArray", &electrons);
+	}
+
+	if(doElectronStudy)
+	{
+		if(verbosity>0) cout << "Electrons info will be added to rootuple (ElectronStudy)" << endl;
+	     
+		for(unsigned int s=0;s<vElectronProducer.size();s++) {
+			velectrons[s] = new TClonesArray("TopTree::TRootElectron", 1000);
+			char name[100];
+			sprintf(name,"Electrons_%s",vElectronProducer[s].c_str());
+			eventTree_->Branch (name, "TClonesArray", &velectrons[s]);
+		} 
 	}
 
 	if(doCaloMET)
@@ -590,6 +629,16 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		delete myMuonAnalyzer;
 	}
 
+	if(doMuonStudy)
+	{
+		if(verbosity>1) cout << endl << "Analysing muon collection (for MuonStudy)..." << endl;
+		for(unsigned int s=0;s<vMuonProducer.size();s++){
+		  MuonAnalyzer* myMuonAnalyzer = new MuonAnalyzer(producersNames_, s, myConfig_, verbosity);
+		  myMuonAnalyzer->Process(iEvent, vmuons[s]);
+		  delete myMuonAnalyzer;
+		}
+	}
+
 	// Cosmic Muons
 	if(doCosmicMuon)
 	{
@@ -623,6 +672,16 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		myElectronAnalyzer->Process(iEvent, electrons, *lazyTools, iSetup);
 		delete myElectronAnalyzer;
 	}
+
+	if(doElectronStudy)
+	{
+		if(verbosity>1) cout << endl << "Analysing electrons collection (for ElectronStudy)..." << endl;
+		for(unsigned int s=0;s<vElectronProducer.size();s++){
+		  ElectronAnalyzer* myElectronAnalyzer = new ElectronAnalyzer(producersNames_, s, myConfig_, verbosity);
+		  myElectronAnalyzer->Process(iEvent, velectrons[s], *lazyTools, iSetup);
+		  delete myElectronAnalyzer;
+		}
+	}	
 
 	// MET 
 	if(doCaloMET)
@@ -712,6 +771,11 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		}
 	}
 	if(doMuon) (*muons).Delete();
+	if(doMuonStudy){
+		for(unsigned int s=0;s<vMuonProducer.size();s++){
+			(*vmuons[s]).Delete();
+		}
+	}
        	if(doCosmicMuon) {
 	
 	  for(unsigned int s=0;s<vCosmicMuonProducer.size();s++){
@@ -721,6 +785,11 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	}
 
 	if(doElectron) (*electrons).Delete();
+	if(doElectronStudy){
+		for(unsigned int s=0;s<vElectronProducer.size();s++){
+			(*velectrons[s]).Delete();
+		}
+	}
 	if(doCaloMET) (*CALOmet).Delete();
 	if(doPFMET) (*PFmet).Delete();
 	if(doTCMET) (*TCmet).Delete();

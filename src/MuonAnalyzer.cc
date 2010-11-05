@@ -20,6 +20,14 @@ verbosity_ (verbosity)
 	muonProducer_ = producersNames.getParameter < edm::InputTag > ("muonProducer");
 	useMC_ = myConfig.getUntrackedParameter < bool > ("doMuonMC");
 }
+MuonAnalyzer::MuonAnalyzer (const edm::ParameterSet & producersNames, int iter, const edm::ParameterSet & myConfig, int verbosity):
+verbosity_ (verbosity)
+{
+	dataType_ = producersNames.getUntrackedParameter < string > ("dataType", "unknown");
+	vMuonProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("vMuonProducer");
+	muonProducer_ =	edm::InputTag(vMuonProducer[iter]);
+	useMC_ = myConfig.getUntrackedParameter < bool > ("doMuonMC");
+}
 
 MuonAnalyzer::~MuonAnalyzer ()
 {

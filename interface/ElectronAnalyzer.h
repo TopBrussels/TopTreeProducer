@@ -51,6 +51,7 @@ class ElectronAnalyzer{
 public:
 	ElectronAnalyzer(const edm::ParameterSet& producersNames);
 	ElectronAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity);
+	ElectronAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity);
 	~ElectronAnalyzer();
 	void SetVerbosity(int verbosity) {verbosity_ = verbosity; };
 	void Process(const edm::Event& iEvent, TClonesArray* rootElectrons, EcalClusterLazyTools& lazyTools, const edm::EventSetup& iSetup);
@@ -70,6 +71,7 @@ private:
 	int verbosity_;
 	std::string dataType_ ;
 	edm::InputTag electronProducer_;
+	std::vector<std::string> vElectronProducer;	
 	edm::InputTag primaryVertexProducer_;
 	edm::InputTag TrackLabel_;
 	bool useMC_;
