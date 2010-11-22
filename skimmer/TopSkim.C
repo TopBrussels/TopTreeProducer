@@ -1107,6 +1107,7 @@ int main()
 		if( verbosity > 1 ) cout << "Analyzing input file " << inFileName[nFile] << " finished!" << endl;
 
 		if(inRunInfos) inRunInfos->Delete();
+		inFile->Close();
 		if(inFile) inFile->Delete();
 
 	} // loop over input files
