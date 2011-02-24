@@ -18,7 +18,7 @@ Table of contents:
   3.1 The TopTreeProducer structure
   3.2 The objects
     3.2.1 Run and Event
-    3.2.2 HLT
+    3.2.2 HLT
     3.2.3 Muon
     3.2.4 Electron
     3.2.5 Jets
@@ -423,7 +423,7 @@ During testing, you can switch on/off as many objects as you like but in the end
   - Muons
   - Electrons
   - All kind of jet options
-  - All king of met options
+  - All kind of met options
   - HLT
   - MC/GenEvent/NPGenEvent
 
