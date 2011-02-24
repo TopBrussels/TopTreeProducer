@@ -190,7 +190,7 @@ Here we will try to summarize how the TopTreeProducer is built and how you can a
 
     Implementation: Both objects are produced inside src/TopTreeProducer.cc. No separate modules are run for these objecs.
  
-    3.2.2 HLT
+    3.2.2 HLT
     ---------
 
     TopTree Definition: interface/TRootHLTInfo.h: HLTInfo container which provides mapping between triggerPath and triggerBit e.g. HLT_Mu9 -> trigger bit 41 (dummy value!)
