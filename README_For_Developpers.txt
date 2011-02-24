@@ -241,7 +241,7 @@ Here we will try to summarize how the TopTreeProducer is built and how you can a
                            |_> interface/CaloMETAnalyzer.h
                            |_> interface/PFMETAnalyzer.h
                            |_> interface/TCMETAnalyzer.h
-                         |_> src/ElectronAnalyzer.cc
+                         |_> src/METAnalyzer.cc
                             |_> src/CaloMETAnalyzer.cc
                             |_> src/PFMETAnalyzer.cc
                             |_> src/TCMETAnalyzer.cc
