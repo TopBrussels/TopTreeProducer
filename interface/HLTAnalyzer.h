@@ -30,26 +30,18 @@ public:
 		verbosity_(0)
 		,triggerResultsTag1st_(producersNames.getParameter<edm::InputTag> ("hltProducer1st"))
 		,triggerResultsTag2nd_(producersNames.getParameter<edm::InputTag> ("hltProducer2nd"))
-		,triggerResultsTag8E29_(producersNames.getParameter<edm::InputTag> ("hltProducer8E29"))
+		,triggerResultsTag3rd_(producersNames.getParameter<edm::InputTag> ("hltProducer3rd"))
+		,triggerResultsTag4th_(producersNames.getParameter<edm::InputTag> ("hltProducer4th"))
   		,triggerNames_()
-  		,triggerNames8E29_()
 		,doHLT_(myConfig.getUntrackedParameter<bool>("doHLT",false))
-		,doHLT8E29_(myConfig.getUntrackedParameter<bool>("doHLT8E29",false))
   		,nEvents_(0)
   		,nWasRun_(0)
   		,nAccept_(0)
   		,nErrors_(0)
-  		,nWasRun8E29_(0)
-  		,nAccept8E29_(0)
-  		,nErrors8E29_(0)
   		,hltWasRun_(0)
   		,hltAccept_(0)
   		,hltErrors_(0)
   		,hltNames_(0)
-  		,hltWasRun8E29_(0)
-  		,hltAccept8E29_(0)
-  		,hltErrors8E29_(0)
-  		,hltNames8E29_(0)
 		{;}
 	
 	~HLTAnalyzer() {;}
@@ -84,37 +76,28 @@ private:
 	edm::InputTag triggerResultsTag_;		// Input tag for TriggerResults, final choice
 	edm::InputTag triggerResultsTag1st_;	// Input tag for TriggerResults, 1st choice
 	edm::InputTag triggerResultsTag2nd_;	// Input tag for TriggerResults, 2nd choice
-	edm::InputTag triggerResultsTag8E29_;	// Input tag for TriggerResults8E29
+	edm::InputTag triggerResultsTag3rd_;	// Input tag for TriggerResults, 3rd choice
+	edm::InputTag triggerResultsTag4th_;	// Input tag for TriggerResults, 4th choice
 
 	edm::TriggerNames triggerNames_;			// TriggerNames class
-	edm::TriggerNames triggerNames8E29_;	// TriggerNames8E29 class
 
 	bool doHLT_;
-	bool doHLT8E29_;
 
 	unsigned int  nEvents_;								// number of events processed
 
 	unsigned int  nWasRun_;								// # where at least one HLT was run
 	unsigned int  nAccept_;								// # of accepted events
 	unsigned int  nErrors_;								// # where at least one HLT had error
-	unsigned int  nWasRun8E29_;						// # where at least one HLT was run
-	unsigned int  nAccept8E29_;						// # of accepted events
-	unsigned int  nErrors8E29_;						// # where at least one HLT had error
 
 	std::vector<unsigned int> hltWasRun_;			// # where HLT[i] was run
 	std::vector<unsigned int> hltAccept_;			// # of events accepted by HLT[i]
 	std::vector<unsigned int> hltErrors_;			// # of events with error in HLT[i]
 	std::vector<std::string>  hltNames_;			// name of each HLT algorithm
-	std::vector<unsigned int> hltWasRun8E29_;		// # where HLT[i] was run
-	std::vector<unsigned int> hltAccept8E29_;		// # of events accepted by HLT[i]
-	std::vector<unsigned int> hltErrors8E29_;		// # of events with error in HLT[i]
-	std::vector<std::string>  hltNames8E29_;		// name of each HLT algorithm
 
 
 	// new HLTInfo container
 
 	vector<TopTree::TRootHLTInfo> hltInfos_;
-	vector<TopTree::TRootHLTInfo> hltInfos8E29_;
 	
 };
 

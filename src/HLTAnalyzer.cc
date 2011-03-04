@@ -22,14 +22,12 @@ int getIndexForRun ( const edm::Event& iEvent, vector<TopTree::TRootHLTInfo> inf
 void HLTAnalyzer::init(const edm::Event& iEvent, TRootEvent* rootEvent)
 {
        
-  // check if we need to process HLT8E29
-
    edm::Handle<edm::TriggerResults> trigResults;
-   try {iEvent.getByLabel(triggerResultsTag8E29_,trigResults);} catch (...) {;}
+   try {iEvent.getByLabel(triggerResultsTag1st_,trigResults);} catch (...) {;}
    if (!trigResults.isValid())
-     doHLT8E29_=false;
+     doHLT_=false;
    else
-     doHLT8E29_=true;     
+     doHLT_=true;     
 }
 
 void HLTAnalyzer::process(const edm::Event& iEvent, TRootEvent* rootEvent)
@@ -43,9 +41,11 @@ void HLTAnalyzer::process(const edm::Event& iEvent, TRootEvent* rootEvent)
 	  
 	  if ( index == -1 || index < (int)hltInfos_.size()-1 ) {// no info for this run yet -> create a new entry
 	    
-	    edm::Handle<edm::TriggerResults> trigResults, trigResults1st, trigResults2nd;
+	    edm::Handle<edm::TriggerResults> trigResults, trigResults1st, trigResults2nd, trigResults3rd, trigResults4th;
 	    try {iEvent.getByLabel(triggerResultsTag1st_,trigResults1st);} catch (...) {;}
 	    try {iEvent.getByLabel(triggerResultsTag2nd_,trigResults2nd);} catch (...) {;}
+	    try {iEvent.getByLabel(triggerResultsTag3rd_,trigResults3rd);} catch (...) {;}
+	    try {iEvent.getByLabel(triggerResultsTag4th_,trigResults4th);} catch (...) {;}
 	    if(trigResults1st.isValid())
 	      {
 		trigResults = trigResults1st;
@@ -56,10 +56,15 @@ void HLTAnalyzer::process(const edm::Event& iEvent, TRootEvent* rootEvent)
 		trigResults = trigResults2nd;
 		triggerResultsTag_ = triggerResultsTag2nd_;
 	      }
-	    else
+	    else if(trigResults3rd.isValid())
+	      {
+		trigResults = trigResults3rd;
+		triggerResultsTag_ = triggerResultsTag3rd_;
+	      }
+	    else if(trigResults4th.isValid())
 	    {
-	      trigResults = trigResults1st;
-	      triggerResultsTag_ = triggerResultsTag1st_;
+	      trigResults = trigResults4th;
+	      triggerResultsTag_ = triggerResultsTag4th_;
 	    }
 	    
 	    //cout << "triggerResultsTag_: " << triggerResultsTag_ << endl;
@@ -126,81 +131,6 @@ void HLTAnalyzer::process(const edm::Event& iEvent, TRootEvent* rootEvent)
 	  
 	}
 
-	if(doHLT8E29_)
-	{
-
-	  //cout << "hltInfos8E29.size(): " << hltInfos8E29_.size() << endl; 
-	
-	  //if (hltInfos8E29_.size() > 0)
-	  //  cout << "hltNames8E29.size(): " << hltInfos8E29_[hltInfos8E29_.size()-1].nHLTPaths() << endl;
-
-	  int index = getIndexForRun(iEvent,hltInfos8E29_);
-	  
-	  if ( index == -1 ) {// no info for this run yet -> create a new entry
-
-	    edm::Handle<edm::TriggerResults> trigResults;
-	    try {iEvent.getByLabel(triggerResultsTag8E29_,trigResults);} catch (...) {;}
-	    if(trigResults.isValid())
-	      {
-		triggerNames8E29_=iEvent.triggerNames(*trigResults);
-		hltNames8E29_=triggerNames8E29_.triggerNames();
-		const unsigned int n(hltNames8E29_.size());
-		hltWasRun8E29_.resize(n);
-		hltAccept8E29_.resize(n);
-		hltErrors8E29_.resize(n);
-		for (unsigned int i=0; i!=n; ++i)
-		  {
-		    hltWasRun8E29_[i]=0;
-		    hltAccept8E29_[i]=0;
-		    hltErrors8E29_[i]=0;
-		  }
-		
-		hltInfos8E29_.push_back(TopTree::TRootHLTInfo(iEvent.id().run(),hltNames8E29_,hltWasRun8E29_,hltAccept8E29_,hltErrors8E29_));	
-		index = getIndexForRun(iEvent,hltInfos8E29_); // reload the index number
-	      }
-	    else doHLT8E29_ = false;
-
-	  }
-
-	  //cout << "Index: " << index << endl;
-
-	  edm::Handle<edm::TriggerResults> trigResults;
-	  try {iEvent.getByLabel(triggerResultsTag8E29_,trigResults);} catch (...) {;}
-	  if (trigResults.isValid()) {
-	    if (trigResults->wasrun()) nWasRun8E29_++;
-	    const bool accept(trigResults->accept());
-	    if(verbosity_>0) cout << "   HLT8E29 decision: " << accept << endl;
-	    rootEvent->setGlobalHLT8E29(accept);
-	    if (accept) ++nAccept8E29_;
-	    if (trigResults->error() ) nErrors8E29_++;
-	  }
-	  else
-	    {
-	      cout << "   HLT8E29 results not found!" << endl;;
-	      nErrors8E29_++;
-	      return;
-	    }
-	  
-	  // decision for each HLT8E29 algorithm
-	  const unsigned int n(hltNames8E29_.size());
-	  std::vector<Bool_t> hltDecision(n, false);
-	  for (unsigned int i=0; i!=n; ++i)
-	    {
-	      if (trigResults->wasrun(i)) hltInfos8E29_[index].sethltWasRun(i);
-	      if (trigResults->error(i) ) hltInfos8E29_[index].sethltErrors(i);
-	      if (trigResults->accept(i))
-		{
-		  hltInfos8E29_[index].sethltAccept(i);
-		  hltDecision[i]=true;
-		}
-	    }
-	  
-	  //cout << "hltDecision.size(): " << hltDecision.size() << endl;
-	  rootEvent->setTrigHLT8E29(hltDecision);
-	  
-	  
-	}
-	
 	return;
 }
 
@@ -255,52 +185,6 @@ void HLTAnalyzer::printStats()
 	  cout << endl;
 	}
 	
-	if(doHLT8E29_) {
-	  
-	  cout << dec << endl;
-	  cout << "HLT8E29 Summary" << endl;
-	  cout << "HLT8E29Analyzer-Summary " << "---------- Event  Summary ------------\n";
-	  cout << "HLT8E29Analyzer-Summary"
-	       << " Events total = " << nEvents_
-	       << " wasrun = " << nWasRun_
-	       << " passed = " << nAccept_
-	       << " errors = " << nErrors_
-	       << "\n";
-	  
-	  cout << endl;
-	  cout << "HLT8E29Analyzer-Summary " << "---------- HLTrig Summary ------------\n";
-	  cout << "HLT8E29Analyzer-Summary "
-	       << right << setw(10) << "HLT  Bit#" << " "
-	       << right << setw(10) << "WasRun" << " "
-	       << right << setw(10) << "Passed" << " "
-	       << right << setw(10) << "Errors" << " "
-	       << "Name" << "\n";
-	  
-	  for (unsigned int i = 0; i<hltInfos8E29_.size(); i++) {
-	    
-	    TopTree::TRootHLTInfo hltInfo = hltInfos8E29_[i];
-	    
-	    const unsigned int n(hltInfo.nHLTPaths());
-	    
-	    for (unsigned int j=0; j!=n; ++j)
-	      {
-		stringstream s;
-		s << hltInfo.RunID();
-		cout << "HLT8E29Analyzer-Summary-RUN "+s.str()
-		     << right << setw(10) << j << " "
-		     << right << setw(10) << hltInfo.hltWasRun(j) << " "
-		     << right << setw(10) << hltInfo.hltAccept(j) << " "
-		     << right << setw(10) << hltInfo.hltErrors(j) << " "
-		     << hltInfo.hltNames(j) << "\n";
-	      }
-	  }
-	  
-	  cout << endl;
-	  cout << "HLT8E29 Summary end!" << endl;
-	  cout << endl;
-
-	}
-	
 	return;
 }
 
@@ -321,18 +205,4 @@ void HLTAnalyzer::copySummary(TRootRun* runInfos)
 	  runInfos->setHLTinfos(hltInfos_);
 	}
 
-	if(doHLT8E29_)
-	{
-	  
-	  runInfos->setNHLT8E29Events(nEvents_);
-	  runInfos->setNHLT8E29WasRun(nWasRun8E29_);
-	  runInfos->setNHLT8E29Accept(nAccept8E29_);
-	  runInfos->setNHLT8E29Errors(nErrors8E29_);
-	  
-	  runInfos->setHLT8E29InputTag(triggerResultsTag8E29_.label()+"_"+triggerResultsTag8E29_.instance()+"_"+triggerResultsTag8E29_.process());
-	  cout << triggerResultsTag8E29_.label()+"_"+triggerResultsTag8E29_.instance()+"_"+triggerResultsTag8E29_.process() << endl;
-		
-	  // set new hlt container
-	  runInfos->setHLTinfos8E29(hltInfos8E29_);
-	}
 }
