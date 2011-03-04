@@ -254,14 +254,15 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 		iEvent.getByLabel(TrackLabel_, tracks_h);
 
 		ConversionFinder convFinder;
-		ConversionInfo convInfo = convFinder.getConversionInfo(*electron, tracks_h, evt_bField,0.45);
+		const ConversionInfo convInfo = convFinder.getConversionInfo(*electron, tracks_h, evt_bField,0.45);
    
 		double Dist = convInfo.dist();
 		double DCot = convInfo.dcot();
 
 		localElectron.setDist(Dist);
 		localElectron.setDCot(DCot);
-		localElectron.setConversion(convFinder.isFromConversion(0.02, 0.02));
+		
+		localElectron.setConversion(convFinder.isFromConversion(convInfo,0.02, 0.02));
 
 		// Variables from reco::GsfTrack
 
