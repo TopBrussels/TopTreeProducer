@@ -127,27 +127,27 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet, std::string dataType)
 
 		pat::Jet rawJet = patJet->correctedJet("raw");
 
-		localJet.setJetCorrFactor(0,"L1",rawJet.corrFactor("off"));
-		localJet.setJetCorrFactor(1,"L1L2",rawJet.corrFactor("rel"));
-		localJet.setJetCorrFactor(2,"L1L2L3",rawJet.corrFactor("abs"));
-		localJet.setJetCorrFactor(3,"L1L2L3L4",rawJet.corrFactor("emf"));
+		localJet.setJetCorrFactor(0,"L1",rawJet.jecFactor("off"));
+		localJet.setJetCorrFactor(1,"L1L2",rawJet.jecFactor("rel"));
+		localJet.setJetCorrFactor(2,"L1L2L3",rawJet.jecFactor("abs"));
+		localJet.setJetCorrFactor(3,"L1L2L3L4",rawJet.jecFactor("emf"));
 
-		localJet.setJetCorrFactor(4,"L1L2L3L4L5_glu",rawJet.corrFactor("had","glu"));
-		localJet.setJetCorrFactor(5,"L1L2L3L4L5_uds",rawJet.corrFactor("had","uds"));
-		localJet.setJetCorrFactor(6,"L1L2L3L4L5_c",rawJet.corrFactor("had","c"));
-		localJet.setJetCorrFactor(7,"L1L2L3L4L5_b",rawJet.corrFactor("had","b"));
+		localJet.setJetCorrFactor(4,"L1L2L3L4L5_glu",rawJet.jecFactor("had","glu"));
+		localJet.setJetCorrFactor(5,"L1L2L3L4L5_uds",rawJet.jecFactor("had","uds"));
+		localJet.setJetCorrFactor(6,"L1L2L3L4L5_c",rawJet.jecFactor("had","c"));
+		localJet.setJetCorrFactor(7,"L1L2L3L4L5_b",rawJet.jecFactor("had","b"));
 
-		localJet.setJetCorrFactor(8,"L1L2L3L4L5L6_glu",rawJet.corrFactor("ue","glu"));
-		localJet.setJetCorrFactor(9,"L1L2L3L4L5L6_uds",rawJet.corrFactor("ue","uds"));
-		localJet.setJetCorrFactor(10,"L1L2L3L4L5L6_c",rawJet.corrFactor("ue","c"));
-		localJet.setJetCorrFactor(11,"L1L2L3L4L5L6_b",rawJet.corrFactor("ue","b"));
+		localJet.setJetCorrFactor(8,"L1L2L3L4L5L6_glu",rawJet.jecFactor("ue","glu"));
+		localJet.setJetCorrFactor(9,"L1L2L3L4L5L6_uds",rawJet.jecFactor("ue","uds"));
+		localJet.setJetCorrFactor(10,"L1L2L3L4L5L6_c",rawJet.jecFactor("ue","c"));
+		localJet.setJetCorrFactor(11,"L1L2L3L4L5L6_b",rawJet.jecFactor("ue","b"));
 
-		localJet.setJetCorrFactor(12,"L1L2L3L4L5L6L7_glu",rawJet.corrFactor("part","glu"));
-		localJet.setJetCorrFactor(13,"L1L2L3L4L5L6L7_uds",rawJet.corrFactor("part","uds"));
-		localJet.setJetCorrFactor(14,"L1L2L3L4L5L6L7_c",rawJet.corrFactor("part","c"));
-		localJet.setJetCorrFactor(15,"L1L2L3L4L5L6L7_b",rawJet.corrFactor("part","b"));
+		localJet.setJetCorrFactor(12,"L1L2L3L4L5L6L7_glu",rawJet.jecFactor("part","glu"));
+		localJet.setJetCorrFactor(13,"L1L2L3L4L5L6L7_uds",rawJet.jecFactor("part","uds"));
+		localJet.setJetCorrFactor(14,"L1L2L3L4L5L6L7_c",rawJet.jecFactor("part","c"));
+		localJet.setJetCorrFactor(15,"L1L2L3L4L5L6L7_b",rawJet.jecFactor("part","b"));
 
-		//cout << "Abs " << patJet->corrFactor("raw") << endl; 
+		//cout << "Abs " << patJet->jecFactor("raw") << endl; 
 		// Matched genParticle
 		if (useMC_)
 		{
