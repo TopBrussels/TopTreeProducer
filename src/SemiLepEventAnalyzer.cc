@@ -71,11 +71,11 @@ void SemiLepEventAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootS
 	 		if(semiLepEvent.isHypoValid(i,j)){
 			   if(semiLepEvent.hadronicDecayQuarkBar(i,j) && semiLepEvent.hadronicDecayQuarkBar(i,j) && semiLepEvent.hadronicDecayB(i,j)
 		    	   && semiLepEvent.singleNeutrino(i,j) && semiLepEvent.singleLepton(i,j) && semiLepEvent.leptonicDecayB(i,j)){
-				TRootJet* quarkP;
-				TRootJet* quarkQ;
-				TRootJet* hadronicB;
-				TRootJet* leptonicB;
-				TRootMuon* muon;
+				TRootJet* quarkP = NULL; ;
+				TRootJet* quarkQ = NULL; ;
+				TRootJet* hadronicB = NULL; ;
+				TRootJet* leptonicB = NULL; ;
+				TRootMuon* muon = NULL; ;
 				//TLorentzVector
 				TLorentzVector TLquarkP;
 				TLorentzVector TLquarkQ;
