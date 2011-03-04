@@ -116,7 +116,7 @@ void CaloJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets)
 				else if(caloJetProducer_.label() == "sisCone7CaloJets")
 					iEvent.getByLabel( "sisCone7JetID", hJetIDMap );
 				else if(caloJetProducer_.label() == "iterativeCone5CaloJets")
-					iEvent.getByLabel( "iterativeCone5JetID", hJetIDMap );
+					iEvent.getByLabel( "ic5JetID", hJetIDMap );
 				else if(caloJetProducer_.label() == "kt4CaloJets")
 					iEvent.getByLabel( "kt4JetID", hJetIDMap );
 				else if(caloJetProducer_.label() == "kt6CaloJets")
