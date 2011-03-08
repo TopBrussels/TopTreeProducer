@@ -66,9 +66,15 @@ Well just check out the latest branch from CVS, in this case CMSSW_38X, inside y
 
   cvs co -r CMSSW_38X -d TopBrussels/TopTreeProducer UserCode/TopBrussels/TopTreeProducer
 
-Once you have the code checked out, go to the TopTreeProducer directory and try to compile it. For sure it will not compile (due to the drastic CMSSW changes) and you will spend some time chasing bugs in the yard. But hey "No Pain No Gain"!
+Once you have the code checked out, go to  TopBrussels/TopTreeProducer/ and do:
 
-Once you managed to get the thing compiling, you should get your hands on a sample. Create a PATtuple based of it and then try to run the TopTreeProducer on it. If all goes well, you will have your first TopTree.
+  cvs tag -b CMSSW_42X (-b stands for "branch-tag")
+	
+Remove your TopBrussels/TopTreeProducer folder and check out the new branch for CMSSW_42X rather than CMSSW_38X. If you don't you'll end up developing in CMSSW_38X and this is not desired.
+
+Go to the TopTreeProducer directory and try to compile it. For sure it will not compile (due to the drastic CMSSW changes) and you will spend some time chasing bugs in the yard. But hey "No Pain No Gain"!
+
+Once you managed to get the thing compiling, you should get your hands on a sample. 
 
 /*
  
@@ -84,13 +90,13 @@ Once you managed to get the thing compiling, you should get your hands on a samp
 
 */
 
-Congratulations! You built the base of the CMSSW_42X development. Now you just have to put it in CVS.
+Create a PATtuple based on it and then try to run the TopTreeProducer on it. If all goes well, you will have your first TopTree.
 
-Inside TopBrussels/TopTreeProducer/ do:
+Congratulations! You built the base of the CMSSW_42X development. Make sure to commit your changes to CVS.
 
-  cvs tag -b CMSSW_42X (-b stands for "branch-tag")
+Tag the base version by doing:
 
-Once you have done this, remove your TopBrussels/TopTreeProducer folder and repeat section 1. but now do it for CMSSW_42X rather than CMSSW_38X. If you don't you'll end up developing in CMSSW_38X and this is not desired.
+cvs tag baseversion_CMSSW_42X
 
 Now you are ready to start working on your physics object.
 
