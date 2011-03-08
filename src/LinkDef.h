@@ -9,7 +9,6 @@
 #include "../interface/TRootGenJet.h"
 #include "../interface/TRootPFJet.h"
 #include "../interface/TRootMuon.h"
-#include "../interface/TRootCosmicMuon.h"
 #include "../interface/TRootTrack.h"
 #include "../interface/TRootElectron.h"
 #include "../interface/TRootSignalEvent.h"
@@ -39,7 +38,6 @@
 #include "../interface/TRootGenJet.h"
 #include "../interface/TRootPFJet.h"
 #include "../interface/TRootMuon.h"
-#include "../interface/TRootCosmicMuon.h"
 #include "../interface/TRootTrack.h"
 #include "../interface/TRootElectron.h"
 #include "../interface/TRootSignalEvent.h"
@@ -75,7 +73,6 @@
 #pragma link C++ class TopTree::TRootGenJet;
 #pragma link C++ class TopTree::TRootPFJet;
 #pragma link C++ class TopTree::TRootMuon;
-#pragma link C++ class TopTree::TRootCosmicMuon;
 #pragma link C++ class TopTree::TRootTrack;
 #pragma link C++ class TopTree::TRootElectron;
 #pragma link C++ class TopTree::TRootSignalEvent;
