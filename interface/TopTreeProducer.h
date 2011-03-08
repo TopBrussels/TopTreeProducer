@@ -39,7 +39,6 @@
 #include "../interface/CaloMETAnalyzer.h"
 #include "../interface/PFMETAnalyzer.h"
 #include "../interface/TCMETAnalyzer.h"
-#include "../interface/MHTAnalyzer.h"
 #include "../interface/GenEventAnalyzer.h"
 #include "../interface/NPGenEventAnalyzer.h"
 #include "../interface/SpinCorrGenAnalyzer.h"
@@ -59,7 +58,6 @@
 #include "../interface/TRootMET.h"
 #include "../interface/TRootCaloMET.h"
 #include "../interface/TRootPFMET.h"
-#include "../interface/TRootMHT.h"
 #include "../interface/TRootGenEvent.h"
 #include "../interface/TRootNPGenEvent.h"
 #include "../interface/TRootSpinCorrGen.h"
@@ -115,7 +113,6 @@ private:
 	bool doCaloMET;
 	bool doPFMET;
 	bool doTCMET;
-	bool doMHT;
 	bool doGenEvent;
 	bool doNPGenEvent;
 	bool doSpinCorrGen;
@@ -148,7 +145,6 @@ private:
 	TClonesArray* CALOmet;
 	TClonesArray* PFmet;
 	TClonesArray* TCmet;
-	TClonesArray* mht;
 	TClonesArray* genEvent;
 	TClonesArray* NPgenEvent;
 	TClonesArray* spinCorrGen;

@@ -55,7 +55,6 @@ void TopTreeProducer::beginJob()
 	doCaloMET = myConfig_.getUntrackedParameter<bool>("doCaloMET",false);
 	doPFMET = myConfig_.getUntrackedParameter<bool>("doPFMET",false);
 	doTCMET = myConfig_.getUntrackedParameter<bool>("doTCMET",false);
-	doMHT = myConfig_.getUntrackedParameter<bool>("doMHT",false);
 	drawMCTree = myConfig_.getUntrackedParameter<bool>("drawMCTree",false);
 	doGenEvent = myConfig_.getUntrackedParameter<bool>("doGenEvent",false);
 	doNPGenEvent = myConfig_.getUntrackedParameter<bool>("doNPGenEvent",false);
@@ -293,13 +292,6 @@ void TopTreeProducer::beginJob()
 		if(verbosity>0) cout << "Track Corrected MET info will be added to rootuple" << endl;
 		TCmet = new TClonesArray("TopTree::TRootMET", 1000);
 		eventTree_->Branch ("TCMET", "TClonesArray", &TCmet);
-	}
-	
-	if(doMHT && (dataType_ == "PAT" || dataType_ == "PATAOD"))
-	{
-		if(verbosity>0) cout << "MHT info will be added to rootuple" << endl;
-		mht = new TClonesArray("TopTree::TRootMHT", 1000);
-		eventTree_->Branch ("MHT", "TClonesArray", &mht);
 	}
 	
 	if(doPrimaryVertex)
@@ -650,15 +642,6 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		delete myMETAnalyzer;
 	}
 	
-	// MHT 
-	if(doMHT && (dataType_ == "PAT" || dataType_ == "PATAOD"))
-	{
-		if(verbosity>1) cout << endl << "Analysing MHT..." << endl;
-		MHTAnalyzer* myMHTAnalyzer = new MHTAnalyzer(producersNames_, myConfig_, verbosity);
-		myMHTAnalyzer->Process(iEvent, mht);
-		delete myMHTAnalyzer;
-	}
-	
 	// Associate recoParticles to mcParticles
 	if(doMC)
 	{
@@ -728,7 +711,6 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	if(doCaloMET) (*CALOmet).Delete();
 	if(doPFMET) (*PFmet).Delete();
 	if(doTCMET) (*TCmet).Delete();
-	if(doMHT && (dataType_ == "PAT" || dataType_ == "PATAOD")) (*mht).Delete();
 	if(doGenEvent) (*genEvent).Delete();
 	if(doNPGenEvent) (*NPgenEvent).Delete();
 	if(doSpinCorrGen) (*spinCorrGen).Delete();

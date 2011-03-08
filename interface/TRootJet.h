@@ -27,7 +27,6 @@ namespace TopTree
 			,jetArea_(-9999.)
 			,pileupEnergy_(-9999.)
 			,maxDistance_(-9999.)
-			,chargedBroadness_(-9999.)
 			,btag_jetBProbabilityBJetTags_(-9999.)
 			,btag_jetProbabilityBJetTags_(-9999.)
 			,btag_trackCountingHighPurBJetTags_(-9999.)
@@ -36,14 +35,14 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
-		  	,btag_combinedMVABJetTags_(-9999.)
+		  ,btag_combinedMVABJetTags_(-9999.)
 			,btag_softMuonBJetTags_(-9999.)
 			,btag_softMuonByPtBJetTags_(-9999.)
 			,btag_softMuonByIP3dBJetTags_(-9999.)
-		        ,btag_softElectronBJetTags_(-9999.)
+		  ,btag_softElectronBJetTags_(-9999.)
 			,btag_softElectronByPtBJetTags_(-9999.)
 			,btag_softElectronByIP3dBJetTags_(-9999.)
-		        ,btag_ghostTrackBJetTags_(-9999.)
+		  ,btag_ghostTrackBJetTags_(-9999.)
 			,partonFlavour_(-999)
 			,isTopJet_(false)
 			,genParton_(0)
@@ -56,7 +55,6 @@ namespace TopTree
 			,jetArea_(jet.jetArea_)
 			,pileupEnergy_(jet.pileupEnergy_)
 			,maxDistance_(jet.maxDistance_)
-			,chargedBroadness_(jet.chargedBroadness_)
 			,btag_jetBProbabilityBJetTags_(jet.btag_jetBProbabilityBJetTags_)
 			,btag_jetProbabilityBJetTags_(jet.btag_jetProbabilityBJetTags_)
 			,btag_trackCountingHighPurBJetTags_(jet.btag_trackCountingHighPurBJetTags_)
@@ -69,16 +67,17 @@ namespace TopTree
 			,btag_softMuonBJetTags_(jet.btag_softMuonBJetTags_)
 			,btag_softMuonByPtBJetTags_(jet.btag_softMuonByPtBJetTags_)
 			,btag_softMuonByIP3dBJetTags_(jet.btag_softMuonByIP3dBJetTags_)
-		        ,btag_softElectronBJetTags_(jet.btag_softElectronBJetTags_)
+		  ,btag_softElectronBJetTags_(jet.btag_softElectronBJetTags_)
 			,btag_softElectronByPtBJetTags_(jet.btag_softElectronByPtBJetTags_)
 			,btag_softElectronByIP3dBJetTags_(jet.btag_softElectronByIP3dBJetTags_)
-		        ,btag_ghostTrackBJetTags_(jet.btag_ghostTrackBJetTags_)
+		  ,btag_ghostTrackBJetTags_(jet.btag_ghostTrackBJetTags_)
 			,partonFlavour_(jet.partonFlavour_)
 			,isTopJet_(jet.isTopJet_)
 			,genParton_(jet.genParton_)
-		        {
+		  {
 			  unsigned int size = sizeof(JetCorrName_)/sizeof(JetCorrName_[0]);
-			  for (unsigned int i=0; i<size; i++) {
+			  for (unsigned int i=0; i<size; i++)
+				{
 			    JetCorrName_[i] = jet.JetCorrName_[i];
 			    JetCorrValue_[i] = jet.JetCorrValue_[i];
 			  }
@@ -91,7 +90,6 @@ namespace TopTree
 			,jetArea_(-9999.)
 			,pileupEnergy_(-9999.)
 			,maxDistance_(-9999.)
-			,chargedBroadness_(-9999.)
 			,btag_jetBProbabilityBJetTags_(-9999.)
 			,btag_jetProbabilityBJetTags_(-9999.)
 			,btag_trackCountingHighPurBJetTags_(-9999.)
@@ -100,14 +98,14 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
-		        ,btag_combinedMVABJetTags_(-9999.)
+		  ,btag_combinedMVABJetTags_(-9999.)
 			,btag_softMuonBJetTags_(-9999.)
 			,btag_softMuonByPtBJetTags_(-9999.)
 			,btag_softMuonByIP3dBJetTags_(-9999.)
-		        ,btag_softElectronBJetTags_(-9999.)
+		  ,btag_softElectronBJetTags_(-9999.)
 			,btag_softElectronByPtBJetTags_(-9999.)
 			,btag_softElectronByIP3dBJetTags_(-9999.)
-		        ,btag_ghostTrackBJetTags_(-9999.)
+		  ,btag_ghostTrackBJetTags_(-9999.)
 			,partonFlavour_(-9999)
 			,isTopJet_(false)
 			,genParton_(0)
@@ -120,7 +118,6 @@ namespace TopTree
 			,jetArea_(-9999.)
 			,pileupEnergy_(-9999.)
 			,maxDistance_(-9999.)
-			,chargedBroadness_(-9999.)
 			,btag_jetBProbabilityBJetTags_(-9999.)
 			,btag_jetProbabilityBJetTags_(-9999.)
 			,btag_trackCountingHighPurBJetTags_(-9999.)
@@ -129,14 +126,14 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
-		        ,btag_combinedMVABJetTags_(-9999.)
+		  ,btag_combinedMVABJetTags_(-9999.)
 			,btag_softMuonBJetTags_(-9999.)
 			,btag_softMuonByPtBJetTags_(-9999.)
 			,btag_softMuonByIP3dBJetTags_(-9999.)
-		        ,btag_softElectronBJetTags_(-9999.)
+		  ,btag_softElectronBJetTags_(-9999.)
 			,btag_softElectronByPtBJetTags_(-9999.)
 			,btag_softElectronByIP3dBJetTags_(-9999.)
-		        ,btag_ghostTrackBJetTags_(-9999.)
+		  ,btag_ghostTrackBJetTags_(-9999.)
 			,partonFlavour_(-9999)
 			,isTopJet_(false)
 			,genParton_(0)
@@ -149,7 +146,6 @@ namespace TopTree
 			,jetArea_(-9999.)
 			,pileupEnergy_(-9999.)
 			,maxDistance_(-9999.)
-			,chargedBroadness_(-9999.)
 			,btag_jetBProbabilityBJetTags_(-9999.)
 			,btag_jetProbabilityBJetTags_(-9999.)
 			,btag_trackCountingHighPurBJetTags_(-9999.)
@@ -158,14 +154,14 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
-		        ,btag_combinedMVABJetTags_(-9999.)
+		  ,btag_combinedMVABJetTags_(-9999.)
 			,btag_softMuonBJetTags_(-9999.)
 			,btag_softMuonByPtBJetTags_(-9999.)
 			,btag_softMuonByIP3dBJetTags_(-9999.)
-		        ,btag_softElectronBJetTags_(-9999.)
+		  ,btag_softElectronBJetTags_(-9999.)
 			,btag_softElectronByPtBJetTags_(-9999.)
 			,btag_softElectronByIP3dBJetTags_(-9999.)
-		        ,btag_ghostTrackBJetTags_(-9999.)
+		  ,btag_ghostTrackBJetTags_(-9999.)
 			,partonFlavour_(-9999)
 			,isTopJet_(false)
 			,genParton_(0)
@@ -178,7 +174,6 @@ namespace TopTree
 			,jetArea_(-9999.)
 			,pileupEnergy_(-9999.)
 			,maxDistance_(-9999.)
-			,chargedBroadness_(-9999.)
 			,btag_jetBProbabilityBJetTags_(-9999.)
 			,btag_jetProbabilityBJetTags_(-9999.)
 			,btag_trackCountingHighPurBJetTags_(-9999.)
@@ -187,14 +182,14 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
-		        ,btag_combinedMVABJetTags_(-9999.)
+		  ,btag_combinedMVABJetTags_(-9999.)
 			,btag_softMuonBJetTags_(-9999.)
 			,btag_softMuonByPtBJetTags_(-9999.)
 			,btag_softMuonByIP3dBJetTags_(-9999.)
-		        ,btag_softElectronBJetTags_(-9999.)
+		  ,btag_softElectronBJetTags_(-9999.)
 			,btag_softElectronByPtBJetTags_(-9999.)
 			,btag_softElectronByIP3dBJetTags_(-9999.)
-		        ,btag_ghostTrackBJetTags_(-9999.)
+		  ,btag_ghostTrackBJetTags_(-9999.)
 			,partonFlavour_(-9999)
 			,isTopJet_(false)
 			,genParton_(0)
@@ -207,7 +202,6 @@ namespace TopTree
 			,jetArea_(-9999.)
 			,pileupEnergy_(-9999.)
 			,maxDistance_(-9999.)
-			,chargedBroadness_(-9999.)
 			,btag_jetBProbabilityBJetTags_(-9999.)
 			,btag_jetProbabilityBJetTags_(-9999.)
 			,btag_trackCountingHighPurBJetTags_(-9999.)
@@ -216,14 +210,14 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
-		        ,btag_combinedMVABJetTags_(-9999.)
+		  ,btag_combinedMVABJetTags_(-9999.)
 			,btag_softMuonBJetTags_(-9999.)
 			,btag_softMuonByPtBJetTags_(-9999.)
 			,btag_softMuonByIP3dBJetTags_(-9999.)
-		        ,btag_softElectronBJetTags_(-9999.)
+		  ,btag_softElectronBJetTags_(-9999.)
 			,btag_softElectronByPtBJetTags_(-9999.)
 			,btag_softElectronByIP3dBJetTags_(-9999.)
-		        ,btag_ghostTrackBJetTags_(-9999.)
+		  ,btag_ghostTrackBJetTags_(-9999.)
 			,partonFlavour_(-9999)
 			,isTopJet_(false)
 			,genParton_(0)
@@ -237,7 +231,6 @@ namespace TopTree
 		Float_t jetArea() const { return jetArea_; }
 		Float_t pileupEnergy() const { return pileupEnergy_; }
 		Float_t maxDistance() const { return maxDistance_; }
-		Float_t chargedBroadness() const { return chargedBroadness_; }
 		Float_t btag_jetBProbabilityBJetTags() const { return btag_jetBProbabilityBJetTags_; }
 		Float_t btag_jetProbabilityBJetTags() const { return btag_jetProbabilityBJetTags_; }
 		Float_t btag_trackCountingHighPurBJetTags() const { return btag_trackCountingHighPurBJetTags_; }
@@ -292,7 +285,6 @@ namespace TopTree
 		void setJetArea(Float_t jetArea) { jetArea_ = jetArea; }
 		void setPileupEnergy(Float_t pileupEnergy) { pileupEnergy_ = pileupEnergy; }
 		void setMaxDistance(Float_t maxDistance) { maxDistance_ = maxDistance; }
-		void setChargedBroadness(Float_t chargedBroadness) { chargedBroadness_ = chargedBroadness; }
 		//btag
 		void setBtag_jetBProbabilityBJetTags(Float_t btag_jetBProbabilityBJetTags) { btag_jetBProbabilityBJetTags_ = btag_jetBProbabilityBJetTags; }
 		void setBtag_jetProbabilityBJetTags(Float_t btag_jetProbabilityBJetTags) { btag_jetProbabilityBJetTags_ = btag_jetProbabilityBJetTags; }
@@ -339,13 +331,9 @@ namespace TopTree
 		Float_t pileupEnergy_;               // Pile-up Energy
 		Float_t maxDistance_;               // Maximum distance from jet to constituent
 
-		// Variables from pat::Jet
-		Float_t chargedBroadness_;          // DR of the cone containing 75% of the jet charged energy 
-        
 		// jet correction factors
-
-		std::string JetCorrName_[17];
-		float JetCorrValue_[17];
+		std::string JetCorrName_[12]; 			// check in JetAnalyzer.cc that size is big enough to store all corrections!
+		float JetCorrValue_[12];
 
 		//btag Info
 		Float_t btag_jetBProbabilityBJetTags_;

@@ -16,6 +16,7 @@ JetAnalyzer::JetAnalyzer(int verbosity):verbosity_(verbosity),useMC_(false)
 JetAnalyzer::JetAnalyzer(const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
 {
 	useMC_ = myConfig.getUntrackedParameter<bool>("doJetMC");
+	isData_ = myConfig.getUntrackedParameter<bool>("isData");
 }
 
 JetAnalyzer::~JetAnalyzer()
@@ -86,68 +87,53 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet, std::string dataType)
 		cout << "softMuonBJetTags -> " << patJet->bDiscriminator("softMuonBJetTags") << endl;
 		cout << "softElectronBJetTags -> " << patJet->bDiscriminator("softElectronBJetTags") << endl;*/
 
-		// Use  associated tracks to calculate charged broadness of the jet
-		// FIXME - Check generalTracks collection is present
-		reco::TrackRefVector tracks =  patJet->associatedTracks() ;
-		Float_t deltaR = 0.;
-		Float_t pTrackerTot = 0.;
-		// TODO - Use std::map....
-		vector < pair < Float_t , Float_t > > tracksVPair ;
-		pair < Float_t , Float_t > tracksPair;
-
-		for(unsigned int iTracks = 0; iTracks< patJet->associatedTracks().size() ; iTracks++)
-		{
-			deltaR = localJet.DeltaR(TLorentzVector(tracks[iTracks]->px(),tracks[iTracks]->py(),tracks[iTracks]->pz(),0));
-			pTrackerTot += tracks[iTracks]->p();
-			tracksPair.first = tracks[iTracks]->p();
-			tracksPair.second = deltaR;
-			tracksVPair.push_back(tracksPair);
-
-			//cout << "DeltaR " << deltaR << endl;
-
-		}
-	
-		sort(tracksVPair.begin(), tracksVPair.end(), Rsortrule);
-		Float_t Rmin = 0;
-		Float_t pDummy = 0;
-		for(std::vector<std::pair< Float_t,Float_t > >::iterator i = tracksVPair.begin(); i!=tracksVPair.end(); i++)
-		{
-			pDummy+=(*i).first;
-			if (pDummy>0.75*(pTrackerTot))
-			{
-				Rmin = (*i).second;
-				break;
-			}
-		}
-		//cout << "Rmin " << Rmin << endl;
-		if (Rmin<1e-5) {Rmin=0.;}
-		localJet.setChargedBroadness(Rmin);
-
 		// jet correction factors
 
-		pat::Jet rawJet = patJet->correctedJet("raw");
+		pat::Jet rawJet = patJet->correctedJet("Uncorrected");
 
-		localJet.setJetCorrFactor(0,"L1",rawJet.jecFactor("off"));
-		localJet.setJetCorrFactor(1,"L1L2",rawJet.jecFactor("rel"));
-		localJet.setJetCorrFactor(2,"L1L2L3",rawJet.jecFactor("abs"));
-		localJet.setJetCorrFactor(3,"L1L2L3L4",rawJet.jecFactor("emf"));
+		localJet.setJetCorrFactor(0,"L1",rawJet.jecFactor("L1Offset"));
+		localJet.setJetCorrFactor(1,"L1L2",rawJet.jecFactor("L2Relative"));
+		localJet.setJetCorrFactor(2,"L1L2L3",rawJet.jecFactor("L3Absolute"));
+		if(isData_)
+		{
+			localJet.setJetCorrFactor(3,"L1L2L3L23Residual",rawJet.jecFactor("L2L3Residual"));
+//			localJet.setJetCorrFactor(4,"L1L2L3L23ResidualL4",rawJet.jecFactor("L4Emf"));
 
-		localJet.setJetCorrFactor(4,"L1L2L3L4L5_glu",rawJet.jecFactor("had","glu"));
-		localJet.setJetCorrFactor(5,"L1L2L3L4L5_uds",rawJet.jecFactor("had","uds"));
-		localJet.setJetCorrFactor(6,"L1L2L3L4L5_c",rawJet.jecFactor("had","c"));
-		localJet.setJetCorrFactor(7,"L1L2L3L4L5_b",rawJet.jecFactor("had","b"));
+			localJet.setJetCorrFactor(4,"L1L2L3L23ResidualL5_glu",rawJet.jecFactor("L5Flavor","gluon"));
+			localJet.setJetCorrFactor(5,"L1L2L3L23ResidualL5_uds",rawJet.jecFactor("L5Flavor","uds"));
+			localJet.setJetCorrFactor(6,"L1L2L3L23ResidualL5_c",rawJet.jecFactor("L5Flavor","charm"));
+			localJet.setJetCorrFactor(7,"L1L2L3L23ResidualL5_b",rawJet.jecFactor("L5Flavor","bottom"));
 
-		localJet.setJetCorrFactor(8,"L1L2L3L4L5L6_glu",rawJet.jecFactor("ue","glu"));
-		localJet.setJetCorrFactor(9,"L1L2L3L4L5L6_uds",rawJet.jecFactor("ue","uds"));
-		localJet.setJetCorrFactor(10,"L1L2L3L4L5L6_c",rawJet.jecFactor("ue","c"));
-		localJet.setJetCorrFactor(11,"L1L2L3L4L5L6_b",rawJet.jecFactor("ue","b"));
+//			localJet.setJetCorrFactor(9,"L1L2L3L23ResidualL4L5L6_glu",rawJet.jecFactor("L6UE","gluon"));
+//			localJet.setJetCorrFactor(10,"L1L2L3L23ResidualL4L5L6_uds",rawJet.jecFactor("L6UE","uds"));
+//			localJet.setJetCorrFactor(11,"L1L2L3L23ResidualL4L5L6_c",rawJet.jecFactor("L6UE","charm"));
+//			localJet.setJetCorrFactor(12,"L1L2L3L23ResidualL4L5L6_b",rawJet.jecFactor("L6UE","bottom"));
 
-		localJet.setJetCorrFactor(12,"L1L2L3L4L5L6L7_glu",rawJet.jecFactor("part","glu"));
-		localJet.setJetCorrFactor(13,"L1L2L3L4L5L6L7_uds",rawJet.jecFactor("part","uds"));
-		localJet.setJetCorrFactor(14,"L1L2L3L4L5L6L7_c",rawJet.jecFactor("part","c"));
-		localJet.setJetCorrFactor(15,"L1L2L3L4L5L6L7_b",rawJet.jecFactor("part","b"));
+			localJet.setJetCorrFactor(8,"L1L2L3L23ResidualL5L7_glu",rawJet.jecFactor("L7Parton","gluon"));
+			localJet.setJetCorrFactor(9,"L1L2L3L23ResidualL5L7_uds",rawJet.jecFactor("L7Parton","uds"));
+			localJet.setJetCorrFactor(10,"L1L2L3L23ResidualL5L7_c",rawJet.jecFactor("L7Parton","charm"));
+			localJet.setJetCorrFactor(11,"L1L2L3L23ResidualL5L7_b",rawJet.jecFactor("L7Parton","bottom"));
+		}
+		else
+		{
+//			localJet.setJetCorrFactor(3,"L1L2L3L4",rawJet.jecFactor("L4Emf"));
 
-		//cout << "Abs " << patJet->jecFactor("raw") << endl; 
+			localJet.setJetCorrFactor(3,"L1L2L3L5_glu",rawJet.jecFactor("L5Flavor","gluon"));
+			localJet.setJetCorrFactor(4,"L1L2L3L5_uds",rawJet.jecFactor("L5Flavor","uds"));
+			localJet.setJetCorrFactor(5,"L1L2L3L5_c",rawJet.jecFactor("L5Flavor","charm"));
+			localJet.setJetCorrFactor(6,"L1L2L3L5_b",rawJet.jecFactor("L5Flavor","bottom"));
+
+//			localJet.setJetCorrFactor(8,"L1L2L3L4L5L6_glu",rawJet.jecFactor("L6UE","gluon"));
+//			localJet.setJetCorrFactor(9,"L1L2L3L4L5L6_uds",rawJet.jecFactor("L6UE","uds"));
+//			localJet.setJetCorrFactor(10,"L1L2L3L4L5L6_c",rawJet.jecFactor("L6UE","charm"));
+//			localJet.setJetCorrFactor(11,"L1L2L3L4L5L6_b",rawJet.jecFactor("L6UE","bottom"));
+
+			localJet.setJetCorrFactor(7,"L1L2L3L5L7_glu",rawJet.jecFactor("L7Parton","gluon"));
+			localJet.setJetCorrFactor(8,"L1L2L3L5L7_uds",rawJet.jecFactor("L7Parton","uds"));
+			localJet.setJetCorrFactor(9,"L1L2L3L5L7_c",rawJet.jecFactor("L7Parton","charm"));
+			localJet.setJetCorrFactor(10,"L1L2L3L5L7_b",rawJet.jecFactor("L7Parton","bottom"));
+		}
+		
 		// Matched genParticle
 		if (useMC_)
 		{

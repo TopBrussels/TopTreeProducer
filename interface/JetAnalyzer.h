@@ -31,6 +31,7 @@ public:
 private:
 	int verbosity_;
 	bool useMC_;
+	bool isData_;
 
 };
 

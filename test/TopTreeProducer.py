@@ -30,7 +30,7 @@ process.load("SimGeneral.HepPDTESSource.pythiapdt_cfi")
 process.load("Configuration.StandardSequences.Geometry_cff")
 process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
-process.GlobalTag.globaltag = cms.string('START311_V1::All')
+process.GlobalTag.globaltag = cms.string('START311_V2::All')
 # geometry needed for clustering and calo shapes variables
 # process.load("RecoEcal.EgammaClusterProducers.geometryForClustering_cff")
 # 3 folllowing config files included in RecoEcal.EgammaClusterProducers.geometryForClustering_cff
@@ -54,7 +54,7 @@ process.source = cms.Source("PoolSource",
 # AOD
 # PATAOD
 # PAT
-	fileNames = cms.untracked.vstring('file:/user/pvmulder/NewEraOfDataAnalysis/TopTree/CMSSW_3_11_2/src/TopBrussels/TopTreeProducer/test/test311X_RECO.root')
+	fileNames = cms.untracked.vstring('file:test311X_PAT.root')
 	#fileNames = cms.untracked.vstring('/store/data/CRAFT09/Cosmics/RAW-RECO/SuperPointing-CRAFT09_R_V4_CosmicsSeq_v1/0009/763782DB-DCB9-DE11-A238-003048678B30.root')
 	#fileNames = cms.untracked.vstring('file:/user/echabert/CMSSW/CMSSW_2_2_3/src/TopQuarkAnalysis/TopEventProducers/test/toto2.root')
 	#fileNames = cms.untracked.vstring('file:/user/echabert/CMSSW/CMSSW_2_2_6/src/NewPhysicsAnalysis/SUSYAnalysis/TopSUSYEvents.root')
@@ -69,10 +69,10 @@ process.source = cms.Source("PoolSource",
 process.analysis = cms.EDAnalyzer("TopTreeProducer",
 	myConfig = cms.PSet(
 		# Data type of the PoolSource ( RECO / AOD / PAT  /  PATAOD )
-		dataType = cms.untracked.string("RECO"),   # only RECO collections are present
+		#dataType = cms.untracked.string("RECO"),   # only RECO collections are present
 		#dataType = cms.untracked.string("AOD"),     # only AOD collections are present 
 		#dataType = cms.untracked.string("PATAOD"), # mixture of PAT and AOD collections
-		#dataType = cms.untracked.string("PAT"),    # only PAT collections are present
+		dataType = cms.untracked.string("PAT"),    # only PAT collections are present
 
 		# Verbosite
 		# 		0 = muet
@@ -84,15 +84,16 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
  		verbosity = cms.untracked.int32(0),
 
 		# used in the electron to see if the magneticfield is taken from DCS or from IDEALMAGFIELDRECORD
+		# also used in the JetAnalyzer to see if L2L3Residual correction needs to be stored
 		isData = cms.untracked.bool(False),
 
 		# name of output root file
 		RootFileName = cms.untracked.string('test311X_TOPTREE_noCosmics.root'),
 
 		# What is written to rootuple		    
-		doHLT = cms.untracked.bool(True),
+		doHLT = cms.untracked.bool(False),
 		doMC = cms.untracked.bool(False),
-		doPDFInfo = cms.untracked.bool(False),
+		doPDFInfo = cms.untracked.bool(True),
 		signalGenerator = cms.untracked.string('PYTHIA'),
 #		signalGenerator = cms.untracked.string('ALPGEN'),
 #		signalGenerator = cms.untracked.string('MADGRAPH'),
@@ -102,25 +103,24 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		doJetMC = cms.untracked.bool(False),
 		doMETMC = cms.untracked.bool(False),
 		doUnstablePartsMC = cms.untracked.bool(False),
-		doPrimaryVertex = cms.untracked.bool(True),
-		runGeneralTracks = cms.untracked.bool(True),#true only if generalTracks are stored.
-		doCaloJet = cms.untracked.bool(False),
-		doCaloJetStudy = cms.untracked.bool(True),
+		doPrimaryVertex = cms.untracked.bool(False),
+		runGeneralTracks = cms.untracked.bool(False),#true only if generalTracks are stored.
+		doCaloJet = cms.untracked.bool(True),
+		doCaloJetStudy = cms.untracked.bool(False),
 		doGenJet = cms.untracked.bool(False),
 		doGenJetStudy = cms.untracked.bool(False),
-		doCaloJetId = cms.untracked.bool(True),
+		doCaloJetId = cms.untracked.bool(False),
 		doPFJet = cms.untracked.bool(False),
-		doPFJetStudy = cms.untracked.bool(True),
+		doPFJetStudy = cms.untracked.bool(False),
     doJPTJet = cms.untracked.bool(False),
 		doJPTJetStudy = cms.untracked.bool(False),
-		doJPTJetId = cms.untracked.bool(True),
-		doMuon = cms.untracked.bool(True),
+		doJPTJetId = cms.untracked.bool(False),
+		doMuon = cms.untracked.bool(False),
 		doElectron = cms.untracked.bool(False),
-		runSuperCluster = cms.untracked.bool(True),#true only if SuperCluster are stored
-		doCaloMET = cms.untracked.bool(False),
+		runSuperCluster = cms.untracked.bool(False),#true only if SuperCluster are stored
+		doCaloMET = cms.untracked.bool(True),
 		doPFMET = cms.untracked.bool(False),
 		doTCMET = cms.untracked.bool(False),
-		doMHT = cms.untracked.bool(True),# MHT only present in PAT, so will run if dataType is PAT or PATAOD
 		doGenEvent = cms.untracked.bool(False),#put on False when running non-ttbar or when running toptree from reco
 		doNPGenEvent = cms.untracked.bool(False),#put on True when running New Physics sample
 		doSpinCorrGen = cms.untracked.bool(False),#put on True only if you need SpinCorrelation Variables
@@ -215,7 +215,6 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		CalometProducer = cms.InputTag("selectedPatMETs"),
 		PFmetProducer = cms.InputTag("selectedPatMETsPF"),
 		TCmetProducer = cms.InputTag("selectedPatMETsTC"),
-		mhtProducer = cms.InputTag("patMHTs"),
 		genEventProducer = cms.InputTag("genEvt"),
 		generalTrackLabel = cms.InputTag("generalTracks"),
 		electronNewId = cms.untracked.bool(False),
@@ -231,18 +230,17 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		hltProducer4th = cms.InputTag("TriggerResults","","HLTdummy2"),
 		genParticlesProducer = cms.InputTag("genParticles"),
 		primaryVertexProducer = cms.InputTag("offlinePrimaryVertices"),
-		caloJetProducer = cms.InputTag("selectedPatJets"),
+		caloJetProducer = cms.InputTag("cleanPatJets"),
 		vcaloJetProducer = cms.untracked.vstring("selectedPatJetsAK5Calo","selectedPatJetsIC5Calo","selectedPatJetsKT4Calo"),
 		genJetProducer = cms.InputTag("ak5GenJets"),
 		vgenJetProducer = cms.untracked.vstring("ak5GenJets","ak5GenJetsNoE"),
 		pfJetProducer = cms.InputTag("selectedPatJets"),
 		vpfJetProducer = cms.untracked.vstring("selectedPatJetsAK5PF","selectedPatJetsIC5PF","selectedPatJetsKT4PF"),
-		muonProducer = cms.InputTag("selectedPatMuons"),
-		electronProducer = cms.InputTag("selectedPatElectrons"),# if electronTriggerMatching == true, change the electron inputTag to "cleanPatElectronsTriggerMatch"
+		muonProducer = cms.InputTag("cleanPatMuons"),
+		electronProducer = cms.InputTag("cleanPatElectrons"),# if electronTriggerMatching == true, change the electron inputTag to "cleanPatElectronsTriggerMatch"
 		CalometProducer = cms.InputTag("patMETs"),
     PFmetProducer = cms.InputTag("patMETsPF"),
     TCmetProducer = cms.InputTag("patMETsTC"),
-		mhtProducer = cms.InputTag("patMHTs"),
 		genEventProducer = cms.InputTag("genEvt"),
 		generalTrackLabel = cms.InputTag("generalTracks"), # to calculate the conversion flag
 		electronNewId = cms.untracked.bool(True), #for recent electronID recommanded by EGamma. still Not accepted by Top group
