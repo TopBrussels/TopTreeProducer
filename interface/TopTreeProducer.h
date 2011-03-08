@@ -64,7 +64,6 @@
 #include "../interface/TRootNPGenEvent.h"
 #include "../interface/TRootSpinCorrGen.h"
 #include "../interface/TRootSemiLepEvent.h"
-#include "../interface/TRootTrack.h"
 #include "../interface/TRootVertex.h"
 
 #include "TFile.h"
