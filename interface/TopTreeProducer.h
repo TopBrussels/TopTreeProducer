@@ -34,7 +34,6 @@
 #include "../interface/GenJetAnalyzer.h"
 #include "../interface/PFJetAnalyzer.h"
 #include "../interface/MuonAnalyzer.h"
-#include "../interface/CosmicMuonAnalyzer.h"
 #include "../interface/ElectronAnalyzer.h"
 #include "../interface/METAnalyzer.h"
 #include "../interface/CaloMETAnalyzer.h"
@@ -56,7 +55,6 @@
 #include "../interface/TRootGenJet.h"
 #include "../interface/TRootPFJet.h"
 #include "../interface/TRootMuon.h"
-#include "../interface/TRootCosmicMuon.h"
 #include "../interface/TRootElectron.h"
 #include "../interface/TRootMET.h"
 #include "../interface/TRootCaloMET.h"
@@ -113,7 +111,6 @@ private:
 	bool doJPTJetStudy;
 	bool doMuon;
 	bool doMuonStudy;
-	bool doCosmicMuon;
 	bool doElectron;
 	bool doElectronStudy;
 	bool doCaloMET;
@@ -129,7 +126,6 @@ private:
 	std::vector<std::string> vCaloJetProducer;
 	std::vector<std::string> vPFJetProducer;
 	std::vector<std::string> vJPTJetProducer;
-	std::vector<std::string> vCosmicMuonProducer;
 	std::vector<std::string> vMuonProducer;
 	std::vector<std::string> vElectronProducer;
 	int nTotEvt_;
@@ -147,8 +143,6 @@ private:
 	TClonesArray* jptJets;
 	std::vector<TClonesArray*> vjptJets;
 	TClonesArray* muons;
-	std::vector<TClonesArray*> vcosmicMuons;
-	std::vector<std::vector<TClonesArray*> > vcosmicMuonTracks;
 	std::vector<TClonesArray*> vmuons;
 	TClonesArray* electrons;
 	std::vector<TClonesArray*> velectrons;

@@ -50,7 +50,6 @@ void TopTreeProducer::beginJob()
 	doJPTJetStudy = myConfig_.getUntrackedParameter<bool>("doJPTJetStudy",false);
 	doMuon = myConfig_.getUntrackedParameter<bool>("doMuon",false);
 	doMuonStudy = myConfig_.getUntrackedParameter<bool>("doMuonStudy",false);
-	doCosmicMuon = myConfig_.getUntrackedParameter<bool>("doCosmicMuon",false);
 	doElectron = myConfig_.getUntrackedParameter<bool>("doElectron",false);	
 	doElectronStudy = myConfig_.getUntrackedParameter<bool>("doElectronStudy",false);	
 	doCaloMET = myConfig_.getUntrackedParameter<bool>("doCaloMET",false);
@@ -68,7 +67,6 @@ void TopTreeProducer::beginJob()
 	vCaloJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vcaloJetProducer",defaultVec);
 	vPFJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vpfJetProducer",defaultVec);
 	vJPTJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vJPTJetProducer",defaultVec);
-	vCosmicMuonProducer = producersNames_.getUntrackedParameter<vector<string> >("vcosmicMuonProducer",defaultVecCM);
 	vMuonProducer = producersNames_.getUntrackedParameter<vector<string> >("vMuonProducer",defaultVec);
 	vElectronProducer = producersNames_.getUntrackedParameter<vector<string> >("vElectronProducer",defaultVec);
 
@@ -90,17 +88,6 @@ void TopTreeProducer::beginJob()
 	for(unsigned int s=0;s<vJPTJetProducer.size();s++){
 		TClonesArray* a;
 		vjptJets.push_back(a);
-	}
-
-	for(unsigned int s=0;s<vCosmicMuonProducer.size();s++){
-		TClonesArray* a;
-		vcosmicMuons.push_back(a); 
-
-		vector<TClonesArray*> trackVector;
-                for (unsigned int t=0; t<3; t++)
-		  trackVector.push_back(a);
-
-		vcosmicMuonTracks.push_back(trackVector);
 	}
 
 	for(unsigned int s=0;s<vMuonProducer.size();s++){
@@ -265,37 +252,6 @@ void TopTreeProducer::beginJob()
 			sprintf(name,"Muons_%s",vMuonProducer[s].c_str());
 			eventTree_->Branch (name, "TClonesArray", &vmuons[s]);
 
-		} 
-	}
-
-	if(doCosmicMuon)
-	{
-		if(verbosity>0) cout << "Cosmic Muons info will be added to rootuple" << endl;
-	     
-		for(unsigned int s=0;s<vCosmicMuonProducer.size();s++){
-			vcosmicMuons[s] = new TClonesArray("TopTree::TRootCosmicMuon", 1000);
-			char name[100];
-			sprintf(name,"CosmicMuons_%s",vCosmicMuonProducer[s].c_str());
-			eventTree_->Branch (name, "TClonesArray", &vcosmicMuons[s]);
-
-			// put the track(gl,sta,tr) branches for this muoncollection
-
-		        vcosmicMuonTracks[s][0] = new TClonesArray("TopTree::TRootTrack",1000);
-			//char name[100];
-			sprintf(name,"CosmicMuonGlobalTracks_%s",vCosmicMuonProducer[s].c_str());
-			eventTree_->Branch (name, "TClonesArray", &vcosmicMuonTracks[s][0]);
-
-			vcosmicMuonTracks[s][1] = new TClonesArray("TopTree::TRootTrack",1000);
-			//char name[100];
-			sprintf(name,"CosmicMuonTrackerTracks_%s",vCosmicMuonProducer[s].c_str());
-			eventTree_->Branch (name, "TClonesArray", &vcosmicMuonTracks[s][1]);
-
-			vcosmicMuonTracks[s][2] = new TClonesArray("TopTree::TRootTrack",1000);
-			//char name[100];
-			sprintf(name,"CosmicMuonStandAloneTracks_%s",vCosmicMuonProducer[s].c_str());
-			eventTree_->Branch (name, "TClonesArray", &vcosmicMuonTracks[s][2]);
-
-			//}
 		} 
 	}
 	
@@ -637,21 +593,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		  myMuonAnalyzer->Process(iEvent, vmuons[s]);
 		  delete myMuonAnalyzer;
 		}
-	}
-
-	// Cosmic Muons
-	if(doCosmicMuon)
-	{
-	  if(verbosity>1) cout << endl << "Analysing muons collection (for cosmics)..." << endl;
-     	  
-	  for(unsigned int s=0;s<vCosmicMuonProducer.size();s++){
-	    CosmicMuonAnalyzer *myCosmicMuonAnalyzer = new CosmicMuonAnalyzer(producersNames_, s,  myConfig_, verbosity);
-	    myCosmicMuonAnalyzer->Process(iEvent, vcosmicMuons[s],vcosmicMuonTracks[s]);
-	    delete myCosmicMuonAnalyzer;
-	  }
-
-	}
-	
+	}	
 
 	// Lazy Tools to calculate Cluster shape variables
 	EcalClusterLazyTools* lazyTools = 0;
@@ -775,13 +717,6 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		for(unsigned int s=0;s<vMuonProducer.size();s++){
 			(*vmuons[s]).Delete();
 		}
-	}
-       	if(doCosmicMuon) {
-	
-	  for(unsigned int s=0;s<vCosmicMuonProducer.size();s++){
-	    (*vcosmicMuons[s]).Delete();
-	  }
-
 	}
 
 	if(doElectron) (*electrons).Delete();
