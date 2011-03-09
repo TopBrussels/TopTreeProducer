@@ -90,48 +90,13 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet, std::string dataType)
 		// jet correction factors
 
 		pat::Jet rawJet = patJet->correctedJet("Uncorrected");
-
+		
 		localJet.setJetCorrFactor(0,"L1",rawJet.jecFactor("L1Offset"));
 		localJet.setJetCorrFactor(1,"L1L2",rawJet.jecFactor("L2Relative"));
 		localJet.setJetCorrFactor(2,"L1L2L3",rawJet.jecFactor("L3Absolute"));
 		if(isData_)
 		{
 			localJet.setJetCorrFactor(3,"L1L2L3L23Residual",rawJet.jecFactor("L2L3Residual"));
-//			localJet.setJetCorrFactor(4,"L1L2L3L23ResidualL4",rawJet.jecFactor("L4Emf"));
-
-			localJet.setJetCorrFactor(4,"L1L2L3L23ResidualL5_glu",rawJet.jecFactor("L5Flavor","gluon"));
-			localJet.setJetCorrFactor(5,"L1L2L3L23ResidualL5_uds",rawJet.jecFactor("L5Flavor","uds"));
-			localJet.setJetCorrFactor(6,"L1L2L3L23ResidualL5_c",rawJet.jecFactor("L5Flavor","charm"));
-			localJet.setJetCorrFactor(7,"L1L2L3L23ResidualL5_b",rawJet.jecFactor("L5Flavor","bottom"));
-
-//			localJet.setJetCorrFactor(9,"L1L2L3L23ResidualL4L5L6_glu",rawJet.jecFactor("L6UE","gluon"));
-//			localJet.setJetCorrFactor(10,"L1L2L3L23ResidualL4L5L6_uds",rawJet.jecFactor("L6UE","uds"));
-//			localJet.setJetCorrFactor(11,"L1L2L3L23ResidualL4L5L6_c",rawJet.jecFactor("L6UE","charm"));
-//			localJet.setJetCorrFactor(12,"L1L2L3L23ResidualL4L5L6_b",rawJet.jecFactor("L6UE","bottom"));
-
-			localJet.setJetCorrFactor(8,"L1L2L3L23ResidualL5L7_glu",rawJet.jecFactor("L7Parton","gluon"));
-			localJet.setJetCorrFactor(9,"L1L2L3L23ResidualL5L7_uds",rawJet.jecFactor("L7Parton","uds"));
-			localJet.setJetCorrFactor(10,"L1L2L3L23ResidualL5L7_c",rawJet.jecFactor("L7Parton","charm"));
-			localJet.setJetCorrFactor(11,"L1L2L3L23ResidualL5L7_b",rawJet.jecFactor("L7Parton","bottom"));
-		}
-		else
-		{
-//			localJet.setJetCorrFactor(3,"L1L2L3L4",rawJet.jecFactor("L4Emf"));
-
-			localJet.setJetCorrFactor(3,"L1L2L3L5_glu",rawJet.jecFactor("L5Flavor","gluon"));
-			localJet.setJetCorrFactor(4,"L1L2L3L5_uds",rawJet.jecFactor("L5Flavor","uds"));
-			localJet.setJetCorrFactor(5,"L1L2L3L5_c",rawJet.jecFactor("L5Flavor","charm"));
-			localJet.setJetCorrFactor(6,"L1L2L3L5_b",rawJet.jecFactor("L5Flavor","bottom"));
-
-//			localJet.setJetCorrFactor(8,"L1L2L3L4L5L6_glu",rawJet.jecFactor("L6UE","gluon"));
-//			localJet.setJetCorrFactor(9,"L1L2L3L4L5L6_uds",rawJet.jecFactor("L6UE","uds"));
-//			localJet.setJetCorrFactor(10,"L1L2L3L4L5L6_c",rawJet.jecFactor("L6UE","charm"));
-//			localJet.setJetCorrFactor(11,"L1L2L3L4L5L6_b",rawJet.jecFactor("L6UE","bottom"));
-
-			localJet.setJetCorrFactor(7,"L1L2L3L5L7_glu",rawJet.jecFactor("L7Parton","gluon"));
-			localJet.setJetCorrFactor(8,"L1L2L3L5L7_uds",rawJet.jecFactor("L7Parton","uds"));
-			localJet.setJetCorrFactor(9,"L1L2L3L5L7_c",rawJet.jecFactor("L7Parton","charm"));
-			localJet.setJetCorrFactor(10,"L1L2L3L5L7_b",rawJet.jecFactor("L7Parton","bottom"));
 		}
 		
 		// Matched genParticle

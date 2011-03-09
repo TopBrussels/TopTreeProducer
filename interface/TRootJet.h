@@ -332,8 +332,8 @@ namespace TopTree
 		Float_t maxDistance_;               // Maximum distance from jet to constituent
 
 		// jet correction factors
-		std::string JetCorrName_[12]; 			// check in JetAnalyzer.cc that size is big enough to store all corrections!
-		float JetCorrValue_[12];
+		std::string JetCorrName_[4]; 			// check in JetAnalyzer.cc that size is big enough to store all corrections!
+		float JetCorrValue_[4];
 
 		//btag Info
 		Float_t btag_jetBProbabilityBJetTags_;

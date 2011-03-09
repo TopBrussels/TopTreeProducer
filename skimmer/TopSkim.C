@@ -13,7 +13,6 @@
 #include "./tinyxml/tinyxml.h"
 
 #include "../interface/TRootMuon.h"
-#include "../interface/TRootCosmicMuon.h"
 #include "../interface/TRootElectron.h"
 #include "../interface/TRootJet.h"
 #include "../interface/TRootPFJet.h"
@@ -23,7 +22,6 @@
 #include "../interface/TRootMET.h"
 #include "../interface/TRootCaloMET.h"
 #include "../interface/TRootPFMET.h"
-#include "../interface/TRootMHT.h"
 #include "../interface/TRootGenEvent.h"
 #include "../interface/TRootNPGenEvent.h"
 #include "../interface/TRootSpinCorrGen.h"
@@ -33,7 +31,6 @@
 #include "../interface/TRootParticle.h"
 #include "../interface/TRootMCParticle.h"
 #include "../interface/TRootSemiLepEvent.h"
-#include "../interface/TRootTrack.h"
 #include "../interface/TRootVertex.h"
 
 #include "TFile.h"
@@ -119,39 +116,6 @@ vector<keepObjects> parseObjects(TiXmlDocument doc, TTree* outEventTree)
 					cout << "With skipObjects = false " << endl;
 
 				toKeep.push_back(tempObj);
-				
-				if(tempObj.type == "TopTree::TRootCosmicMuon") // prepare stuff for storage of the CosmicMuonTracks
-				{
-					keepObjects tempObj1, tempObj2, tempObj3;
-					string muonType = "";
-					
-					if(tempObj.name == "CosmicMuons_muons") muonType = "muons";
-					else if(tempObj.name == "CosmicMuons_muons1Leg") muonType = "muons1Leg";
-					else if(tempObj.name == "CosmicMuons_muonsBarrelOnly") muonType = "muonsBarrelOnly";
-					else if(tempObj.name == "CosmicMuons_muons1LegBarrelOnly") muonType = "muons1LegBarrelOnly";
-					
-					tempObj1.name = "CosmicMuonGlobalTracks_" + muonType;
-					tempObj1.type = "TopTree::TRootTrack";
-					
-					tempObj1.outArray = new TClonesArray((tempObj1.type).c_str(), 1000);
-					outEventTree->Branch ((tempObj1.name).c_str(), "TClonesArray", &(tempObj1.outArray) );
-					toKeep.push_back(tempObj1);
-					
-					tempObj2.name = "CosmicMuonTrackerTracks_" + muonType;
-					tempObj2.type = "TopTree::TRootTrack";
-					
-					tempObj2.outArray = new TClonesArray((tempObj2.type).c_str(), 1000);
-					outEventTree->Branch ((tempObj2.name).c_str(), "TClonesArray", &(tempObj2.outArray) );
-					toKeep.push_back(tempObj2);
-					
-					tempObj3.name = "CosmicMuonStandAloneTracks_" + muonType;
-					tempObj3.type = "TopTree::TRootTrack";
-					
-					tempObj3.outArray = new TClonesArray((tempObj3.type).c_str(), 1000);
-					outEventTree->Branch ((tempObj3.name).c_str(), "TClonesArray", &(tempObj3.outArray) );
-					toKeep.push_back(tempObj3);
-					
-				}
 				
 				elem = elem->NextSiblingElement ();	// iteration 
 			}
@@ -440,24 +404,6 @@ int main()
 			objectsToKeep[j].inBranch = (TBranch *) inEventTree->GetBranch((objectsToKeep[j].name).c_str());
 			objectsToKeep[j].inArray = new TClonesArray((objectsToKeep[j].type).c_str(), 0);
 			objectsToKeep[j].inBranch->SetAddress( &(objectsToKeep[j].inArray) );
-				
-			if(objectsToKeep[j].type == "TopTree::TRootCosmicMuon") // prepare stuff for storage of the CosmicMuonTracks
-			{
-				j++;
-				objectsToKeep[j].inBranch = (TBranch *) inEventTree->GetBranch((objectsToKeep[j].name).c_str());
-				objectsToKeep[j].inArray = new TClonesArray((objectsToKeep[j].type).c_str(), 0);
-				objectsToKeep[j].inBranch->SetAddress( &(objectsToKeep[j].inArray) );
-					
-				j++;
-				objectsToKeep[j].inBranch = (TBranch *) inEventTree->GetBranch((objectsToKeep[j].name).c_str());
-				objectsToKeep[j].inArray = new TClonesArray((objectsToKeep[j].type).c_str(), 0);
-				objectsToKeep[j].inBranch->SetAddress( &(objectsToKeep[j].inArray) );
-					
-				j++;
-				objectsToKeep[j].inBranch = (TBranch *) inEventTree->GetBranch((objectsToKeep[j].name).c_str());
-				objectsToKeep[j].inArray = new TClonesArray((objectsToKeep[j].type).c_str(), 0);
-				objectsToKeep[j].inBranch->SetAddress( &(objectsToKeep[j].inArray) );
-			}
 		}
 	
 		unsigned int nTempEvents = (int) inEventTree->GetEntries();
@@ -886,35 +832,6 @@ int main()
 					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
 				}
 			
-				else if(objectsToKeep[j].type == "TopTree::TRootMHT")
-				{
-					TRootMHT* mht;
-					int MHTKept=0;
-					mht = (TRootMHT*) (objectsToKeep[j].inArray)->At(0);
-					bool keepMHT = true;
-					if(mht)
-					{
-						if(mht->Pt() < objectsToKeep[j].minPt || fabs(mht->Eta()) > objectsToKeep[j].maxEta)
-						{
-							keepMHT = false;
-							if( verbosity > 1 ) cout << "skip MHT with pT = " << mht->Pt() << " and eta = " << mht->Eta() << endl;
-						}
-						else MHTKept++;
-				
-						if( ! objectsToKeep[j].skipObjects || keepMHT )
-							new( (*(objectsToKeep[j].outArray))[0] ) TRootMHT(*mht);
-
-						if(MHTKept < objectsToKeep[j].minNObjects)
-						{
-							keepEvent = false;
-							if( verbosity > 1 ) cout << "Too small number of selected MHT: MHTKept = " << MHTKept << endl;
-						}
-					}
-
-					if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
-					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
-				}
-			
 				else if(objectsToKeep[j].type == "TopTree::TRootElectron")
 				{
 					TRootElectron* electron;
@@ -978,77 +895,7 @@ int main()
 					if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
 					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
 				}
-			
-				else if(objectsToKeep[j].type == "TopTree::TRootCosmicMuon")
-				{
-					TRootCosmicMuon* muon;
-					int cosmicMuonsKept = 0, nCosmicMuonGlobalTracks = 0, nCosmicMuonTrackerTracks = 0, nCosmicMuonStandaloneTracks = 0;
-
-					for(int i=0; i<(objectsToKeep[j].inArray)->GetEntriesFast(); i++)
-					{
-						muon = (TRootCosmicMuon*) (objectsToKeep[j].inArray)->At(i);
-						bool keepCosmicMuon = true;
-			
-						if(muon->Pt() < objectsToKeep[j].minPt || fabs(muon->Eta()) > objectsToKeep[j].maxEta)
-						{
-							keepCosmicMuon = false;
-							if( verbosity > 1 ) cout << "skip CosmicMuon with pT = " << muon->Pt() << " and eta = " << muon->Eta() << endl;
-						}
-						else cosmicMuonsKept++;
-						
-						int index = cosmicMuonsKept - 1;
-						if( ! objectsToKeep[j].skipObjects )
-							index = i;
 				
-						if(keepCosmicMuon)
-						{
-							new( (*(objectsToKeep[j].outArray))[index] ) TRootCosmicMuon(*muon);
-
-							j++;
-							if(muon->globalTrack() != NULL)
-							{
-								TRootTrack* track = (TRootTrack*) muon->globalTrack();
-								new( (*(objectsToKeep[j].outArray))[index] ) TRootTrack(*track);
-					
-								muon->SetGlobalTrack( (TObject*) (objectsToKeep[j].outArray)->At(nCosmicMuonGlobalTracks));
-				
-								nCosmicMuonGlobalTracks++;
-							}
-					
-							j++;
-							if(muon->trackerTrack() != NULL)
-							{
-								TRootTrack* track = (TRootTrack*) muon->trackerTrack();
-								new( (*(objectsToKeep[j].outArray))[index] ) TRootTrack(*track);
-				
-								muon->SetGlobalTrack( (TObject*) (objectsToKeep[j].outArray)->At(nCosmicMuonTrackerTracks));
-				
-								nCosmicMuonTrackerTracks++;
-							}
-					
-							j++;
-							
-							if(muon->trackerTrack() != NULL)
-							{
-								TRootTrack* track = (TRootTrack*) muon->trackerTrack();
-								new( (*(objectsToKeep[j].outArray))[index] ) TRootTrack(*track);
-				
-								muon->SetGlobalTrack( (TObject*) (objectsToKeep[j].outArray)->At(nCosmicMuonStandaloneTracks));
-				
-								nCosmicMuonStandaloneTracks++;
-							}
-						}
-					}
-
-					if(cosmicMuonsKept < objectsToKeep[j].minNObjects)
-					{
-						keepEvent = false;
-						if( verbosity > 1 ) cout << "Too small number of selected CosmicMuons: cosmicMuonsKept = " << cosmicMuonsKept << endl;
-					}
-
-					if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
-					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
-				}
 				else
 					cerr << "Unknown type: " << objectsToKeep[j].type << endl;
 			}
