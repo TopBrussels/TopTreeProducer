@@ -28,7 +28,7 @@ bool Rsortrule (std::pair <double,double> p1, std::pair <double,double> p2 )
 	return p1.second<p2.second; 
 }
 
-TRootJet JetAnalyzer::Process(const reco::Jet* jet, std::string dataType)
+TRootJet JetAnalyzer::Process(const reco::Jet* jet)
 {
 
 	TRootJet localJet(
@@ -48,8 +48,6 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet, std::string dataType)
 	localJet.setPileupEnergy(jet->pileup());
 	localJet.setMaxDistance(jet->maxDistance());
 
-	if( dataType=="PATAOD" || dataType=="PAT" )
-	{
 		// Some specific methods to pat::Jet
 		const pat::Jet *patJet = dynamic_cast<const pat::Jet*>(&*jet);
 
@@ -136,7 +134,6 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet, std::string dataType)
 			localJet.setIsTopJet(IsTopJet);
 		}
 
-	}
 
 	return localJet;
 }

@@ -261,7 +261,6 @@ Here we will try to summarize how the TopTreeProducer is built and how you can a
 
   src/TopTreeProducer.cc (definitions in interface/TopTreeProducer.h - it is a CMSSW EDAnalyzer)
         |_> TopTreeProducer::TopTreeProducer() (constructor)
-                     |_> Define the dataType (PAT,RECO,É)
                      |_> Define the names of the collections to use (e.g the muon,jets,.. collection names in the source CMSSW Pat or RECO file)
 
         |_> TopTreeProducer::~TopTreeProducer() (destructor) EMPTY for now

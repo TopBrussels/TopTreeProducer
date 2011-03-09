@@ -31,7 +31,6 @@ public:
 
 private:
 	int verbosity_;
-	std::string dataType_;
 	edm::InputTag genJetProducer_;
 	edm::InputTag mcProducer_;
 	std::vector<std::string> vGenJetProducer;

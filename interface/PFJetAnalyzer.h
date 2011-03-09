@@ -32,7 +32,6 @@ public:
 
 private:
 	int verbosity_;
-	std::string dataType_;
 	edm::InputTag pfJetProducer_;
 	edm::InputTag mcProducer_;
 	std::vector<std::string> vPFJetProducer;

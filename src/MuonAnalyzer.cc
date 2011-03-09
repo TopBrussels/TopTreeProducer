@@ -9,21 +9,18 @@ MuonAnalyzer::MuonAnalyzer (const edm::ParameterSet & producersNames):
 verbosity_(0),
 useMC_(false)
 {
-	dataType_ = producersNames.getUntrackedParameter < string > ("dataType", "unknown");
 	muonProducer_ = producersNames.getParameter < edm::InputTag > ("muonProducer");
 }
 
 MuonAnalyzer::MuonAnalyzer (const edm::ParameterSet & producersNames, const edm::ParameterSet & myConfig, int verbosity):
 verbosity_ (verbosity)
 {
-	dataType_ = producersNames.getUntrackedParameter < string > ("dataType", "unknown");
 	muonProducer_ = producersNames.getParameter < edm::InputTag > ("muonProducer");
 	useMC_ = myConfig.getUntrackedParameter < bool > ("doMuonMC");
 }
 MuonAnalyzer::MuonAnalyzer (const edm::ParameterSet & producersNames, int iter, const edm::ParameterSet & myConfig, int verbosity):
 verbosity_ (verbosity)
 {
-	dataType_ = producersNames.getUntrackedParameter < string > ("dataType", "unknown");
 	vMuonProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("vMuonProducer");
 	muonProducer_ =	edm::InputTag(vMuonProducer[iter]);
 	useMC_ = myConfig.getUntrackedParameter < bool > ("doMuonMC");
@@ -40,20 +37,10 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
 	Float_t sintheta = 0.;
 	unsigned int nMuons = 0;
 
-	edm::Handle < std::vector < reco::Muon > >recoMuons;
-	if (dataType_ == "RECO" || dataType_ == "AOD")
-	{
-		iEvent.getByLabel (muonProducer_, recoMuons);
-		nMuons = recoMuons->size ();
-	}
-
 	edm::Handle < std::vector < pat::Muon > >patMuons;
-	if (dataType_ == "PAT" || dataType_ == "PATAOD")
-	{
-		iEvent.getByLabel (muonProducer_, patMuons);
-		nMuons = patMuons->size ();
-	}
-
+	iEvent.getByLabel (muonProducer_, patMuons);
+	nMuons = patMuons->size ();
+	
 	edm::Handle<reco::BeamSpot> beamSpotHandle;
 	iEvent.getByLabel("offlineBeamSpot", beamSpotHandle);
 	const reco::TrackBase::Point & beamSpot = reco::TrackBase::Point(beamSpotHandle->x0(), beamSpotHandle->y0(), beamSpotHandle->z0());
@@ -64,10 +51,7 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
 	for (unsigned int j = 0; j < nMuons; j++)
 	{
 		const reco::Muon * muon = 0;
-		if (dataType_ == "RECO" || dataType_ == "AOD")
-			muon = &((*recoMuons)[j]);
-		if (dataType_ == "PAT" || dataType_ == "PATAOD")
-			muon = (const reco::Muon *) (&((*patMuons)[j]));
+		muon = (const reco::Muon *) (&((*patMuons)[j]));
 
 		TRootMuon localMuon (muon->px (), muon->py (), muon->pz (), muon->energy (), muon->vx (), muon->vy (), muon->vz (), muon->pdgId (), muon->charge ());
 
@@ -105,15 +89,6 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
 		  localMuon.SetChi2 (muon->globalTrack()->normalizedChi2 ());
 		}
 
-		if (dataType_ == "RECO" || dataType_ == "AOD")
-		{
-			// Some specific methods requiring  RECO / AOD format
-			// Do association to genParticle ?
-			// Add InnerTrack, OuterTrack, GlobalTrack infos ?
-		}
-
-		if (dataType_ == "PATAOD" || dataType_ == "PAT")
-		{
 			// Some specific methods to pat::Muon
 			const pat::Muon * patMuon = dynamic_cast < const pat::Muon * >(&*muon);
 			// Use existing reference to genParticle [ pat::PATObject::genParticleRef() ] ?
@@ -153,7 +128,6 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
 					localMuon.setGenParticleIndex (-1);
 				}
 			}
-		}
 
 		new ((*rootMuons)[j]) TRootMuon (localMuon);
 		if (verbosity_ > 2)

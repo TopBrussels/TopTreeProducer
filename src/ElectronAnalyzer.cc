@@ -8,12 +8,10 @@ using namespace edm;
 ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& producersNames):verbosity_(0),useMC_(false),runSuperCluster_(false),doPrimaryVertex_(false),isData_(false)
 
 {
-	dataType_ = producersNames.getUntrackedParameter<string>("dataType","unknown");
 	electronProducer_ = producersNames.getParameter<edm::InputTag>("electronProducer");
 	primaryVertexProducer_ = producersNames.getParameter<edm::InputTag>("primaryVertexProducer");
 	TrackLabel_ = producersNames.getParameter<edm::InputTag>("generalTrackLabel");
 	newId_ = producersNames.getUntrackedParameter<bool>("electronNewId",false);
-	doTriggerMatching = producersNames.getUntrackedParameter<bool>("electronTriggerMatching",false);
 	std::vector<std::string> tmp;
 	tmp.clear();
 	pathNames = producersNames.getUntrackedParameter<std::vector<std::string> >("electronTriggerPaths",tmp); // electron trigger path names
@@ -21,7 +19,6 @@ ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& producersNames):verb
 
 ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
 {
-	dataType_ = producersNames.getUntrackedParameter<string>("dataType","unknown");
 	electronProducer_ = producersNames.getParameter<edm::InputTag>("electronProducer");
 	useMC_ = myConfig.getUntrackedParameter<bool>("doElectronMC");
 	isData_ = myConfig.getUntrackedParameter<bool>("isData");
@@ -30,7 +27,6 @@ ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& producersNames, cons
 	doPrimaryVertex_ = myConfig.getUntrackedParameter<bool>("doPrimaryVertex");
 	TrackLabel_ = producersNames.getParameter<edm::InputTag>("generalTrackLabel");
 	newId_ = producersNames.getUntrackedParameter<bool>("electronNewId",false);
-	doTriggerMatching = producersNames.getUntrackedParameter<bool>("electronTriggerMatching",false);
 	std::vector<std::string> tmp;
 	tmp.clear();
 	pathNames = producersNames.getUntrackedParameter<std::vector<std::string> >("electronTriggerPaths",tmp); // electron trigger path names
@@ -38,7 +34,6 @@ ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& producersNames, cons
 
 ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
 {
-	dataType_ = producersNames.getUntrackedParameter<string>("dataType","unknown");
 	vElectronProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("vElectronProducer");
 	electronProducer_ =	edm::InputTag(vElectronProducer[iter]);
 	useMC_ = myConfig.getUntrackedParameter<bool>("doElectronMC");
@@ -48,7 +43,6 @@ ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& producersNames, int 
 	doPrimaryVertex_ = myConfig.getUntrackedParameter<bool>("doPrimaryVertex");
 	TrackLabel_ = producersNames.getParameter<edm::InputTag>("generalTrackLabel");
 	newId_ = producersNames.getUntrackedParameter<bool>("electronNewId",false);
-	doTriggerMatching = producersNames.getUntrackedParameter<bool>("electronTriggerMatching",false);
 	std::vector<std::string> tmp;
 	tmp.clear();
 	pathNames = producersNames.getUntrackedParameter<std::vector<std::string> >("electronTriggerPaths",tmp); // electron trigger path names
@@ -62,19 +56,9 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 {
 	unsigned int nElectrons=0;
 
-	edm::Handle < std::vector <reco::GsfElectron> > recoElectrons;
-	if( dataType_=="RECO" || dataType_=="AOD" )
-	{
-		iEvent.getByLabel(electronProducer_, recoElectrons);
-		nElectrons = recoElectrons->size();
-	}
-
 	edm::Handle < std::vector <pat::Electron> > patElectrons;
-	if( dataType_=="PAT" || dataType_=="PATAOD" )
-	{
-		iEvent.getByLabel(electronProducer_, patElectrons);
-		nElectrons = patElectrons->size();
-	}
+	iEvent.getByLabel(electronProducer_, patElectrons);
+	nElectrons = patElectrons->size();
 
 	edm::Handle< reco::VertexCollection > pvHandle;
 
@@ -87,10 +71,7 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 	for (unsigned int j=0; j<nElectrons; j++)
 	{
 		const reco::GsfElectron* electron = 0;	
-		if( dataType_=="RECO" || dataType_=="AOD" )
-			electron =  &((*recoElectrons)[j]);
-		if( dataType_=="PAT" || dataType_=="PATAOD" )
-			electron = (const reco::GsfElectron*) ( & ((*patElectrons)[j]) );
+		electron = (const reco::GsfElectron*) ( & ((*patElectrons)[j]) );
 
 		TRootElectron localElectron(
 			electron->px()
@@ -197,11 +178,6 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 			}
 			// FIXME - if no BasicCluster collection, init to -999.
 			localElectron.setCaloConeSize(caloConeSize);
-			if ( seedBasicCluster.isNonnull() && (dataType_=="RECO" || dataType_=="AOD" || dataType_=="PATAOD") )
-			{
-				localElectron.setE2x2(lazyTools.e2x2(*seedBasicCluster));
-				localElectron.setE3x3(lazyTools.e3x3(*seedBasicCluster));
-			}
 		}
 
 		//setFiducialFlags
@@ -270,18 +246,6 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 		// need reco::SuperCluster and reco::BasicCluster
 
 
-		if( dataType_=="RECO" || dataType_=="AOD" )
-		{
-			// Some specific methods requiring  RECO / AOD format
-			// Do association to genParticle ?
-
-			// Isolation ?
-			// Electron ID ?  RecoEgamma/ElectronIdentification
-		}
-
-
-		if( dataType_=="PATAOD" || dataType_=="PAT" )
-		{
 			// Some specific methods to pat::Electron
 			const pat::Electron *patElectron = dynamic_cast<const pat::Electron*>(&*electron);
 
@@ -325,16 +289,6 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 				}
 
 			}
-
-			//triggerMatching
-			if(doTriggerMatching && pathNames.size() != 0)
-			{
-				for(uint trig = 0; trig < pathNames.size(); trig++)
-				{
-					localElectron.setTriggerinfo(pathNames.at(trig),(patElectron->triggerObjectMatchesByPath(pathNames.at(trig)).size() != 0));
-				}
-			}
-		}
 
 		new( (*rootElectrons)[j] ) TRootElectron(localElectron);
 		if(verbosity_>2) cout << "   ["<< setw(3) << j << "] " << localElectron << endl;

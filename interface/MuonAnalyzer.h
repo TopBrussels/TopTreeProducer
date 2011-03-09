@@ -34,7 +34,6 @@ public:
 
 private:
 	int verbosity_;
-	std::string dataType_ ;
 	edm::InputTag muonProducer_;
 	std::vector<std::string> vMuonProducer;	
 	bool useMC_;

@@ -29,7 +29,6 @@ public:
 
 private:
 	int verbosity_;
-	std::string dataType_ ;
 	edm::InputTag semiLepEventProducer_;
  ///
 };

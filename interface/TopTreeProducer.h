@@ -89,8 +89,6 @@ private:
 	TFile* rootFile_ ;
 	TTree* eventTree_;
 	TTree* runTree_;
-	std::string dataType_ ;
-	bool doHLT8E29;
 	bool doHLT;
 	bool doMC;
 	bool doPDFInfo;

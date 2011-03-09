@@ -7,21 +7,18 @@ using namespace edm;
 
 JPTJetAnalyzer::JPTJetAnalyzer(const edm::ParameterSet& producersNames):verbosity_(0)
 {
-	dataType_ = producersNames.getUntrackedParameter<string>("dataType","unknown");
 	JPTJetProducer_ = producersNames.getParameter<edm::InputTag>("JPTJetProducer");
 	myJetAnalyzer = new JetAnalyzer();
 }
 
 JPTJetAnalyzer::JPTJetAnalyzer(const edm::ParameterSet& producersNames, int verbosity):verbosity_(verbosity)
 {
-	dataType_ = producersNames.getUntrackedParameter<string>("dataType","unknown");
 	JPTJetProducer_ = producersNames.getParameter<edm::InputTag>("JPTJetProducer");
 	myJetAnalyzer = new JetAnalyzer(verbosity);
 }
 
 JPTJetAnalyzer::JPTJetAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
 {
-	dataType_ = producersNames.getUntrackedParameter<string>("dataType","unknown");
 	JPTJetProducer_ = producersNames.getParameter<edm::InputTag>("JPTJetProducer");
 	doJPTJetId_ = myConfig.getUntrackedParameter<bool>("doJPTJetId");
 	myJetAnalyzer = new JetAnalyzer(myConfig, verbosity);
@@ -29,7 +26,6 @@ JPTJetAnalyzer::JPTJetAnalyzer(const edm::ParameterSet& producersNames, const ed
 
 JPTJetAnalyzer::JPTJetAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
 {
-	dataType_ = producersNames.getUntrackedParameter<string>("dataType","unknown");
 	vJPTJetProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("vJPTJetProducer");
 	JPTJetProducer_ = edm::InputTag(vJPTJetProducer[iter]);
 	doJPTJetId_ = myConfig.getUntrackedParameter<bool>("doJPTJetId");
@@ -49,11 +45,8 @@ void JPTJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets)
 	std::string jetType = "BASIC";
 	
 	edm::Handle < std::vector <pat::Jet> > patJets;
-	if( dataType_=="PAT" || dataType_=="PATAOD" )
-	{
-		iEvent.getByLabel(JPTJetProducer_, patJets);
-		nJets = patJets->size();
-	}
+	iEvent.getByLabel(JPTJetProducer_, patJets);
+	nJets = patJets->size();
 		
 	if(verbosity_>1) std::cout << "   Number of jets = " << nJets << "   Label: " << JPTJetProducer_.label() << "   Instance: " << JPTJetProducer_.instance() << std::endl;
 
@@ -61,14 +54,11 @@ void JPTJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets)
 	{
 		const reco::Jet* jet = 0;	
 	
-		if( dataType_=="PAT" || dataType_=="PATAOD" )
-		{
-			jet = (const reco::Jet*) ( & ((*patJets)[j]) );
-			if( (*patJets)[j].isJPTJet() ) jetType="JPT";
-		}
-		
+		jet = (const reco::Jet*) ( & ((*patJets)[j]) );
+		if( (*patJets)[j].isJPTJet() ) jetType="JPT";
+			
 		// Call JetAnalyzer to fill the basic Jet Properties
-		TRootJet tempJet = (TRootJet) myJetAnalyzer->Process( &( *(jet) ), dataType_);
+		TRootJet tempJet = (TRootJet) myJetAnalyzer->Process( &( *(jet) ));
 
 		TRootJPTJet localJet = TRootJPTJet(tempJet);
 
@@ -78,8 +68,6 @@ void JPTJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets)
 		localJet.setetaetaMoment(jet->etaetaMoment());
 		localJet.setphiphiMoment(jet->phiphiMoment());
 
-		if( dataType_=="PATAOD" || dataType_=="PAT" )
-		{
 			// Some specific methods to pat::Jet
 			const pat::Jet *patJet = dynamic_cast<const pat::Jet*>(&*jet);
 			
@@ -109,8 +97,6 @@ void JPTJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets)
 			    
 			  } //end of if(doJPTJetId_)	
 			
-		} //end of if( dataType_=="PATAOD" || dataType_=="PAT" )
-		
 		new( (*rootJets)[j] ) TRootJPTJet(localJet);
 		if(verbosity_>2) cout << "   ["<< setw(3) << j << "] " << localJet << endl;
 		

@@ -7,25 +7,21 @@ using namespace edm;
 
 GenJetAnalyzer::GenJetAnalyzer(const edm::ParameterSet& producersNames):verbosity_(0)
 {
-	dataType_ = producersNames.getUntrackedParameter<string>("dataType","unknown");
 	genJetProducer_ = producersNames.getParameter<edm::InputTag>("genJetProducer");
 }
 
 GenJetAnalyzer::GenJetAnalyzer(const edm::ParameterSet& producersNames, int verbosity):verbosity_(verbosity)
 {
-	dataType_ = producersNames.getUntrackedParameter<string>("dataType","unknown");
 	genJetProducer_ = producersNames.getParameter<edm::InputTag>("genJetProducer");
 }
 
 GenJetAnalyzer::GenJetAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
 {
-	dataType_ = producersNames.getUntrackedParameter<string>("dataType","unknown");
 	genJetProducer_ = producersNames.getParameter<edm::InputTag>("genJetProducer");
 }
 
 GenJetAnalyzer::GenJetAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
 {
-	dataType_ = producersNames.getUntrackedParameter<string>("dataType","unknown");
 	vGenJetProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("vgenJetProducer");
 	genJetProducer_ = edm::InputTag(vGenJetProducer[iter]);
 }
@@ -63,10 +59,10 @@ void GenJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenJets
 		for (unsigned int j=0; j<nJets; j++)
 		{
 			const reco::GenJet* genJet = 0;	
-			if( (dataType_=="RECO" || dataType_=="AOD" || dataType_=="PAT" || dataType_=="PATAOD") && jetType=="CALO" ) genJet = (const reco::GenJet*) ( & ((*recoGenJets)[j]) );
+			if( jetType=="CALO" ) genJet = (const reco::GenJet*) ( & ((*recoGenJets)[j]) );
 			
 			// Call JetAnalyzer to fill the basic Jet Properties
-//			TRootJet tempJet = (TRootJet) myJetAnalyzer->Process( &( *(genJet) ), dataType_);
+//			TRootJet tempJet = (TRootJet) myJetAnalyzer->Process( &( *(genJet) ));
 
 			TRootGenJet localGenJet(
 				genJet->px()

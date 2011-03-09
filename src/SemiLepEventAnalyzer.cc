@@ -7,19 +7,16 @@ using namespace edm;
 
 SemiLepEventAnalyzer::SemiLepEventAnalyzer(const edm::ParameterSet& producersNames):verbosity_(0)
 {
-	dataType_ = producersNames.getUntrackedParameter<string>("dataType","unknown");
 	semiLepEventProducer_ = producersNames.getParameter<edm::InputTag>("semiLepEventProducer");
 }
 
 SemiLepEventAnalyzer::SemiLepEventAnalyzer(const edm::ParameterSet& producersNames, int verbosity):verbosity_(verbosity)
 {
-	dataType_ = producersNames.getUntrackedParameter<string>("dataType","unknown");
 	semiLepEventProducer_ = producersNames.getParameter<edm::InputTag>("semiLepEventProducer");
 }
 
 SemiLepEventAnalyzer::SemiLepEventAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
 {
-	dataType_ = producersNames.getUntrackedParameter<string>("dataType","unknown");
 	semiLepEventProducer_ = producersNames.getParameter<edm::InputTag>("semiLepEventProducer");
 }
 

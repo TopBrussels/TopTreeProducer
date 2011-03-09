@@ -32,7 +32,6 @@ public:
 
 private:
 	int verbosity_;
-	std::string dataType_;
 	edm::InputTag JPTJetProducer_;
 	edm::InputTag mcProducer_;
 	bool doJPTJetId_;

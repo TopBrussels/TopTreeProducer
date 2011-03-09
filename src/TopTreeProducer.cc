@@ -12,13 +12,7 @@ using namespace edm;
 TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
 {
 	myConfig_ = iConfig.getParameter<ParameterSet>("myConfig");
-	dataType_ = myConfig_.getUntrackedParameter<string>("dataType","unknown");
-	cout << "dataType: " << dataType_ << endl;
-	if( dataType_=="RECO" )				producersNames_ = iConfig.getParameter<ParameterSet>("producersNamesRECO");
-	else if( dataType_=="AOD" )		producersNames_ = iConfig.getParameter<ParameterSet>("producersNamesAOD");
-	else if( dataType_=="PATAOD" )	producersNames_ = iConfig.getParameter<ParameterSet>("producersNamesPATAOD");
-	else if( dataType_=="PAT" )		producersNames_ = iConfig.getParameter<ParameterSet>("producersNamesPAT");
-	else { cout << "TopTreeProducer::TopTreeProducer...   dataType is unknown...  exiting..." << endl; exit(1); }
+	producersNames_ = iConfig.getParameter<ParameterSet>("producersNames");
 }
 
 
@@ -34,7 +28,6 @@ void TopTreeProducer::beginJob()
 	// Load Config parameters	
 	verbosity = myConfig_.getUntrackedParameter<int>("verbosity", 0);
 	rootFileName_ = myConfig_.getUntrackedParameter<string>("RootFileName","noname.root");
-	doHLT8E29 = myConfig_.getUntrackedParameter<bool>("doHLT8E29",false);
 	doHLT = myConfig_.getUntrackedParameter<bool>("doHLT",false);
 	doMC = myConfig_.getUntrackedParameter<bool>("doMC",false);
 	doPDFInfo = myConfig_.getUntrackedParameter<bool>("doPDFInfo",false);
@@ -116,7 +109,7 @@ void TopTreeProducer::beginJob()
 	eventTree_->Branch ("Event", "TopTree::TRootEvent", &rootEvent);
 	if(verbosity>0) cout << "EventTree is created" << endl;
 
-	if(doHLT8E29 || doHLT)
+	if(doHLT)
 	{
 		if(verbosity>0) cout << "HLT info will be added to rootuple" << endl;
 		hltAnalyzer_ = new HLTAnalyzer(producersNames_, myConfig_);
@@ -309,7 +302,7 @@ void TopTreeProducer::endJob()
 {
 
 	// Trigger Summary Tables
-	if(doHLT8E29 || doHLT)
+	if(doHLT)
 	{	
 		cout << "Trigger Summary Tables" << endl;
 		hltAnalyzer_->copySummary(runInfos_);
@@ -423,7 +416,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	// Trigger
 	rootEvent->setGlobalHLT(true);
 	rootEvent->setGlobalHLT8E29(true);
-	if(doHLT8E29 || doHLT)
+	if(doHLT)
 	{
 		if(verbosity>1) std::cout << endl << "Get TriggerResults..." << std::endl;
 		if (nTotEvt_==1) hltAnalyzer_->init(iEvent, rootEvent);
@@ -437,7 +430,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		MCAnalyzer* myMCAnalyzer = new MCAnalyzer(myConfig_, producersNames_);
 		myMCAnalyzer->SetVerbosity(verbosity);
 		if (drawMCTree) myMCAnalyzer->DrawMCTree(iEvent, iSetup, myConfig_, producersNames_);
-		if ( dataType_=="RECO" && doPDFInfo ) myMCAnalyzer->PDFInfo(iEvent, rootEvent);
+		if (doPDFInfo ) myMCAnalyzer->PDFInfo(iEvent, rootEvent);
 		myMCAnalyzer->ProcessMCParticle(iEvent, mcParticles);
 		delete myMCAnalyzer;
 	}
@@ -588,16 +581,8 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	}	
 
 	// Lazy Tools to calculate Cluster shape variables
-	EcalClusterLazyTools* lazyTools = 0;
-	if( (dataType_=="RECO" || dataType_=="AOD" || dataType_=="PATAOD") && ( doElectron )  )
-	{
-		if(verbosity>1) cout << endl << "Loading egamma LazyTools..." << endl;
-		edm::InputTag reducedBarrelEcalRecHitCollection_ = producersNames_.getParameter<edm::InputTag>("reducedBarrelEcalRecHitCollection");
-		edm::InputTag reducedEndcapEcalRecHitCollection_ = producersNames_.getParameter<edm::InputTag>("reducedEndcapEcalRecHitCollection");
-		// FIXME - Test availability of reducedEcalRecHits...
-		lazyTools = new EcalClusterLazyTools( iEvent, iSetup, reducedBarrelEcalRecHitCollection_, reducedEndcapEcalRecHitCollection_ );
-	}
-
+	EcalClusterLazyTools* lazyTools = 0; //obsolete!!!
+	
 	// Electrons
 	if(doElectron)
 	{

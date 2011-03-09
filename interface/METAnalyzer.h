@@ -30,11 +30,10 @@ public:
 	METAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity);
 	~METAnalyzer();
 	void SetVerbosity(int verbosity) {verbosity_ = verbosity; };
-	TopTree::TRootMET Process(const reco::Candidate* met, std::string dataType_);
+	TopTree::TRootMET Process(const reco::Candidate* met);
 
 private:
 	int verbosity_;
-	std::string dataType_ ;
 	edm::InputTag metProducer_;
 	bool useMC_;
 };

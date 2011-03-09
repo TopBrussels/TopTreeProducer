@@ -1,3 +1,4 @@
+
 #include "../interface/METAnalyzer.h"
 
 using namespace std;
@@ -18,7 +19,7 @@ METAnalyzer::~METAnalyzer()
 {
 }
 
-TopTree::TRootMET METAnalyzer::Process(const reco::Candidate* met, std::string dataType_)
+TopTree::TRootMET METAnalyzer::Process(const reco::Candidate* met)
 {
 
   
@@ -32,39 +33,6 @@ TopTree::TRootMET METAnalyzer::Process(const reco::Candidate* met, std::string d
 		    ,met->vz()
 		    ); 
   
-  
-  if( dataType_=="RECO" || dataType_=="AOD" || dataType_=="PATAOD")
-    {
-      // Some specific methods to reco::MET
-      /*
-	const reco::CaloMET *recoMET = dynamic_cast<const reco::CaloMET*>(&*met);
-	localMET.setCaloMETFraction(
-	recoMET->maxEtInEmTowers()
-	,recoMET->maxEtInHadTowers()
-	,recoMET->hadEtInHO()
-	,recoMET->hadEtInHB()
-	,recoMET->hadEtInHF()
-	,recoMET->hadEtInHE()
-	,recoMET->emEtInEB()
-	,recoMET->emEtInEE()
-	,recoMET->emEtInHF()
-	,recoMET->etFractionHadronic()
-	,recoMET->emEtFraction()
-	,recoMET->metSignificance()
-	,recoMET->CaloMETInpHF()
-	,recoMET->CaloMETInmHF()
-	,recoMET->CaloSETInpHF()
-	,recoMET->CaloSETInmHF()
-	,recoMET->CaloMETPhiInpHF()
-	,recoMET->CaloMETPhiInmHF()
-	);
-      */
-      
-    }
-
-  if( dataType_=="PAT" )
-    {
-      // Some specific methods to pat::MET
       const pat::MET *patMET = dynamic_cast<const pat::MET*>(&*met);
       
       localMET.setSumEt(patMET->sumEt());
@@ -100,7 +68,7 @@ TopTree::TRootMET METAnalyzer::Process(const reco::Candidate* met, std::string d
 	    localMET.setGenParticleIndex(-1);
 	  }
 	}
-    }
+
   
   return localMET;
 

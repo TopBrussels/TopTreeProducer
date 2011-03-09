@@ -69,7 +69,6 @@ public:
 
 private:
 	int verbosity_;
-	std::string dataType_ ;
 	edm::InputTag electronProducer_;
 	std::vector<std::string> vElectronProducer;	
 	edm::InputTag primaryVertexProducer_;
@@ -77,7 +76,6 @@ private:
 	bool useMC_;
 	bool runSuperCluster_;
 	bool newId_;
-	bool doTriggerMatching;
 	bool doPrimaryVertex_;
 	bool isData_;
 	std::vector<std::string> pathNames;
