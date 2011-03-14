@@ -68,34 +68,33 @@ void JPTJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets)
 		localJet.setetaetaMoment(jet->etaetaMoment());
 		localJet.setphiphiMoment(jet->phiphiMoment());
 
-			// Some specific methods to pat::Jet
-			const pat::Jet *patJet = dynamic_cast<const pat::Jet*>(&*jet);
+		// Some specific methods to pat::Jet
+		const pat::Jet *patJet = dynamic_cast<const pat::Jet*>(&*jet);
 			
-			localJet.setEcalEnergyFraction(patJet->emEnergyFraction());
-			localJet.setHcalEnergyFraction(patJet->energyFractionHadronic());
-			localJet.setMaxEInEmTowers(patJet->maxEInEmTowers());
-			localJet.setMaxEInHadTowers(patJet->maxEInHadTowers());
-			localJet.setTowersArea(patJet->towersArea());
+		localJet.setEcalEnergyFraction(patJet->emEnergyFraction());
+		localJet.setHcalEnergyFraction(patJet->energyFractionHadronic());
+		localJet.setMaxEInEmTowers(patJet->maxEInEmTowers());
+		localJet.setMaxEInHadTowers(patJet->maxEInHadTowers());
+		localJet.setTowersArea(patJet->towersArea());
 
-			localJet.setChargedMultiplicity(patJet->chargedMultiplicity()) ;
-			localJet.setchargedHadronEnergy(patJet->chargedHadronEnergy());
-			localJet.setchargedHadronEnergyFraction(patJet->chargedHadronEnergyFraction());
-			localJet.setneutralHadronEnergy(patJet->neutralHadronEnergy());
-			localJet.setneutralHadronEnergyFraction(patJet->neutralHadronEnergyFraction());
-			localJet.setchargedEmEnergy(patJet->chargedEmEnergy());
-			localJet.setchargedEmEnergyFraction(patJet->chargedEmEnergyFraction());
-			localJet.setneutralEmEnergy(patJet->neutralEmEnergy());
-			localJet.setneutralEmEnergyFraction(patJet->neutralEmEnergyFraction());
+		localJet.setChargedMultiplicity(patJet->chargedMultiplicity()) ;
+		localJet.setchargedHadronEnergy(patJet->chargedHadronEnergy());
+		localJet.setchargedHadronEnergyFraction(patJet->chargedHadronEnergyFraction());
+		localJet.setneutralHadronEnergy(patJet->neutralHadronEnergy());
+		localJet.setneutralHadronEnergyFraction(patJet->neutralHadronEnergyFraction());
+		localJet.setchargedEmEnergy(patJet->chargedEmEnergy());
+		localJet.setchargedEmEnergyFraction(patJet->chargedEmEnergyFraction());
+		localJet.setneutralEmEnergy(patJet->neutralEmEnergy());
+		localJet.setneutralEmEnergyFraction(patJet->neutralEmEnergyFraction());
 			
-			if(doJPTJetId_)
-			  {
-			    localJet.setfHPD(patJet->jetID().fHPD);
-			    localJet.setfRBX(patJet->jetID().fRBX);
-			    localJet.setn90Hits(patJet->jetID().n90Hits);
-			    localJet.setnHCALTowers(patJet->jetID().nHCALTowers);
-			    localJet.setnECALTowers(patJet->jetID().nECALTowers);
-			    
-			  } //end of if(doJPTJetId_)	
+		if(doJPTJetId_)
+		{
+			localJet.setfHPD(patJet->jetID().fHPD);
+			localJet.setfRBX(patJet->jetID().fRBX);
+			localJet.setn90Hits(patJet->jetID().n90Hits);
+			localJet.setnHCALTowers(patJet->jetID().nHCALTowers);
+			localJet.setnECALTowers(patJet->jetID().nECALTowers);
+		} //end of if(doJPTJetId_)	
 			
 		new( (*rootJets)[j] ) TRootJPTJet(localJet);
 		if(verbosity_>2) cout << "   ["<< setw(3) << j << "] " << localJet << endl;

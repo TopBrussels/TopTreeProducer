@@ -75,25 +75,24 @@ void CaloJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets)
 		localJet.setetaetaMoment(jet->etaetaMoment());
 		localJet.setphiphiMoment(jet->phiphiMoment());
 
-			// Some specific methods to pat::Jet
-			const pat::Jet *patJet = dynamic_cast<const pat::Jet*>(&*jet);
+		// Some specific methods to pat::Jet
+		const pat::Jet *patJet = dynamic_cast<const pat::Jet*>(&*jet);
 			
-			localJet.setChargedMultiplicity(patJet->associatedTracks().size()) ;
-			localJet.setEcalEnergyFraction(patJet->emEnergyFraction());
-			localJet.setHcalEnergyFraction(patJet->energyFractionHadronic());
-			localJet.setMaxEInEmTowers(patJet->maxEInEmTowers());
-			localJet.setMaxEInHadTowers(patJet->maxEInHadTowers());
-			localJet.setTowersArea(patJet->towersArea());
+		localJet.setChargedMultiplicity(patJet->associatedTracks().size()) ;
+		localJet.setEcalEnergyFraction(patJet->emEnergyFraction());
+		localJet.setHcalEnergyFraction(patJet->energyFractionHadronic());
+		localJet.setMaxEInEmTowers(patJet->maxEInEmTowers());
+		localJet.setMaxEInHadTowers(patJet->maxEInHadTowers());
+		localJet.setTowersArea(patJet->towersArea());
 
-			if(doCaloJetId_)
-			{
-				localJet.setfHPD(patJet->jetID().fHPD);
-				localJet.setfRBX(patJet->jetID().fRBX);
-				localJet.setn90Hits(patJet->jetID().n90Hits);
-				localJet.setnHCALTowers(patJet->jetID().nHCALTowers);
-				localJet.setnECALTowers(patJet->jetID().nECALTowers);
-
-			} //end of if(doCaloJetId_)
+		if(doCaloJetId_)
+		{
+			localJet.setfHPD(patJet->jetID().fHPD);
+			localJet.setfRBX(patJet->jetID().fRBX);
+			localJet.setn90Hits(patJet->jetID().n90Hits);
+			localJet.setnHCALTowers(patJet->jetID().nHCALTowers);
+			localJet.setnECALTowers(patJet->jetID().nECALTowers);
+		} //end of if(doCaloJetId_)
 
 		new( (*rootJets)[j] ) TRootCaloJet(localJet);
 		if(verbosity_>2) cout << "   ["<< setw(3) << j << "] " << localJet << endl;

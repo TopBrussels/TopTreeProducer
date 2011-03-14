@@ -34,7 +34,7 @@ ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& producersNames, cons
 
 ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
 {
-	vElectronProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("vElectronProducer");
+	vElectronProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("velectronProducer");
 	electronProducer_ =	edm::InputTag(vElectronProducer[iter]);
 	useMC_ = myConfig.getUntrackedParameter<bool>("doElectronMC");
 	isData_ = myConfig.getUntrackedParameter<bool>("isData");

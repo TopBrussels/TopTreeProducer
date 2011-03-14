@@ -71,17 +71,17 @@ void PFJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets)
 		localJet.setJetType(2); // 2 = PFJet
 
 		// Some specific methods to pat::Jet
-			const pat::Jet *patJet = dynamic_cast<const pat::Jet*>(&*jet);
-
-			localJet.setnOfDaughters(patJet->numberOfDaughters());
-			localJet.setChargedHadronEnergyFraction(patJet->chargedHadronEnergyFraction());
-			localJet.setNeutralHadronEnergyFraction(patJet->neutralHadronEnergyFraction());
-			localJet.setChargedEmEnergyFraction(patJet->chargedEmEnergyFraction());
-			localJet.setChargedMuEnergyFraction(patJet->chargedMuEnergyFraction());
-			localJet.setNeutralEmEnergyFraction(patJet->neutralEmEnergyFraction());
-			localJet.setChargedMultiplicity(patJet->chargedMultiplicity());
-			localJet.setNeutralMultiplicity(patJet->neutralMultiplicity());
-			localJet.setMuonMultiplicity(patJet->muonMultiplicity());
+		const pat::Jet *patJet = dynamic_cast<const pat::Jet*>(&*jet);
+			
+		localJet.setnOfDaughters(patJet->numberOfDaughters());
+		localJet.setChargedHadronEnergyFraction(patJet->chargedHadronEnergyFraction());
+		localJet.setNeutralHadronEnergyFraction(patJet->neutralHadronEnergyFraction());
+		localJet.setChargedEmEnergyFraction(patJet->chargedEmEnergyFraction());
+		localJet.setChargedMuEnergyFraction(patJet->chargedMuEnergyFraction());
+		localJet.setNeutralEmEnergyFraction(patJet->neutralEmEnergyFraction());
+		localJet.setChargedMultiplicity(patJet->chargedMultiplicity());
+		localJet.setNeutralMultiplicity(patJet->neutralMultiplicity());
+		localJet.setMuonMultiplicity(patJet->muonMultiplicity());
 
 		new( (*rootJets)[j] ) TRootPFJet(localJet);
 		if(verbosity_>2) cout << "   ["<< setw(3) << j << "] " << localJet << endl;
