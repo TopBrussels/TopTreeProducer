@@ -55,8 +55,6 @@ void TopTreeProducer::beginJob()
 	vMuonProducer = producersNames_.getUntrackedParameter<vector<string> >("vmuonProducer",defaultVec);
 	vElectronProducer = producersNames_.getUntrackedParameter<vector<string> >("velectronProducer",defaultVec);
 	
-	cout << "doMuon: " << doMuon << "  doElectron: " << doElectron << endl;
-	
 	for(unsigned int s=0;s<vGenJetProducer.size();s++){
 		TClonesArray* a;
 		vgenJets.push_back(a);
