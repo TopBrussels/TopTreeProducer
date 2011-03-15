@@ -25,7 +25,6 @@
 #include "../interface/TRootGenEvent.h"
 #include "../interface/TRootNPGenEvent.h"
 #include "../interface/TRootSpinCorrGen.h"
-#include "../interface/TRootSignalEvent.h"
 #include "../interface/TRootEvent.h"
 #include "../interface/TRootRun.h"
 #include "../interface/TRootParticle.h"

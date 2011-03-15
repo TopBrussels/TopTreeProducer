@@ -1,8 +1,6 @@
 #ifndef TRootVertex_h
 #define TRootVertex_h
 
-#include "../interface/TRootXYZPoint.h"
-
 #include <string>
 #include <iostream>
 

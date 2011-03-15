@@ -10,7 +10,6 @@
 #include "../interface/TRootPFJet.h"
 #include "../interface/TRootMuon.h"
 #include "../interface/TRootElectron.h"
-#include "../interface/TRootSignalEvent.h"
 #include "../interface/TRootMET.h"
 #include "../interface/TRootCaloMET.h"
 #include "../interface/TRootPFMET.h"
@@ -22,7 +21,6 @@
 #include "../interface/TRootTopCandidate.h"
 #include "../interface/TRootCompositeCandidate.h"
 #include "../interface/TRootSemiLepEvent.h"
-#include "../interface/TRootXYZPoint.h"
 #include "../interface/TRootVertex.h"
 #include "../interface/TRootHLTInfo.h"
 #else
@@ -37,7 +35,6 @@
 #include "../interface/TRootPFJet.h"
 #include "../interface/TRootMuon.h"
 #include "../interface/TRootElectron.h"
-#include "../interface/TRootSignalEvent.h"
 #include "../interface/TRootMET.h"
 #include "../interface/TRootCaloMET.h"
 #include "../interface/TRootPFMET.h"
@@ -49,7 +46,6 @@
 #include "../interface/TRootTopCandidate.h"
 #include "../interface/TRootCompositeCandidate.h"
 #include "../interface/TRootSemiLepEvent.h"
-#include "../interface/TRootXYZPoint.h"
 #include "../interface/TRootVertex.h"
 #include "../interface/TRootHLTInfo.h"
 #endif
@@ -70,7 +66,6 @@
 #pragma link C++ class TopTree::TRootPFJet;
 #pragma link C++ class TopTree::TRootMuon;
 #pragma link C++ class TopTree::TRootElectron;
-#pragma link C++ class TopTree::TRootSignalEvent;
 #pragma link C++ class TopTree::TRootMET;
 #pragma link C++ class TopTree::TRootCaloMET;
 #pragma link C++ class TopTree::TRootPFMET;
@@ -82,7 +77,6 @@
 #pragma link C++ class TopTree::TRootTopCandidate;
 #pragma link C++ class TopTree::TRootCompositeCandidate;
 #pragma link C++ class TopTree::TRootSemiLepEvent;
-#pragma link C++ class TopTree::TRootXYZPoint;
 #pragma link C++ class TopTree::TRootVertex;
 #pragma link C++ class TopTree::TRootHLTInfo;
 
