@@ -152,8 +152,6 @@ int main(int argc, char** argv){
 
      if (runInfos->hltInputTag() != "")
        cout << "- " << "TopTree::TRootRun" << setw(5) << " -> " << "\"" << runInfos->hltInputTag() << "\""  << endl;
-     if (runInfos->hlt8E29InputTag() != "")
-       cout << "- " << "TopTree::TRootRun" << setw(5) << " -> " << "\"" << runInfos->hlt8E29InputTag() << "\""  << endl; 
 
     }
 

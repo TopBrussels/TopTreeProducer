@@ -356,7 +356,6 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 
 	// Trigger
 	rootEvent->setGlobalHLT(true);
-	rootEvent->setGlobalHLT8E29(true);
 	if(doHLT)
 	{
 		if(verbosity>1) std::cout << endl << "Get TriggerResults..." << std::endl;

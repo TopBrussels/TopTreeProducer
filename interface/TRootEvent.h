@@ -27,8 +27,6 @@ namespace TopTree
 			,lumiBlockId_(-1)
 			,nTracks_(-1)
 			,nHighPurityTracks_(-1)
-			,passGlobalHLT8E29_(false)
-			,trigHLT8E29_(0)
 			,passGlobalHLT_(false)
 			,trigHLT_(0)
 			,idParton1_(-1)
@@ -49,21 +47,6 @@ namespace TopTree
 		Int_t nTracks() const { return nTracks_; }
 		Int_t nHighPurityTracks() const { return nHighPurityTracks_; }
 		// Trigger decision
-		Bool_t passGlobalHLT8E29() const { return passGlobalHLT8E29_; }
-		UInt_t nHLT8E29Paths() const { return trigHLT8E29_.size(); }
-		std::vector<Bool_t> trigHLT8E29() const { return trigHLT8E29_; }
-		Bool_t trigHLT8E29(unsigned int i) const
-		{
-			if (trigHLT8E29_.size()>i)
-			{
-				return trigHLT8E29_.at(i); 
-			}
-			else
-			{
-				cout << "HLT8E29 path " << i << " not found" << endl;
-				return false;
-			}
-		}
 		Bool_t passGlobalHLT() const { return passGlobalHLT_; }
 		UInt_t nHLTPaths() const { return trigHLT_.size(); }
 		std::vector<Bool_t> trigHLT() const { return trigHLT_; }
@@ -102,12 +85,6 @@ namespace TopTree
 		void setNTracks(Int_t nTracks) { nTracks_ = nTracks; }
 		void setNHighPurityTracks(Int_t nHighPurityTracks) { nHighPurityTracks_ = nHighPurityTracks; }
 
-		void setGlobalHLT8E29(Bool_t passGlobalHLT8E29) { passGlobalHLT8E29_ = passGlobalHLT8E29; }
-		void setTrigHLT8E29(std::vector<Bool_t> trigHLT8E29)
-		{
-			trigHLT8E29_.resize(trigHLT8E29.size());
-			for (unsigned int i=0; i!=trigHLT8E29.size(); ++i) trigHLT8E29_[i]=trigHLT8E29[i];
-		}
 		void setGlobalHLT(Bool_t passGlobalHLT) { passGlobalHLT_ = passGlobalHLT; }
 		void setTrigHLT(std::vector<Bool_t> trigHLT)
 		{
@@ -143,8 +120,6 @@ namespace TopTree
 		Int_t nHighPurityTracks_;
 
 		// Trigger Infos
-		Bool_t passGlobalHLT8E29_;
-		std::vector<Bool_t> trigHLT8E29_;
 		Bool_t passGlobalHLT_;
 		std::vector<Bool_t> trigHLT_;
 
