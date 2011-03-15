@@ -436,9 +436,7 @@ Make sure your development on one object doesn't make the other ones break.
 
 Test cases (this is the minimal set that should succeed!):
 
-  - Test the TopTreeProducer on RECO/AOD MC input
   - Test the TopTreeProducer on PAT MC input (created from the RECO/AOD input)
-  - Test the TopTreeProducer on RECO/AOD DATA input
   - Test the TopTreeProducer on PAT DATA input (created from the RECO/AOD input)
 
 Finally try to write a simple macro to read out the variables you changed in your object and validate them. An example standalone root macro can be found in test/Macro.C and compilation info in the README in the same dir.
