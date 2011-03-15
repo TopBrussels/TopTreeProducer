@@ -32,7 +32,6 @@
 
 #include "../interface/ParticleTreeDrawer.h"
 #include "../interface/TRootEvent.h"
-#include "../interface/TRootSignalEvent.h"
 #include "../interface/TRootParticle.h"
 #include "../interface/TRootMCParticle.h"
 #include "../interface/TRootJet.h"

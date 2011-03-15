@@ -6,7 +6,6 @@
 #include "../interface/TRootPFJet.h"
 #include "../interface/TRootMET.h"
 #include "../interface/TRootGenEvent.h"
-#include "../interface/TRootSignalEvent.h"
 #include "../interface/TRootEvent.h"
 #include "../interface/TRootRun.h"
 #include "../interface/TRootParticle.h"
