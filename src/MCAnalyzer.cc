@@ -93,7 +93,7 @@ void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootM
 	iEvent.getByLabel( genParticlesProducer_, genParticles );
 	int iElectron=0; int iMuon=0; int iUnstableParticle=0;
 	int iPartSel=0;  int iElectronSel=0; int iMuonSel=0; 
-
+	int iJet=0, iMET=0, iJetSel=0, iMETSel=0;
 
 	for(unsigned int j=0; j<genParticles->size(); ++j )
 	{
@@ -138,13 +138,12 @@ void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootM
 			iMuonSel++;
 		}
 
-		/*
 		// FIXME - GenJet collection instead
 		if ( doJetMC_ && (abs(p.pdgId()) < 7 || abs(p.pdgId()) == 21 )&& p.status()==1 )
 		{
 			iJet++;
 			if ( abs(p.eta()>jetMC_etaMax_) || p.pt()<jetMC_ptMin_ ) continue;
-			new( (*rootMCParticles)[iPartSel] ) TRootParticle( p.px(), p.py(), p.pz(), p.energy(), p.vx(), p.vy(), p.vz(), p.pdgId() , p.charge(), p.status(), p.numberOfDaughters(), motherID, grannyID, 0, 0, 0, 0, j );
+			new( (*rootMCParticles)[iPartSel] ) TRootMCParticle( p.px(), p.py(), p.pz(), p.energy(), p.vx(), p.vy(), p.vz(), p.pdgId() , p.charge(), p.status(), p.numberOfDaughters(), motherID, grannyID, 0, 0, 0, 0, j );
 			if(verbosity_>2) cout << "   MC Jet  " << (const TRootParticle&)(*rootMCParticles->At(iPartSel)) << endl;
 			iPartSel++;
 			iJetSel++;
@@ -154,12 +153,11 @@ void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootM
 		if ( doMETMC_ && (abs(p.pdgId()) == 12 || abs(p.pdgId()) == 14 ||  abs(p.pdgId()) == 16 || ( abs(p.pdgId()) > 1000000 && abs(p.pdgId()) < 3000000 ) )&& p.status()==1 )
 		{
 			iMET++;
-			new( (*rootMCParticles)[iPartSel] ) TRootParticle( p.px(), p.py(), p.pz(), p.energy(), p.vx(), p.vy(), p.vz(), p.pdgId() , p.charge(), p.status(), p.numberOfDaughters(), motherID, grannyID, 0, 0, 0, 0, j );
+			new( (*rootMCParticles)[iPartSel] ) TRootMCParticle( p.px(), p.py(), p.pz(), p.energy(), p.vx(), p.vy(), p.vz(), p.pdgId() , p.charge(), p.status(), p.numberOfDaughters(), motherID, grannyID, 0, 0, 0, 0, j );
 			if(verbosity_>2) cout << "   MC MET  " << (const TRootParticle&)(*rootMCParticles->At(iPartSel)) << endl;
 			iPartSel++;
 			iMETSel++;
 		}
-		*/
 
 		// add information on primary unstable particles: keep quarks, taus, Z, W, Higgs and susy particles, with status 3
 		if ( doUnstablePartsMC_ && (abs(p.pdgId()) < 7 || (abs(p.pdgId()) > 10 && abs(p.pdgId()) < 17 )  ||
