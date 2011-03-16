@@ -64,23 +64,23 @@ void MCAnalyzer::DrawMCTree(const edm::Event& iEvent, const edm::EventSetup& iSe
 
 void MCAnalyzer::PDFInfo(const edm::Event& iEvent, TRootEvent* rootEvent)
 {
-	// FIXME - Protection if edm::HepMCProduct not present
 	if(verbosity_>1) cout << endl << "   Process PDF Infos..." << endl;
-	edm::Handle<edm::HepMCProduct> mcProduct;
-	iEvent.getByType( mcProduct );
-	const HepMC::GenEvent * genEvent = mcProduct->GetEvent();
-	const HepMC::PdfInfo* pdfInfo = genEvent->pdf_info();
-	if (pdfInfo != 0 && verbosity_>1)
+	edm::Handle<GenEventInfoProduct> genEvtInfo;
+	iEvent.getByLabel( "generator", genEvtInfo );
+	typedef gen::PdfInfo PDF;
+	const PDF *pdfInfo = genEvtInfo->pdf();
+	if (genEvtInfo->hasPDF() && verbosity_>1)
 	{
-		cout << "   First incoming parton:  flavour=" << pdfInfo->id1() << " x1 = " << pdfInfo->x1() << endl;
-		cout << "   Second incoming parton: flavour=" << pdfInfo->id2() << " x2 = " << pdfInfo->x2() << endl;
-		cout << "   Factorization Scale Q = " << pdfInfo->scalePDF() << endl;
+		cout << "   First incoming parton:  flavour=" << pdfInfo->id.first << " x1 = " << pdfInfo->x.first << endl;
+		cout << "   Second incoming parton: flavour=" << pdfInfo->id.second << " x2 = " << pdfInfo->x.second << endl;
+		cout << "   Factorization Scale Q = " << pdfInfo->scalePDF << endl;
 	}
-	rootEvent->setIdParton1(pdfInfo->id1());
-	rootEvent->setXParton1(pdfInfo->x1());
-	rootEvent->setIdParton2(pdfInfo->id2());
-	rootEvent->setXParton2(pdfInfo->x2());
-	rootEvent->setFactorizationScale(pdfInfo->scalePDF());
+	rootEvent->setIdParton1(pdfInfo->id.first);
+	rootEvent->setXParton1(pdfInfo->x.first);		
+	rootEvent->setIdParton2(pdfInfo->id.second);
+	rootEvent->setXParton2(pdfInfo->x.second);
+	rootEvent->setFactorizationScale(pdfInfo->scalePDF);	
+	
 }
 
 

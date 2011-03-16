@@ -72,7 +72,7 @@ namespace TopTree
 		Int_t idParton2() const { return idParton2_; }
 		// energy fraction carried by first incoming parton
 		Float_t xParton2() const { return xParton2_; }
-		// Factorization Scale Q
+		// Q-scale used in evaluation of PDF's (in GeV). 
 		Float_t factorizationScale() const { return factorizationScale_; }
 
 		std::map<std::string, std::vector<double> >  getTriggerFilters() const { return triggerFilters_;}
