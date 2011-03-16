@@ -291,12 +291,16 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	  std::map<std::string, std::vector<double> > triggerFilters;
 	  
 	  // get Trigger summary from Event
-	  edm::Handle<trigger::TriggerEvent> summary, summary1st, summary2nd;
+	  edm::Handle<trigger::TriggerEvent> summary, summary1st, summary2nd, summary3rd, summary4th;
 	  edm::InputTag summaryTag1st_("hltTriggerSummaryAOD","",(producersNames_.getParameter < edm::InputTag > ("hltProducer1st")).process());
 	  edm::InputTag summaryTag2nd_("hltTriggerSummaryAOD","",(producersNames_.getParameter < edm::InputTag > ("hltProducer2nd")).process());
+	  edm::InputTag summaryTag3rd_("hltTriggerSummaryAOD","",(producersNames_.getParameter < edm::InputTag > ("hltProducer3rd")).process());
+	  edm::InputTag summaryTag4th_("hltTriggerSummaryAOD","",(producersNames_.getParameter < edm::InputTag > ("hltProducer4th")).process());
 	  
 	  try { iEvent.getByLabel(summaryTag1st_,summary1st);} catch (...) {;}
 	  try { iEvent.getByLabel(summaryTag2nd_,summary2nd);} catch (...) {;}
+	  try { iEvent.getByLabel(summaryTag3rd_,summary3rd);} catch (...) {;}
+	  try { iEvent.getByLabel(summaryTag4th_,summary4th);} catch (...) {;}
 
 	  //cout << summaryTag1st_ << " " << summaryTag2nd_ << endl;
 	  //cout << summaryTag1st_.process() << " " << summaryTag2nd_.process() << endl;
@@ -306,6 +310,10 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	    summary = summary1st;
 	  else if (summary2nd.isValid())
 	    summary = summary2nd;
+	  else if (summary3rd.isValid())
+	    summary = summary3rd;
+	  else if (summary4th.isValid())
+	    summary = summary4th;
 	  else
 	    if (verbosity > 1) cout << "TopTreeProducer::Analyze ERROR: Could not store info for trigger emulation: provided HLTproducerNames are null" << endl;
 	    
