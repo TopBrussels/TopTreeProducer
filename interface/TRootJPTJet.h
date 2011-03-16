@@ -25,7 +25,7 @@ namespace TopTree
 			,ecalEnergyFraction_(-9999.)
 			,hcalEnergyFraction_(-9999.)
 			,maxEInEmTowers_(-9999.)
-   	                ,maxEInHadTowers_(-9999.)
+   	  ,maxEInHadTowers_(-9999.)
 			,towersArea_(-9999.)
 			,n90_(-9999)
 			,n60_(-9999)
@@ -35,14 +35,7 @@ namespace TopTree
 			,nHCALTowers_(-9999)
 			,nECALTowers_(-9999)
 			,chargedMultiplicity_(-9999)
-		        ,chargedHadronEnergy_(-9999.)
-		        ,chargedHadronEnergyFraction_(-9999.)
-		        ,neutralHadronEnergy_(-9999.)
-		        ,neutralHadronEnergyFraction_(-9999.)
-		        ,chargedEmEnergy_(-9999.)
-		        ,chargedEmEnergyFraction_(-9999.)
-		        ,neutralEmEnergy_(-9999.)
-		        ,neutralEmEnergyFraction_(-9999.)
+		  ,chargedHadronEnergyFraction_(-9999.)
 			{;}
 		
 		TRootJPTJet(const TRootJPTJet& jet) :
@@ -62,14 +55,7 @@ namespace TopTree
 			,nHCALTowers_(jet.nHCALTowers_)
 			,nECALTowers_(jet.nECALTowers_)
 			,chargedMultiplicity_(jet.chargedMultiplicity_)
-		        ,chargedHadronEnergy_(-9999.)
-		        ,chargedHadronEnergyFraction_(-9999.)
-		        ,neutralHadronEnergy_(-9999.)
-		        ,neutralHadronEnergyFraction_(-9999.)
-		        ,chargedEmEnergy_(-9999.)
-		        ,chargedEmEnergyFraction_(-9999.)
-		        ,neutralEmEnergy_(-9999.)
-		        ,neutralEmEnergyFraction_(-9999.)
+		  ,chargedHadronEnergyFraction_(jet.chargedHadronEnergyFraction_)
 			{;}
 	
 		TRootJPTJet(const TRootJet& jet) :
@@ -79,7 +65,7 @@ namespace TopTree
 			,ecalEnergyFraction_(-9999.)
 			,hcalEnergyFraction_(-9999.)
 			,maxEInEmTowers_(-9999.)
-   	                ,maxEInHadTowers_(-9999.)
+   	  ,maxEInHadTowers_(-9999.)
 			,towersArea_(-9999.)
 			,n90_(-9999)
 			,n60_(-9999)
@@ -89,14 +75,7 @@ namespace TopTree
 			,nHCALTowers_(-9999)
 			,nECALTowers_(-9999)
 			,chargedMultiplicity_(-9999)
-		        ,chargedHadronEnergy_(-9999.)
-		        ,chargedHadronEnergyFraction_(-9999.)
-		        ,neutralHadronEnergy_(-9999.)
-		        ,neutralHadronEnergyFraction_(-9999.)
-		        ,chargedEmEnergy_(-9999.)
-		        ,chargedEmEnergyFraction_(-9999.)
-		        ,neutralEmEnergy_(-9999.)
-		        ,neutralEmEnergyFraction_(-9999.)
+		  ,chargedHadronEnergyFraction_(-9999.)
 			{;}
 	
 		TRootJPTJet(Double_t px, Double_t py, Double_t pz, Double_t e) :
@@ -106,7 +85,7 @@ namespace TopTree
 			,ecalEnergyFraction_(-9999.)
 			,hcalEnergyFraction_(-9999.)
 			,maxEInEmTowers_(-9999.)
-   	                ,maxEInHadTowers_(-9999.)
+   	  ,maxEInHadTowers_(-9999.)
 			,towersArea_(-9999.)
 			,n90_(-9999)
 			,n60_(-9999)
@@ -116,14 +95,7 @@ namespace TopTree
 			,nHCALTowers_(-9999)
 			,nECALTowers_(-9999)
 			,chargedMultiplicity_(-9999)
-		        ,chargedHadronEnergy_(-9999.)
-		        ,chargedHadronEnergyFraction_(-9999.)
-		        ,neutralHadronEnergy_(-9999.)
-		        ,neutralHadronEnergyFraction_(-9999.)
-		        ,chargedEmEnergy_(-9999.)
-		        ,chargedEmEnergyFraction_(-9999.)
-		        ,neutralEmEnergy_(-9999.)
-		        ,neutralEmEnergyFraction_(-9999.)
+		  ,chargedHadronEnergyFraction_(-9999.)
 			{;}
 	
 		TRootJPTJet(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z) :
@@ -133,7 +105,7 @@ namespace TopTree
 			,ecalEnergyFraction_(-9999.)
 			,hcalEnergyFraction_(-9999.)
 			,maxEInEmTowers_(-9999.)
-   	                ,maxEInHadTowers_(-9999.)
+   	  ,maxEInHadTowers_(-9999.)
 			,towersArea_(-9999.)
 			,n90_(-9999)
 			,n60_(-9999)
@@ -143,14 +115,7 @@ namespace TopTree
 			,nHCALTowers_(-9999)
 			,nECALTowers_(-9999)
 			,chargedMultiplicity_(-9999)
-		        ,chargedHadronEnergy_(-9999.)
-		        ,chargedHadronEnergyFraction_(-9999.)
-		        ,neutralHadronEnergy_(-9999.)
-		        ,neutralHadronEnergyFraction_(-9999.)
-		        ,chargedEmEnergy_(-9999.)
-		        ,chargedEmEnergyFraction_(-9999.)
-		        ,neutralEmEnergy_(-9999.)
-		        ,neutralEmEnergyFraction_(-9999.)
+		  ,chargedHadronEnergyFraction_(-9999.)
 			{;}
 	
 		TRootJPTJet(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z, Int_t type, Float_t charge) :
@@ -160,7 +125,7 @@ namespace TopTree
 			,ecalEnergyFraction_(-9999.)
 			,hcalEnergyFraction_(-9999.)
 			,maxEInEmTowers_(-9999.)
-   	                ,maxEInHadTowers_(-9999.)
+   	  ,maxEInHadTowers_(-9999.)
 			,towersArea_(-9999.)
 			,n60_(-9999)
 			,fHPD_(-9999)
@@ -169,14 +134,7 @@ namespace TopTree
 			,nHCALTowers_(-9999)
 			,nECALTowers_(-9999)
 			,chargedMultiplicity_(-9999)
-		        ,chargedHadronEnergy_(-9999.)
-		        ,chargedHadronEnergyFraction_(-9999.)
-		        ,neutralHadronEnergy_(-9999.)
-		        ,neutralHadronEnergyFraction_(-9999.)
-		        ,chargedEmEnergy_(-9999.)
-		        ,chargedEmEnergyFraction_(-9999.)
-		        ,neutralEmEnergy_(-9999.)
-		        ,neutralEmEnergyFraction_(-9999.)
+		  ,chargedHadronEnergyFraction_(-9999.)
 			{;}
 	
 		TRootJPTJet(const TLorentzVector &momentum) :
@@ -186,7 +144,7 @@ namespace TopTree
 			,ecalEnergyFraction_(-9999.)
 			,hcalEnergyFraction_(-9999.)
 			,maxEInEmTowers_(-9999.)
-   	                ,maxEInHadTowers_(-9999.)
+   	  ,maxEInHadTowers_(-9999.)
 			,towersArea_(-9999.)
 			,n90_(-9999)
 			,n60_(-9999)
@@ -196,14 +154,7 @@ namespace TopTree
 			,nHCALTowers_(-9999)
 			,nECALTowers_(-9999)
 			,chargedMultiplicity_(-9999)
-		        ,chargedHadronEnergy_(-9999.)
-		        ,chargedHadronEnergyFraction_(-9999.)
-		        ,neutralHadronEnergy_(-9999.)
-		        ,neutralHadronEnergyFraction_(-9999.)
-		        ,chargedEmEnergy_(-9999.)
-		        ,chargedEmEnergyFraction_(-9999.)
-		        ,neutralEmEnergy_(-9999.)
-		        ,neutralEmEnergyFraction_(-9999.)
+		  ,chargedHadronEnergyFraction_(-9999.)
 			{;}
 	
 		TRootJPTJet(const TLorentzVector &momentum, const TVector3 &vertex, Int_t type, Float_t charge) :
@@ -213,7 +164,7 @@ namespace TopTree
 			,ecalEnergyFraction_(-9999.)
 			,hcalEnergyFraction_(-9999.)
 			,maxEInEmTowers_(-9999.)
-   	                ,maxEInHadTowers_(-9999.)
+   	  ,maxEInHadTowers_(-9999.)
 			,towersArea_(-9999.)
 			,n90_(-9999)
 			,n60_(-9999)
@@ -223,14 +174,7 @@ namespace TopTree
 			,nHCALTowers_(-9999)
 			,nECALTowers_(-9999)
 			,chargedMultiplicity_(-9999)
-		        ,chargedHadronEnergy_(-9999.)
-		        ,chargedHadronEnergyFraction_(-9999.)
-		        ,neutralHadronEnergy_(-9999.)
-		        ,neutralHadronEnergyFraction_(-9999.)
-		        ,chargedEmEnergy_(-9999.)
-		        ,chargedEmEnergyFraction_(-9999.)
-		        ,neutralEmEnergy_(-9999.)
-		        ,neutralEmEnergyFraction_(-9999.)
+			,chargedHadronEnergyFraction_(-9999.)
 			{;}
 		
 		~TRootJPTJet() {;}
@@ -250,15 +194,7 @@ namespace TopTree
 		Int_t nHCALTowers() const { return nHCALTowers_; }
 		Int_t nECALTowers() const { return nECALTowers_; }
 		Int_t chargedMultiplicity() const { return chargedMultiplicity_; }
-
-		Float_t chargedHadronEnergy () const {return chargedHadronEnergy_;}
 		Float_t chargedHadronEnergyFraction () const {return chargedHadronEnergyFraction_;}
-		Float_t neutralHadronEnergy () const {return neutralHadronEnergy_;}
-		Float_t neutralHadronEnergyFraction () const {return neutralHadronEnergyFraction_;}	
-		Float_t chargedEmEnergy () const {return chargedEmEnergy_;}
-		Float_t chargedEmEnergyFraction () const {return chargedEmEnergyFraction_;}
-		Float_t neutralEmEnergy () const {return neutralEmEnergy_;}
-		Float_t neutralEmEnergyFraction () const {return neutralEmEnergyFraction_;}
 
 		virtual TString typeName() const { return "TRootJPTJet"; }
 		
@@ -277,16 +213,7 @@ namespace TopTree
 		void setnHCALTowers(Int_t nHCALTowers) { nHCALTowers_ = nHCALTowers; }
 		void setnECALTowers(Int_t nECALTowers) { nECALTowers_ = nECALTowers; }
 		void setChargedMultiplicity(Int_t chargedMultiplicity) { chargedMultiplicity_ = chargedMultiplicity; }
-
-		void setchargedHadronEnergy (Float_t x) { chargedHadronEnergy_ = x;}
-		void setchargedHadronEnergyFraction (Float_t x) { chargedHadronEnergyFraction_ = x;}
-		void setneutralHadronEnergy (Float_t x) { neutralHadronEnergy_ = x;}
-		void setneutralHadronEnergyFraction (Float_t x) { neutralHadronEnergyFraction_ = x;}	
-		void setchargedEmEnergy (Float_t x) { chargedEmEnergy_ = x;}
-		void setchargedEmEnergyFraction (Float_t x) { chargedEmEnergyFraction_ = x;}
-		void setneutralEmEnergy (Float_t x) { neutralEmEnergy_ = x;}
-		void setneutralEmEnergyFraction (Float_t x) { neutralEmEnergyFraction_ = x;}
-
+		void setchargedHadronEnergyFraction (Float_t chargedHadronEnergyFraction) { chargedHadronEnergyFraction_ = chargedHadronEnergyFraction; }
 		
 		friend std::ostream& operator<< (std::ostream& stream, const TRootJPTJet& jet) {
 			stream << "TRootJPTJet - Charge=" << setw(2) << jet.charge() << " (Et,eta,phi)=("<< setw(10) << jet.Et() <<","<< setw(10) << jet.Eta() <<","<< setw(10) << jet.Phi() << ")"
@@ -313,15 +240,8 @@ namespace TopTree
 		Int_t nECALTowers_;
 		Int_t chargedMultiplicity_;
 
-		Float_t chargedHadronEnergy_;
 		Float_t chargedHadronEnergyFraction_;
-		Float_t neutralHadronEnergy_;
-		Float_t neutralHadronEnergyFraction_;
-		Float_t chargedEmEnergy_;
-		Float_t chargedEmEnergyFraction_;
-		Float_t neutralEmEnergy_;
-		Float_t neutralEmEnergyFraction_;
-
+		// neutralHadronEnergyFraction_, chargedEmEnergyFraction_, neutralEmEnergyFraction_ all not filled in PAT, so removed
 
 		ClassDef (TRootJPTJet,1);
 	};

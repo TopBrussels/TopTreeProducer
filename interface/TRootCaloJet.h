@@ -231,7 +231,6 @@ namespace TopTree
 		Int_t nHCALTowers_;
 		Int_t nECALTowers_;
 		Int_t chargedMultiplicity_;         // Number of tracks associated to the jet. Not available for reco::CaloJet
-													// Different of PF chargedMultiplicity!
 
 		ClassDef (TRootCaloJet,1);
 	};

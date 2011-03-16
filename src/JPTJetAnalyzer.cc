@@ -76,17 +76,9 @@ void JPTJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets)
 		localJet.setMaxEInEmTowers(patJet->maxEInEmTowers());
 		localJet.setMaxEInHadTowers(patJet->maxEInHadTowers());
 		localJet.setTowersArea(patJet->towersArea());
-
 		localJet.setChargedMultiplicity(patJet->chargedMultiplicity()) ;
-		localJet.setchargedHadronEnergy(patJet->chargedHadronEnergy());
 		localJet.setchargedHadronEnergyFraction(patJet->chargedHadronEnergyFraction());
-		localJet.setneutralHadronEnergy(patJet->neutralHadronEnergy());
-		localJet.setneutralHadronEnergyFraction(patJet->neutralHadronEnergyFraction());
-		localJet.setchargedEmEnergy(patJet->chargedEmEnergy());
-		localJet.setchargedEmEnergyFraction(patJet->chargedEmEnergyFraction());
-		localJet.setneutralEmEnergy(patJet->neutralEmEnergy());
-		localJet.setneutralEmEnergyFraction(patJet->neutralEmEnergyFraction());
-			
+		
 		if(doJPTJetId_)
 		{
 			localJet.setfHPD(patJet->jetID().fHPD);
