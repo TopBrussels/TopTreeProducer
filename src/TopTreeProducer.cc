@@ -519,9 +519,9 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		if(doMuon && vmuons.size() > 0) myMCAssociator->process(vmuons[0]);
 		if(doElectron && velectrons.size() > 0) myMCAssociator->process(velectrons[0]);
 		if(doCaloMET) myMCAssociator->process(CALOmet);
-		//if(verbosity>2 && doJet) myMCAssociator->printParticleAssociation(jets);
-		//if(verbosity>2 && doMuon) myMCAssociator->printParticleAssociation(muons);
-		//if(verbosity>2 && doElectron) myMCAssociator->printParticleAssociation(electrons);
+		//if(verbosity>2 && doCaloJet && vcaloJets.size() > 0) myMCAssociator->printParticleAssociation(vcaloJets[0]);
+		//if(verbosity>2 && doMuon && vmuons.size() > 0) myMCAssociator->printParticleAssociation(vmuons[0]);
+		//if(verbosity>2 && doElectron && velectrons.size() > 0) myMCAssociator->printParticleAssociation(velectrons[0]);
 		//if(verbosity>2 && doPhoton) myMCAssociator->printParticleAssociation(photons);
 		//if(verbosity>2 && doCaloMET) myMCAssociator->printParticleAssociation(CALOmet);
 		delete myMCAssociator;
