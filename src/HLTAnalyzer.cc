@@ -48,18 +48,18 @@ void HLTAnalyzer::process(const edm::Event& iEvent, TRootEvent* rootEvent)
 	    try {iEvent.getByLabel(triggerResultsTag4th_,trigResults4th);} catch (...) {;}
 	    if(trigResults1st.isValid())
 	      {
-		trigResults = trigResults1st;
-		triggerResultsTag_ = triggerResultsTag1st_;
+				trigResults = trigResults1st;
+				triggerResultsTag_ = triggerResultsTag1st_;
 	      }
 	    else if(trigResults2nd.isValid())
 	      {
-		trigResults = trigResults2nd;
-		triggerResultsTag_ = triggerResultsTag2nd_;
+				trigResults = trigResults2nd;
+				triggerResultsTag_ = triggerResultsTag2nd_;
 	      }
 	    else if(trigResults3rd.isValid())
 	      {
-		trigResults = trigResults3rd;
-		triggerResultsTag_ = triggerResultsTag3rd_;
+				trigResults = trigResults3rd;
+				triggerResultsTag_ = triggerResultsTag3rd_;
 	      }
 	    else if(trigResults4th.isValid())
 	    {
@@ -77,9 +77,9 @@ void HLTAnalyzer::process(const edm::Event& iEvent, TRootEvent* rootEvent)
 	    hltErrors_.resize(n);
 	    for (unsigned int i=0; i!=n; ++i)
 	      {
-		hltWasRun_[i]=0;
-		hltAccept_[i]=0;
-		hltErrors_[i]=0;
+					hltWasRun_[i]=0;
+					hltAccept_[i]=0;
+					hltErrors_[i]=0;
 	      }
 	    
 	    if (index == -1) {
@@ -117,13 +117,14 @@ void HLTAnalyzer::process(const edm::Event& iEvent, TRootEvent* rootEvent)
 	  const unsigned int n(hltNames_.size());
 	  std::vector<Bool_t> hltDecision(n, false);
 	  for (unsigned int i=0; i!=n; ++i)
-	    {                                                                                                           	      if (trigResults->wasrun(i)) hltInfos_[index].sethltWasRun(i);
+	    { 
+			  if (trigResults->wasrun(i)) hltInfos_[index].sethltWasRun(i);
 	      if (trigResults->error(i) ) hltInfos_[index].sethltErrors(i);
 	      if (trigResults->accept(i))
-		{
-		  hltInfos_[index].sethltAccept(i);
-		  hltDecision[i]=true;
-		}
+					{
+		  			hltInfos_[index].sethltAccept(i);
+		  			hltDecision[i]=true;
+					}
 	    }
 	  
 //	  cout << "hltDecision.size(): " << hltDecision.size() << endl;

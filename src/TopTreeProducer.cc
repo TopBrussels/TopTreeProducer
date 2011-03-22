@@ -288,8 +288,8 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 
 	// we need to store some triggerFilter info to be able to emulate triggers on older data
 	if (doHLT) {
-	  std::map<std::string, std::vector<double> > triggerFilters;
-	  
+	  if (verbosity > 1) cout << "should do HLT now..." << endl;
+		
 	  // get Trigger summary from Event
 	  edm::Handle<trigger::TriggerEvent> summary, summary1st, summary2nd, summary3rd, summary4th;
 	  edm::InputTag summaryTag1st_("hltTriggerSummaryAOD","",(producersNames_.getParameter < edm::InputTag > ("hltProducer1st")).process());
@@ -302,9 +302,9 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	  try { iEvent.getByLabel(summaryTag3rd_,summary3rd);} catch (...) {;}
 	  try { iEvent.getByLabel(summaryTag4th_,summary4th);} catch (...) {;}
 
-	  //cout << summaryTag1st_ << " " << summaryTag2nd_ << endl;
-	  //cout << summaryTag1st_.process() << " " << summaryTag2nd_.process() << endl;
-	  //cout << summary1st.isValid() << " " << summary2nd.isValid()<< endl;
+	  //cout << summaryTag1st_ << " " << summaryTag2nd_  << " " << summaryTag3rd_  << " " << summaryTag4th_ << endl;
+	  //cout << summaryTag1st_.process() << " " << summaryTag2nd_.process()<< " " << summaryTag3rd_.process()<< " " << summaryTag4th_.process() << endl;
+	 // cout << summary1st.isValid() << " " << summary2nd.isValid() << " " << summary3rd.isValid() << " " << summary4th.isValid()<< endl;
 
 	  if (summary1st.isValid()) 
 	    summary = summary1st;
@@ -319,7 +319,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	    
 	  if (summary.isValid()) {
 	    for (unsigned int i=0; i<summary->sizeFilters(); i++) {
-	      //cout << i << " -> " << summary->filterTag(i).label() << endl;
+	       if (verbosity > 1) cout << i << " -> " << summary->filterTag(i).label() << endl;
 	      
 	      // get all trigger objects corresponding to this module.
 	      // loop through them and see how many objects match the selection
@@ -328,12 +328,13 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	      
 	      for (int j=0; j!=n1; ++j) {
 					const trigger::TriggerObject& triggerObject( summary-> getObjects().at(KEYS[j]) );
-					//cout << "pt " << triggerObject.pt() << endl;
-					//cout << string(summary->filterTag(i).label()) << endl;
-					triggerFilters[string(summary->filterTag(i).label())].push_back(triggerObject.pt());
-	      }
+					//cout << "j: " << j << " -> id " << triggerObject.id() << endl;
+					//cout << "j: " << j << " -> pt " << triggerObject.pt() << endl;
+					//cout << "j: " << j << " -> eta " << triggerObject.eta() << endl;
+					//cout << "j: " << j << " -> phi " << triggerObject.phi() << endl;
+	      	rootEvent->AddTriggerObject(string(summary->filterTag(i).label()), triggerObject.id(),triggerObject.pt(),triggerObject.eta(),triggerObject.phi());
+				}
 	    }
-	    rootEvent->setTriggerFilters(triggerFilters);
 	  }
 	}
 	

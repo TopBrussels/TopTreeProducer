@@ -18,7 +18,7 @@ LDFLAGS 	= -g
 SOFLAGS 	= -shared
 
 CXXFLAGS	+= $(ROOTCFLAGS)
-LIBS		= $(ROOTLIBS) -lRFIO -lEG
+LIBS		= $(ROOTLIBS) -lEG
 GLIBS		= $(ROOTGLIBS)
 #------------------------------------------------------------------------------
 SOURCES 	= $(wildcard TRoot*.cc)

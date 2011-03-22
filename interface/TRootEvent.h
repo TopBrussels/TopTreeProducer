@@ -15,6 +15,19 @@ using namespace std;
 
 namespace TopTree
 {
+
+	struct triggeredObject{
+		triggeredObject() {};
+		Int_t id;
+		Float_t pt;
+		Float_t eta;
+		Float_t phi;
+
+		ClassDef(triggeredObject,1);
+
+	};
+
+	
 	class TRootEvent : public TObject
 	{
 	
@@ -37,7 +50,7 @@ namespace TopTree
 			{;}
 
 		~TRootEvent() {;}
-
+	
 		// Event number
 		Int_t nb() const { return nb_; }
 		Int_t eventId() const { return eventId_; }
@@ -75,7 +88,7 @@ namespace TopTree
 		// Q-scale used in evaluation of PDF's (in GeV). 
 		Float_t factorizationScale() const { return factorizationScale_; }
 
-		std::map<std::string, std::vector<double> >  getTriggerFilters() const { return triggerFilters_;}
+		std::map<std::string, std::vector<TopTree::triggeredObject> >  getTriggerFilters() const { return triggerFilters_;}
 
 
 		void setNb(Int_t nb) { nb_ = nb; }
@@ -98,8 +111,15 @@ namespace TopTree
 		void setXParton2(Float_t xParton2) { xParton2_=xParton2; }
 		void setFactorizationScale(Float_t factorizationScale) { factorizationScale_=factorizationScale; }
 
-		void setTriggerFilters(std::map<std::string, std::vector<double> > filters) { triggerFilters_ = filters; }
-
+		void AddTriggerObject(string path, Int_t id, Float_t pt, Float_t eta, Float_t phi){
+			TopTree::triggeredObject object;
+			object.id = id;
+			object.pt = pt;
+			object.eta = eta;
+			object.phi = phi;
+			triggerFilters_[path].push_back(object);
+		}
+		
 		/*
 		// FIXME
 		friend std::ostream& operator<< (std::ostream& stream, const TRootEvent& event) {
@@ -130,9 +150,7 @@ namespace TopTree
 		Float_t xParton2_;
 		Float_t factorizationScale_;
 
-		// store the pT of the EG objects for the last module in each passed trigger path
-
-		std::map<std::string, std::vector<double> > triggerFilters_;
+		std::map<std::string, std::vector<TopTree::triggeredObject> > triggerFilters_;
 
 		ClassDef (TRootEvent,2);
 	};

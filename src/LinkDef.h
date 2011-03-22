@@ -80,4 +80,6 @@
 #pragma link C++ class TopTree::TRootVertex;
 #pragma link C++ class TopTree::TRootHLTInfo;
 
+#pragma link C++ struct TopTree::triggeredObject;
+
 #endif
