@@ -1,7 +1,5 @@
 #ifndef TRootNPGenEvent_h
 #define TRootNPGenEvent_h
-#include "../interface/TRootGenTop.h"
-
 #include <iostream>
 #include <iomanip>
 #include <vector>
@@ -9,7 +7,8 @@
 #include "TObject.h"
 #include "Rtypes.h"
 
-using namespace std;
+#include "../interface/TRootMCParticle.h"
+#include "../interface/TRootGenTop.h"
 
 namespace TopTree
 {
@@ -17,7 +16,9 @@ namespace TopTree
 
 	public:
 		TRootNPGenEvent(){isNewPhysics_ = false;};
-		TRootNPGenEvent(const Bool_t isNewPhysics, const vector<TRootGenTop> tops, const vector<TRootMCParticle> leptons, const vector<TRootMCParticle> quarks, const vector<TRootMCParticle> bquarks, const vector<TRootMCParticle> invisibleParticles, const vector<TRootMCParticle> neutrinos, const vector<TRootMCParticle> gluinos, const vector<TRootMCParticle> stops)
+		TRootNPGenEvent(const Bool_t isNewPhysics, const std::vector<TopTree::TRootGenTop> tops, const std::vector<TopTree::TRootMCParticle> leptons, const std::vector<TopTree::TRootMCParticle> quarks,
+                    const std::vector<TopTree::TRootMCParticle> bquarks, const std::vector<TopTree::TRootMCParticle> invisibleParticles, const std::vector<TopTree::TRootMCParticle> neutrinos,
+                    const std::vector<TopTree::TRootMCParticle> gluinos, const std::vector<TopTree::TRootMCParticle> stops)
 		{
 			isNewPhysics_ = isNewPhysics;
 			tops_ = tops;
@@ -58,14 +59,14 @@ namespace TopTree
 		Int_t numberOfGluinos() const{ return gluinos_.size();};
 		Int_t numberOfStops() const{ return stops_.size();};
 
-		vector<TRootGenTop> tops() const {return tops_;};
-		vector<TRootMCParticle> leptons() const {return leptons_;};
-		vector<TRootMCParticle> quarks() const {return quarks_;};
-		vector<TRootMCParticle> bquarks() const {return bquarks_;};
-		vector<TRootMCParticle> invisibleParticles() const {return invisibleParticles_;};
-		vector<TRootMCParticle> neutrinos() const {return neutrinos_;}; 
-		vector<TRootMCParticle> gluinos() const {return gluinos_;}; 
-		vector<TRootMCParticle> stops() const {return stops_;}; 
+		std::vector<TRootGenTop> tops() const {return tops_;};
+		std::vector<TRootMCParticle> leptons() const {return leptons_;};
+		std::vector<TRootMCParticle> quarks() const {return quarks_;};
+		std::vector<TRootMCParticle> bquarks() const {return bquarks_;};
+		std::vector<TRootMCParticle> invisibleParticles() const {return invisibleParticles_;};
+		std::vector<TRootMCParticle> neutrinos() const {return neutrinos_;}; 
+		std::vector<TRootMCParticle> gluinos() const {return gluinos_;}; 
+		std::vector<TRootMCParticle> stops() const {return stops_;}; 
 
 		friend std::ostream& operator<< (std::ostream& stream, const TRootNPGenEvent& gevent)
 		{
@@ -80,14 +81,14 @@ namespace TopTree
 	private:
   
 		Bool_t isNewPhysics_;
-		vector<TRootGenTop> tops_;
-		vector<TRootMCParticle> leptons_;
-		vector<TRootMCParticle> quarks_;
-		vector<TRootMCParticle> bquarks_;
-		vector<TRootMCParticle> invisibleParticles_;
-		vector<TRootMCParticle> neutrinos_;
-		vector<TRootMCParticle> gluinos_;
-		vector<TRootMCParticle> stops_;
+    std::vector<TRootGenTop> tops_;
+		std::vector<TRootMCParticle> leptons_;
+		std::vector<TRootMCParticle> quarks_;
+		std::vector<TRootMCParticle> bquarks_;
+		std::vector<TRootMCParticle> invisibleParticles_;
+		std::vector<TRootMCParticle> neutrinos_;
+		std::vector<TRootMCParticle> gluinos_;
+		std::vector<TRootMCParticle> stops_;
   
 		ClassDef (TRootNPGenEvent,2); 
 	};

@@ -29,7 +29,6 @@
 #include "../interface/TRootRun.h"
 #include "../interface/TRootParticle.h"
 #include "../interface/TRootMCParticle.h"
-#include "../interface/TRootSemiLepEvent.h"
 #include "../interface/TRootVertex.h"
 
 #include "TFile.h"

@@ -46,7 +46,6 @@ void TopTreeProducer::beginJob()
 	doGenEvent = myConfig_.getUntrackedParameter<bool>("doGenEvent",false);
 	doNPGenEvent = myConfig_.getUntrackedParameter<bool>("doNPGenEvent",false);
 	doSpinCorrGen = myConfig_.getUntrackedParameter<bool>("doSpinCorrGen",false);
-	doSemiLepEvent = myConfig_.getUntrackedParameter<bool>("doSemiLepEvent",false);
 	vector<string> defaultVec;
 	vGenJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vgenJetProducer",defaultVec);
 	vCaloJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vcaloJetProducer",defaultVec);
@@ -185,13 +184,6 @@ void TopTreeProducer::beginJob()
 		eventTree_->Branch ("SpinCorrGen", "TClonesArray", &spinCorrGen);
 	}
     
-	if(doSemiLepEvent)
-	{
-		if(verbosity>0) cout << "SemiLepEvent info will be added to rootuple" << endl;
-		semiLepEvent = new TClonesArray("TopTree::TRootSemiLepEvent", 1000);
-		eventTree_->Branch ("SemiLepEvent", "TClonesArray", &semiLepEvent);
-	}
-
 	if(doMuon)
 	{
 		if(verbosity>0) cout << "Muons info will be added to rootuple" << endl;
@@ -467,17 +459,6 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		delete mySpinCorrGenAnalyzer;
 	}
 
-	//SemiLepEvent
-	if(doSemiLepEvent)
-	{
-		if(verbosity>1) cout << endl << "Analysing SemiLepEvent collection..." << endl;
-		SemiLepEventAnalyzer* mySemiLepEventAnalyzer = new SemiLepEventAnalyzer(producersNames_, myConfig_, verbosity);
-		if(vcaloJets.size() > 0 && vmuons.size() > 0)
-			mySemiLepEventAnalyzer->Process(iEvent, semiLepEvent, vcaloJets[0], vmuons[0]);
-		// FIXME: add possibility to use PFjets in the SemiLepEventAnalyzer
-		delete mySemiLepEventAnalyzer;
-	}
-	
 	// Muons
 	if(doMuon)
 	{
@@ -592,7 +573,6 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	if(doGenEvent) (*genEvent).Delete();
 	if(doNPGenEvent) (*NPgenEvent).Delete();
 	if(doSpinCorrGen) (*spinCorrGen).Delete();
-	if(doSemiLepEvent) (*semiLepEvent).Delete();
 	if(doPrimaryVertex) (*primaryVertex).Delete();
 	if(verbosity>0) cout << endl;
 }

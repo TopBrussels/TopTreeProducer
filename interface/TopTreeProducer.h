@@ -42,7 +42,6 @@
 #include "../interface/GenEventAnalyzer.h"
 #include "../interface/NPGenEventAnalyzer.h"
 #include "../interface/SpinCorrGenAnalyzer.h"
-#include "../interface/SemiLepEventAnalyzer.h"
 
 #include "../interface/TRootRun.h"
 #include "../interface/TRootEvent.h"
@@ -60,7 +59,6 @@
 #include "../interface/TRootGenEvent.h"
 #include "../interface/TRootNPGenEvent.h"
 #include "../interface/TRootSpinCorrGen.h"
-#include "../interface/TRootSemiLepEvent.h"
 #include "../interface/TRootVertex.h"
 
 #include "TFile.h"
@@ -107,7 +105,6 @@ private:
 	bool doGenEvent;
 	bool doNPGenEvent;
 	bool doSpinCorrGen;
-	bool doSemiLepEvent;
 	bool drawMCTree;
 	std::vector<std::string> vGenJetProducer;
 	std::vector<std::string> vCaloJetProducer;
@@ -133,7 +130,6 @@ private:
 	TClonesArray* genEvent;
 	TClonesArray* NPgenEvent;
 	TClonesArray* spinCorrGen;
-	TClonesArray* semiLepEvent;
 	TClonesArray* primaryVertex;
 
 };
