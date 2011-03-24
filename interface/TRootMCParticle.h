@@ -25,7 +25,6 @@ namespace TopTree
 			,dauTwoId_(0)
 			,dauThreeId_(0)
 			,dauFourId_(0)
-			,indexInList_(-1)
 			{;}
 
 		TRootMCParticle(const TRootMCParticle& particle) :
@@ -38,7 +37,6 @@ namespace TopTree
 			,dauTwoId_(particle.dauTwoId_)
 			,dauThreeId_(particle.dauThreeId_)
 			,dauFourId_(particle.dauFourId_)
-			,indexInList_(particle.indexInList_)
 			{;}
 
 		TRootMCParticle(Double_t px, Double_t py, Double_t pz, Double_t e) :
@@ -51,7 +49,6 @@ namespace TopTree
 			,dauTwoId_(0)
 			,dauThreeId_(0)
 			,dauFourId_(0)
-			,indexInList_(-1)
 			{;}
 
 		TRootMCParticle(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z) :
@@ -64,7 +61,6 @@ namespace TopTree
 			,dauTwoId_(0)
 			,dauThreeId_(0)
 			,dauFourId_(0)
-			,indexInList_(-1)
 			{;}
 
 		TRootMCParticle(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z,Int_t type, Float_t charge) :
@@ -77,10 +73,9 @@ namespace TopTree
 			,dauTwoId_(0)
 			,dauThreeId_(0)
 			,dauFourId_(0)
-			,indexInList_(-1)
 			{;}
 
-		TRootMCParticle(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z,Int_t type, Float_t charge, Int_t status, Int_t nDau, Int_t motherType, Int_t grannyType, Int_t dauOneId, Int_t dauTwoId, Int_t dauThreeId, Int_t dauFourId, Int_t indexInList) :
+		TRootMCParticle(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z,Int_t type, Float_t charge, Int_t status, Int_t nDau, Int_t motherType, Int_t grannyType, Int_t dauOneId, Int_t dauTwoId, Int_t dauThreeId, Int_t dauFourId, Int_t genParticleIndex) :
 			TRootParticle(px,py,pz,e,vtx_x,vtx_y,vtx_z,type,charge)
 			,status_(status)
 			,nDau_(nDau)
@@ -90,8 +85,7 @@ namespace TopTree
 			,dauTwoId_(dauTwoId)
 			,dauThreeId_(dauThreeId)
 			,dauFourId_(dauFourId)
-			,indexInList_(indexInList)
-			{;}
+    { TRootParticle::setGenParticleIndex(genParticleIndex); }
 
 		TRootMCParticle(const TLorentzVector &momentum) :
 			TRootParticle(momentum)
@@ -103,7 +97,6 @@ namespace TopTree
 			,dauTwoId_(0)
 			,dauThreeId_(0)
 			,dauFourId_(0)
-			,indexInList_(-1)
 			{;}
 
 		TRootMCParticle(const TLorentzVector &momentum, const TVector3 &vertex, Int_t type, Float_t charge) :
@@ -116,10 +109,9 @@ namespace TopTree
 			,dauTwoId_(0)
 			,dauThreeId_(0)
 			,dauFourId_(0)
-			,indexInList_(-1)
 			{;}
 
-		TRootMCParticle(const TLorentzVector &momentum, const TVector3 &vertex, Int_t type, Float_t charge, Int_t status, Int_t nDau, Int_t motherType, Int_t grannyType, Int_t dauOneId, Int_t dauTwoId, Int_t dauThreeId, Int_t dauFourId, Int_t indexInList) :
+		TRootMCParticle(const TLorentzVector &momentum, const TVector3 &vertex, Int_t type, Float_t charge, Int_t status, Int_t nDau, Int_t motherType, Int_t grannyType, Int_t dauOneId, Int_t dauTwoId, Int_t dauThreeId, Int_t dauFourId, Int_t genParticleIndex) :
 			TRootParticle(momentum, vertex, type, charge)
 			,status_(status)
 			,nDau_(nDau)
@@ -129,8 +121,7 @@ namespace TopTree
 			,dauTwoId_(dauTwoId)
 			,dauThreeId_(dauThreeId)
 			,dauFourId_(dauFourId)
-			,indexInList_(indexInList)
-			{;}
+    {TRootParticle::setGenParticleIndex(genParticleIndex);}
 
 		~TRootMCParticle() {;}
 
@@ -143,7 +134,6 @@ namespace TopTree
 		Int_t dauTwoId() const {return dauTwoId_;}
 		Int_t dauThreeId() const {return dauThreeId_;}
 		Int_t dauFourId() const {return dauFourId_;}
-		Int_t indexInList() const {return indexInList_; }
 		virtual TString typeName() const { return "TRootMCParticle"; }
 
 
@@ -155,13 +145,12 @@ namespace TopTree
 		void setDauTwoId (Int_t dauTwoId) { dauTwoId_ = dauTwoId; }
 		void setDauThreeId (Int_t dauThreeId) { dauThreeId_ = dauThreeId; }
 		void setDauFourId (Int_t dauFourId) { dauFourId_ = dauFourId; }
-		void setIndexInList(Int_t indexInList) {indexInList_ = indexInList; }
 
 
 		friend std::ostream& operator<< (std::ostream& stream, const TRootMCParticle& part)
 		{
 			stream << "Type=" << part.type_ << "  Charge=" << part.charge_ << "  Status=" << part.status_ << "  number of daughters=" <<
-				part.nDau_ << "  mother ID=" << part.motherType_ << "  granny ID=" << part.grannyType_ << " index in the MC list=" << part.indexInList_ << " (Et,eta,phi)=("<< part.Et() <<","<< part.Eta() <<","<< part.Phi() << ")"
+				part.nDau_ << "  mother ID=" << part.motherType_ << "  granny ID=" << part.grannyType_ << " (Et,eta,phi)=("<< part.Et() <<","<< part.Eta() <<","<< part.Phi() << ")"
 				<< " vertex(x,y,z)=("<< part.vx() <<","<< part.vy() <<","<< part.vz() << ")";
 			return stream;
 		};
@@ -177,9 +166,8 @@ namespace TopTree
 		Int_t dauTwoId_;
 		Int_t dauThreeId_;
 		Int_t dauFourId_;
-		Int_t indexInList_;
 
-		ClassDef (TRootMCParticle,1);
+		ClassDef (TRootMCParticle,2);
 	};
 }
 

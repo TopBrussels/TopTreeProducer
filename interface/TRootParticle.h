@@ -24,7 +24,6 @@ namespace TopTree
 			,type_(0)
 			,charge_(0.)
 			,genParticleIndex_(-1)
-			,genParticle_(0)
 			{;}
 
 		TRootParticle(const TRootParticle& particle) :
@@ -33,7 +32,6 @@ namespace TopTree
 			,type_(particle.type_)
 			,charge_(particle.charge_)
 			,genParticleIndex_(particle.genParticleIndex_)
-			,genParticle_(particle.genParticle_)
 			{;}
 
 		TRootParticle(Double_t px, Double_t py, Double_t pz, Double_t e) :
@@ -42,7 +40,6 @@ namespace TopTree
 			,type_(0)
 			,charge_(0.)
 			,genParticleIndex_(-1)
-			,genParticle_(0)
 			{;}
 
 		TRootParticle(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z) :
@@ -51,7 +48,6 @@ namespace TopTree
 			,type_(0)
 			,charge_(0.)
 			,genParticleIndex_(-1)
-			,genParticle_(0)
 			{;}
 
 		TRootParticle(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z,Int_t type, Float_t charge) :
@@ -60,7 +56,6 @@ namespace TopTree
 			,type_(type)
 			,charge_(charge)
 			,genParticleIndex_(-1)
-			,genParticle_(0)
 			{;}
 
 
@@ -70,7 +65,6 @@ namespace TopTree
 			,type_(0)
 			,charge_(0.)
 			,genParticleIndex_(-1)
-			,genParticle_(0)
 			{;}
 
 		TRootParticle(const TLorentzVector &momentum, const TVector3 &vertex) :
@@ -79,7 +73,6 @@ namespace TopTree
 			,type_(0)
 			,charge_(0.)
 			,genParticleIndex_(-1)
-			,genParticle_(0)
 			{;}
 
 		TRootParticle(const TLorentzVector &momentum, const TVector3 &vertex, Int_t type, Float_t charge) :
@@ -88,7 +81,6 @@ namespace TopTree
 			,type_(type)
 			,charge_(charge)
 			,genParticleIndex_(-1)
-			,genParticle_(0)
 			{;}
 
 		~TRootParticle() {;}
@@ -100,7 +92,6 @@ namespace TopTree
 		Int_t type() const  { return type_; }
 		Float_t charge() const  { return charge_; }
 		Int_t genParticleIndex() const { return genParticleIndex_; }
-		TRootParticle* genParticle() const { return (TRootParticle*) genParticle_.GetObject() ;}
 		virtual TString typeName() const { return "TRootParticle"; }
 
 
@@ -111,7 +102,6 @@ namespace TopTree
 		void setType(Int_t type) { type_ = type; }
 		void setCharge(Int_t charge) { charge_ = charge; }
 		void setGenParticleIndex(Int_t genParticleIndex) { genParticleIndex_ = genParticleIndex; }
-		void setGenParticle(TObject* genParticle) { genParticle_ = genParticle; }
 
 		friend std::ostream& operator<< (std::ostream& stream, const TRootParticle& part)
 		{
@@ -127,9 +117,8 @@ namespace TopTree
 		Int_t type_;
 		Float_t charge_;
 		Int_t genParticleIndex_;
-		TRef genParticle_;
 
-		ClassDef (TRootParticle,1);
+		ClassDef (TRootParticle,2);
 	};
 }
 
