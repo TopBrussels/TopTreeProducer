@@ -269,12 +269,10 @@ int main()
 
 	TRootRun* outRunInfos = 0;
 	TTree* outRunTree = new TTree("runTree", "Global Run Infos");
-	outRunTree->SetMaxTreeSize(ULONG_MAX);
 	outRunTree->Branch("runInfos", "TopTree::TRootRun", &outRunInfos);
 	
 	TRootEvent* outRootEvent = 0;
 	TTree* outEventTree = new TTree("eventTree", "Event Infos");
-	outEventTree->SetMaxTreeSize(ULONG_MAX);
 	outEventTree->Branch("Event", "TopTree::TRootEvent", &outRootEvent);
 	
 	cout << "Parsing objectsToKeep from xml file..." << endl;
@@ -369,8 +367,8 @@ int main()
 		}
 	}
 
-	unsigned int nOutEvents = 0, nInEvents = 0, NHLTAccept = 0, NHLT8E29Accept = 0; 
-	vector<unsigned int> hltAccept, hlt8E29Accept;
+	unsigned int nOutEvents = 0, nInEvents = 0, NHLTAccept = 0; 
+	vector<unsigned int> hltAccept;
 	
 	for(unsigned int nFile = 0; nFile < inFileName.size(); nFile++)
 	{
@@ -394,9 +392,7 @@ int main()
 		inRunTree->GetEvent(0);
 		
 		if( verbosity > 1 ) cout << "outRunInfos->nHLTEvents() = " << outRunInfos->nHLTEvents() << endl;
-		if( verbosity > 1 ) cout << "outRunInfos->nHLT8E29Events() = " << outRunInfos->nHLT8E29Events() << endl;
-	      
-	
+
 		for(unsigned int j=0; j !=objectsToKeep.size(); j++)
 		{
 			objectsToKeep[j].inBranch = (TBranch *) inEventTree->GetBranch((objectsToKeep[j].name).c_str());
@@ -408,7 +404,6 @@ int main()
 		nInEvents += nTempEvents;
 
 		vector<TopTree::TRootHLTInfo> tmpRunInfos = outRunInfos->copyHLTinfos();
-		vector<TopTree::TRootHLTInfo> tmpRunInfos8E29 = outRunInfos->copyHLTinfos8E29();
 
 		//loop over events
 		for(unsigned int ievt=0; ievt<nTempEvents; ievt++)
@@ -421,7 +416,6 @@ int main()
 			if(ievt == 0 && nFile == 0)
 			{
 				outRunInfos->setHLTInputTag(inRunInfos->hltInputTag());
-				outRunInfos->setHLT8E29InputTag(inRunInfos->hlt8E29InputTag());
 			}
 			else
 			{
@@ -431,31 +425,17 @@ int main()
 					cout << "inRunInfos->hltInputTag() = " << inRunInfos->hltInputTag() << "  outRunInfos->hltInputTag() = " << outRunInfos->hltInputTag() << endl;
 					exit (4);
 				}
-				if(inRunInfos->hlt8E29InputTag() != outRunInfos->hlt8E29InputTag())
-				{
-					cout << "Different HLT8E29 inputTags!" << endl;
-					cout << "inRunInfos->hlt8E29InputTag() = " << inRunInfos->hlt8E29InputTag() << "  outRunInfos->hlt8E29InputTag() = " << outRunInfos->hlt8E29InputTag() << endl;
-					exit (4);
-				}
 			}
 			
 			// updating HLT info
 
 			// The HLT info is stored per run in the TRootRun. For file >= 0, we just copy the elements from the hltInfos vector and it's done...
-			
 			if (outRunInfos->getHLTinfo(inEvent->runId()).RunID() == 0) // if this run is not yet in the vector, add it.
 			  tmpRunInfos.push_back(inRunInfos->getHLTinfo(inEvent->runId()));
 
 			outRunInfos->setHLTinfos(tmpRunInfos); // put the new vector in TRootRun
 
-			if (inRunInfos->copyHLTinfos8E29().size() > 0)
-			  if (outRunInfos->getHLTinfo8E29(inEvent->runId()).RunID() == 0) // if this run is not yet in the vector, add it.
-			    tmpRunInfos8E29.push_back(inRunInfos->getHLTinfo8E29(inEvent->runId()));
-
-			outRunInfos->setHLTinfos8E29(tmpRunInfos8E29); // put the new vector in TRootRun
-
 			if( verbosity > 1 ) cout << "outRunInfos->copyHLTinfos().size(): " << outRunInfos->copyHLTinfos().size() << endl;
-			if( verbosity > 1 ) cout << "outRunInfos->copyHLTinfos8E29().size(): " << outRunInfos->copyHLTinfos8E29().size() << endl;
 
 			if( verbosity > 1 ) cout << ">>> Analyzing event " << ievt << endl;
 			else if((int) ievt/10000 == (double) ievt/10000)  cout << ">>> Analyzing event " << ievt << endl;
@@ -489,23 +469,6 @@ int main()
 						HLT2Bit = hltInfo.hltPath((optionsToUse.HLTPath2).c_str());
 						bool passed1 = inEvent->trigHLT(HLT1Bit);
 						bool passed2 = inEvent->trigHLT(HLT2Bit);
-						if(keepEvent && optionsToUse.HLTApplyAnd)
-							keepEvent = passed1 && passed2;
-						else if(keepEvent)
-							keepEvent = passed1 || passed2;
-					}
-					else
-						keepEvent = inEvent->trigHLT(HLT1Bit);
-				}
-				else if(optionsToUse.TriggerMenu == inRunInfos->hlt8E29InputTag())
-				{
-					TopTree::TRootHLTInfo hltInfo = inRunInfos->getHLTinfo8E29(inEvent->runId());
-					HLT1Bit = hltInfo.hltPath((optionsToUse.HLTPath1).c_str());
-					if(optionsToUse.HLTPath2 != "")
-					{
-						HLT2Bit = hltInfo.hltPath((optionsToUse.HLTPath2).c_str());				
-						bool passed1 = inEvent->trigHLT8E29(HLT1Bit);
-						bool passed2 = inEvent->trigHLT8E29(HLT2Bit);
 						if(keepEvent && optionsToUse.HLTApplyAnd)
 							keepEvent = passed1 && passed2;
 						else if(keepEvent)
@@ -913,18 +876,6 @@ int main()
 					}
 				}
 				if(passHLT) NHLTAccept++;
-
-//				Calculate HLT8E29 stuff
-				bool passHLT8E29 = false;
-				for(unsigned int k=0; k!=hlt8E29Accept.size() ;k++)
-				{
-					if(outRootEvent->trigHLT8E29(k))
-					{
-						hlt8E29Accept[k]++;
-						passHLT8E29 = true;
-					}
-				}
-				if(passHLT8E29) NHLT8E29Accept++;
 
 				if( verbosity > 1 ) cout << "Filling the outEventTree" << endl;
 			
