@@ -296,7 +296,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 
 	  //cout << summaryTag1st_ << " " << summaryTag2nd_  << " " << summaryTag3rd_  << " " << summaryTag4th_ << endl;
 	  //cout << summaryTag1st_.process() << " " << summaryTag2nd_.process()<< " " << summaryTag3rd_.process()<< " " << summaryTag4th_.process() << endl;
-	  //cout << summary1st.isValid() << " " << summary2nd.isValid() << " " << summary3rd.isValid() << " " << summary4th.isValid()<< endl;
+	  cout << summary1st.isValid() << " " << summary2nd.isValid() << " " << summary3rd.isValid() << " " << summary4th.isValid()<< endl;
 
 	  if (summary1st.isValid()) 
 	    summary = summary1st;
@@ -309,7 +309,9 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	  else
 	    cout << "TopTreeProducer::Analyze ERROR: Could not store info for trigger emulation: provided HLTproducerNames are null" << endl;
 	    
-	  if (summary.isValid()) {
+	  cout << "summary " << summary << endl;
+	  
+		if (summary.isValid()) {
 	    for (unsigned int i=0; i<summary->sizeFilters(); i++) {
 	       if (verbosity > 1) cout << i << " -> " << summary->filterTag(i).label() << endl;
 	      
@@ -360,7 +362,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	if(doHLT)
 	{
 		if(verbosity>1) std::cout << endl << "Get TriggerResults..." << std::endl;
-		if (nTotEvt_==1) hltAnalyzer_->init(iEvent, rootEvent);
+		//if (nTotEvt_==1) hltAnalyzer_->init(iEvent, rootEvent);
 		hltAnalyzer_->process(iEvent, rootEvent);
 	}
 

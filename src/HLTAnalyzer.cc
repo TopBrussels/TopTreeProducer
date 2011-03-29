@@ -19,7 +19,7 @@ int getIndexForRun ( const edm::Event& iEvent, vector<TopTree::TRootHLTInfo> inf
 
 }
 
-void HLTAnalyzer::init(const edm::Event& iEvent, TRootEvent* rootEvent)
+/*void HLTAnalyzer::init(const edm::Event& iEvent, TRootEvent* rootEvent)
 {
        
    edm::Handle<edm::TriggerResults> trigResults;
@@ -29,6 +29,7 @@ void HLTAnalyzer::init(const edm::Event& iEvent, TRootEvent* rootEvent)
    else
      doHLT_=true;     
 }
+*/
 
 void HLTAnalyzer::process(const edm::Event& iEvent, TRootEvent* rootEvent)
 {
@@ -38,9 +39,12 @@ void HLTAnalyzer::process(const edm::Event& iEvent, TRootEvent* rootEvent)
 	{
 	  
 	  int index = getIndexForRun(iEvent,hltInfos_);
+		
+		cout << "index " << index << " and hltInfos_ " << hltInfos_.size() << endl;
+
 	  
 	  if ( index == -1 || index < (int)hltInfos_.size()-1 ) {// no info for this run yet -> create a new entry
-	    
+
 	    edm::Handle<edm::TriggerResults> trigResults, trigResults1st, trigResults2nd, trigResults3rd, trigResults4th;
 	    try {iEvent.getByLabel(triggerResultsTag1st_,trigResults1st);} catch (...) {;}
 	    try {iEvent.getByLabel(triggerResultsTag2nd_,trigResults2nd);} catch (...) {;}
@@ -65,10 +69,8 @@ void HLTAnalyzer::process(const edm::Event& iEvent, TRootEvent* rootEvent)
 	    {
 	      trigResults = trigResults4th;
 	      triggerResultsTag_ = triggerResultsTag4th_;
-	    }
-	    
-	    //cout << "triggerResultsTag_: " << triggerResultsTag_ << endl;
-	    
+			}
+			
 	    triggerNames_=iEvent.triggerNames(*trigResults);
 	    hltNames_=triggerNames_.triggerNames();
 	    const unsigned int n(hltNames_.size());
@@ -89,12 +91,12 @@ void HLTAnalyzer::process(const edm::Event& iEvent, TRootEvent* rootEvent)
 
 	  }
 
-//	  cout << "hltInfos.size(): " << hltInfos_.size() << endl; 
+	  //cout << "hltInfos.size(): " << hltInfos_.size() << endl; 
 	
-//	  if (hltInfos_.size() > 0 && index != -1)
-//	    cout << "hltNames.size(): " << hltInfos_[index].nHLTPaths() << endl;
+	  //if (hltInfos_.size() > 0 && index != -1)
+	  //  cout << "hltNames.size(): " << hltInfos_[index].nHLTPaths() << endl;
 
-//	  cout << "Index: " << index << endl;
+	  //cout << "Index: " << index << endl;
 
 	  edm::Handle<edm::TriggerResults> trigResults;
 	  try {iEvent.getByLabel(triggerResultsTag_,trigResults);} catch (...) {;}
@@ -127,7 +129,7 @@ void HLTAnalyzer::process(const edm::Event& iEvent, TRootEvent* rootEvent)
 					}
 	    }
 	  
-//	  cout << "hltDecision.size(): " << hltDecision.size() << endl;
+	  //cout << "hltDecision.size(): " << hltDecision.size() << endl;
 	  rootEvent->setTrigHLT(hltDecision);
 	  
 	}
