@@ -188,12 +188,11 @@ int main(int argc, char *argv[]){
 	arrays[ObjName.substr(0,position)]=std::pair<std::string,TClonesArray*>(className,objects);
 
       } else if (verbosity > 1) cerr << "  ERROR loading Branch " << className << " " << ObjName.substr(0,position) << endl;
-
-      //i=10000000;
 	
     }
 
     for(unsigned int ievt=0; ievt<eventTree->GetEntriesFast(); ievt++) {
+      //for(unsigned int ievt=0; ievt<8000; ievt++) {
       eventTree->GetEvent(ievt);
       runTree->GetEvent(0);
 
@@ -302,12 +301,27 @@ int main(int argc, char *argv[]){
 
 	}
 
+	//delete it->second.second;
       }
 
     }
 
     cout << endl;
-    
+   
+    for (std::map<std::string, std::pair<std::string,TClonesArray*> >::const_iterator it=arrays.begin(); it != arrays.end(); ++it)
+      delete it->second.second;
+
+    //delete obj;
+    //delete br;
+
+    delete event_br;
+    delete run_br;
+
+    delete eventTree;
+    delete runTree;
+
+    //f->Close();
+
   }
 
   if(verbosity>1) cout <<"Writing the plots" << endl;
