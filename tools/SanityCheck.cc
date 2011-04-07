@@ -192,7 +192,7 @@ int main(int argc, char *argv[]){
     }
 
     for(unsigned int ievt=0; ievt<eventTree->GetEntriesFast(); ievt++) {
-      //for(unsigned int ievt=0; ievt<8000; ievt++) {
+    //for(unsigned int ievt=0; ievt<8000; ievt++) {
       eventTree->GetEvent(ievt);
       runTree->GetEvent(0);
 
@@ -213,14 +213,57 @@ int main(int argc, char *argv[]){
 	if (histos.find(it->first+hist) == histos.end()) histos[it->first+hist]=new TH1F((it->first+hist).c_str(),(it->first).c_str(),100,0,100);
 
 	for (unsigned int o=0; o<it->second.second->GetEntries(); o++) {
-	  // because c++ it not flexible we need to write the crappy code below.... Sorry:'(
+
+	  // because c++ it not flexible we need to write the elaborate code below.... Sorry:'(
+
+	  //
+	  //
+	  // Dear object developer:) You can find some sample code here to add plots so all your changes will happen below this comment.....
+	  //
+	  //
+
+	  //
+	  // HLT
+	  //
+
+	  /* NO IMPLEMENTATION YET */
+
+	  //
+	  // PRIMARY VERTEX
+	  //
+
+	  if (strstr(it->second.first.c_str(),"TopTree::TRootVertex")) {
+
+	    if(o==0) histos[it->first+"_size"]->Fill(it->second.second->GetEntries());
+
+	  }
+
+	  //
+	  // GenEvent
+	  //
+
+	  else if (strstr(it->second.first.c_str(),"TopTree::TRootGenEvent") || strstr(it->second.first.c_str(),"TopTree::TRootNPGenEvent")) {
+
+	    if(o==0) histos[it->first+"_size"]->Fill(it->second.second->GetEntries());
+
+	  }
+
+	  //
+	  // MCParticles
+	  //
+
+	  else if (strstr(it->second.first.c_str(),"TopTree::TRootMCParticle")) {
+
+	    if(o==0) histos[it->first+"_size"]->Fill(it->second.second->GetEntries());
+
+	  }
 
 	  //
 	  // JETS
 	  //
 
 	  // now putting all jet types together, these can be addressed seperately in the future if needed
-	  if (strstr(it->second.first.c_str(),"TopTree::TRootCaloJet") || strstr(it->second.first.c_str(),"TopTree::TRootPFJet") || strstr(it->second.first.c_str(),"TopTree::TRootJPTJet") ){
+	  else if (strstr(it->second.first.c_str(),"TopTree::TRootGenJet") || strstr(it->second.first.c_str(),"TopTree::TRootCaloJet") || strstr(it->second.first.c_str(),"TopTree::TRootPFJet") || strstr(it->second.first.c_str(),"TopTree::TRootJPTJet") ){
 	    
 	    if(o==0) histos[it->first+"_size"]->Fill(it->second.second->GetEntries());
 
@@ -242,6 +285,7 @@ int main(int argc, char *argv[]){
 	  // MET
 	  //
 
+	  // now putting all met types together, these can be addressed seperately in the future if needed
 	  else if (strstr(it->second.first.c_str(),"TopTree::TRootCaloMET") || strstr(it->second.first.c_str(),"TopTree::TRootPFMET") || strstr(it->second.first.c_str(),"TopTree::TRootMET") ){
 	    
 	    if(o==0) histos[it->first+"_size"]->Fill(it->second.second->GetEntries());
@@ -259,7 +303,7 @@ int main(int argc, char *argv[]){
 	  // MUON
 	  //
 	  
-	  if (strstr(it->second.first.c_str(),"TopTree::TRootMuon")){
+	  else if (strstr(it->second.first.c_str(),"TopTree::TRootMuon")){
 	    
 	    if(o==0) histos[it->first+"_size"]->Fill(it->second.second->GetEntries());
 
@@ -281,7 +325,7 @@ int main(int argc, char *argv[]){
 	  // ELECTRON
 	  //
 	  
-	  if (strstr(it->second.first.c_str(),"TopTree::TRootElectron")){
+	  else if (strstr(it->second.first.c_str(),"TopTree::TRootElectron")){
 	    
 	    if(o==0) histos[it->first+"_size"]->Fill(it->second.second->GetEntries());
 
