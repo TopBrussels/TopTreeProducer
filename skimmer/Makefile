@@ -11,9 +11,9 @@ ROOTGLIBS     = $(shell root-config --glibs) -lMinuit
 
 # Linux with egcs
 DEFINES       = -DNO_ORCA_CLASSES
-CXX           = g++
+CXX           = g++ -m32
 CXXFLAGS	= -O -Wall -fPIC $(DEFINES)
-LD		= g++
+LD		= g++ -m32
 LDFLAGS		= -g -O -Wall -fPIC
 SOFLAGS		= -shared
 

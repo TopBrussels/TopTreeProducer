@@ -15,14 +15,13 @@
 
 <keepbranches>
 <!-- Branches which need to be kept
-<k type="TopTree::TRootMHT" name="MHT" minPt="15" maxEta="2.4" isoObject="0" minRelIso="0.2" skipObjects="0" minNObjects="0"/>
-isoObject: 1 = True | 0 = False, asks for isolation in the Electron/Muon selection
+<k type="TopTree::TRootMHT" name="MHT" minPt="15" maxEta="2.4" isoObject="0" maxRelIso="0.2" skipObjects="0" minNObjects="0"/>
 skipObjects:  1 = True | 0 = False
 -->
-<k type="TopTree::TRootMuon" name="Muons_selectedPatMuons" minPt="15" maxEta="2.4" isoObject= "1" minRelIso="0.2" skipObjects="0" minNObjects="1"/>
-<k type="TopTree::TRootElectron" name="Electrons_selectedPatElectrons" minPt="5" maxEta="2.4" isoObject= "1" minRelIso="0.1" skipObjects="0" minNObjects="1"/>
-<k type="TopTree::TRootCaloJet" name="CaloJets_selectedPatJetsAK5Calo" minPt="15" maxEta="2.4"  skipObjects="0" minNObjects="0"/>
+<k type="TopTree::TRootMuon" name="Muons_selectedPatMuons" minPt="15" maxEta="2.4" maxRelIso="0.2" skipObjects="1" minNObjects="1"/>
+<k type="TopTree::TRootElectron" name="Electrons_selectedPatElectrons" minPt="5" maxEta="2.4" maxRelIso="0.1" skipObjects="1" minNObjects="1"/>
+<k type="TopTree::TRootCaloJet" name="CaloJets_selectedPatJetsAK5Calo" minPt="15" maxEta="2.4" maxRelIso="9999" skipObjects="0" minNObjects="0"/>
 <k type="TopTree::TRootPFJet" name="PFJets_selectedPatJetsAK5PF" minPt="15" maxEta="2.4" skipObjects="0" minNObjects="0"/>
-<k type="TopTree::TRootVertex" name="PrimaryVertex" minPt="0" maxEta="9999" skipObjects="0" minNObjects="0"/>
-<k type="TopTree::TRootPFMET" name="PFMET" minPt="0" maxEta="2.4" skipObjects="0" minNObjects="0"/>
+<k type="TopTree::TRootVertex" name="PrimaryVertex" minPt="0" maxEta="9999" maxRelIso="9999" skipObjects="0" minNObjects="0"/>
+<k type="TopTree::TRootPFMET" name="PFMET" minPt="0" maxEta="2.4" maxRelIso="9999" skipObjects="0" minNObjects="0"/>
 </keepbranches>

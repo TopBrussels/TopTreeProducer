@@ -48,8 +48,7 @@ struct keepObjects
 	string type;
 	float minPt;
 	float maxEta;
-	bool isoObject;
-	float minRelIso;
+	float maxRelIso;
 	bool skipObjects;
 	int minNObjects;
 };
@@ -96,20 +95,7 @@ vector<keepObjects> parseObjects(TiXmlDocument doc, TTree* outEventTree)
 				
 				elem->QueryFloatAttribute ("minPt", &(tempObj.minPt));
 				elem->QueryFloatAttribute ("maxEta", &(tempObj.maxEta));
-				
-				
-				
-				int isoObj = 0;
-				elem->QueryIntAttribute ("isoObject", &(isoObj));
-				if(isoObj == 0)
-					tempObj.isoObject = false;
-				else if(isoObj == 1)
-					tempObj.isoObject = true;
-				else
-					cerr << "Wrong Iso : " << isoObj << " for " << tempObj.name << endl;
-				
-				
-				elem->QueryFloatAttribute ("minRelIso", &(tempObj.minRelIso));
+				elem->QueryFloatAttribute ("maxRelIso", &(tempObj.maxRelIso));
 				
 				int skipObj = 0, minNobj = 0;
 				elem->QueryIntAttribute ("minNObjects", &(minNobj));
@@ -123,9 +109,8 @@ vector<keepObjects> parseObjects(TiXmlDocument doc, TTree* outEventTree)
 					cerr << "Wrong skipObjects : " << skipObj << " for " << tempObj.name << endl;
 				
 				cout << "The skim will keep " << tempObj.name << ", of type " << tempObj.type << endl;
-				cout << "With minPt = " << tempObj.minPt << " maxEta = " << tempObj.maxEta;
-				if (tempObj.isoObject) cout << " and minRelIso = " << tempObj.minRelIso << endl;
-				else cout << endl;
+				cout << "With minPt = " << tempObj.minPt << " maxEta = " << tempObj.maxEta << " and maxRelIso = " << tempObj.maxRelIso << endl;
+				
 				if(tempObj.skipObjects)
 					cout << "With skipObjects = true " << endl;
 				else
@@ -305,15 +290,14 @@ int main()
 
 	for(unsigned int j=0; j !=objectsToKeep.size(); j++)
 	{
-		stringstream tmpMinPt, tmpMaxEta, tmpMinNObjects, tmpMinRelIso;
+		stringstream tmpMinPt, tmpMaxEta, tmpMinNObjects, tmpmaxRelIso;
 		tmpMinPt << objectsToKeep[j].minPt;
 		tmpMaxEta << objectsToKeep[j].maxEta;
-		tmpMinRelIso << objectsToKeep[j].minRelIso;
+		tmpmaxRelIso << objectsToKeep[j].maxRelIso;
 		tmpMinNObjects << objectsToKeep[j].minNObjects;
 
 		info += "name = " + objectsToKeep[j].name + "  type = " + objectsToKeep[j].type;
-		info += "  minPt = " + tmpMinPt.str() + "  maxEta = " + tmpMaxEta.str();
-		if(objectsToKeep[j].isoObject) info += " minRelIso = " + tmpMinRelIso.str();
+		info += "  minPt = " + tmpMinPt.str() + "  maxEta = " + tmpMaxEta.str() +  " maxRelIso = " + tmpmaxRelIso.str();
 		if(objectsToKeep[j].skipObjects) info += "  skipObjects = 1";
 		else info += "  skipObjects = 0";
 		info += "  minNObjects = " + tmpMinNObjects.str() + "\n";
@@ -514,9 +498,7 @@ int main()
 				{
 					cout << "objectsToKeep[" << j << "] : " <<endl;
 					cout << "name = " << objectsToKeep[j].name << " type = " << objectsToKeep[j].type << endl;
-					cout << "minPt = " << objectsToKeep[j].minPt << " maxEta = " << objectsToKeep[j].maxEta ;
-					if (objectsToKeep[j].isoObject) cout << " minRelIso = " << objectsToKeep[j].minRelIso << endl;
-					else cout << endl;
+					cout << "minPt = " << objectsToKeep[j].minPt << " maxEta = " << objectsToKeep[j].maxEta << " maxRelIso = " << objectsToKeep[j].maxRelIso << endl;
 					if(objectsToKeep[j].skipObjects) cout << "skipObjects = true" << endl;
 					else cout << "skipObjects = false" << endl;
 				}
@@ -823,22 +805,13 @@ int main()
 					{
 						electron = (TRootElectron*) (objectsToKeep[j].inArray)->At(i);
 						bool keepElectron = true;
-					
-						if(electron->Pt() < objectsToKeep[j].minPt || fabs(electron->Eta()) > objectsToKeep[j].maxEta)
+					        double eRelIso = (electron->caloIso(3) + electron->trackerIso(3))/electron->Et();
+						if(electron->Pt() < objectsToKeep[j].minPt || fabs(electron->Eta()) > objectsToKeep[j].maxEta || eRelIso > objectsToKeep[j].maxRelIso)
 						{
 							keepElectron = false;
-							if( verbosity > 1 ) cout << "skip Electron with pT = " << electron->Pt() << " and eta = " << electron->Eta() << endl;
-						} 
-						
-						if (objectsToKeep[j].isoObject){
-						  double eRelIso = (electron->caloIso(3) + electron->trackerIso(3))/electron->Et();
-						  if( eRelIso > objectsToKeep[j].minRelIso)
-						  {
-							keepElectron = false;
-							if( verbosity > 1 ) cout << "skip Electron with Rel Iso  = " << eRelIso  << endl;
-						  }
-						}
-						if (keepElectron) electronsKept++;
+							if( verbosity > 1 ) 
+							cout << "skip Electron with pT = " << electron->Pt() << ", eta = " << electron->Eta() << " and relIso = " <<eRelIso << endl;
+						} else electronsKept++;
 						
 						if( ! objectsToKeep[j].skipObjects )
 							new( (*(objectsToKeep[j].outArray))[i] ) TRootElectron(*electron);
@@ -865,20 +838,12 @@ int main()
 						muon = (TRootMuon*) (objectsToKeep[j].inArray)->At(i);
 						bool keepMuon = true;
 				
-						if(muon->Pt() < objectsToKeep[j].minPt || fabs(muon->Eta()) > objectsToKeep[j].maxEta)
+						if(muon->Pt() < objectsToKeep[j].minPt || fabs(muon->Eta()) > objectsToKeep[j].maxEta || muon->relativeIso03() > objectsToKeep[j].maxRelIso)
 						{
 							keepMuon = false;
-							if( verbosity > 1 ) cout << "skip Muon with pT = " << muon->Pt() << " and eta = " << muon->Eta() << endl;
-						} 
-						
-						if (objectsToKeep[j].isoObject){
-						  if( muon->relativeIso03() > objectsToKeep[j].minRelIso)
-						  {
-							keepMuon = false;
-							if( verbosity > 1 ) cout << "skip Muon with Rel Iso  = " << muon->relativeIso03()  << endl;
-						  }
-						}
-						if (keepMuon) muonsKept++;
+							if( verbosity > 1 ) 
+							cout << "skip Muon with pT = " << muon->Pt() << ", eta = " << muon->Eta() << " and relIso = " << muon->relativeIso03() << endl;
+						} else muonsKept++;
 						
 						if( ! objectsToKeep[j].skipObjects )
 							new( (*(objectsToKeep[j].outArray))[i] ) TRootMuon(*muon);
