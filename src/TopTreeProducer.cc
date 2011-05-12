@@ -278,6 +278,27 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	rootEvent->setRunId(iEvent.id().run());
 	rootEvent->setLumiBlockId(iEvent.luminosityBlock());
 
+	// do PileUp info
+
+	edm::InputTag PileupSrc_(producersNames_.getParameter<edm::InputTag>("pileUpProducer"));
+	Handle<std::vector< PileupSummaryInfo > >  PupInfo;
+	iEvent.getByLabel(PileupSrc_, PupInfo);
+  
+	if (PupInfo.isValid()) {
+	  std::vector<PileupSummaryInfo>::const_iterator PVI;
+	  
+	  // (then, for example, you can do)
+	  for(PVI = PupInfo->begin(); PVI != PupInfo->end(); ++PVI) {
+	  
+	    //std::cout << " Pileup Information: bunchXing, nvtx: " << PVI->getBunchCrossing() << " " << PVI->getPU_NumInteractions() << std::endl;
+
+	    if (PVI->getBunchCrossing() == 0) // in-time pile-up
+	      rootEvent->setNPu(PVI->getPU_NumInteractions());
+	  
+	  }
+
+	}
+
 	// we need to store some triggerFilter info to be able to emulate triggers on older data
 	if (doHLT) {
 	  if (verbosity > 1) cout << "should do HLT now..." << endl;
@@ -296,7 +317,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 
 	  //cout << summaryTag1st_ << " " << summaryTag2nd_  << " " << summaryTag3rd_  << " " << summaryTag4th_ << endl;
 	  //cout << summaryTag1st_.process() << " " << summaryTag2nd_.process()<< " " << summaryTag3rd_.process()<< " " << summaryTag4th_.process() << endl;
-	  cout << summary1st.isValid() << " " << summary2nd.isValid() << " " << summary3rd.isValid() << " " << summary4th.isValid()<< endl;
+	  //cout << summary1st.isValid() << " " << summary2nd.isValid() << " " << summary3rd.isValid() << " " << summary4th.isValid()<< endl;
 
 	  if (summary1st.isValid()) 
 	    summary = summary1st;
@@ -309,7 +330,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	  else
 	    cout << "TopTreeProducer::Analyze ERROR: Could not store info for trigger emulation: provided HLTproducerNames are null" << endl;
 	    
-	  cout << "summary " << summary << endl;
+	  //cout << "summary " << summary << endl;
 	  
 		if (summary.isValid()) {
 	    for (unsigned int i=0; i<summary->sizeFilters(); i++) {

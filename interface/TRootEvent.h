@@ -40,6 +40,7 @@ namespace TopTree
 			,lumiBlockId_(-1)
 			,nTracks_(-1)
 			,nHighPurityTracks_(-1)
+			,nPu_(-1)
 			,passGlobalHLT_(false)
 			,trigHLT_(0)
 			,idParton1_(-1)
@@ -59,6 +60,8 @@ namespace TopTree
 		// generalTracks infos (for cleaning of the scraping events)
 		Int_t nTracks() const { return nTracks_; }
 		Int_t nHighPurityTracks() const { return nHighPurityTracks_; }
+		// PileUp info
+		Int_t nPu() const { return nPu_; }
 		// Trigger decision
 		Bool_t passGlobalHLT() const { return passGlobalHLT_; }
 		UInt_t nHLTPaths() const { return trigHLT_.size(); }
@@ -96,6 +99,7 @@ namespace TopTree
 		void setRunId(Int_t runId) { runId_ = runId; }
 		void setLumiBlockId(Int_t lumiBlockId) { lumiBlockId_ = lumiBlockId; }
 		void setNTracks(Int_t nTracks) { nTracks_ = nTracks; }
+		void setNPu(Int_t nPu) { nPu_ = nPu; }
 		void setNHighPurityTracks(Int_t nHighPurityTracks) { nHighPurityTracks_ = nHighPurityTracks; }
 
 		void setGlobalHLT(Bool_t passGlobalHLT) { passGlobalHLT_ = passGlobalHLT; }
@@ -138,6 +142,10 @@ namespace TopTree
 		// generalTracks infos (for cleaning of the scraping events)
 		Int_t nTracks_;
 		Int_t nHighPurityTracks_;
+
+		// PileUp info
+
+		Int_t nPu_;
 
 		// Trigger Infos
 		Bool_t passGlobalHLT_;
