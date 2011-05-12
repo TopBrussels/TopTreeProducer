@@ -55,10 +55,10 @@ void GenJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenJets
 	{
 		const reco::GenJet* genJet = 0;	
 		if( jetType=="CALO" ) genJet = (const reco::GenJet*) ( & ((*recoGenJets)[j]) );
-			
+
 		// Call JetAnalyzer to fill the basic Jet Properties
 //		TRootJet tempJet = (TRootJet) myJetAnalyzer->Process( &( *(genJet) ));
-
+		
 		TRootGenJet localGenJet(
 			genJet->px()
 			,genJet->py()
@@ -70,7 +70,7 @@ void GenJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenJets
 			,genJet->pdgId()
 			,genJet->charge()
 		);
-
+		
 		localGenJet.setNConstituents(genJet->nConstituents());
 		localGenJet.setMaxDistance(genJet->maxDistance());
 		localGenJet.setN90(genJet->nCarrying(0.9));
@@ -80,7 +80,7 @@ void GenJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenJets
 		localGenJet.setEMEnergy(genJet->emEnergy());
 		localGenJet.setHadEnergy(genJet->hadEnergy());
 		localGenJet.setInvisibleEnergy(genJet->invisibleEnergy());
-				
+
 		new( (*rootGenJets)[j] ) TRootGenJet(localGenJet);
 		if(verbosity_>2) cout << "   ["<< setw(3) << j << "] " << localGenJet << endl;
 	}
