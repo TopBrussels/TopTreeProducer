@@ -278,6 +278,27 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	rootEvent->setRunId(iEvent.id().run());
 	rootEvent->setLumiBlockId(iEvent.luminosityBlock());
 
+	// do PileUp info
+
+	edm::InputTag PileupSrc_(producersNames_.getParameter<edm::InputTag>("pileUpProducer"));
+	Handle<std::vector< PileupSummaryInfo > >  PupInfo;
+	iEvent.getByLabel(PileupSrc_, PupInfo);
+  
+	if (PupInfo.isValid()) {
+	  std::vector<PileupSummaryInfo>::const_iterator PVI;
+	  
+	  // (then, for example, you can do)
+	  for(PVI = PupInfo->begin(); PVI != PupInfo->end(); ++PVI) {
+	  
+	    //std::cout << " Pileup Information: bunchXing, nvtx: " << PVI->getBunchCrossing() << " " << PVI->getPU_NumInteractions() << std::endl;
+
+	    if (PVI->getBunchCrossing() == 0) // in-time pile-up
+	      rootEvent->setNPu(PVI->getPU_NumInteractions());
+	  
+	  }
+
+	}
+
 	// we need to store some triggerFilter info to be able to emulate triggers on older data
 	if (doHLT) {
 	  if (verbosity > 1) cout << "should do HLT now..." << endl;
