@@ -60,13 +60,15 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet)
 	localJet.setBtag_combinedSecondaryVertexMVABJetTags(patJet->bDiscriminator("combinedSecondaryVertexMVABJetTags"));
 	
 	// jet correction factors
+	std::vector< std::string > jecLevels = patJet->availableJECLevels();
+	
 	pat::Jet rawJet = patJet->correctedJet("Uncorrected");
-		
-	localJet.setJetCorrFactor(0,"L1",rawJet.jecFactor("L1Offset"));
-	localJet.setJetCorrFactor(1,"L1L2",rawJet.jecFactor("L2Relative"));
-	localJet.setJetCorrFactor(2,"L1L2L3",rawJet.jecFactor("L3Absolute"));
+	
+	localJet.setJetCorrFactor(0,jecLevels[1],rawJet.jecFactor(jecLevels[1]));
+	localJet.setJetCorrFactor(1,jecLevels[1]+"L2",rawJet.jecFactor("L2Relative"));
+	localJet.setJetCorrFactor(2,jecLevels[1]+"L2L3",rawJet.jecFactor("L3Absolute"));
 	if(isData_)
-		localJet.setJetCorrFactor(3,"L1L2L3L23Residual",rawJet.jecFactor("L2L3Residual"));
+		localJet.setJetCorrFactor(3,jecLevels[1]+"L2L3L23Residual",rawJet.jecFactor("L2L3Residual"));
 		
 	// Matched genParticle
 	if (useMC_)
