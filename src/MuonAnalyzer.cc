@@ -128,7 +128,12 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
 					localMuon.setGenParticleIndex (-1);
 				}
 			}
-
+			
+			if(patMuon->chargedHadronIso() != -1) localMuon.SetChargedHadronIso(patMuon->chargedHadronIso());
+		  	if(patMuon->photonIso() != -1) localMuon.SetPhotonIso(patMuon->photonIso());
+			if(patMuon->neutralHadronIso() != -1) localMuon.SetNeutralHadronIso(patMuon->neutralHadronIso());
+						
+		
 		new ((*rootMuons)[j]) TRootMuon (localMuon);
 		if (verbosity_ > 2)
 			cout << "   [" << setw (3) << j << "] " << localMuon << endl;
