@@ -45,6 +45,9 @@ namespace TopTree
 			,direction_(-9999)
 			,algo_(-9999)
 			,id_(-9999)
+			,chargedHadronIso_(-9999)
+			,photonIso_(-9999)
+			,neutralHadronIso_(-9999)
 			{;}
 
 		TRootMuon(const TRootMuon& muon) :
@@ -80,6 +83,9 @@ namespace TopTree
 			,direction_(muon.direction_)
 			,algo_(muon.algo_)
 			,id_(muon.id_)
+			,chargedHadronIso_(muon.chargedHadronIso_)
+			,photonIso_(muon.photonIso_)
+			,neutralHadronIso_(muon.neutralHadronIso_)
 			{;}
 
 		TRootMuon(Double_t px, Double_t py, Double_t pz, Double_t e) :
@@ -115,6 +121,9 @@ namespace TopTree
 			,direction_(-9999)
 			,algo_(-9999)
 			,id_(-9999)
+			,chargedHadronIso_(-9999)
+			,photonIso_(-9999)
+			,neutralHadronIso_(-9999)
 			{;}
 
 		TRootMuon(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z) :
@@ -150,6 +159,9 @@ namespace TopTree
 			,direction_(-9999)
 			,algo_(-9999)
 			,id_(-9999)
+			,chargedHadronIso_(-9999)
+			,photonIso_(-9999)
+			,neutralHadronIso_(-9999)
 			{;}
 
 		TRootMuon(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z, Int_t type, Float_t charge) :
@@ -184,6 +196,9 @@ namespace TopTree
 			,direction_(-9999)
 			,algo_(-9999)
 			,id_(-9999)
+			,chargedHadronIso_(-9999)
+			,photonIso_(-9999)
+			,neutralHadronIso_(-9999)
 			{;}
 
 		TRootMuon(const TLorentzVector &momentum) :
@@ -219,6 +234,9 @@ namespace TopTree
 			,direction_(-9999)
 			,algo_(-9999)
 			,id_(-9999)
+			,chargedHadronIso_(-9999)
+			,photonIso_(-9999)
+			,neutralHadronIso_(-9999)
 			{;}
 
 		TRootMuon(const TLorentzVector &momentum, const TVector3 &vertex, Int_t type, Float_t charge) :
@@ -254,6 +272,9 @@ namespace TopTree
 			,direction_(-9999)
 			,algo_(-9999)
 			,id_(-9999)
+			,chargedHadronIso_(-9999)
+			,photonIso_(-9999)
+			,neutralHadronIso_(-9999)
 			{;}
 
 		~TRootMuon() {;}
@@ -319,6 +340,10 @@ namespace TopTree
 
 		Float_t dB() const { return dB_; }
 		Float_t dBError() const { return dBError_; }
+		
+		Float_t chargedHadronIso() const { return chargedHadronIso_; }
+		Float_t photonIso() const { return photonIso_; }
+		Float_t neutralHadronIso() const { return neutralHadronIso_; }
 
 		//TObject* genMuon() const { return genMuon_.GetObject() ;}
 		virtual TString typeName() const { return "TRootMuon"; }
@@ -389,6 +414,10 @@ namespace TopTree
 
 		void SetdB(Float_t dB) { dB_ = dB; }
 		void SetdBError(Float_t dBError) { dBError_ = dBError; }
+		
+		void SetChargedHadronIso(Float_t chargedHadronIso){chargedHadronIso_ = chargedHadronIso;}
+		void SetPhotonIso(Float_t photonIso){photonIso_ = photonIso;}
+		void SetNeutralHadronIso(Float_t neutralHadronIso){neutralHadronIso_ = neutralHadronIso;}
 
 		friend std::ostream& operator<< (std::ostream& stream, const TRootMuon& muon)
 		{
@@ -447,6 +476,10 @@ namespace TopTree
 		// MuonId coded in binary word id_ ==> TrackerMuonArbitrated=0000001 , AllArbitrated=0000010 , GlobalMuonPromptTight=0000100 ,
 		// TMLastStationLoose=0001000 , TMLastStationTight=0010000 , TM2DCompatibilityLoose=0100000 , TM2DCompatibilityTight=1000000
 		Int_t id_;
+		
+		Float_t chargedHadronIso_;  // charged hadron isolation value computed in the PF2PAT sequence, and stored in the pat muon
+		Float_t photonIso_;         // photon isolation value computed in the PF2PAT sequence, and stored in the pat muon
+		Float_t neutralHadronIso_;  // neutral hadron isolation value computed in the PF2PAT sequence, and stored in the pat muon
 
 		ClassDef (TRootMuon,1);
 	};
