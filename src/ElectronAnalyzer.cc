@@ -109,9 +109,9 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 		//setCorrections
 		localElectron.setCaloEnergyError( electron->ecalEnergyError()) ;
 		localElectron.setCaloEnergy(electron->caloEnergy()) ;
-		localElectron.setElectronMomentumError( electron->electronMomentumError());
+		//localElectron.setElectronMomentumError( electron->electronMomentumError());
 		localElectron.setEnergyScaleCorrected( electron->isEcalEnergyCorrected());
-		localElectron.setMomentumCorrected( electron->isMomentumCorrected()) ;
+		//localElectron.setMomentumCorrected( electron->isMomentumCorrected()) ;
 		localElectron.setTrackMomentumError(electron->trackMomentumError());
 
 		reco::GsfTrackRef gsfTrack = electron->gsfTrack();

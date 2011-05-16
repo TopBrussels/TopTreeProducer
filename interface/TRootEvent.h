@@ -40,7 +40,6 @@ namespace TopTree
 			,lumiBlockId_(-1)
 			,nTracks_(-1)
 			,nHighPurityTracks_(-1)
-			,nPu_(-1)
 			,passGlobalHLT_(false)
 			,trigHLT_(0)
 			,idParton1_(-1)
@@ -61,7 +60,7 @@ namespace TopTree
 		Int_t nTracks() const { return nTracks_; }
 		Int_t nHighPurityTracks() const { return nHighPurityTracks_; }
 		// PileUp info
-		Int_t nPu() const { return nPu_; }
+		Int_t nPu(Int_t nBX) { return ( nPu_.find(nBX) != nPu_.end() ? nPu_[nBX] : -9999 ); }
 		// Trigger decision
 		Bool_t passGlobalHLT() const { return passGlobalHLT_; }
 		UInt_t nHLTPaths() const { return trigHLT_.size(); }
@@ -99,7 +98,7 @@ namespace TopTree
 		void setRunId(Int_t runId) { runId_ = runId; }
 		void setLumiBlockId(Int_t lumiBlockId) { lumiBlockId_ = lumiBlockId; }
 		void setNTracks(Int_t nTracks) { nTracks_ = nTracks; }
-		void setNPu(Int_t nPu) { nPu_ = nPu; }
+		void setNPu(Int_t nBX, Int_t nPu) { nPu_[nBX] = nPu; }
 		void setNHighPurityTracks(Int_t nHighPurityTracks) { nHighPurityTracks_ = nHighPurityTracks; }
 
 		void setGlobalHLT(Bool_t passGlobalHLT) { passGlobalHLT_ = passGlobalHLT; }
@@ -145,7 +144,7 @@ namespace TopTree
 
 		// PileUp info
 
-		Int_t nPu_;
+		std::map<Int_t,Int_t> nPu_;
 
 		// Trigger Infos
 		Bool_t passGlobalHLT_;
