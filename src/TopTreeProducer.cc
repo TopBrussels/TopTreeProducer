@@ -290,12 +290,14 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	  // (then, for example, you can do)
 	  for(PVI = PupInfo->begin(); PVI != PupInfo->end(); ++PVI) {
 	  
-	    //std::cout << " Pileup Information: bunchXing, nvtx: " << PVI->getBunchCrossing() << " " << PVI->getPU_NumInteractions() << std::endl;
+	    std::cout << " Pileup Information: bunchXing, nvtx: " << PVI->getBunchCrossing() << " " << PVI->getPU_NumInteractions() << std::endl;
 
-	    if (PVI->getBunchCrossing() == 0) // in-time pile-up
-	      rootEvent->setNPu(PVI->getPU_NumInteractions());
+	    rootEvent->setNPu(PVI->getBunchCrossing(),PVI->getPU_NumInteractions());
 	  
 	  }
+
+	  cout << rootEvent->nPu(0) << endl;
+	  cout << rootEvent->nPu(1) << endl;
 
 	}
 
