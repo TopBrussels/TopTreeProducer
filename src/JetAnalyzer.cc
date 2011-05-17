@@ -67,7 +67,7 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet)
 	localJet.setJetCorrFactor(0,jecLevels[1],rawJet.jecFactor(jecLevels[1]));
 	localJet.setJetCorrFactor(1,jecLevels[1]+"L2",rawJet.jecFactor("L2Relative"));
 	localJet.setJetCorrFactor(2,jecLevels[1]+"L2L3",rawJet.jecFactor("L3Absolute"));
-	if(isData_)
+	if(jecLevels.size() > 4 && jecLevels[4] == "L2L3Residual" )
 		localJet.setJetCorrFactor(3,jecLevels[1]+"L2L3L23Residual",rawJet.jecFactor("L2L3Residual"));
 	
 	// Matched genParticle
