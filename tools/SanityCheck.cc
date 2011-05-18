@@ -354,10 +354,19 @@ int main(int argc, char *argv[]){
 	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),300,-6,6);	  
 	  hist="_phi";
 	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),250,-5,5);
+	  hist="_chargedHadronIso";
+	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),250,-5,25);
+	  hist="_photonIso";
+	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),250,-5,25);
+	  hist="_neutralHadronIso";
+	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),250,-5,25);
 	  
 	  histos[myArrayName[p]+"_pt"]->Fill(((TRootMuon*)myArrays[p]->At(o))->Pt());
 	  histos[myArrayName[p]+"_eta"]->Fill(((TRootMuon*)myArrays[p]->At(o))->Eta());
 	  histos[myArrayName[p]+"_phi"]->Fill(((TRootMuon*)myArrays[p]->At(o))->Phi());
+	  histos[myArrayName[p]+"_chargedHadronIso"]->Fill(((TRootMuon*)myArrays[p]->At(o))->chargedHadronIso());
+	  histos[myArrayName[p]+"_photonIso"]->Fill(((TRootMuon*)myArrays[p]->At(o))->photonIso());
+	  histos[myArrayName[p]+"_neutralHadronIso"]->Fill(((TRootMuon*)myArrays[p]->At(o))->neutralHadronIso());
 	  
 	}
 	
@@ -376,10 +385,19 @@ int main(int argc, char *argv[]){
 	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),300,-6,6);	  
 	  hist="_phi";
 	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),250,-5,5);
+	  hist="_chargedHadronIso";
+	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),250,-5,25);
+	  hist="_photonIso";
+	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),250,-5,25);
+	  hist="_neutralHadronIso";
+	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),250,-5,25);
 	  
 	  histos[myArrayName[p]+"_pt"]->Fill(((TRootElectron*)myArrays[p]->At(o))->Pt());
 	  histos[myArrayName[p]+"_eta"]->Fill(((TRootElectron*)myArrays[p]->At(o))->Eta());
 	  histos[myArrayName[p]+"_phi"]->Fill(((TRootElectron*)myArrays[p]->At(o))->Phi());
+	  histos[myArrayName[p]+"_chargedHadronIso"]->Fill(((TRootElectron*)myArrays[p]->At(o))->chargedHadronIso());
+	  histos[myArrayName[p]+"_photonIso"]->Fill(((TRootElectron*)myArrays[p]->At(o))->photonIso());
+	  histos[myArrayName[p]+"_neutralHadronIso"]->Fill(((TRootElectron*)myArrays[p]->At(o))->neutralHadronIso());
 	  
 	}
 	
