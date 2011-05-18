@@ -40,7 +40,7 @@ void HLTAnalyzer::process(const edm::Event& iEvent, TRootEvent* rootEvent)
 	  
 	  int index = getIndexForRun(iEvent,hltInfos_);
 		
-		cout << "index " << index << " and hltInfos_ " << hltInfos_.size() << endl;
+//		cout << "index " << index << " and hltInfos_ " << hltInfos_.size() << endl;
 
 	  
 	  if ( index == -1 || index < (int)hltInfos_.size()-1 ) {// no info for this run yet -> create a new entry
