@@ -231,6 +231,13 @@ int main(int argc, char *argv[]){
     
     if (verbosity > 0 && ievt % 1000 == 0) std::cout<<"Processing the "<<ievt<<"th event." << flush<<"\r";
 
+    // PileUp plot
+
+    string hist="PileUp";
+    if (histos.find(hist) == histos.end()) histos[hist]=new TH1F((hist).c_str(),(hist+";nPu").c_str(),75,0,75);
+
+    histos[hist]->Fill(event->nPu(0));
+
     for (unsigned int p=0; p<nArrays; p++) {
       
       //cout << myArrayClass[p] << " " << myArrayName[p] << " " << myArrays[p]->GetEntries() << endl;
