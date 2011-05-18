@@ -433,13 +433,13 @@ int main(int argc, char *argv[]){
     
     for (unsigned int j=0; j<it->second.size(); j++) {
 
-      if (j ==0 || dest == 5) {
+      if (j ==0 || dest % 5 == 0) {
 
 	stringstream s; s << canvas.size()+1;
 
 	string cName = "canvas_"+s.str();
 
-	string cTitle = ("Output/"+(string)it->second[0]->GetTitle()).c_str(); // this to know in which dir we need to store it
+	string cTitle = ("Output/"+(string)it->second[j]->GetTitle()).c_str(); // this to know in which dir we need to store it
 
 	canvas.push_back(new TCanvas(cName.c_str(),cTitle.c_str(),800,600));
 	
