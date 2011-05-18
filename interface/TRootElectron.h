@@ -93,6 +93,9 @@ namespace TopTree
 			ecalRecHitSumEt04_(-9999.),
 			hcalDepth1TowerSumEt04_(-9999.),
 			hcalDepth2TowerSumEt04_(-9999.),
+			chargedHadronIso_(-9999),
+			photonIso_(-9999),
+			neutralHadronIso_(-9999),
 			idCutBasedRobustLoose_(-9999),
 			idCutBasedRobustTight_(-9999),
 			idCutBasedRobustHighEnergy_(-9999),
@@ -192,6 +195,9 @@ namespace TopTree
 			ecalRecHitSumEt04_(e.ecalRecHitSumEt04_),
 			hcalDepth1TowerSumEt04_(e.hcalDepth1TowerSumEt04_),
 			hcalDepth2TowerSumEt04_(e.hcalDepth2TowerSumEt04_),
+			chargedHadronIso_(e.chargedHadronIso_),
+			photonIso_(e.photonIso_),
+			neutralHadronIso_(e.neutralHadronIso_),
 			idCutBasedRobustLoose_(e.idCutBasedRobustLoose_),
 			idCutBasedRobustTight_(e.idCutBasedRobustTight_),
 			idCutBasedRobustHighEnergy_(e.idCutBasedRobustHighEnergy_),
@@ -291,6 +297,9 @@ namespace TopTree
 			ecalRecHitSumEt04_(-9999.),
 			hcalDepth1TowerSumEt04_(-9999.),
 			hcalDepth2TowerSumEt04_(-9999.),
+			chargedHadronIso_(-9999),
+			photonIso_(-9999),
+			neutralHadronIso_(-9999),
 			idCutBasedRobustLoose_(-9999),
 			idCutBasedRobustTight_(-9999),
 			idCutBasedRobustHighEnergy_(-9999),
@@ -390,6 +399,9 @@ namespace TopTree
 			ecalRecHitSumEt04_(-9999.),
 			hcalDepth1TowerSumEt04_(-9999.),
 			hcalDepth2TowerSumEt04_(-9999.),
+			chargedHadronIso_(-9999),
+			photonIso_(-9999),
+			neutralHadronIso_(-9999),
 			idCutBasedRobustLoose_(-9999),
 			idCutBasedRobustTight_(-9999),
 			idCutBasedRobustHighEnergy_(-9999),
@@ -489,6 +501,9 @@ namespace TopTree
 			ecalRecHitSumEt04_(-9999.),
 			hcalDepth1TowerSumEt04_(-9999.),
 			hcalDepth2TowerSumEt04_(-9999.),
+			chargedHadronIso_(-9999),
+			photonIso_(-9999),
+			neutralHadronIso_(-9999),
 			idCutBasedRobustLoose_(-9999),
 			idCutBasedRobustTight_(-9999),
 			idCutBasedRobustHighEnergy_(-9999),
@@ -588,6 +603,9 @@ namespace TopTree
 			ecalRecHitSumEt04_(-9999.),
 			hcalDepth1TowerSumEt04_(-9999.),
 			hcalDepth2TowerSumEt04_(-9999.),
+			chargedHadronIso_(-9999),
+			photonIso_(-9999),
+			neutralHadronIso_(-9999),
 			idCutBasedRobustLoose_(-9999),
 			idCutBasedRobustTight_(-9999),
 			idCutBasedRobustHighEnergy_(-9999),
@@ -687,6 +705,9 @@ namespace TopTree
 			ecalRecHitSumEt04_(-9999.),
 			hcalDepth1TowerSumEt04_(-9999.),
 			hcalDepth2TowerSumEt04_(-9999.),
+			chargedHadronIso_(-9999),
+			photonIso_(-9999),
+			neutralHadronIso_(-9999),
 			idCutBasedRobustLoose_(-9999),
 			idCutBasedRobustTight_(-9999),
 			idCutBasedRobustHighEnergy_(-9999),
@@ -866,6 +887,9 @@ namespace TopTree
 //            return -1.;
 //        }
 //    }
+		Float_t chargedHadronIso() const { return chargedHadronIso_; }
+		Float_t photonIso() const { return photonIso_; }
+		Float_t neutralHadronIso() const { return neutralHadronIso_; }
 
 		Int_t isRobustLoose() const { return idCutBasedRobustLoose_; }
 		Int_t isRobustTight() const { return idCutBasedRobustTight_; }
@@ -1042,6 +1066,9 @@ namespace TopTree
 		void setIsoR04_Depth2HadEt(Float_t isoR04_hadEt2) { hcalDepth2TowerSumEt04_ = isoR04_hadEt2; }
 		void setIsoR04_sumPt(Float_t isoR04_sumPt) { tkSumPt04_ = isoR04_sumPt; }
 //    void setIsoR04_nTracks(Int_t isoR04_nTracks) { nTracks_ = isoR04_nTracks; }
+		void setChargedHadronIso(Float_t chargedHadronIso){chargedHadronIso_ = chargedHadronIso;}
+		void setPhotonIso(Float_t photonIso){photonIso_ = photonIso;}
+		void setNeutralHadronIso(Float_t neutralHadronIso){neutralHadronIso_ = neutralHadronIso;}
 
 		void setIDCutBasedRobustLoose(Int_t idCutBasedFixedThresholdLoose) { idCutBasedRobustLoose_ = idCutBasedFixedThresholdLoose; }
 		void setIDCutBasedRobustTight(Int_t idCutBasedFixedThresholdTight) { idCutBasedRobustTight_ = idCutBasedFixedThresholdTight; }
@@ -1186,6 +1213,9 @@ namespace TopTree
 		Float_t hcalDepth1TowerSumEt04_;   // hcal depht 1 iso deposit with electron footprint removed
 		Float_t hcalDepth2TowerSumEt04_;   // hcal depht 2 iso deposit with electron footprint removed
 //		Int_t nTracks04_;
+		Float_t chargedHadronIso_;         // charged hadron isolation value computed in the PF2PAT sequence, and stored in the pat electron
+		Float_t photonIso_;		   // photon isolation value computed in the PF2PAT sequence, and stored in the pat electron
+		Float_t neutralHadronIso_;	   // neutral hadron isolation value computed in the PF2PAT sequence, and stored in the pat electron
 
 //Identification ===================================
 		Int_t idCutBasedRobustLoose_;      // Simple cut based ID (aka 'robust') - Loose Thresholds on H/E, DeltaEta, DeltaPhi, SigmaEtaEta

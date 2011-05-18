@@ -289,6 +289,10 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 				}
 
 			}
+			
+			if(patElectron->chargedHadronIso() != -1) localElectron.setChargedHadronIso(patElectron->chargedHadronIso());
+		  	if(patElectron->photonIso() != -1) localElectron.setPhotonIso(patElectron->photonIso());
+			if(patElectron->neutralHadronIso() != -1) localElectron.setNeutralHadronIso(patElectron->neutralHadronIso());
 
 		new( (*rootElectrons)[j] ) TRootElectron(localElectron);
 		if(verbosity_>2) cout << "   ["<< setw(3) << j << "] " << localElectron << endl;
