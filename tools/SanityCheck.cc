@@ -80,21 +80,27 @@ int main(int argc, char *argv[]){
   //4 Info for each event
   //5 Debug
 
+  bool onlyPU = false;
+
    // RETRIEVING LIST OF FILENAMES TO CHECK
 
-  if (argc != 3) {
+  if (argc < 3) {
 
-    cout << "Usage: ./SanityCheck --inputfiles file1;file2;fileN\n\n" << endl;
+    cout << "Usage: ./SanityCheck --inputfiles file1;file2;fileN (--onlyPU)\n\n" << endl;
 
     exit(0);
 
   } else if (argc == 3 && !strstr(argv[1],"--inputfiles")) {
 
-    cout << "Usage: ./SanityCheck --inputfiles file1;file2;fileN\n\n" << endl;
+    cout << "Usage: ./SanityCheck --inputfiles file1;file2;fileN (--onlyPU)\n\n" << endl;
 
     exit(0);
 
   }
+
+  for (unsigned int i=0;i<argc;i++)
+    if (strstr(argv[i],"--onlyPU"))
+      onlyPU=true;
 
   vector<string> fileNames;
   
@@ -149,67 +155,71 @@ int main(int argc, char *argv[]){
   string myArrayClass[2000];
   string myArrayName[2000];
 
-  for (int i=1; i<eventTree->GetListOfBranches()->GetEntriesFast(); i++) {
+  if (!onlyPU) {
+
+    for (int i=1; i<eventTree->GetListOfBranches()->GetEntriesFast(); i++) {
       
-    TBranch * branch = (TBranch *)eventTree->GetListOfBranches()->At(i);
+      TBranch * branch = (TBranch *)eventTree->GetListOfBranches()->At(i);
       
-    TObject* obj = branch->GetListOfLeaves()->At(0);
+      TObject* obj = branch->GetListOfLeaves()->At(0);
+      
+      std::string ObjName = obj->GetName();
+      
+      string::size_type position = ObjName.find_last_of("_");
+      
+      std::string className = "";
+      
+      if (strstr(ObjName.c_str(),"CaloJet"))
+	className="TopTree::TRootCaloJet";
+      else if (strstr(ObjName.c_str(),"PFJet"))
+	className="TopTree::TRootPFJet";
+      else if (strstr(ObjName.c_str(),"JPTJet"))
+	className="TopTree::TRootJPTJet";
+      else if (strstr(ObjName.c_str(),"GenJet"))
+	className="TopTree::TRootGenJet";
+      else if (strstr(ObjName.c_str(),"MCParticles"))
+	className="TopTree::TRootMCParticle";
+      else if (strstr(ObjName.c_str(),"NPGenEvent"))
+	className="TopTree::TRootNPGenEvent";
+      else if (strstr(ObjName.c_str(),"GenEvent"))
+	className="TopTree::TRootGenEvent";
+      else if (strstr(ObjName.c_str(),"Muon"))
+	className="TopTree::TRootMuon";
+      else if (strstr(ObjName.c_str(),"Electron"))
+	className="TopTree::TRootElectron";
+      else if (strstr(ObjName.c_str(),"TCMET"))
+	className="TopTree::TRootMET";
+      else if (strstr(ObjName.c_str(),"CaloMET"))
+	className="TopTree::TRootCaloMET";
+      else if (strstr(ObjName.c_str(),"PFMET"))
+	className="TopTree::TRootPFMET";
+      else if (strstr(ObjName.c_str(),"MET"))
+	className="TopTree::TRootMET";
+      else if (strstr(ObjName.c_str(),"MHT"))
+	className="TopTree::TRootMHT";
+      else if (strstr(ObjName.c_str(),"PrimaryVertex"))
+	className="TopTree::TRootVertex";
+      
+      if (verbosity > 1) cout << "  Found Branch " << className << " " << ObjName.substr(0,position) << endl;
+      
+      arrays[ObjName.substr(0,position)]=std::pair<std::string,TClonesArray*>(className,new TClonesArray());
+      
+      char branchStatus[100];
+      myArrays[nArrays] = new TClonesArray(className.c_str(), 0);
+      myArrayClass[nArrays]=className;
+      myArrayName[nArrays]=ObjName.substr(0,position);
+      
+      string branchName = ObjName.substr(0,position);
+      sprintf(branchStatus,"%s*",branchName.c_str());
+      
+      eventTree->SetBranchStatus(branchStatus,1);
+      eventTree->SetBranchAddress(branchName.c_str(),&myArrays[nArrays]);
+      
+      nArrays++;
+      
+    }
     
-    std::string ObjName = obj->GetName();
-    
-    string::size_type position = ObjName.find_last_of("_");
-    
-    std::string className = "";
-    
-    if (strstr(ObjName.c_str(),"CaloJet"))
-      className="TopTree::TRootCaloJet";
-    else if (strstr(ObjName.c_str(),"PFJet"))
-      className="TopTree::TRootPFJet";
-    else if (strstr(ObjName.c_str(),"JPTJet"))
-      className="TopTree::TRootJPTJet";
-    else if (strstr(ObjName.c_str(),"GenJet"))
-      className="TopTree::TRootGenJet";
-    else if (strstr(ObjName.c_str(),"MCParticles"))
-      className="TopTree::TRootMCParticle";
-    else if (strstr(ObjName.c_str(),"NPGenEvent"))
-      className="TopTree::TRootNPGenEvent";
-    else if (strstr(ObjName.c_str(),"GenEvent"))
-      className="TopTree::TRootGenEvent";
-    else if (strstr(ObjName.c_str(),"Muon"))
-      className="TopTree::TRootMuon";
-    else if (strstr(ObjName.c_str(),"Electron"))
-      className="TopTree::TRootElectron";
-    else if (strstr(ObjName.c_str(),"TCMET"))
-      className="TopTree::TRootMET";
-    else if (strstr(ObjName.c_str(),"CaloMET"))
-      className="TopTree::TRootCaloMET";
-    else if (strstr(ObjName.c_str(),"PFMET"))
-      className="TopTree::TRootPFMET";
-    else if (strstr(ObjName.c_str(),"MET"))
-      className="TopTree::TRootMET";
-    else if (strstr(ObjName.c_str(),"MHT"))
-      className="TopTree::TRootMHT";
-    else if (strstr(ObjName.c_str(),"PrimaryVertex"))
-    className="TopTree::TRootVertex";
-    
-    if (verbosity > 1) cout << "  Found Branch " << className << " " << ObjName.substr(0,position) << endl;
-  
-    arrays[ObjName.substr(0,position)]=std::pair<std::string,TClonesArray*>(className,new TClonesArray());
-
-    char branchStatus[100];
-    myArrays[nArrays] = new TClonesArray(className.c_str(), 0);
-    myArrayClass[nArrays]=className;
-    myArrayName[nArrays]=ObjName.substr(0,position);
-
-    string branchName = ObjName.substr(0,position);
-    sprintf(branchStatus,"%s*",branchName.c_str());
-    
-    eventTree->SetBranchStatus(branchStatus,1);
-    eventTree->SetBranchAddress(branchName.c_str(),&myArrays[nArrays]);
-    
-    nArrays++;
-
-  }
+  } // end if onlyPU
 
   /*char branchStatus[100];
   objects.push_back(new TClonesArray("TopTree::TRootMuon", 0));
@@ -410,6 +420,8 @@ int main(int argc, char *argv[]){
 
   if(verbosity>1) cout <<"Writing the plots" << endl;
 
+  mkdir("Output",0755);
+
   std::map<std::string, vector<TH1F*> > new_histos;
 
   for (std::map<std::string, TH1F* >::const_iterator it=histos.begin(); it != histos.end(); ++it) {
@@ -419,6 +431,7 @@ int main(int argc, char *argv[]){
   }
 
   vector<TCanvas*> canvas; // yes another vector but this is the last one, promise!
+  vector<TFile*> out; // yes another vector but this is the last one, promise!
 
   for (std::map<std::string, vector<TH1F*> >::const_iterator it=new_histos.begin(); it != new_histos.end(); ++it) {
 
@@ -442,7 +455,13 @@ int main(int argc, char *argv[]){
 	string cTitle = ("Output/"+(string)it->second[j]->GetTitle()).c_str(); // this to know in which dir we need to store it
 
 	canvas.push_back(new TCanvas(cName.c_str(),cTitle.c_str(),800,600));
-	
+
+	mkdir(canvas[canvas.size()-1]->GetTitle(),0755);
+
+	string rootFileName= (string)canvas[canvas.size()-1]->GetTitle()+"/"+(string)canvas[canvas.size()-1]->GetName()+".root";
+
+	out.push_back(new TFile(rootFileName.c_str(),"RECREATE"));
+  
 	numCanvas = canvas.size()-1;
 
 	if (it->second.size() == 1)
@@ -467,21 +486,27 @@ int main(int argc, char *argv[]){
 
       it->second[j]->Draw();
 
+      out[out.size()-1]->cd();
+
+      it->second[j]->Write();
+
       dest++;
 
     }
 
   }
-
-  mkdir("Output",0755);
   
   for (unsigned int c=0; c<canvas.size(); c++) {
-
-    mkdir(canvas[c]->GetTitle(),0755);
 
     string saveTitle = (string)canvas[c]->GetTitle()+"/"+(string)canvas[c]->GetName()+".png";
 
     canvas[c]->SaveAs(saveTitle.c_str());
+
+    out[c]->cd();
+
+    canvas[c]->Write();
+
+    out[c]->Close();
 
   }
 
