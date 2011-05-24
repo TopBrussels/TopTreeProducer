@@ -355,6 +355,11 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	  }
 	}
 	
+	//fastjet density rho
+	edm::Handle<double> rho;
+	iEvent.getByLabel("kt6PFJetsPF2PAT","rho",rho);
+	rootEvent->setKt6PFJetsPF2PAT_rho(*rho);
+	
 	if(runGeneralTracks) // Calculate and fill number of tracks and number of high purity tracks
 	{
 		// get GeneralTracks collection
