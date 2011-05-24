@@ -269,10 +269,14 @@ int main(int argc, char *argv[]){
     // PileUp plot -> not yet in these toptrees
 
     string hist="PileUp";
-    if (histos.find(hist) == histos.end()) histos[hist]=new TH1F((hist).c_str(),(hist+";nPu").c_str(),75,0,75);
-
+    if (histos.find(hist) == histos.end()) histos[hist]=new TH1F((hist).c_str(),(hist+";nPu").c_str(),75,0,75);    
     histos[hist]->Fill(event->nPu(0));
-
+    
+    hist="kt6PFJetsPF2PAT_rho";
+    if (histos.find(hist) == histos.end()) histos[hist]=new TH1F((hist).c_str(),hist.c_str(),80,0,40);
+    histos[hist]->Fill(event->kt6PFJetsPF2PAT_rho());    
+    
+    
     for (unsigned int p=0; p<nArrays; p++) {
       
       //cout << myArrayClass[p] << " " << myArrayName[p] << " " << myArrays[p]->GetEntries() << endl;
@@ -395,6 +399,10 @@ int main(int argc, char *argv[]){
 	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),250,-5,25);
 	  hist="_neutralHadronIso";
 	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),250,-5,25);
+	  hist="_nofValidPixelHits";
+	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),15,0,15);
+	  hist="_nofMatchedStations";
+	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),15,0,15);
 	  
 	  histos[myArrayName[p]+"_pt"]->Fill(((TRootMuon*)myArrays[p]->At(o))->Pt());
 	  histos[myArrayName[p]+"_eta"]->Fill(((TRootMuon*)myArrays[p]->At(o))->Eta());
@@ -402,6 +410,8 @@ int main(int argc, char *argv[]){
 	  histos[myArrayName[p]+"_chargedHadronIso"]->Fill(((TRootMuon*)myArrays[p]->At(o))->chargedHadronIso());
 	  histos[myArrayName[p]+"_photonIso"]->Fill(((TRootMuon*)myArrays[p]->At(o))->photonIso());
 	  histos[myArrayName[p]+"_neutralHadronIso"]->Fill(((TRootMuon*)myArrays[p]->At(o))->neutralHadronIso());
+	  histos[myArrayName[p]+"_nofValidPixelHits"]->Fill(((TRootMuon*)myArrays[p]->At(o))->nofValidPixelHits());
+	  histos[myArrayName[p]+"_nofMatchedStations"]->Fill(((TRootMuon*)myArrays[p]->At(o))->nofMatchedStations());
 	  
 	}
 	
@@ -425,7 +435,7 @@ int main(int argc, char *argv[]){
 	  hist="_photonIso";
 	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),250,-5,25);
 	  hist="_neutralHadronIso";
-	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),250,-5,25);
+	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),250,-5,25);	  
 	  
 	  histos[myArrayName[p]+"_pt"]->Fill(((TRootElectron*)myArrays[p]->At(o))->Pt());
 	  histos[myArrayName[p]+"_eta"]->Fill(((TRootElectron*)myArrays[p]->At(o))->Eta());
