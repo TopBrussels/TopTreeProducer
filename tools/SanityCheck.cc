@@ -106,6 +106,33 @@ int main(int argc, char *argv[]){
   
   Tokenize(argv[2], fileNames, ";");
 
+  if (fileNames.size() == 1) {
+
+    if (!strstr(fileNames[0].c_str(),".root")) {
+
+      cout << "A file containing a file-list was provided" << endl;
+
+      fileNames.clear();
+
+      string line;
+      ifstream myfile (argv[2]);
+      if (myfile.is_open())
+	{
+	  while ( myfile.good() )
+	    {
+	      getline (myfile,line);
+	      if (strstr(line.c_str(),".root")) 
+		fileNames.push_back((string)line);
+	    }
+	  myfile.close();
+	}
+      
+      else cout << "Unable to open file"; 
+
+
+    }
+
+  }
 
   // CHECKING THE FILECONTENT FOR FILE 0 AND COUNT EVENTS FOR ALL FILES
 
@@ -155,71 +182,69 @@ int main(int argc, char *argv[]){
   string myArrayClass[2000];
   string myArrayName[2000];
 
-  if (!onlyPU) {
-
-    for (int i=1; i<eventTree->GetListOfBranches()->GetEntriesFast(); i++) {
-      
-      TBranch * branch = (TBranch *)eventTree->GetListOfBranches()->At(i);
-      
-      TObject* obj = branch->GetListOfLeaves()->At(0);
-      
-      std::string ObjName = obj->GetName();
-      
-      string::size_type position = ObjName.find_last_of("_");
-      
-      std::string className = "";
-      
-      if (strstr(ObjName.c_str(),"CaloJet"))
-	className="TopTree::TRootCaloJet";
-      else if (strstr(ObjName.c_str(),"PFJet"))
-	className="TopTree::TRootPFJet";
-      else if (strstr(ObjName.c_str(),"JPTJet"))
-	className="TopTree::TRootJPTJet";
-      else if (strstr(ObjName.c_str(),"GenJet"))
-	className="TopTree::TRootGenJet";
-      else if (strstr(ObjName.c_str(),"MCParticles"))
-	className="TopTree::TRootMCParticle";
-      else if (strstr(ObjName.c_str(),"NPGenEvent"))
-	className="TopTree::TRootNPGenEvent";
-      else if (strstr(ObjName.c_str(),"GenEvent"))
-	className="TopTree::TRootGenEvent";
-      else if (strstr(ObjName.c_str(),"Muon"))
-	className="TopTree::TRootMuon";
-      else if (strstr(ObjName.c_str(),"Electron"))
-	className="TopTree::TRootElectron";
-      else if (strstr(ObjName.c_str(),"TCMET"))
-	className="TopTree::TRootMET";
-      else if (strstr(ObjName.c_str(),"CaloMET"))
-	className="TopTree::TRootCaloMET";
-      else if (strstr(ObjName.c_str(),"PFMET"))
-	className="TopTree::TRootPFMET";
-      else if (strstr(ObjName.c_str(),"MET"))
-	className="TopTree::TRootMET";
-      else if (strstr(ObjName.c_str(),"MHT"))
-	className="TopTree::TRootMHT";
-      else if (strstr(ObjName.c_str(),"PrimaryVertex"))
-	className="TopTree::TRootVertex";
-      
-      if (verbosity > 1) cout << "  Found Branch " << className << " " << ObjName.substr(0,position) << endl;
-      
-      arrays[ObjName.substr(0,position)]=std::pair<std::string,TClonesArray*>(className,new TClonesArray());
-      
-      char branchStatus[100];
-      myArrays[nArrays] = new TClonesArray(className.c_str(), 0);
-      myArrayClass[nArrays]=className;
-      myArrayName[nArrays]=ObjName.substr(0,position);
-      
-      string branchName = ObjName.substr(0,position);
-      sprintf(branchStatus,"%s*",branchName.c_str());
-      
-      eventTree->SetBranchStatus(branchStatus,1);
-      eventTree->SetBranchAddress(branchName.c_str(),&myArrays[nArrays]);
-      
-      nArrays++;
-      
-    }
+  for (int i=1; i<eventTree->GetListOfBranches()->GetEntriesFast(); i++) {
     
-  } // end if onlyPU
+    TBranch * branch = (TBranch *)eventTree->GetListOfBranches()->At(i);
+    
+    TObject* obj = branch->GetListOfLeaves()->At(0);
+    
+    std::string ObjName = obj->GetName();
+
+    if (onlyPU && !strstr(ObjName.c_str(),"PrimaryVertex")) continue;
+    
+    string::size_type position = ObjName.find_last_of("_");
+    
+    std::string className = "";
+    
+    if (strstr(ObjName.c_str(),"CaloJet"))
+      className="TopTree::TRootCaloJet";
+    else if (strstr(ObjName.c_str(),"PFJet"))
+      className="TopTree::TRootPFJet";
+    else if (strstr(ObjName.c_str(),"JPTJet"))
+      className="TopTree::TRootJPTJet";
+    else if (strstr(ObjName.c_str(),"GenJet"))
+      className="TopTree::TRootGenJet";
+    else if (strstr(ObjName.c_str(),"MCParticles"))
+      className="TopTree::TRootMCParticle";
+    else if (strstr(ObjName.c_str(),"NPGenEvent"))
+      className="TopTree::TRootNPGenEvent";
+    else if (strstr(ObjName.c_str(),"GenEvent"))
+      className="TopTree::TRootGenEvent";
+    else if (strstr(ObjName.c_str(),"Muon"))
+      className="TopTree::TRootMuon";
+    else if (strstr(ObjName.c_str(),"Electron"))
+      className="TopTree::TRootElectron";
+    else if (strstr(ObjName.c_str(),"TCMET"))
+      className="TopTree::TRootMET";
+    else if (strstr(ObjName.c_str(),"CaloMET"))
+	className="TopTree::TRootCaloMET";
+    else if (strstr(ObjName.c_str(),"PFMET"))
+      className="TopTree::TRootPFMET";
+    else if (strstr(ObjName.c_str(),"MET"))
+      className="TopTree::TRootMET";
+    else if (strstr(ObjName.c_str(),"MHT"))
+      className="TopTree::TRootMHT";
+    else if (strstr(ObjName.c_str(),"PrimaryVertex"))
+      className="TopTree::TRootVertex";
+    
+    if (verbosity > 1) cout << "  Found Branch " << className << " " << ObjName.substr(0,position) << endl;
+      
+    arrays[ObjName.substr(0,position)]=std::pair<std::string,TClonesArray*>(className,new TClonesArray());
+    
+    char branchStatus[100];
+    myArrays[nArrays] = new TClonesArray(className.c_str(), 0);
+    myArrayClass[nArrays]=className;
+    myArrayName[nArrays]=ObjName.substr(0,position);
+    
+    string branchName = ObjName.substr(0,position);
+    sprintf(branchStatus,"%s*",branchName.c_str());
+    
+    eventTree->SetBranchStatus(branchStatus,1);
+    eventTree->SetBranchAddress(branchName.c_str(),&myArrays[nArrays]);
+    
+    nArrays++;
+    
+  } 
 
   /*char branchStatus[100];
   objects.push_back(new TClonesArray("TopTree::TRootMuon", 0));
@@ -229,8 +254,8 @@ int main(int argc, char *argv[]){
 
   //arrays["Muons_selectedPatMuons"]=std::pair<std::string,TClonesArray*>("TopTree::TRootMuon",objects[0]);
 
-  if (verbosity > 1) cout << "eventTree->GetEntries(): " << eventTree->GetEntries() << endl;
-  if (verbosity > 1) cout << "runTree->GetEntries(): " << runTree->GetEntries() << endl;
+  if (verbosity > 1) cout << "eventTree->GetEntriesFast(): " << eventTree->GetEntries() << endl;
+  if (verbosity > 1) cout << "runTree->GetEntriesFast(): " << runTree->GetEntries() << endl;
 
   if (verbosity > 0) cout << "Looping over " << eventTree->GetEntries() << " events " << endl;
   for(unsigned int ievt=0; ievt<eventTree->GetEntries(); ievt++) {
@@ -241,7 +266,7 @@ int main(int argc, char *argv[]){
     
     if (verbosity > 0 && ievt % 1000 == 0) std::cout<<"Processing the "<<ievt<<"th event." << flush<<"\r";
 
-    // PileUp plot
+    // PileUp plot -> not yet in these toptrees
 
     string hist="PileUp";
     if (histos.find(hist) == histos.end()) histos[hist]=new TH1F((hist).c_str(),(hist+";nPu").c_str(),75,0,75);
