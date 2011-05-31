@@ -76,6 +76,7 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
 			localMuon.SetDZError (muon->innerTrack()->dzError());
 
 			localMuon.SetNofValidHits (muon->innerTrack()->numberOfValidHits ());
+			localMuon.SetNofValidPixelHits(muon->innerTrack()->hitPattern().numberOfValidPixelHits());
 			localMuon.SetInnerTrack (TLorentzVector (muon->innerTrack()->px (), muon->innerTrack ()->py(), muon->innerTrack()->pz (), muon->innerTrack()->p ()));
 			localMuon.SetNofPixelLayersWithMeasurement(muon->innerTrack()->hitPattern().pixelLayersWithMeasurement());
 		}
@@ -85,7 +86,7 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
 		{
 		  //localMuon.SetNofValidMuHits(muon->numberOfValidHits());
 		  localMuon.SetNofMatches(muon->numberOfMatches());
-		  
+		  localMuon.SetNofMatchedStations(muon->numberOfMatchedStations());
 		  localMuon.SetChi2 (muon->globalTrack()->normalizedChi2 ());
 		}
 

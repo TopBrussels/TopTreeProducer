@@ -37,7 +37,9 @@ namespace TopTree
 			,chi2_(-9999.)
 		        ,nofValidHits_(-9999)
 		        ,nofValidMuHits_(-9999.)
+		        ,nofValidPixelHits_(-9999.)
 		        ,nofMatches_(-9999.)
+			,nofMatchedStations_(-9999.)
 		        ,nofPixelLayersWithMeasurement_(-9999.)
 			,innerTrack_(TLorentzVector())
 			,dB_(-9999.)
@@ -75,7 +77,9 @@ namespace TopTree
 			,chi2_(muon.chi2_)
 			,nofValidHits_(muon.nofValidHits_)
 		        ,nofValidMuHits_(muon.nofValidMuHits_)
+		        ,nofValidPixelHits_(muon.nofValidPixelHits_)
 		        ,nofMatches_(muon.nofMatches_)
+			,nofMatchedStations_(muon.nofMatchedStations_)
 		        ,nofPixelLayersWithMeasurement_(muon.nofPixelLayersWithMeasurement_)
 			,innerTrack_(muon.innerTrack_)
 			,dB_(muon.dB_)
@@ -113,7 +117,9 @@ namespace TopTree
 			,chi2_(-9999.)
 			,nofValidHits_(-9999)
 		        ,nofValidMuHits_(-9999.)
+		        ,nofValidPixelHits_(-9999.)
 		        ,nofMatches_(-9999.)
+			,nofMatchedStations_(-9999.)
 		        ,nofPixelLayersWithMeasurement_(-9999.)
 			,innerTrack_(TLorentzVector())
 			,dB_(-9999.)
@@ -151,7 +157,9 @@ namespace TopTree
 			,chi2_(-9999.)
 			,nofValidHits_(-9999)
 		        ,nofValidMuHits_(-9999.)
+		        ,nofValidPixelHits_(-9999.)
 		        ,nofMatches_(-9999.)
+			,nofMatchedStations_(-9999.)
 		        ,nofPixelLayersWithMeasurement_(-9999.)
 			,innerTrack_(TLorentzVector())
 			,dB_(-9999.)
@@ -189,7 +197,9 @@ namespace TopTree
 			,chi2_(-9999.)
 			,nofValidHits_(-9999)
 		        ,nofValidMuHits_(-9999.)
+		        ,nofValidPixelHits_(-9999.)
 		        ,nofMatches_(-9999.)
+			,nofMatchedStations_(-9999.)
 		        ,nofPixelLayersWithMeasurement_(-9999.)
 			,dB_(-9999.)
 			,dBError_(-9999.)
@@ -226,7 +236,9 @@ namespace TopTree
 			,chi2_(-9999.)
 			,nofValidHits_(-9999)
 		        ,nofValidMuHits_(-9999.)
+		        ,nofValidPixelHits_(-9999.)
 		        ,nofMatches_(-9999.)
+			,nofMatchedStations_(-9999.)
 		        ,nofPixelLayersWithMeasurement_(-9999.)
 			,innerTrack_(TLorentzVector())
 			,dB_(-9999.)
@@ -264,7 +276,9 @@ namespace TopTree
 			,chi2_(-9999.)
 			,nofValidHits_(-9999)
 		        ,nofValidMuHits_(-9999.)
+		        ,nofValidPixelHits_(-9999.)
 		        ,nofMatches_(-9999.)
+			,nofMatchedStations_(-9999.)
 		        ,nofPixelLayersWithMeasurement_(-9999.)
 			,innerTrack_(TLorentzVector())
 			,dB_(-9999.)
@@ -333,7 +347,9 @@ namespace TopTree
 		Float_t chi2() const { return chi2_;}
 		Int_t nofValidHits() const { return nofValidHits_;} 
 		Int_t nofValidMuHits() const { return nofValidMuHits_;}
+		Int_t nofValidPixelHits() const { return nofValidPixelHits_;}
 		Int_t nofMatches() const { return nofMatches_;}
+		Int_t nofMatchedStations() const { return nofMatchedStations_;}
 		Int_t nofPixelLayersWithMeasurement() const { return nofPixelLayersWithMeasurement_;}
 
 		TLorentzVector innerTrack() const { return innerTrack_;}
@@ -408,7 +424,9 @@ namespace TopTree
 		void SetChi2(Float_t chi2){ chi2_ = chi2;}
 		void SetNofValidHits(Int_t nofValidHits){ nofValidHits_ = nofValidHits;}
 		void SetNofValidMuHits(Int_t x){ nofValidMuHits_ = x;}
+		void SetNofValidPixelHits(Int_t x){ nofValidPixelHits_ = x;}
 		void SetNofMatches(Int_t x){ nofMatches_ = x;}
+		void SetNofMatchedStations(Int_t x){ nofMatchedStations_ = x;}
 		void SetNofPixelLayersWithMeasurement(Int_t x){ nofPixelLayersWithMeasurement_ = x;}
 		void SetInnerTrack (TLorentzVector innerTrack) { innerTrack_ = innerTrack;}
 
@@ -462,7 +480,9 @@ namespace TopTree
 		Float_t chi2_;              // chi2 of global Muon
 		Int_t nofValidHits_;        // nof hits of inner track
 		Int_t nofValidMuHits_;        // nof hits on the global fit
+		Int_t nofValidPixelHits_;   //nof pixel hits of inner track
 		Int_t nofMatches_;        // Segments matched to a GlobalMuon in at least two muon stations, since DT require two-segments to trigger.
+		Int_t nofMatchedStations_; // number of stations with matched segments
 		Int_t nofPixelLayersWithMeasurement_; 
 		TLorentzVector innerTrack_; // inner track 
 
