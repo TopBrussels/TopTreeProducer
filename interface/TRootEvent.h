@@ -38,6 +38,7 @@ namespace TopTree
 			,eventId_(-1)
 			,runId_(-1)
 			,lumiBlockId_(-1)
+			,kt6PFJetsPF2PAT_rho_(-1)
 			,nTracks_(-1)
 			,nHighPurityTracks_(-1)
 			,passGlobalHLT_(false)
@@ -56,6 +57,7 @@ namespace TopTree
 		Int_t eventId() const { return eventId_; }
 		Int_t runId() const { return runId_; }
 		Int_t lumiBlockId() const {return lumiBlockId_; }
+		double kt6PFJetsPF2PAT_rho() const { return kt6PFJetsPF2PAT_rho_; }
 		// generalTracks infos (for cleaning of the scraping events)
 		Int_t nTracks() const { return nTracks_; }
 		Int_t nHighPurityTracks() const { return nHighPurityTracks_; }
@@ -97,6 +99,7 @@ namespace TopTree
 		void setEventId(Int_t eventId) { eventId_ = eventId; }
 		void setRunId(Int_t runId) { runId_ = runId; }
 		void setLumiBlockId(Int_t lumiBlockId) { lumiBlockId_ = lumiBlockId; }
+		void setKt6PFJetsPF2PAT_rho(double kt6PFJetsPF2PAT_rho) { kt6PFJetsPF2PAT_rho_ = kt6PFJetsPF2PAT_rho; }
 		void setNTracks(Int_t nTracks) { nTracks_ = nTracks; }
 		void setNPu(Int_t nBX, Int_t nPu) { nPu_[nBX] = nPu; }
 		void setNHighPurityTracks(Int_t nHighPurityTracks) { nHighPurityTracks_ = nHighPurityTracks; }
@@ -138,6 +141,8 @@ namespace TopTree
 		Int_t runId_;
 		Int_t lumiBlockId_;
 		
+		double kt6PFJetsPF2PAT_rho_;
+		
 		// generalTracks infos (for cleaning of the scraping events)
 		Int_t nTracks_;
 		Int_t nHighPurityTracks_;
@@ -159,7 +164,7 @@ namespace TopTree
 
 		std::map<std::string, std::vector<TopTree::triggeredObject> > triggerFilters_;
 
-		ClassDef (TRootEvent,2);
+		ClassDef (TRootEvent,3);
 	};
 }
 
