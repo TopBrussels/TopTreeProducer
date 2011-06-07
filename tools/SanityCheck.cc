@@ -80,26 +80,59 @@ int main(int argc, char *argv[]){
   //4 Info for each event
   //5 Debug
 
+  bool onlyPU = false;
+
    // RETRIEVING LIST OF FILENAMES TO CHECK
 
-  if (argc != 3) {
+  if (argc < 3) {
 
-    cout << "Usage: ./SanityCheck --inputfiles file1;file2;fileN\n\n" << endl;
+    cout << "Usage: ./SanityCheck --inputfiles file1;file2;fileN (--onlyPU)\n\n" << endl;
 
     exit(0);
 
   } else if (argc == 3 && !strstr(argv[1],"--inputfiles")) {
 
-    cout << "Usage: ./SanityCheck --inputfiles file1;file2;fileN\n\n" << endl;
+    cout << "Usage: ./SanityCheck --inputfiles file1;file2;fileN (--onlyPU)\n\n" << endl;
 
     exit(0);
 
   }
 
+  for (unsigned int i=0;i<argc;i++)
+    if (strstr(argv[i],"--onlyPU"))
+      onlyPU=true;
+
   vector<string> fileNames;
   
   Tokenize(argv[2], fileNames, ";");
 
+  if (fileNames.size() == 1) {
+
+    if (!strstr(fileNames[0].c_str(),".root")) {
+
+      cout << "A file containing a file-list was provided" << endl;
+
+      fileNames.clear();
+
+      string line;
+      ifstream myfile (argv[2]);
+      if (myfile.is_open())
+	{
+	  while ( myfile.good() )
+	    {
+	      getline (myfile,line);
+	      if (strstr(line.c_str(),".root")) 
+		fileNames.push_back((string)line);
+	    }
+	  myfile.close();
+	}
+      
+      else cout << "Unable to open file"; 
+
+
+    }
+
+  }
 
   // CHECKING THE FILECONTENT FOR FILE 0 AND COUNT EVENTS FOR ALL FILES
 
@@ -150,12 +183,14 @@ int main(int argc, char *argv[]){
   string myArrayName[2000];
 
   for (int i=1; i<eventTree->GetListOfBranches()->GetEntriesFast(); i++) {
-      
+    
     TBranch * branch = (TBranch *)eventTree->GetListOfBranches()->At(i);
-      
+    
     TObject* obj = branch->GetListOfLeaves()->At(0);
     
     std::string ObjName = obj->GetName();
+
+    if (onlyPU && !strstr(ObjName.c_str(),"PrimaryVertex")) continue;
     
     string::size_type position = ObjName.find_last_of("_");
     
@@ -182,7 +217,7 @@ int main(int argc, char *argv[]){
     else if (strstr(ObjName.c_str(),"TCMET"))
       className="TopTree::TRootMET";
     else if (strstr(ObjName.c_str(),"CaloMET"))
-      className="TopTree::TRootCaloMET";
+	className="TopTree::TRootCaloMET";
     else if (strstr(ObjName.c_str(),"PFMET"))
       className="TopTree::TRootPFMET";
     else if (strstr(ObjName.c_str(),"MET"))
@@ -190,17 +225,17 @@ int main(int argc, char *argv[]){
     else if (strstr(ObjName.c_str(),"MHT"))
       className="TopTree::TRootMHT";
     else if (strstr(ObjName.c_str(),"PrimaryVertex"))
-    className="TopTree::TRootVertex";
+      className="TopTree::TRootVertex";
     
     if (verbosity > 1) cout << "  Found Branch " << className << " " << ObjName.substr(0,position) << endl;
-  
+      
     arrays[ObjName.substr(0,position)]=std::pair<std::string,TClonesArray*>(className,new TClonesArray());
-
+    
     char branchStatus[100];
     myArrays[nArrays] = new TClonesArray(className.c_str(), 0);
     myArrayClass[nArrays]=className;
     myArrayName[nArrays]=ObjName.substr(0,position);
-
+    
     string branchName = ObjName.substr(0,position);
     sprintf(branchStatus,"%s*",branchName.c_str());
     
@@ -208,8 +243,8 @@ int main(int argc, char *argv[]){
     eventTree->SetBranchAddress(branchName.c_str(),&myArrays[nArrays]);
     
     nArrays++;
-
-  }
+    
+  } 
 
   /*char branchStatus[100];
   objects.push_back(new TClonesArray("TopTree::TRootMuon", 0));
@@ -219,8 +254,8 @@ int main(int argc, char *argv[]){
 
   //arrays["Muons_selectedPatMuons"]=std::pair<std::string,TClonesArray*>("TopTree::TRootMuon",objects[0]);
 
-  if (verbosity > 1) cout << "eventTree->GetEntries(): " << eventTree->GetEntries() << endl;
-  if (verbosity > 1) cout << "runTree->GetEntries(): " << runTree->GetEntries() << endl;
+  if (verbosity > 1) cout << "eventTree->GetEntriesFast(): " << eventTree->GetEntries() << endl;
+  if (verbosity > 1) cout << "runTree->GetEntriesFast(): " << runTree->GetEntries() << endl;
 
   if (verbosity > 0) cout << "Looping over " << eventTree->GetEntries() << " events " << endl;
   for(unsigned int ievt=0; ievt<eventTree->GetEntries(); ievt++) {
@@ -231,17 +266,17 @@ int main(int argc, char *argv[]){
     
     if (verbosity > 0 && ievt % 1000 == 0) std::cout<<"Processing the "<<ievt<<"th event." << flush<<"\r";
 
-    // PileUp plot
+    // PileUp plot -> not yet in these toptrees
 
-    string hist="PileUp";
-    if (histos.find(hist) == histos.end()) histos[hist]=new TH1F((hist).c_str(),(hist+";nPu").c_str(),75,0,75);
+    string hist="pileup";
+    if (histos.find(hist) == histos.end()) histos[hist]=new TH1F((hist).c_str(),(hist+";nPu").c_str(),76,-0.5,75.5);    
     histos[hist]->Fill(event->nPu(0));
     
     hist="kt6PFJetsPF2PAT_rho";
     if (histos.find(hist) == histos.end()) histos[hist]=new TH1F((hist).c_str(),hist.c_str(),80,0,40);
-    histos[hist]->Fill(event->kt6PFJetsPF2PAT_rho()); 
-
-
+    histos[hist]->Fill(event->kt6PFJetsPF2PAT_rho());    
+    
+    
     for (unsigned int p=0; p<nArrays; p++) {
       
       //cout << myArrayClass[p] << " " << myArrayName[p] << " " << myArrays[p]->GetEntries() << endl;
@@ -400,7 +435,7 @@ int main(int argc, char *argv[]){
 	  hist="_photonIso";
 	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),250,-5,25);
 	  hist="_neutralHadronIso";
-	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),250,-5,25);
+	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),250,-5,25);	  
 	  
 	  histos[myArrayName[p]+"_pt"]->Fill(((TRootElectron*)myArrays[p]->At(o))->Pt());
 	  histos[myArrayName[p]+"_eta"]->Fill(((TRootElectron*)myArrays[p]->At(o))->Eta());
@@ -420,6 +455,8 @@ int main(int argc, char *argv[]){
 
   if(verbosity>1) cout <<"Writing the plots" << endl;
 
+  mkdir("Output",0755);
+
   std::map<std::string, vector<TH1F*> > new_histos;
 
   for (std::map<std::string, TH1F* >::const_iterator it=histos.begin(); it != histos.end(); ++it) {
@@ -429,6 +466,7 @@ int main(int argc, char *argv[]){
   }
 
   vector<TCanvas*> canvas; // yes another vector but this is the last one, promise!
+  vector<TFile*> out; // yes another vector but this is the last one, promise!
 
   for (std::map<std::string, vector<TH1F*> >::const_iterator it=new_histos.begin(); it != new_histos.end(); ++it) {
 
@@ -452,7 +490,13 @@ int main(int argc, char *argv[]){
 	string cTitle = ("Output/"+(string)it->second[j]->GetTitle()).c_str(); // this to know in which dir we need to store it
 
 	canvas.push_back(new TCanvas(cName.c_str(),cTitle.c_str(),800,600));
-	
+
+	mkdir(canvas[canvas.size()-1]->GetTitle(),0755);
+
+	string rootFileName= (string)canvas[canvas.size()-1]->GetTitle()+"/"+(string)canvas[canvas.size()-1]->GetName()+".root";
+
+	out.push_back(new TFile(rootFileName.c_str(),"RECREATE"));
+  
 	numCanvas = canvas.size()-1;
 
 	if (it->second.size() == 1)
@@ -477,21 +521,27 @@ int main(int argc, char *argv[]){
 
       it->second[j]->Draw();
 
+      out[out.size()-1]->cd();
+
+      it->second[j]->Write();
+
       dest++;
 
     }
 
   }
-
-  mkdir("Output",0755);
   
   for (unsigned int c=0; c<canvas.size(); c++) {
-
-    mkdir(canvas[c]->GetTitle(),0755);
 
     string saveTitle = (string)canvas[c]->GetTitle()+"/"+(string)canvas[c]->GetName()+".png";
 
     canvas[c]->SaveAs(saveTitle.c_str());
+
+    out[c]->cd();
+
+    canvas[c]->Write();
+
+    out[c]->Close();
 
   }
 
