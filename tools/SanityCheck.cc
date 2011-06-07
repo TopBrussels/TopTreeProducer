@@ -268,8 +268,8 @@ int main(int argc, char *argv[]){
 
     // PileUp plot -> not yet in these toptrees
 
-    string hist="PileUp";
-    if (histos.find(hist) == histos.end()) histos[hist]=new TH1F((hist).c_str(),(hist+";nPu").c_str(),75,0,75);    
+    string hist="pileup";
+    if (histos.find(hist) == histos.end()) histos[hist]=new TH1F((hist).c_str(),(hist+";nPu").c_str(),76,-0.5,75.5);    
     histos[hist]->Fill(event->nPu(0));
     
     hist="kt6PFJetsPF2PAT_rho";
