@@ -38,6 +38,7 @@ namespace TopTree
 			,eventId_(-1)
 			,runId_(-1)
 			,lumiBlockId_(-1)
+			,flavHistPath_(-1)
 			,kt6PFJetsPF2PAT_rho_(-1)
 			,nTracks_(-1)
 			,nHighPurityTracks_(-1)
@@ -57,6 +58,7 @@ namespace TopTree
 		Int_t eventId() const { return eventId_; }
 		Int_t runId() const { return runId_; }
 		Int_t lumiBlockId() const {return lumiBlockId_; }
+		Int_t flavorHistoryPath() const { return flavHistPath_; }
 		double kt6PFJetsPF2PAT_rho() const { return kt6PFJetsPF2PAT_rho_; }
 		// generalTracks infos (for cleaning of the scraping events)
 		Int_t nTracks() const { return nTracks_; }
@@ -99,6 +101,7 @@ namespace TopTree
 		void setEventId(Int_t eventId) { eventId_ = eventId; }
 		void setRunId(Int_t runId) { runId_ = runId; }
 		void setLumiBlockId(Int_t lumiBlockId) { lumiBlockId_ = lumiBlockId; }
+		void setflavorHistoryPath(Int_t flavHistPath) { flavHistPath_ = flavHistPath; }
 		void setKt6PFJetsPF2PAT_rho(double kt6PFJetsPF2PAT_rho) { kt6PFJetsPF2PAT_rho_ = kt6PFJetsPF2PAT_rho; }
 		void setNTracks(Int_t nTracks) { nTracks_ = nTracks; }
 		void setNPu(Int_t nBX, Int_t nPu) { nPu_[nBX] = nPu; }
@@ -141,16 +144,16 @@ namespace TopTree
 		Int_t runId_;
 		Int_t lumiBlockId_;
 		
+		Int_t flavHistPath_; // flavor history path, see https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideFlavorHistory
 		double kt6PFJetsPF2PAT_rho_;
 		
 		// generalTracks infos (for cleaning of the scraping events)
 		Int_t nTracks_;
 		Int_t nHighPurityTracks_;
-
+		
 		// PileUp info
-
 		std::map<Int_t,Int_t> nPu_;
-
+		
 		// Trigger Infos
 		Bool_t passGlobalHLT_;
 		std::vector<Bool_t> trigHLT_;
