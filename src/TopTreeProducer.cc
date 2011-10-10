@@ -360,10 +360,13 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	iEvent.getByLabel("kt6PFJetsPF2PAT","rho",rho);
 	rootEvent->setKt6PFJetsPF2PAT_rho(*rho);
 	
-	//flavorHistory path
-	edm::Handle<unsigned int> flavHist;
-	iEvent.getByLabel("flavorHistoryFilter","",flavHist);
-	rootEvent->setflavorHistoryPath(*flavHist);
+	if(doMC)
+	{
+		//flavorHistory path
+		edm::Handle<unsigned int> flavHist;
+		iEvent.getByLabel("flavorHistoryFilter","",flavHist);
+		rootEvent->setflavorHistoryPath(*flavHist);
+	}
 	
 	if(runGeneralTracks) // Calculate and fill number of tracks and number of high purity tracks
 	{
