@@ -19,6 +19,13 @@ PFMETAnalyzer::PFMETAnalyzer(const edm::ParameterSet& producersNames, const edm:
 
 }
 
+PFMETAnalyzer::PFMETAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
+{
+	vPFmetProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("vpfmetProducer");
+	metProducer_ = edm::InputTag(vPFmetProducer[iter]);
+	myMETAnalyzer = new METAnalyzer(producersNames, myConfig, verbosity);
+}
+
 PFMETAnalyzer::~PFMETAnalyzer()
 {
 }

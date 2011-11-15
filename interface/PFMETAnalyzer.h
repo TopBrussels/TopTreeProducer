@@ -28,6 +28,7 @@ class PFMETAnalyzer{
 public:
 	PFMETAnalyzer(const edm::ParameterSet& producersNames);
 	PFMETAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity);
+	PFMETAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity);
 	~PFMETAnalyzer();
 	void SetVerbosity(int verbosity) {verbosity_ = verbosity; };
 	void Process(const edm::Event& iEvent, TClonesArray* rootMET);
@@ -36,7 +37,7 @@ private:
 	int verbosity_;
 	edm::InputTag metProducer_;
 	bool useMC_;
-
+  std::vector<std::string> vPFmetProducer;
 	METAnalyzer* myMETAnalyzer;
 };
 

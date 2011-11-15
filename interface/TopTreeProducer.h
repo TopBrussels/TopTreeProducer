@@ -114,6 +114,7 @@ private:
 	std::vector<std::string> vJPTJetProducer;
 	std::vector<std::string> vMuonProducer;
 	std::vector<std::string> vElectronProducer;
+  std::vector<std::string> vPFmetProducer;
 	int nTotEvt_;
 	HLTAnalyzer* hltAnalyzer_;
 	TRootRun* runInfos_;
@@ -127,7 +128,7 @@ private:
 	std::vector<TClonesArray*> vmuons;
 	std::vector<TClonesArray*> velectrons;
 	TClonesArray* CALOmet;
-	TClonesArray* PFmet;
+	std::vector<TClonesArray*> vPFmets;
 	TClonesArray* TCmet;
 	TClonesArray* genEvent;
 	TClonesArray* NPgenEvent;

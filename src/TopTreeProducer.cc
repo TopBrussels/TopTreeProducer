@@ -53,6 +53,7 @@ void TopTreeProducer::beginJob()
 	vJPTJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vJPTJetProducer",defaultVec);
 	vMuonProducer = producersNames_.getUntrackedParameter<vector<string> >("vmuonProducer",defaultVec);
 	vElectronProducer = producersNames_.getUntrackedParameter<vector<string> >("velectronProducer",defaultVec);
+  vPFmetProducer = producersNames_.getUntrackedParameter<vector<string> >("vpfmetProducer",defaultVec);
 	
 	for(unsigned int s=0;s<vGenJetProducer.size();s++){
 		TClonesArray* a;
@@ -83,6 +84,11 @@ void TopTreeProducer::beginJob()
 		TClonesArray* a;
 		velectrons.push_back(a);
 	}
+  
+  for(unsigned int s=0; s<vPFmetProducer.size(); s++) {
+    TClonesArray* a;
+    vPFmets.push_back(a);
+  }
 
 	nTotEvt_ = 0;
 	
@@ -216,9 +222,13 @@ void TopTreeProducer::beginJob()
 	if(doPFMET)
 	{
 		if(verbosity>0) cout << "ParticleFlowMET info will be added to rootuple" << endl;
-		PFmet = new TClonesArray("TopTree::TRootPFMET", 1000);
-		eventTree_->Branch ("PFMET", "TClonesArray", &PFmet);
-	}
+    for(unsigned int s=0; s<vPFmetProducer.size(); s++) {
+		  vPFmets[s] = new TClonesArray("TopTree::TRootPFMET", 1000);
+      char name[100];
+			sprintf(name,"PFMET_%s",vPFmetProducer[s].c_str());
+  		eventTree_->Branch (name, "TClonesArray", &vPFmets[s]);
+	  }
+  }
 
 	if(doTCMET)
 	{
@@ -534,9 +544,11 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	if(doPFMET)
 	{
 		if(verbosity>1) cout << endl << "Analysing ParticleFlow Missing Et..." << endl;
-		PFMETAnalyzer* myMETAnalyzer = new PFMETAnalyzer(producersNames_, myConfig_, verbosity);
-		myMETAnalyzer->Process(iEvent, PFmet);
-		delete myMETAnalyzer;
+    for(unsigned int s=0; s<vPFmetProducer.size(); s++) {
+      PFMETAnalyzer* myPFMETAnalyzer = new PFMETAnalyzer(producersNames_, s, myConfig_, verbosity);
+      myPFMETAnalyzer->Process(iEvent, vPFmets[s]);
+      delete myPFMETAnalyzer;
+    }
 	}
 
 	if(doTCMET)
@@ -606,7 +618,11 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		}
 	}
 	if(doCaloMET) (*CALOmet).Delete();
-	if(doPFMET) (*PFmet).Delete();
+	if(doPFMET) {
+    for(unsigned int s=0; s<vPFmetProducer.size(); s++) {
+      (*vPFmets[s]).Delete();
+    }
+  }
 	if(doTCMET) (*TCmet).Delete();
 	if(doGenEvent) (*genEvent).Delete();
 	if(doNPGenEvent) (*NPgenEvent).Delete();
