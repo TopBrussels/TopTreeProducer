@@ -36,7 +36,7 @@ JPTJetAnalyzer::~JPTJetAnalyzer()
 {
 }
 
-void JPTJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets)
+void JPTJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets, const edm::EventSetup& iSetup)
 {
 
 	unsigned int nJets=0;
@@ -58,7 +58,7 @@ void JPTJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets)
 		if( (*patJets)[j].isJPTJet() ) jetType="JPT";
 			
 		// Call JetAnalyzer to fill the basic Jet Properties
-		TRootJet tempJet = (TRootJet) myJetAnalyzer->Process( &( *(jet) ));
+		TRootJet tempJet = (TRootJet) myJetAnalyzer->Process( &( *(jet) ), iSetup);
 
 		TRootJPTJet localJet = TRootJPTJet(tempJet);
 

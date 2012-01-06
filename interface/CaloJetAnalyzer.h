@@ -28,7 +28,7 @@ public:
 	CaloJetAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity);
 	~CaloJetAnalyzer();
 	void SetVerbosity(int verbosity) {verbosity_ = verbosity; };
-	void Process(const edm::Event& iEvent, TClonesArray* rootCaloJets);
+	void Process(const edm::Event& iEvent, TClonesArray* rootCaloJets, const edm::EventSetup& iSetup);
 
 private:
 	int verbosity_;

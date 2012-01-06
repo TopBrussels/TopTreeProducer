@@ -14,6 +14,10 @@
 #include "DataFormats/PatCandidates/interface/Jet.h"
 #include "DataFormats/PatCandidates/interface/JetCorrFactors.h"
 
+#include "RecoBTag/Records/interface/BTagPerformanceRecord.h"
+#include "CondFormats/PhysicsToolsObjects/interface/BinningPointByMap.h"
+#include "RecoBTag/PerformanceDB/interface/BtagPerformance.h"
+
 #include "../interface/TRootJet.h"
 
 using namespace TopTree;
@@ -26,7 +30,7 @@ public:
 	JetAnalyzer(const edm::ParameterSet& myConfig, int verbosity);
 	~JetAnalyzer();
 	void SetVerbosity(int verbosity) {verbosity_ = verbosity; };
-	TRootJet Process(const reco::Jet* jet);
+	TRootJet Process(const reco::Jet* jet, const edm::EventSetup& iSetup);
 
 private:
 	int verbosity_;

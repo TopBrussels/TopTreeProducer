@@ -30,6 +30,9 @@
 <use   name="Geometry/CaloTopology"/>
 <use   name="RecoCaloTools/MetaCollections"/>
 <use   name="AnalysisDataFormats/TopObjects"/>
+<use   name="RecoBTag/PerformanceDB"/>
+<use   name="CondFormats/PhysicsToolsObjects"/>
+<use   name="RecoBTag/Records"/>
 <use   name="clhep"/>
 <use   name="root"/>
 <flags   LDFLAGS="-lTMVA"/>

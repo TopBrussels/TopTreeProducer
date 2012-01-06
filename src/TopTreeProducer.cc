@@ -439,7 +439,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		if(verbosity>1) cout << endl << "Analysing Calojets collection (for JetStudy)..." << endl;
 		for(unsigned int s=0;s<vCaloJetProducer.size();s++){
 			CaloJetAnalyzer* myCaloJetAnalyzer = new CaloJetAnalyzer(producersNames_, s, myConfig_, verbosity);
-			myCaloJetAnalyzer->Process(iEvent, vcaloJets[s]);
+			myCaloJetAnalyzer->Process(iEvent, vcaloJets[s], iSetup);
 			delete myCaloJetAnalyzer;
 		}
 	}
@@ -462,7 +462,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		if(verbosity>1) cout << endl << "Analysing PFjets collection..." << endl;
 		for(unsigned int s=0;s<vPFJetProducer.size();s++){
 			PFJetAnalyzer* myPFJetAnalyzer = new PFJetAnalyzer(producersNames_, s,  myConfig_, verbosity);
-			myPFJetAnalyzer->Process(iEvent, vpfJets[s]);
+			myPFJetAnalyzer->Process(iEvent, vpfJets[s], iSetup);
 			delete myPFJetAnalyzer;
 		}
 	}
@@ -473,7 +473,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		if(verbosity>1) cout << endl << "Analysing JPT jets collection..." << endl;
 		for(unsigned int s=0;s<vJPTJetProducer.size();s++){
 			JPTJetAnalyzer* myJPTJetAnalyzer = new JPTJetAnalyzer(producersNames_, s,  myConfig_, verbosity);
-			myJPTJetAnalyzer->Process(iEvent, vjptJets[s]);
+			myJPTJetAnalyzer->Process(iEvent, vjptJets[s], iSetup);
 			delete myJPTJetAnalyzer;
 		}
 	}

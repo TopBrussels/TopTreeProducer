@@ -28,7 +28,7 @@ public:
 	JPTJetAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity);
 	~JPTJetAnalyzer();
 	void SetVerbosity(int verbosity) {verbosity_ = verbosity; };
-	void Process(const edm::Event& iEvent, TClonesArray* rootJPTJets);
+	void Process(const edm::Event& iEvent, TClonesArray* rootJPTJets, const edm::EventSetup& iSetup);
 
 private:
 	int verbosity_;

@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <map>
 
 // Specific methods for PF and Calo can be found on:
 // http://cms-service-sdtweb.web.cern.ch/cms-service-sdtweb/doxygen/CMSSW_3_5_2/doc/html/df/d60/DataFormats_2PatCandidates_2interface_2Jet_8h-source.html#l00212
@@ -61,6 +62,18 @@ namespace TopTree
 			    JetCorrName_[i] = jet.JetCorrName_[i];
 			    JetCorrValue_[i] = jet.JetCorrValue_[i];
 			  }
+				for(std::map<std::string,float>::const_iterator it = jet.mistag_SF_.begin(); it != jet.mistag_SF_.end(); it++) {
+					mistag_SF_[it->first] = it->second;
+				}
+				for(std::map<std::string,float>::const_iterator it = jet.btag_SF_.begin(); it != jet.btag_SF_.end(); it++) {
+					btag_SF_[it->first] = it->second;
+				}
+				for(std::map<std::string,float>::const_iterator it = jet.mistag_SFerr_.begin(); it != jet.mistag_SFerr_.end(); it++) {
+					mistag_SFerr_[it->first] = it->second;
+				}
+				for(std::map<std::string,float>::const_iterator it = jet.btag_SFerr_.begin(); it != jet.btag_SFerr_.end(); it++) {
+					btag_SFerr_[it->first] = it->second;
+				}
 			}
 
 		TRootJet(Double_t px, Double_t py, Double_t pz, Double_t e) :
@@ -169,6 +182,15 @@ namespace TopTree
 		Float_t btag_combinedSecondaryVertexBJetTags() const { return btag_combinedSecondaryVertexBJetTags_; }
 		Float_t btag_combinedSecondaryVertexMVABJetTags() const { return btag_combinedSecondaryVertexMVABJetTags_; }
 
+		std::map<std::string, float> getMistag_SF() const { 
+			std::cout << mistag_SF_.size() << endl;
+			return mistag_SF_;
+		}
+		std::map<std::string, float> getBtag_SF() const { return btag_SF_;}
+		std::map<std::string, float> getMistag_SFerr() const { return mistag_SFerr_;}
+		std::map<std::string, float> getBtag_SFerr() const { return btag_SFerr_;}
+
+
 		Int_t partonFlavour() const {return partonFlavour_; }
 		//Float_t partonFlavour() const {return partonFlavour_; }
 		Bool_t isTopJet() const { return isTopJet_; }
@@ -214,6 +236,39 @@ namespace TopTree
 		void setBtag_combinedSecondaryVertexMVABJetTags(Float_t btag_combinedSecondaryVertexMVABJetTags) { btag_combinedSecondaryVertexMVABJetTags_ = btag_combinedSecondaryVertexMVABJetTags; }
 		void setPartonFlavour(Int_t partonFlavour) { partonFlavour_ = partonFlavour; }
 		void setIsTopJet(Bool_t isTopJet) { isTopJet_ = isTopJet; }
+
+		//btag scalefactors
+		void setMistag_SF(std::map<std::string, float> mistag_SF) { 
+			//std::cout << mistag_SF.size() << std::endl;
+			for(std::map<std::string,float>::const_iterator it = mistag_SF.begin(); it != mistag_SF.end(); it++) {
+				//std::cout << "mistag_SF " << it->first << " " << it->second << std::endl;
+				mistag_SF_[it->first] = it->second;
+			}
+			//std::cout << mistag_SF_.size() << std::endl;
+			//for(std::map<std::string,float>::const_iterator it = mistag_SF_.begin(); it != mistag_SF_.end(); it++) {
+			//	std::cout << "mistag_SF_ " << it->first << " " << it->second << std::endl;
+			//}
+							
+		}
+		//std::cout << mistag_SF_.size() << std::endl;
+		
+		void setBtag_SF(std::map<std::string, float> btag_SF) { 
+			for(std::map<std::string,float>::const_iterator it = btag_SF.begin(); it != btag_SF.end(); it++) {
+				btag_SF_[it->first] = it->second;
+			}				
+		}
+		void setMistag_SFerr(std::map<std::string, float> mistag_SFerr) { 
+			for(std::map<std::string,float>::const_iterator it = mistag_SFerr.begin(); it != mistag_SFerr.end(); it++) {
+				mistag_SFerr_[it->first] = it->second;
+			}				
+		}
+		void setBtag_SFerr(std::map<std::string, float> btag_SFerr) { 
+			for(std::map<std::string,float>::const_iterator it = btag_SFerr.begin(); it != btag_SFerr.end(); it++) {
+				btag_SFerr_[it->first] = it->second;
+			}				
+		}
+
+
 		// JEC
 		void setJetCorrFactor(int pos, std::string name, float factor)
 		{  
@@ -250,11 +305,18 @@ namespace TopTree
 		Float_t btag_combinedSecondaryVertexBJetTags_;
 		Float_t btag_combinedSecondaryVertexMVABJetTags_;
 
+		//btag scalefactors
+		std::map<std::string, float> mistag_SF_;
+		std::map<std::string, float> btag_SF_;
+		std::map<std::string, float> mistag_SFerr_;
+		std::map<std::string, float> btag_SFerr_;
+		
+
 		//MC info
 		Int_t partonFlavour_;
 		Bool_t isTopJet_;				// Is parton matched to the jet a decay product of the top quark ?
 
-		ClassDef (TRootJet,1);
+		ClassDef (TRootJet,2);
 	};
 }
 

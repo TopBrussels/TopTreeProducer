@@ -34,7 +34,7 @@ PFJetAnalyzer::~PFJetAnalyzer()
 {
 }
 
-void PFJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets)
+void PFJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets, const edm::EventSetup& iSetup)
 {
 
 	unsigned int nJets=0;
@@ -64,7 +64,7 @@ void PFJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets)
 		if( (*patJets)[j].isPFJet() ) jetType="PF";
 			
 		// Call JetAnalyzer to fill the basic Jet Properties
-		TRootJet tempJet = myJetAnalyzer->Process( &( *(jet) ));
+		TRootJet tempJet = myJetAnalyzer->Process( &( *(jet) ), iSetup);
 		
 		TRootPFJet localJet = TRootPFJet(tempJet);
 
