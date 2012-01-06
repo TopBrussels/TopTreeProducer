@@ -37,5 +37,3 @@
 <use   name="root"/>
 <flags   LDFLAGS="-lTMVA"/>
 <flags   EDM_PLUGIN="1"/>
-<export>
-</export>
