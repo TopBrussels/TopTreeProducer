@@ -42,6 +42,7 @@ void GenJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenJets
       || genJetProducer_.label()=="ak5GenJets"
       || genJetProducer_.label()=="ak7GenJets"
       || genJetProducer_.label()=="ak5GenJetsNoE"
+      || genJetProducer_.label()=="ak5GenJetsNoNu"
 	) jetType="CALO";
 
 	edm::Handle < edm::View <reco::GenJet> > recoGenJets;
