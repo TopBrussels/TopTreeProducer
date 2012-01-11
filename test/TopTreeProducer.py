@@ -95,6 +95,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		doPFJet = cms.untracked.bool(True),
     doJPTJet = cms.untracked.bool(False),
 		doJPTJetId = cms.untracked.bool(True),
+    doBtagSF = cms.untracked.bool(False),
 		doMuon = cms.untracked.bool(True),
 		doElectron = cms.untracked.bool(True),
 		runSuperCluster = cms.untracked.bool(False),#true only if SuperCluster are stored

@@ -36,6 +36,7 @@ private:
 	int verbosity_;
 	bool useMC_;
 	bool isData_;
+  bool doBtagSF_;
 
 };
 
