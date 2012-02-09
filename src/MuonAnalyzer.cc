@@ -84,7 +84,7 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
 
 		if(muon->isGlobalMuon ())
 		{
-		  //localMuon.SetNofValidMuHits(muon->numberOfValidHits());
+		  localMuon.SetNofValidMuHits(muon->globalTrack()->hitPattern().numberOfValidMuonHits());
 		  localMuon.SetNofMatches(muon->numberOfMatches());
 		  localMuon.SetNofMatchedStations(muon->numberOfMatchedStations());
 		  localMuon.SetChi2 (muon->globalTrack()->normalizedChi2 ());
@@ -113,9 +113,9 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
 					localMuon.SetVetoIso (true);
 			}
 			
-			if(patMuon->isGlobalMuon ()) {
-			    localMuon.SetNofValidMuHits(patMuon->numberOfValidHits());
-			}
+//			if(patMuon->isGlobalMuon ()) {// same as muon->innerTrack()->numberOfValidHits ()
+//			    localMuon.SetNofValidMuHits(patMuon->numberOfValidHits());
+//			}
 		
 			if (useMC_)
 			{
