@@ -891,6 +891,8 @@ namespace TopTree
 		Float_t photonIso() const { return photonIso_; }
 		Float_t neutralHadronIso() const { return neutralHadronIso_; }
 
+		Float_t relativePfIso03() const { return( (chargedHadronIso_+neutralHadronIso_+photonIso_)/((TLorentzVector)(*this)).Pt() );}
+
 		Int_t isRobustLoose() const { return idCutBasedRobustLoose_; }
 		Int_t isRobustTight() const { return idCutBasedRobustTight_; }
 		Int_t isRobustHighEnergy() const{ return idCutBasedRobustHighEnergy_; }
