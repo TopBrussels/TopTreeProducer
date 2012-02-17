@@ -101,15 +101,19 @@ namespace TopTree
 			idCutBasedRobustHighEnergy_(-9999),
 			idCategorizedLoose_(-9999),
 			idCategorizedTight_(-9999),
-/*			idCiCVeryLoose_(-9999),
+			
+			idCiCVeryLoose_(-9999),
 			idCiCLoose_(-9999),
 			idCiCMedium_(-9999),
 			idCiCTight_(-9999),
 			idCiCSuperTight_(-9999),
 			idCiCHyperTight1_(-9999),
-			idCiCHyperTight2_(-9999),
-			idCiCHyperTight3_(-9999),
-			idCiCHyperTight4_(-9999),*/
+			idWP95_(-9999),
+			idWP90_(-9999),
+			idWP85_(-9999),
+			idWP80_(-9999),
+			idWP70_(-9999),
+			idWP60_(-9999),
 			classification_(-9999),
 			fBrem_(-9999.),
 			isConversion_(true),
@@ -203,15 +207,18 @@ namespace TopTree
 			idCutBasedRobustHighEnergy_(e.idCutBasedRobustHighEnergy_),
 			idCategorizedLoose_(e.idCategorizedLoose_),
 			idCategorizedTight_(e.idCategorizedTight_),
-/*			idCiCVeryLoose_(e.idCiCVeryLoose_),
+			idCiCVeryLoose_(e.idCiCVeryLoose_),
 			idCiCLoose_(e.idCiCLoose_),
 			idCiCMedium_(e.idCiCMedium_),
 			idCiCTight_(e.idCiCTight_),
 			idCiCSuperTight_(e.idCiCSuperTight_),
 			idCiCHyperTight1_(e.idCiCHyperTight1_),
-			idCiCHyperTight2_(e.idCiCHyperTight2_),
-			idCiCHyperTight3_(e.idCiCHyperTight3_),
-			idCiCHyperTight4_(e.idCiCHyperTight4_),*/
+			idWP95_(e.idWP95_),
+			idWP90_(e.idWP90_),
+			idWP85_(e.idWP85_),
+			idWP80_(e.idWP80_),
+			idWP70_(e.idWP70_),
+			idWP60_(e.idWP60_),
 			classification_(e.classification_),
 			fBrem_(e.fBrem_),
 			isConversion_(e.isConversion_),
@@ -305,15 +312,18 @@ namespace TopTree
 			idCutBasedRobustHighEnergy_(-9999),
 			idCategorizedLoose_(-9999),
 			idCategorizedTight_(-9999),
-/*			idCiCVeryLoose_(-9999),
+			idCiCVeryLoose_(-9999),
 			idCiCLoose_(-9999),
 			idCiCMedium_(-9999),
 			idCiCTight_(-9999),
 			idCiCSuperTight_(-9999),
 			idCiCHyperTight1_(-9999),
-			idCiCHyperTight2_(-9999),
-			idCiCHyperTight3_(-9999),
-			idCiCHyperTight4_(-9999),*/
+			idWP95_(-9999),
+			idWP90_(-9999),
+			idWP85_(-9999),
+			idWP80_(-9999),
+			idWP70_(-9999),
+			idWP60_(-9999),
 		        classification_(-9999),
 			fBrem_(-9999.),
 			isConversion_(true),
@@ -407,15 +417,18 @@ namespace TopTree
 			idCutBasedRobustHighEnergy_(-9999),
 			idCategorizedLoose_(-9999),
 			idCategorizedTight_(-9999),
-/*			idCiCVeryLoose_(-9999),
+			idCiCVeryLoose_(-9999),
 			idCiCLoose_(-9999),
 			idCiCMedium_(-9999),
 			idCiCTight_(-9999),
 			idCiCSuperTight_(-9999),
 			idCiCHyperTight1_(-9999),
-			idCiCHyperTight2_(-9999),
-			idCiCHyperTight3_(-9999),
-			idCiCHyperTight4_(-9999),*/
+			idWP95_(-9999),
+			idWP90_(-9999),
+			idWP85_(-9999),
+			idWP80_(-9999),
+			idWP70_(-9999),
+			idWP60_(-9999),
 		        classification_(-9999),
 			fBrem_(-9999.),
 			isConversion_(true),
@@ -509,15 +522,18 @@ namespace TopTree
 			idCutBasedRobustHighEnergy_(-9999),
 			idCategorizedLoose_(-9999),
 			idCategorizedTight_(-9999),
-/*			idCiCVeryLoose_(-9999),
+			idCiCVeryLoose_(-9999),
 			idCiCLoose_(-9999),
 			idCiCMedium_(-9999),
 			idCiCTight_(-9999),
 			idCiCSuperTight_(-9999),
 			idCiCHyperTight1_(-9999),
-			idCiCHyperTight2_(-9999),
-			idCiCHyperTight3_(-9999),
-			idCiCHyperTight4_(-9999),*/
+			idWP95_(-9999),
+			idWP90_(-9999),
+			idWP85_(-9999),
+			idWP80_(-9999),
+			idWP70_(-9999),
+			idWP60_(-9999),
 		        classification_(-9999),
 			fBrem_(-9999.),
 			isConversion_(true),
@@ -611,16 +627,19 @@ namespace TopTree
 			idCutBasedRobustHighEnergy_(-9999),
 			idCategorizedLoose_(-9999),
 			idCategorizedTight_(-9999),
-/*			idCiCVeryLoose_(-9999),
+			idCiCVeryLoose_(-9999),
 			idCiCLoose_(-9999),
 			idCiCMedium_(-9999),
 			idCiCTight_(-9999),
 			idCiCSuperTight_(-9999),
 			idCiCHyperTight1_(-9999),
-			idCiCHyperTight2_(-9999),
-			idCiCHyperTight3_(-9999),
-			idCiCHyperTight4_(-9999),*/
-		       classification_(-9999),
+			idWP95_(-9999),
+			idWP90_(-9999),
+			idWP85_(-9999),
+			idWP80_(-9999),
+			idWP70_(-9999),
+			idWP60_(-9999),
+		        classification_(-9999),
 			fBrem_(-9999.),
 			isConversion_(true),
 		        Dist_(9999),
@@ -713,15 +732,18 @@ namespace TopTree
 			idCutBasedRobustHighEnergy_(-9999),
 			idCategorizedLoose_(-9999),
 			idCategorizedTight_(-9999),
-/*			idCiCVeryLoose_(-9999),
+			idCiCVeryLoose_(-9999),
 			idCiCLoose_(-9999),
 			idCiCMedium_(-9999),
 			idCiCTight_(-9999),
 			idCiCSuperTight_(-9999),
 			idCiCHyperTight1_(-9999),
-			idCiCHyperTight2_(-9999),
-			idCiCHyperTight3_(-9999),
-			idCiCHyperTight4_(-9999),*/
+			idWP95_(-9999),
+			idWP90_(-9999),
+			idWP85_(-9999),
+			idWP80_(-9999),
+			idWP70_(-9999),
+			idWP60_(-9999),
 		        classification_(-9999),
 			fBrem_(-9999.),
 			isConversion_(true),
@@ -891,24 +913,25 @@ namespace TopTree
 		Float_t photonIso() const { return photonIso_; }
 		Float_t neutralHadronIso() const { return neutralHadronIso_; }
 
-		Float_t relativePfIso03() const { return( (chargedHadronIso_+neutralHadronIso_+photonIso_)/((TLorentzVector)(*this)).Pt() );}
-
 		Int_t isRobustLoose() const { return idCutBasedRobustLoose_; }
 		Int_t isRobustTight() const { return idCutBasedRobustTight_; }
 		Int_t isRobustHighEnergy() const{ return idCutBasedRobustHighEnergy_; }
 		Int_t isLoose() const { return idCategorizedLoose_; }
 		Int_t isTight() const { return idCategorizedTight_; }
-/*		Int_t CiCVeryLooseId() const { return idCiCVeryLoose_; }
+		Int_t CiCVeryLooseId() const { return idCiCVeryLoose_; }
 		Int_t CiCLooseId() const { return idCiCLoose_; }
 		Int_t CiCMediumId() const { return idCiCMedium_; }
 		Int_t CiCTightId() const { return idCiCTight_; }
 		Int_t CiCSuperTightId() const { return idCiCSuperTight_; }
 		Int_t CiCHyperTightId_1() const { return idCiCHyperTight1_; }
-		Int_t CiCHyperTightId_2() const{ return idCiCHyperTight2_; }
-		Int_t CiCHyperTightId_3() const{ return idCiCHyperTight3_; }
-		Int_t CiCHyperTightId_4() const{ return idCiCHyperTight4_; } */
+		Int_t idWP95() const { return idWP95_; }
+		Int_t idWP90() const { return idWP90_; }
+		Int_t idWP85() const { return idWP85_; }
+		Int_t idWP80() const { return idWP80_; }
+		Int_t idWP70() const { return idWP70_; }
+		Int_t idWP60() const { return idWP60_; }
 		
-		Float_t fbrem() const { return fBrem_; };
+		Float_t fbrem() const { return fBrem_; }
 		Int_t numberOfBrems() const { return (basicClusterSize() - 1); }
 		Int_t classification() const { return classification_; }
 		Bool_t isFromConversion() const	{ return ((bool)isConversion_); }
@@ -1078,16 +1101,20 @@ namespace TopTree
 		void setIDCategorizedLoose(Int_t idCutBasedCategorizedLoose) { idCategorizedLoose_ = idCutBasedCategorizedLoose; }
 		void setIDCategorizedTight(Int_t idCutBasedCategorizedTight) { idCategorizedTight_ = idCutBasedCategorizedTight; }
 
-/*		void setIDCiCVeryLoose(Int_t cicVL) { idCiCVeryLoose_ = cicVL; }
+		void setIDCiCVeryLoose(Int_t cicVL) { idCiCVeryLoose_ = cicVL; }
 		void setIDCiCLoose(Int_t cicL) { idCiCLoose_ = cicL; }
 		void setIDCiCMedium(Int_t cicM) { idCiCMedium_ = cicM; }
 		void setIDCiCTight(Int_t cicT) { idCiCTight_ = cicT; }
 		void setIDCiCSuperTight(Int_t cicST) { idCiCSuperTight_ = cicST; }
 		void setIDCiCHyperTight1(Int_t cicHT1) { idCiCHyperTight1_ = cicHT1; }
-		void setIDCiCHyperTight2(Int_t cicHT2) { idCiCHyperTight2_ = cicHT2; }
-		void setIDCiCHyperTight3(Int_t cicHT3) { idCiCHyperTight3_ = cicHT3; }
-		void setIDCiCHyperTight4(Int_t cicHT4) { idCiCHyperTight4_ = cicHT4; } */
-
+		
+		void setIDWP95(Int_t wp95) { idWP95_= wp95; }
+		void setIDWP90(Int_t wp90) { idWP90_= wp90; }
+		void setIDWP85(Int_t wp85) { idWP85_= wp85; }
+		void setIDWP80(Int_t wp80) { idWP80_= wp80; }
+		void setIDWP70(Int_t wp70) { idWP70_= wp70; }
+		void setIDWP60(Int_t wp60) { idWP60_= wp60; }
+		
 		void setFbrem(Float_t f) { fBrem_ = f; }
 		void setClassification(Int_t i) { classification_ = i; }
 		void setConversion(Bool_t is) {	isConversion_ = is; }
@@ -1227,16 +1254,23 @@ namespace TopTree
 		Int_t idCategorizedTight_;         // Category based ID - Different tight thresholds on H/E, DeltaEta, DeltaPhi, SigmaEtaEta, eSeedOverPin for differents regions in the E/p vs fBrem plane
 
 // New Identification
-/*		Int_t idCiCVeryLoose_;             //Cuts in Categories for 35x: https://twiki.cern.ch/twiki/bin/viewauth/CMS/SWGuideCategoryBasedElectronID#The_Cut_Variables
+		Int_t idCiCVeryLoose_;             //Cuts in Categories for 35x: https://twiki.cern.ch/twiki/bin/viewauth/CMS/SWGuideCategoryBasedElectronID#The_Cut_Variables
 		Int_t idCiCLoose_;
 		Int_t idCiCMedium_;
 		Int_t idCiCTight_;
 		Int_t idCiCSuperTight_;
 		Int_t idCiCHyperTight1_;
-		Int_t idCiCHyperTight2_;
-		Int_t idCiCHyperTight3_;
-		Int_t idCiCHyperTight4_;*/
+		
+// Working points from PAT
 
+		Int_t  idWP95_;
+		Int_t  idWP90_;
+		Int_t  idWP85_;
+		Int_t  idWP80_;
+		Int_t  idWP70_;
+		Int_t  idWP60_ ;
+
+		
 // Electron classification && fBrem ====================
 		Int_t classification_;             
 		Float_t fBrem_;

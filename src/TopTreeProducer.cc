@@ -286,7 +286,8 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	rootEvent->setNb(nTotEvt_);
 	rootEvent->setEventId(iEvent.id().event());
 	rootEvent->setRunId(iEvent.id().run());
-	rootEvent->setLumiBlockId(iEvent.luminosityBlock());
+
+        rootEvent->setLumiBlockId(iEvent.luminosityBlock());
 
 	// do PileUp info
 
@@ -303,12 +304,11 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	    //std::cout << " Pileup Information: bunchXing, nvtx: " << PVI->getBunchCrossing() << " " << PVI->getPU_NumInteractions() << std::endl;
 
 	    rootEvent->setNPu(PVI->getBunchCrossing(),PVI->getPU_NumInteractions());
-	  
+	    if(PVI->getBunchCrossing() == 0) rootEvent->setNTruePU(PVI->getTrueNumInteractions());
 	  }
 
 	  //cout << rootEvent->nPu(0) << endl;
 	  //cout << rootEvent->nPu(1) << endl;
-
 	}
 
 	// we need to store some triggerFilter info to be able to emulate triggers on older data
