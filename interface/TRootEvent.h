@@ -42,7 +42,7 @@ namespace TopTree
 			,kt6PFJetsPF2PAT_rho_(-1)
 			,nTracks_(-1)
 			,nHighPurityTracks_(-1)
-      ,nTruePU_(-1.)
+			,nTruePU_(-1.)
 			,passGlobalHLT_(false)
 			,trigHLT_(0)
 			,idParton1_(-1)
@@ -66,7 +66,7 @@ namespace TopTree
 		Int_t nHighPurityTracks() const { return nHighPurityTracks_; }
 		// PileUp info
 		Int_t nPu(Int_t nBX) { return ( nPu_.find(nBX) != nPu_.end() ? nPu_[nBX] : -9999 ); }
-    Float_t nTruePU() { return nTruePU_; }
+		Float_t nTruePU() { return nTruePU_; }
 		// Trigger decision
 		Bool_t passGlobalHLT() const { return passGlobalHLT_; }
 		UInt_t nHLTPaths() const { return trigHLT_.size(); }
@@ -107,7 +107,7 @@ namespace TopTree
 		void setKt6PFJetsPF2PAT_rho(double kt6PFJetsPF2PAT_rho) { kt6PFJetsPF2PAT_rho_ = kt6PFJetsPF2PAT_rho; }
 		void setNTracks(Int_t nTracks) { nTracks_ = nTracks; }
 		void setNPu(Int_t nBX, Int_t nPu) { nPu_[nBX] = nPu; }
-    void setNTruePU(Float_t nTruePU) { nTruePU_ = nTruePU; }
+		void setNTruePU(Float_t nTruePU) { nTruePU_ = nTruePU; }
 		void setNHighPurityTracks(Int_t nHighPurityTracks) { nHighPurityTracks_ = nHighPurityTracks; }
 
 		void setGlobalHLT(Bool_t passGlobalHLT) { passGlobalHLT_ = passGlobalHLT; }
@@ -156,8 +156,7 @@ namespace TopTree
 		
 		// PileUp info
 		std::map<Int_t,Int_t> nPu_;
-    Float_t nTruePU_; // the *true* mean number of pileup interactions for this event from which each bunch crossing has been sampled
-		
+		Float_t nTruePU_;
 		// Trigger Infos
 		Bool_t passGlobalHLT_;
 		std::vector<Bool_t> trigHLT_;
