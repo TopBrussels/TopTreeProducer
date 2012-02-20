@@ -40,6 +40,7 @@
 #include "../interface/METAnalyzer.h"
 #include "../interface/CaloMETAnalyzer.h"
 #include "../interface/PFMETAnalyzer.h"
+#include "../interface/TrackMETAnalyzer.h"
 #include "../interface/TCMETAnalyzer.h"
 #include "../interface/GenEventAnalyzer.h"
 #include "../interface/NPGenEventAnalyzer.h"
@@ -58,6 +59,7 @@
 #include "../interface/TRootMET.h"
 #include "../interface/TRootCaloMET.h"
 #include "../interface/TRootPFMET.h"
+#include "../interface/TRootTrackMET.h"
 #include "../interface/TRootGenEvent.h"
 #include "../interface/TRootNPGenEvent.h"
 #include "../interface/TRootSpinCorrGen.h"
@@ -103,6 +105,7 @@ private:
 	bool doElectron;
 	bool doCaloMET;
 	bool doPFMET;
+	bool doTrackMET;
 	bool doTCMET;
 	bool doGenEvent;
 	bool doNPGenEvent;
@@ -114,7 +117,8 @@ private:
 	std::vector<std::string> vJPTJetProducer;
 	std::vector<std::string> vMuonProducer;
 	std::vector<std::string> vElectronProducer;
-  std::vector<std::string> vPFmetProducer;
+        std::vector<std::string> vPFmetProducer;
+        std::vector<std::string> vTrackmetProducer; 
 	int nTotEvt_;
 	HLTAnalyzer* hltAnalyzer_;
 	TRootRun* runInfos_;
@@ -129,6 +133,7 @@ private:
 	std::vector<TClonesArray*> velectrons;
 	TClonesArray* CALOmet;
 	std::vector<TClonesArray*> vPFmets;
+	std::vector<TClonesArray*> vTrackmets;
 	TClonesArray* TCmet;
 	TClonesArray* genEvent;
 	TClonesArray* NPgenEvent;
