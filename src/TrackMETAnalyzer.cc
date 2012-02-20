@@ -7,23 +7,23 @@ using namespace edm;
 
 TrackMETAnalyzer::TrackMETAnalyzer(const edm::ParameterSet& producersNames):verbosity_(0), useMC_(false)
 {
-	metProducer_ = producersNames.getParameter<edm::InputTag>("TrackMETProducer");
-	myMETAnalyzer = new METAnalyzer(producersNames);
+	metProducer_ = producersNames.getParameter<edm::InputTag>("TrackmetProducer");
+	myMETAnalyzer = new RecoMETAnalyzer(producersNames);
 }
 
 TrackMETAnalyzer::TrackMETAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
 {
-	metProducer_ = producersNames.getParameter<edm::InputTag>("TrackMETProducer");
+	metProducer_ = producersNames.getParameter<edm::InputTag>("TrackmetProducer");
 	useMC_ = myConfig.getUntrackedParameter<bool>("doMETMC");
-	myMETAnalyzer = new METAnalyzer(producersNames,myConfig, verbosity);
+	myMETAnalyzer = new RecoMETAnalyzer(producersNames,myConfig, verbosity);
 
 }
 
 TrackMETAnalyzer::TrackMETAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
 {
-	vTrackMETProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("vTrackMETProducer");
+	vTrackMETProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("vtrackmetProducer");
 	metProducer_ = edm::InputTag(vTrackMETProducer[iter]);
-	myMETAnalyzer = new METAnalyzer(producersNames, myConfig, verbosity);
+	myMETAnalyzer = new RecoMETAnalyzer(producersNames, myConfig, verbosity);
 }
 
 TrackMETAnalyzer::~TrackMETAnalyzer()
@@ -55,5 +55,6 @@ void TrackMETAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootMET)
 		new( (*rootMET)[j] ) TRootTrackMET(localMET);
 		if(verbosity_>2) cout << "   ["<< setw(3) << j << "] " << localMET << endl;
 	}
+	
 
 }

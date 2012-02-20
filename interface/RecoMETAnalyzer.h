@@ -1,5 +1,5 @@
-#ifndef TrackMETAnalyzer_h
-#define TrackMETAnalyzer_h
+#ifndef RecoMETAnalyzer_h
+#define RecoMETAnalyzer_h
 
 // system include files
 #include <iostream>
@@ -11,35 +11,31 @@
 
 //#include "DataFormats/METReco/interface/MET.h"
 //#include "DataFormats/METReco/interface/METFwd.h"
+#include "DataFormats/METReco/interface/CaloMET.h"
+#include "DataFormats/METReco/interface/CaloMETCollection.h"
 #include "DataFormats/METReco/interface/PFMET.h"
 #include "DataFormats/METReco/interface/PFMETCollection.h"
 #include "DataFormats/PatCandidates/interface/MET.h"
 
 #include "../interface/TRootEvent.h"
-#include "../interface/TRootTrackMET.h"
-
-#include "../interface/RecoMETAnalyzer.h"
+#include "../interface/TRootMET.h"
 
 #include "TClonesArray.h"
 
 
-class TrackMETAnalyzer{
+class RecoMETAnalyzer{
 	
 public:
-	TrackMETAnalyzer(const edm::ParameterSet& producersNames);
-	TrackMETAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity);
-	TrackMETAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity);
-	~TrackMETAnalyzer();
+	RecoMETAnalyzer(const edm::ParameterSet& producersNames);
+	RecoMETAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity);
+	~RecoMETAnalyzer();
 	void SetVerbosity(int verbosity) {verbosity_ = verbosity; };
-	void Process(const edm::Event& iEvent, TClonesArray* rootMET);
+	TopTree::TRootMET Process(const reco::Candidate* met);
 
 private:
 	int verbosity_;
 	edm::InputTag metProducer_;
 	bool useMC_;
-  std::vector<std::string> vTrackMETProducer;
-	RecoMETAnalyzer* myMETAnalyzer;
 };
 
 #endif
-
