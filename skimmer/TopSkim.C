@@ -22,6 +22,7 @@
 #include "../interface/TRootMET.h"
 #include "../interface/TRootCaloMET.h"
 #include "../interface/TRootPFMET.h"
+#include "../interface/TRootTrackMET.h"
 #include "../interface/TRootGenEvent.h"
 #include "../interface/TRootNPGenEvent.h"
 #include "../interface/TRootSpinCorrGen.h"
@@ -792,6 +793,33 @@ int main()
 					if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
 					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
 				}
+	                     else if(objectsToKeep[j].type == "TopTree::TRootTrackMET")
+                                {
+                                        TRootTrackMET* met;
+                                        int METKept=0;
+                                        met = (TRootTrackMET*) (objectsToKeep[j].inArray)->At(0);
+                                        bool keepMET = true;
+
+                                        if(met->Pt() < objectsToKeep[j].minPt || fabs(met->Eta()) > objectsToKeep[j].maxEta)
+                                        {
+                                                keepMET = false;
+                                                if( verbosity > 1 ) cout << "skip TrackMET with pT = " << met->Pt() << " and eta = " << met->Eta() << endl;
+                                        }
+                                        else METKept++;
+
+                                        if( ! objectsToKeep[j].skipObjects || keepMET )
+                                                new( (*(objectsToKeep[j].outArray))[0] ) TRootMET(*met);
+
+                                        if(METKept < objectsToKeep[j].minNObjects)
+                                        {
+                                                keepEvent = false;
+                                                if( verbosity > 1 ) cout << "Too small number of selected TrackMET: METKept = " << METKept << endl;
+                                        }
+
+                                        if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
+                                        if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
+                                }
+			
 			
 				else if(objectsToKeep[j].type == "TopTree::TRootElectron")
 				{
