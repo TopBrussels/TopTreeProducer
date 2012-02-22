@@ -5,6 +5,7 @@
 #include "../interface/TRootCaloJet.h"
 #include "../interface/TRootPFJet.h"
 #include "../interface/TRootMET.h"
+#include "../interface/TRootTrackMET.h"
 #include "../interface/TRootGenEvent.h"
 #include "../interface/TRootEvent.h"
 #include "../interface/TRootRun.h"
@@ -135,6 +136,8 @@ int main(int argc, char** argv){
 	  className="TopTree::TRootPFMET";
 	else if (strstr(ObjName.c_str(),"MET"))
 	  className="TopTree::TRootMET";
+	else if (strsts(ObjName.c_str(), "TrackMET"))
+	  className="TopTree::TRootTrackMET";  
 	else if (strstr(ObjName.c_str(),"MHT"))
 	  className="TopTree::TRootMHT";
 	else if (strstr(ObjName.c_str(),"PrimaryVertex"))
