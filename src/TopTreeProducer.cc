@@ -539,16 +539,13 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		}
 	}	
 
-	// Lazy Tools to calculate Cluster shape variables
-	EcalClusterLazyTools* lazyTools = 0; //obsolete!!!
-	
 	// Electrons
 	if(doElectron)
 	{
 		if(verbosity>1) cout << endl << "Analysing electrons collection..." << endl;
 		for(unsigned int s=0;s<vElectronProducer.size();s++){
 		  ElectronAnalyzer* myElectronAnalyzer = new ElectronAnalyzer(producersNames_, s, myConfig_, verbosity);
-		  myElectronAnalyzer->Process(iEvent, velectrons[s], *lazyTools, iSetup);
+		  myElectronAnalyzer->Process(iEvent, velectrons[s], iSetup);
 		  delete myElectronAnalyzer;
 		}
 	}	

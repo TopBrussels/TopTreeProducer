@@ -21,9 +21,6 @@
 #include "FWCore/Common/interface/TriggerNames.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
 
-#include "RecoEcal/EgammaCoreTools/interface/EcalClusterLazyTools.h"
-#include "RecoEgamma/EgammaTools/interface/ConversionLikelihoodCalculator.h"
-
 #include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h" 
 
 #include "../interface/HLTAnalyzer.h"
