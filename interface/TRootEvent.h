@@ -40,6 +40,7 @@ namespace TopTree
 			,lumiBlockId_(-1)
 			,flavHistPath_(-1)
 			,kt6PFJetsPF2PAT_rho_(-1)
+      ,kt6PFJetsForIsolation_rho_(-1)
 			,nTracks_(-1)
 			,nHighPurityTracks_(-1)
 			,nTruePU_(-1.)
@@ -61,6 +62,7 @@ namespace TopTree
 		Int_t lumiBlockId() const {return lumiBlockId_; }
 		Int_t flavorHistoryPath() const { return flavHistPath_; }
 		double kt6PFJetsPF2PAT_rho() const { return kt6PFJetsPF2PAT_rho_; }
+    double kt6PFJetsForIsolation_rho() const { return kt6PFJetsForIsolation_rho_; }
 		// generalTracks infos (for cleaning of the scraping events)
 		Int_t nTracks() const { return nTracks_; }
 		Int_t nHighPurityTracks() const { return nHighPurityTracks_; }
@@ -105,6 +107,7 @@ namespace TopTree
 		void setLumiBlockId(Int_t lumiBlockId) { lumiBlockId_ = lumiBlockId; }
 		void setflavorHistoryPath(Int_t flavHistPath) { flavHistPath_ = flavHistPath; }
 		void setKt6PFJetsPF2PAT_rho(double kt6PFJetsPF2PAT_rho) { kt6PFJetsPF2PAT_rho_ = kt6PFJetsPF2PAT_rho; }
+    void setKt6PFJetsForIsolation_rho(double kt6PFJetsForIsolation_rho) { kt6PFJetsForIsolation_rho_ = kt6PFJetsForIsolation_rho; }
 		void setNTracks(Int_t nTracks) { nTracks_ = nTracks; }
 		void setNPu(Int_t nBX, Int_t nPu) { nPu_[nBX] = nPu; }
 		void setNTruePU(Float_t nTruePU) { nTruePU_ = nTruePU; }
@@ -149,6 +152,7 @@ namespace TopTree
 		
 		Int_t flavHistPath_; // flavor history path, see https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideFlavorHistory
 		double kt6PFJetsPF2PAT_rho_;
+    double kt6PFJetsForIsolation_rho_;
 		
 		// generalTracks infos (for cleaning of the scraping events)
 		Int_t nTracks_;

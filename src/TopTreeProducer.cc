@@ -42,7 +42,7 @@ void TopTreeProducer::beginJob()
 	doCaloMET = myConfig_.getUntrackedParameter<bool>("doCaloMET",false);
 	doPFMET = myConfig_.getUntrackedParameter<bool>("doPFMET",false);
 	doTrackMET = myConfig_.getUntrackedParameter<bool>("doTrackMET",false);
-        doTCMET = myConfig_.getUntrackedParameter<bool>("doTCMET",false);
+  doTCMET = myConfig_.getUntrackedParameter<bool>("doTCMET",false);
 	drawMCTree = myConfig_.getUntrackedParameter<bool>("drawMCTree",false);
 	doGenEvent = myConfig_.getUntrackedParameter<bool>("doGenEvent",false);
 	doNPGenEvent = myConfig_.getUntrackedParameter<bool>("doNPGenEvent",false);
@@ -54,8 +54,8 @@ void TopTreeProducer::beginJob()
 	vJPTJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vJPTJetProducer",defaultVec);
 	vMuonProducer = producersNames_.getUntrackedParameter<vector<string> >("vmuonProducer",defaultVec);
 	vElectronProducer = producersNames_.getUntrackedParameter<vector<string> >("velectronProducer",defaultVec);
-        vPFmetProducer = producersNames_.getUntrackedParameter<vector<string> >("vpfmetProducer",defaultVec);
-        vTrackmetProducer = producersNames_.getUntrackedParameter<vector<string> >("vtrackmetProducer",defaultVec);	
+  vPFmetProducer = producersNames_.getUntrackedParameter<vector<string> >("vpfmetProducer",defaultVec);
+  vTrackmetProducer = producersNames_.getUntrackedParameter<vector<string> >("vtrackmetProducer",defaultVec);	
 
 	for(unsigned int s=0;s<vGenJetProducer.size();s++){
 		TClonesArray* a;
@@ -390,6 +390,11 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	edm::Handle<double> rho;
 	iEvent.getByLabel("kt6PFJetsPF2PAT","rho",rho);
 	rootEvent->setKt6PFJetsPF2PAT_rho(*rho);
+  
+  //density rho for electron isolation (effective area stuff)
+  edm::Handle<double> rhoIso;
+  iEvent.getByLabel("kt6PFJetsForIsolation","rho",rhoIso);
+  rootEvent->setKt6PFJetsForIsolation_rho(*rhoIso);
 	
 	if(doMC)
 	{
