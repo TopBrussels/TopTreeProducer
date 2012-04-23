@@ -51,6 +51,10 @@ void PFMETAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootMET)
 		TRootPFMET localMET = TRootPFMET(tempMET);
 
 		localMET.setMETType(2); // 2 = PFMET
+    
+    const pat::MET *patMET = dynamic_cast<const pat::MET*>(&*met);
+    
+    localMET.setPFMETFraction(patMET->NeutralEMFraction(), patMET->NeutralHadEtFraction(), patMET->ChargedEMEtFraction(), patMET->ChargedHadEtFraction(), patMET->MuonEtFraction(), patMET->Type6EtFraction(), patMET->Type7EtFraction());
 
 		new( (*rootMET)[j] ) TRootPFMET(localMET);
 		if(verbosity_>2) cout << "   ["<< setw(3) << j << "] " << localMET << endl;
