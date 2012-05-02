@@ -23,7 +23,7 @@ namespace TopTree
 			,d0error_(-9999.)
 			,dz_(-9999.)
 			,dzerror_(-9999.)
-			,chi2_(-9999.)
+			,chi2_(+9999.0)
 		  ,nofValidHits_(-9999)
 		  ,nofValidMuHits_(-9999)
 		  ,nofValidPixelHits_(-9999)
@@ -34,6 +34,7 @@ namespace TopTree
 			,algo_(-9999)
 			,id_(-9999)
 			,chargedHadronIso_(-9999.)
+			,puChargedHadronIso_(-9999.)
 			,photonIso_(-9999.)
 			,neutralHadronIso_(-9999.)
 			{;}
@@ -60,6 +61,7 @@ namespace TopTree
 			,algo_(muon.algo_)
 			,id_(muon.id_)
 			,chargedHadronIso_(muon.chargedHadronIso_)
+			,puChargedHadronIso_(muon.puChargedHadronIso_)
 			,photonIso_(muon.photonIso_)
 			,neutralHadronIso_(muon.neutralHadronIso_)
 			{;}
@@ -75,7 +77,7 @@ namespace TopTree
 			,d0error_(-9999.)
 			,dz_(-9999.)
 			,dzerror_(-9999.)
-			,chi2_(-9999.)
+			,chi2_(+9999.0)
 			,nofValidHits_(-9999)
 		  ,nofValidMuHits_(-9999)
 		  ,nofValidPixelHits_(-9999)
@@ -86,6 +88,7 @@ namespace TopTree
 			,algo_(-9999)
 			,id_(-9999)
 			,chargedHadronIso_(-9999.)
+			,puChargedHadronIso_(-9999.)
 			,photonIso_(-9999.)
 			,neutralHadronIso_(-9999.)
 			{;}
@@ -101,7 +104,7 @@ namespace TopTree
 			,d0error_(-9999.)
 			,dz_(-9999.)
 			,dzerror_(-9999.)
-			,chi2_(-9999.)
+			,chi2_(+9999.0)
 			,nofValidHits_(-9999)
 		  ,nofValidMuHits_(-9999)
 		  ,nofValidPixelHits_(-9999)
@@ -112,6 +115,7 @@ namespace TopTree
 			,algo_(-9999)
 			,id_(-9999)
 			,chargedHadronIso_(-9999.)
+			,puChargedHadronIso_(-9999.)
 			,photonIso_(-9999.)
 			,neutralHadronIso_(-9999.)
 			{;}
@@ -127,7 +131,7 @@ namespace TopTree
 			,d0error_(-9999.)
 			,dz_(-9999.)
 			,dzerror_(-9999.)
-			,chi2_(-9999.)
+			,chi2_(+9999.0)
 			,nofValidHits_(-9999)
 		  ,nofValidMuHits_(-9999)
 		  ,nofValidPixelHits_(-9999)
@@ -138,6 +142,7 @@ namespace TopTree
 			,algo_(-9999)
 			,id_(-9999)
 			,chargedHadronIso_(-9999.)
+			,puChargedHadronIso_(-9999.)
 			,photonIso_(-9999.)
 			,neutralHadronIso_(-9999.)
 			{;}
@@ -153,7 +158,7 @@ namespace TopTree
 			,d0error_(-9999.)
 			,dz_(-9999.)
 			,dzerror_(-9999.)
-			,chi2_(-9999.)
+			,chi2_(+9999.0)
 			,nofValidHits_(-9999)
 		  ,nofValidMuHits_(-9999)
 		  ,nofValidPixelHits_(-9999)
@@ -164,6 +169,7 @@ namespace TopTree
 			,algo_(-9999)
 			,id_(-9999)
 			,chargedHadronIso_(-9999.)
+			,puChargedHadronIso_(-9999.)
 			,photonIso_(-9999.)
 			,neutralHadronIso_(-9999.)
 			{;}
@@ -179,7 +185,7 @@ namespace TopTree
 			,d0error_(-9999.)
 			,dz_(-9999.)
 			,dzerror_(-9999.)
-			,chi2_(-9999.)
+			,chi2_(+9999.0)
 			,nofValidHits_(-9999)
 		  ,nofValidMuHits_(-9999)
 		  ,nofValidPixelHits_(-9999)
@@ -190,6 +196,7 @@ namespace TopTree
 			,algo_(-9999)
 			,id_(-9999)
 			,chargedHadronIso_(-9999.)
+			,puChargedHadronIso_(-9999.)
 			,photonIso_(-9999.)
 			,neutralHadronIso_(-9999.)
 			{;}
@@ -236,6 +243,7 @@ namespace TopTree
 		Float_t dB() const { return dB_; }
 		Float_t dBError() const { return dBError_; }
 		Float_t chargedHadronIso() const { return chargedHadronIso_; }
+		Float_t puChargedHadronIso() const { return puChargedHadronIso_; }
 		Float_t photonIso() const { return photonIso_; }
 		Float_t neutralHadronIso() const { return neutralHadronIso_; }
 		Float_t relativePfIso03() const { return( (chargedHadronIso_+neutralHadronIso_+photonIso_)/((TLorentzVector)(*this)).Pt() );}
@@ -285,6 +293,7 @@ namespace TopTree
 		void SetdB(Float_t dB) { dB_ = dB; }
 		void SetdBError(Float_t dBError) { dBError_ = dBError; }
 		void SetChargedHadronIso(Float_t chargedHadronIso){chargedHadronIso_ = chargedHadronIso;}
+		void setPuChargedHadronIso(Float_t iso) { puChargedHadronIso_ = iso; }
 		void SetPhotonIso(Float_t photonIso){photonIso_ = photonIso;}
 		void SetNeutralHadronIso(Float_t neutralHadronIso){neutralHadronIso_ = neutralHadronIso;}
 
@@ -328,6 +337,7 @@ namespace TopTree
 		// TMLastStationLoose=0001000 , TMLastStationTight=0010000 , TM2DCompatibilityLoose=0100000 , TM2DCompatibilityTight=1000000
 		
 		Float_t chargedHadronIso_;  // charged hadron isolation value computed in the PF2PAT sequence, and stored in the pat muon
+		Float_t puChargedHadronIso_;
 		Float_t photonIso_;         // photon isolation value computed in the PF2PAT sequence, and stored in the pat muon
 		Float_t neutralHadronIso_;  // neutral hadron isolation value computed in the PF2PAT sequence, and stored in the pat muon
 
