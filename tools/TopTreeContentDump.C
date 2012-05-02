@@ -136,7 +136,7 @@ int main(int argc, char** argv){
 	  className="TopTree::TRootPFMET";
 	else if (strstr(ObjName.c_str(),"MET"))
 	  className="TopTree::TRootMET";
-	else if (strsts(ObjName.c_str(), "TrackMET"))
+	else if (strstr(ObjName.c_str(), "TrackMET"))
 	  className="TopTree::TRootTrackMET";  
 	else if (strstr(ObjName.c_str(),"MHT"))
 	  className="TopTree::TRootMHT";
