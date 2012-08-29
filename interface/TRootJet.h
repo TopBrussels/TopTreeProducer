@@ -35,6 +35,11 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
+			,btag_softMuonBJetTags_(-9999.)
+			,btag_softMuonByPtBJetTags_(-9999.)
+			,btag_softMuonByIP3dBJetTags_(-9999.)
+			,btag_softElectronByPtBJetTags_(-9999.)
+			,btag_softElectronByIP3dBJetTags_(-9999.)
 			,partonFlavour_(-999)
 			,isTopJet_(false)
 			{;}
@@ -53,28 +58,33 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighPurBJetTags_(jet.btag_simpleSecondaryVertexHighPurBJetTags_)
 			,btag_combinedSecondaryVertexBJetTags_(jet.btag_combinedSecondaryVertexBJetTags_)
 			,btag_combinedSecondaryVertexMVABJetTags_(jet.btag_combinedSecondaryVertexMVABJetTags_)
+			,btag_softMuonBJetTags_(jet.btag_softMuonBJetTags_)
+			,btag_softMuonByPtBJetTags_(jet.btag_softMuonByPtBJetTags_)
+			,btag_softMuonByIP3dBJetTags_(jet.btag_softMuonByIP3dBJetTags_)
+			,btag_softElectronByPtBJetTags_(jet.btag_softElectronByPtBJetTags_)
+			,btag_softElectronByIP3dBJetTags_(jet.btag_softElectronByIP3dBJetTags_)
 			,partonFlavour_(jet.partonFlavour_)
 			,isTopJet_(jet.isTopJet_)
 		  {
-			  unsigned int size = sizeof(JetCorrName_)/sizeof(JetCorrName_[0]);
-			  for (unsigned int i=0; i<size; i++)
-				{
-			    JetCorrName_[i] = jet.JetCorrName_[i];
-			    JetCorrValue_[i] = jet.JetCorrValue_[i];
-			  }
-				for(std::map<std::string,float>::const_iterator it = jet.mistag_SF_.begin(); it != jet.mistag_SF_.end(); it++) {
-					mistag_SF_[it->first] = it->second;
-				}
-				for(std::map<std::string,float>::const_iterator it = jet.btag_SF_.begin(); it != jet.btag_SF_.end(); it++) {
-					btag_SF_[it->first] = it->second;
-				}
-				for(std::map<std::string,float>::const_iterator it = jet.mistag_SFerr_.begin(); it != jet.mistag_SFerr_.end(); it++) {
-					mistag_SFerr_[it->first] = it->second;
-				}
-				for(std::map<std::string,float>::const_iterator it = jet.btag_SFerr_.begin(); it != jet.btag_SFerr_.end(); it++) {
-					btag_SFerr_[it->first] = it->second;
-				}
+			unsigned int size = sizeof(JetCorrName_)/sizeof(JetCorrName_[0]);
+			for (unsigned int i=0; i<size; i++)
+			{
+				JetCorrName_[i] = jet.JetCorrName_[i];
+			    	JetCorrValue_[i] = jet.JetCorrValue_[i];
 			}
+			for(std::map<std::string,float>::const_iterator it = jet.mistag_SF_.begin(); it != jet.mistag_SF_.end(); it++) {
+				mistag_SF_[it->first] = it->second;
+			}
+			for(std::map<std::string,float>::const_iterator it = jet.btag_SF_.begin(); it != jet.btag_SF_.end(); it++) {
+				btag_SF_[it->first] = it->second;
+			}
+			for(std::map<std::string,float>::const_iterator it = jet.mistag_SFerr_.begin(); it != jet.mistag_SFerr_.end(); it++) {
+				mistag_SFerr_[it->first] = it->second;
+			}
+			for(std::map<std::string,float>::const_iterator it = jet.btag_SFerr_.begin(); it != jet.btag_SFerr_.end(); it++) {
+				btag_SFerr_[it->first] = it->second;
+			}
+		}
 
 		TRootJet(Double_t px, Double_t py, Double_t pz, Double_t e) :
 			TRootParticle(px,py,pz,e)
@@ -90,6 +100,11 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
+			,btag_softMuonBJetTags_(-9999.)
+			,btag_softMuonByPtBJetTags_(-9999.)
+			,btag_softMuonByIP3dBJetTags_(-9999.)
+			,btag_softElectronByPtBJetTags_(-9999.)
+			,btag_softElectronByIP3dBJetTags_(-9999.)
 			,partonFlavour_(-9999)
 			,isTopJet_(false)
 			{;}
@@ -108,6 +123,11 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
+			,btag_softMuonBJetTags_(-9999.)
+			,btag_softMuonByPtBJetTags_(-9999.)
+			,btag_softMuonByIP3dBJetTags_(-9999.)
+			,btag_softElectronByPtBJetTags_(-9999.)
+			,btag_softElectronByIP3dBJetTags_(-9999.)
 			,partonFlavour_(-9999)
 			,isTopJet_(false)
 			{;}
@@ -126,6 +146,11 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
+			,btag_softMuonBJetTags_(-9999.)
+			,btag_softMuonByPtBJetTags_(-9999.)
+			,btag_softMuonByIP3dBJetTags_(-9999.)
+			,btag_softElectronByPtBJetTags_(-9999.)
+			,btag_softElectronByIP3dBJetTags_(-9999.)
 			,partonFlavour_(-9999)
 			,isTopJet_(false)
 			{;}
@@ -144,6 +169,11 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
+			,btag_softMuonBJetTags_(-9999.)
+			,btag_softMuonByPtBJetTags_(-9999.)
+			,btag_softMuonByIP3dBJetTags_(-9999.)
+			,btag_softElectronByPtBJetTags_(-9999.)
+			,btag_softElectronByIP3dBJetTags_(-9999.)
 			,partonFlavour_(-9999)
 			,isTopJet_(false)
 			{;}
@@ -162,12 +192,16 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
+			,btag_softMuonBJetTags_(-9999.)
+			,btag_softMuonByPtBJetTags_(-9999.)
+			,btag_softMuonByIP3dBJetTags_(-9999.)
+			,btag_softElectronByPtBJetTags_(-9999.)
+			,btag_softElectronByIP3dBJetTags_(-9999.)
 			,partonFlavour_(-9999)
 			,isTopJet_(false)
 			{;}
 
 		~TRootJet() {;}
-
 
 		Int_t jetType() const { return jetType_; }
 		Int_t nConstituents() const { return nConstituents_; }
@@ -181,6 +215,11 @@ namespace TopTree
 		Float_t btag_simpleSecondaryVertexHighPurBJetTags() const { return btag_simpleSecondaryVertexHighPurBJetTags_; }
 		Float_t btag_combinedSecondaryVertexBJetTags() const { return btag_combinedSecondaryVertexBJetTags_; }
 		Float_t btag_combinedSecondaryVertexMVABJetTags() const { return btag_combinedSecondaryVertexMVABJetTags_; }
+		Float_t btag_softMuonBJetTags() const { return btag_softMuonBJetTags_; }
+		Float_t btag_softMuonByPtBJetTags() const { return btag_softMuonByPtBJetTags_; }
+		Float_t	btag_softMuonByIP3dBJetTags() const { return btag_softMuonByIP3dBJetTags_; }
+		Float_t	btag_softElectronByPtBJetTags() const { return btag_softElectronByPtBJetTags_; }
+		Float_t	btag_softElectronByIP3dBJetTags() const { return btag_softElectronByIP3dBJetTags_; }
 
 		std::map<std::string, float> getMistag_SF() const { 
 			std::cout << mistag_SF_.size() << endl;
@@ -234,24 +273,21 @@ namespace TopTree
 		void setBtag_simpleSecondaryVertexHighPurBJetTags(Float_t btag_simpleSecondaryVertexHighPurBJetTags) { btag_simpleSecondaryVertexHighPurBJetTags_ = btag_simpleSecondaryVertexHighPurBJetTags; }
 		void setBtag_combinedSecondaryVertexBJetTags(Float_t btag_combinedSecondaryVertexBJetTags) { btag_combinedSecondaryVertexBJetTags_ = btag_combinedSecondaryVertexBJetTags; }
 		void setBtag_combinedSecondaryVertexMVABJetTags(Float_t btag_combinedSecondaryVertexMVABJetTags) { btag_combinedSecondaryVertexMVABJetTags_ = btag_combinedSecondaryVertexMVABJetTags; }
+		void setBtag_softMuonBJetTags(Float_t btag_softMuonBJetTags) { btag_softMuonBJetTags_ = btag_softMuonBJetTags; }
+		void setBtag_softMuonByPtBJetTags(Float_t btag_softMuonByPtBJetTags) { btag_softMuonByPtBJetTags_ = btag_softMuonByPtBJetTags; }
+		void setBtag_softMuonByIP3dBJetTags(Float_t btag_softMuonByIP3dBJetTags) { btag_softMuonByIP3dBJetTags_ = btag_softMuonByIP3dBJetTags; }
+		void setBtag_softElectronByPtBJetTags(Float_t btag_softElectronByPtBJetTags) { btag_softElectronByPtBJetTags_ = btag_softElectronByPtBJetTags; }
+		void setBtag_softElectronByIP3dBJetTags(Float_t btag_softElectronByIP3dBJetTags) { btag_softElectronByIP3dBJetTags_ = btag_softElectronByIP3dBJetTags; }
+
 		void setPartonFlavour(Int_t partonFlavour) { partonFlavour_ = partonFlavour; }
 		void setIsTopJet(Bool_t isTopJet) { isTopJet_ = isTopJet; }
 
 		//btag scalefactors
 		void setMistag_SF(std::map<std::string, float> mistag_SF) { 
-			//std::cout << mistag_SF.size() << std::endl;
 			for(std::map<std::string,float>::const_iterator it = mistag_SF.begin(); it != mistag_SF.end(); it++) {
-				//std::cout << "mistag_SF " << it->first << " " << it->second << std::endl;
 				mistag_SF_[it->first] = it->second;
 			}
-			//std::cout << mistag_SF_.size() << std::endl;
-			//for(std::map<std::string,float>::const_iterator it = mistag_SF_.begin(); it != mistag_SF_.end(); it++) {
-			//	std::cout << "mistag_SF_ " << it->first << " " << it->second << std::endl;
-			//}
-							
 		}
-		//std::cout << mistag_SF_.size() << std::endl;
-		
 		void setBtag_SF(std::map<std::string, float> btag_SF) { 
 			for(std::map<std::string,float>::const_iterator it = btag_SF.begin(); it != btag_SF.end(); it++) {
 				btag_SF_[it->first] = it->second;
@@ -304,6 +340,11 @@ namespace TopTree
 		Float_t btag_simpleSecondaryVertexHighPurBJetTags_;
 		Float_t btag_combinedSecondaryVertexBJetTags_;
 		Float_t btag_combinedSecondaryVertexMVABJetTags_;
+		Float_t btag_softMuonBJetTags_;
+		Float_t btag_softMuonByPtBJetTags_;
+		Float_t btag_softMuonByIP3dBJetTags_;
+		Float_t btag_softElectronByPtBJetTags_;
+		Float_t btag_softElectronByIP3dBJetTags_;
 
 		//btag scalefactors
 		std::map<std::string, float> mistag_SF_;

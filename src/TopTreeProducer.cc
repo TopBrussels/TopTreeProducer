@@ -388,13 +388,13 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	
 	//fastjet density rho
 	edm::Handle<double> rho;
-	iEvent.getByLabel("kt6PFJetsPF2PAT","rho",rho);
-	rootEvent->setKt6PFJetsPF2PAT_rho(*rho);
+	iEvent.getByLabel("kt6PFJets","rho",rho);
+	rootEvent->setKt6PFJets_rho(*rho);
   
-  //density rho for electron isolation (effective area stuff)
-  edm::Handle<double> rhoIso;
-  iEvent.getByLabel("kt6PFJetsForIsolation","rho",rhoIso);
-  rootEvent->setKt6PFJetsForIsolation_rho(*rhoIso);
+	//density rho for electron isolation (effective area stuff)
+  	edm::Handle<double> rhoIso;
+  	iEvent.getByLabel("kt6PFJetsForIsolation","rho",rhoIso);
+  	rootEvent->setKt6PFJetsForIsolation_rho(*rhoIso);
 	
 	if(doMC)
 	{

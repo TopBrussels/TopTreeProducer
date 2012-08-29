@@ -34,15 +34,9 @@ void GenJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenJets
 {
 	// check if the genJet is of the good type
 	std::string jetType = "BASIC";
-	if( genJetProducer_.label()=="kt4GenJets"
-		|| genJetProducer_.label()=="kt6GenJets"
-		|| genJetProducer_.label()=="iterativeCone5GenJets"
-		|| genJetProducer_.label()=="sisCone5GenJets"
-		|| genJetProducer_.label()=="sisCone7GenJets"
-      || genJetProducer_.label()=="ak5GenJets"
-      || genJetProducer_.label()=="ak7GenJets"
-      || genJetProducer_.label()=="ak5GenJetsNoE"
-	) jetType="CALO";
+	if( genJetProducer_.label()=="kt4GenJets" || genJetProducer_.label()=="kt6GenJets" || genJetProducer_.label()=="ak5GenJets"
+	|| genJetProducer_.label()=="ak7GenJets" || genJetProducer_.label()=="ak5GenJetsNoE" || genJetProducer_.label()=="ak5GenJetsNoNu")
+		jetType="CALO";
 
 	edm::Handle < edm::View <reco::GenJet> > recoGenJets;
 	iEvent.getByLabel(genJetProducer_, recoGenJets);
