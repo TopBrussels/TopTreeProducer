@@ -272,9 +272,9 @@ int main(int argc, char *argv[]){
     if (histos.find(hist) == histos.end()) histos[hist]=new TH1F((hist).c_str(),(hist+";nPu").c_str(),76,-0.5,75.5);    
     histos[hist]->Fill(event->nPu(0));
     
-    hist="kt6PFJetsPF2PAT_rho";
+    hist="kt6PFJets_rho";
     if (histos.find(hist) == histos.end()) histos[hist]=new TH1F((hist).c_str(),hist.c_str(),80,0,40);
-    histos[hist]->Fill(event->kt6PFJetsPF2PAT_rho());    
+    histos[hist]->Fill(event->kt6PFJets_rho());    
     
     
     for (unsigned int p=0; p<nArrays; p++) {
