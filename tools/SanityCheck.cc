@@ -357,9 +357,39 @@ int main(int argc, char *argv[]){
 	  histos[myArrayName[p]+"_pt"]->Fill(((TRootJet*)myArrays[p]->At(o))->Pt());
 	  histos[myArrayName[p]+"_eta"]->Fill(((TRootJet*)myArrays[p]->At(o))->Eta());
 	  histos[myArrayName[p]+"_phi"]->Fill(((TRootJet*)myArrays[p]->At(o))->Phi());
+	 
+	  // b-tagging
+
+	  hist="_bTagDisc_TCHE";
+	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),50,-10,30);
+	  histos[myArrayName[p]+hist]->Fill(((TRootJet*)myArrays[p]->At(o))->btag_trackCountingHighEffBJetTags());
+
+	  hist="_bTagDisc_TCHP";
+	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),50,-10,30);
+	  histos[myArrayName[p]+hist]->Fill(((TRootJet*)myArrays[p]->At(o))->btag_trackCountingHighPurBJetTags());
 	  
+	  hist="_bTagDisc_SSVHE";
+	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),50,0,8);
+	  histos[myArrayName[p]+hist]->Fill(((TRootJet*)myArrays[p]->At(o))->btag_simpleSecondaryVertexHighEffBJetTags());
+
+	  hist="_bTagDisc_SSVHP";
+	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),50,0,8);
+	  histos[myArrayName[p]+hist]->Fill(((TRootJet*)myArrays[p]->At(o))->btag_simpleSecondaryVertexHighPurBJetTags());
+
+	  hist="_bTagDisc_JP";
+	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),50,0,3);
+	  histos[myArrayName[p]+hist]->Fill(((TRootJet*)myArrays[p]->At(o))->btag_jetProbabilityBJetTags());
+
+	  hist="_bTagDisc_JBP";
+	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),50,0,8);
+	  histos[myArrayName[p]+hist]->Fill(((TRootJet*)myArrays[p]->At(o))->btag_jetBProbabilityBJetTags());
+
+	  hist="_bTagDisc_CSV";
+	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),50,-1,2);
+	  histos[myArrayName[p]+hist]->Fill(((TRootJet*)myArrays[p]->At(o))->btag_combinedSecondaryVertexBJetTags());
+
 	}
-	
+
 	// 
 	// MET
 	//
