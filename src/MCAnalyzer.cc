@@ -148,6 +148,15 @@ void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootM
 			iPartSel++;
 			iJetSel++;
 		}
+    else if ( doJetMC_ && abs(p.pdgId()) == 5 && p.status() == 2 )
+    {
+      iJet++;
+      if ( abs(p.eta()>jetMC_etaMax_) || p.pt()<jetMC_ptMin_ ) continue;
+      new( (*rootMCParticles)[iPartSel] ) TRootMCParticle( p.px(), p.py(), p.pz(), p.energy(), p.vx(), p.vy(), p.vz(), p.pdgId() , p.charge(), p.status(), p.numberOfDaughters(), motherID, grannyID, 0, 0, 0, 0, j );
+      if(verbosity_>2) cout << "   MC Jet  " << (const TRootParticle&)(*rootMCParticles->At(iPartSel)) << endl;
+      iPartSel++;
+      iJetSel++;
+    }
 
 		// FIXME - GenMET collection instead
 		if ( doMETMC_ && (abs(p.pdgId()) == 12 || abs(p.pdgId()) == 14 ||  abs(p.pdgId()) == 16 || ( abs(p.pdgId()) > 1000000 && abs(p.pdgId()) < 3000000 ) )&& p.status()==1 )
