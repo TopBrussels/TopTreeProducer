@@ -34,6 +34,7 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighEffBJetTags_(-9999.)
 			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexBJetTags_(-9999.)
+			,btag_combinedSecondaryVertexRetrainedBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
 			,btag_softMuonBJetTags_(-9999.)
 			,btag_softMuonByPtBJetTags_(-9999.)
@@ -57,6 +58,7 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighEffBJetTags_(jet.btag_simpleSecondaryVertexHighEffBJetTags_)
 			,btag_simpleSecondaryVertexHighPurBJetTags_(jet.btag_simpleSecondaryVertexHighPurBJetTags_)
 			,btag_combinedSecondaryVertexBJetTags_(jet.btag_combinedSecondaryVertexBJetTags_)
+			,btag_combinedSecondaryVertexRetrainedBJetTags_(jet.btag_combinedSecondaryVertexRetrainedBJetTags_)
 			,btag_combinedSecondaryVertexMVABJetTags_(jet.btag_combinedSecondaryVertexMVABJetTags_)
 			,btag_softMuonBJetTags_(jet.btag_softMuonBJetTags_)
 			,btag_softMuonByPtBJetTags_(jet.btag_softMuonByPtBJetTags_)
@@ -99,6 +101,7 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighEffBJetTags_(-9999.)
 			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexBJetTags_(-9999.)
+			,btag_combinedSecondaryVertexRetrainedBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
 			,btag_softMuonBJetTags_(-9999.)
 			,btag_softMuonByPtBJetTags_(-9999.)
@@ -122,6 +125,7 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighEffBJetTags_(-9999.)
 			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexBJetTags_(-9999.)
+			,btag_combinedSecondaryVertexRetrainedBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
 			,btag_softMuonBJetTags_(-9999.)
 			,btag_softMuonByPtBJetTags_(-9999.)
@@ -145,6 +149,7 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighEffBJetTags_(-9999.)
 			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexBJetTags_(-9999.)
+			,btag_combinedSecondaryVertexRetrainedBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
 			,btag_softMuonBJetTags_(-9999.)
 			,btag_softMuonByPtBJetTags_(-9999.)
@@ -168,6 +173,7 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighEffBJetTags_(-9999.)
 			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexBJetTags_(-9999.)
+			,btag_combinedSecondaryVertexRetrainedBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
 			,btag_softMuonBJetTags_(-9999.)
 			,btag_softMuonByPtBJetTags_(-9999.)
@@ -191,6 +197,7 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighEffBJetTags_(-9999.)
 			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexBJetTags_(-9999.)
+			,btag_combinedSecondaryVertexRetrainedBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
 			,btag_softMuonBJetTags_(-9999.)
 			,btag_softMuonByPtBJetTags_(-9999.)
@@ -214,6 +221,7 @@ namespace TopTree
 		Float_t btag_simpleSecondaryVertexHighEffBJetTags() const { return btag_simpleSecondaryVertexHighEffBJetTags_; }
 		Float_t btag_simpleSecondaryVertexHighPurBJetTags() const { return btag_simpleSecondaryVertexHighPurBJetTags_; }
 		Float_t btag_combinedSecondaryVertexBJetTags() const { return btag_combinedSecondaryVertexBJetTags_; }
+		Float_t btag_combinedSecondaryVertexRetrainedBJetTags() const { return btag_combinedSecondaryVertexRetrainedBJetTags_; }
 		Float_t btag_combinedSecondaryVertexMVABJetTags() const { return btag_combinedSecondaryVertexMVABJetTags_; }
 		Float_t btag_softMuonBJetTags() const { return btag_softMuonBJetTags_; }
 		Float_t btag_softMuonByPtBJetTags() const { return btag_softMuonByPtBJetTags_; }
@@ -272,6 +280,7 @@ namespace TopTree
 		void setBtag_simpleSecondaryVertexHighEffBJetTags(Float_t btag_simpleSecondaryVertexHighEffBJetTags) { btag_simpleSecondaryVertexHighEffBJetTags_ = btag_simpleSecondaryVertexHighEffBJetTags; }
 		void setBtag_simpleSecondaryVertexHighPurBJetTags(Float_t btag_simpleSecondaryVertexHighPurBJetTags) { btag_simpleSecondaryVertexHighPurBJetTags_ = btag_simpleSecondaryVertexHighPurBJetTags; }
 		void setBtag_combinedSecondaryVertexBJetTags(Float_t btag_combinedSecondaryVertexBJetTags) { btag_combinedSecondaryVertexBJetTags_ = btag_combinedSecondaryVertexBJetTags; }
+		void setBtag_combinedSecondaryVertexRetrainedBJetTags(Float_t btag_combinedSecondaryVertexBJetTags) { btag_combinedSecondaryVertexRetrainedBJetTags_ = btag_combinedSecondaryVertexBJetTags; }
 		void setBtag_combinedSecondaryVertexMVABJetTags(Float_t btag_combinedSecondaryVertexMVABJetTags) { btag_combinedSecondaryVertexMVABJetTags_ = btag_combinedSecondaryVertexMVABJetTags; }
 		void setBtag_softMuonBJetTags(Float_t btag_softMuonBJetTags) { btag_softMuonBJetTags_ = btag_softMuonBJetTags; }
 		void setBtag_softMuonByPtBJetTags(Float_t btag_softMuonByPtBJetTags) { btag_softMuonByPtBJetTags_ = btag_softMuonByPtBJetTags; }
@@ -339,6 +348,7 @@ namespace TopTree
 		Float_t btag_simpleSecondaryVertexHighEffBJetTags_;
 		Float_t btag_simpleSecondaryVertexHighPurBJetTags_;
 		Float_t btag_combinedSecondaryVertexBJetTags_;
+		Float_t btag_combinedSecondaryVertexRetrainedBJetTags_;
 		Float_t btag_combinedSecondaryVertexMVABJetTags_;
 		Float_t btag_softMuonBJetTags_;
 		Float_t btag_softMuonByPtBJetTags_;
