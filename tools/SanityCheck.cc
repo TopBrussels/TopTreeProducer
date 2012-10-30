@@ -388,6 +388,10 @@ int main(int argc, char *argv[]){
 	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),50,-1,2);
 	  histos[myArrayName[p]+hist]->Fill(((TRootJet*)myArrays[p]->At(o))->btag_combinedSecondaryVertexBJetTags());
 
+	  hist="_bTagDisc_CSVRetrained";
+	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),50,-1,2);
+	  histos[myArrayName[p]+hist]->Fill(((TRootJet*)myArrays[p]->At(o))->btag_combinedSecondaryVertexRetrainedBJetTags());
+
 	}
 
 	// 
