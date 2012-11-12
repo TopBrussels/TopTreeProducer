@@ -554,7 +554,7 @@ namespace TopTree
 		Float_t Dist() const { return Dist_; }
 		Float_t DCot() const { return DCot_; }
     Bool_t passConversion() const { return passConversion_; }
-    Float_t mvaTrigId() const { return mvaNonTrigId_; }
+    Float_t mvaTrigId() const { return mvaTrigId_; }
     Float_t mvaNonTrigId() const { return mvaNonTrigId_; }
 
 		//setters
