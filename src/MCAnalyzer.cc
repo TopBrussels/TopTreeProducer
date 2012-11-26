@@ -169,9 +169,7 @@ void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootM
 		}
 
 		// add information on primary unstable particles: keep quarks, taus, Z, W, Higgs and susy particles, with status 3
-		if ( doUnstablePartsMC_ && (abs(p.pdgId()) < 7 || (abs(p.pdgId()) > 10 && abs(p.pdgId()) < 17 )  ||
-		(abs(p.pdgId()) > 20 && abs(p.pdgId()) < 38) || (abs(p.pdgId()) > 1000000 && abs(p.pdgId()) < 3000000) )
-		&& p.status()==3 )
+		if ( doUnstablePartsMC_ && (abs(p.pdgId()) < 38 || (abs(p.pdgId()) > 1000000 && abs(p.pdgId()) < 3000000) )	&& p.status()==3 )
 		{
 			iUnstableParticle++;	
 			Int_t daug0Id = 0;
