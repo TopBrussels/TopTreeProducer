@@ -41,7 +41,10 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
 	edm::Handle < std::vector < pat::Muon > >patMuons;
 	iEvent.getByLabel (muonProducer_, patMuons);
 	nMuons = patMuons->size ();
-	
+
+  edm::Handle< reco::VertexCollection > pvHandle;
+  iEvent.getByLabel(primaryVertexProducer_, pvHandle);
+  
 //	edm::Handle<reco::BeamSpot> beamSpotHandle;
 //	iEvent.getByLabel("offlineBeamSpot", beamSpotHandle);
 //	const reco::TrackBase::Point & beamSpot = reco::TrackBase::Point(beamSpotHandle->x0(), beamSpotHandle->y0(), beamSpotHandle->z0());
