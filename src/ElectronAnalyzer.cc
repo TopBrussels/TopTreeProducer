@@ -58,22 +58,22 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
   iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder", builder);
   TransientTrackBuilder thebuilder = *(builder.product());
   
-  edm::Handle<reco::BeamSpot> beamSpotHandle;
-  iEvent.getByLabel("offlineBeamSpot", beamSpotHandle);
-  const reco::TrackBase::Point & beamSpot = reco::TrackBase::Point(beamSpotHandle->x0(), beamSpotHandle->y0(), beamSpotHandle->z0());
+  //edm::Handle<reco::BeamSpot> beamSpotHandle;
+  //iEvent.getByLabel("offlineBeamSpot", beamSpotHandle);
+  //const reco::TrackBase::Point & beamSpot = reco::TrackBase::Point(beamSpotHandle->x0(), beamSpotHandle->y0(), beamSpotHandle->z0());
   
   if(verbosity_>1) std::cout << "   Number of electrons = " << nElectrons << "   Label: " << electronProducer_.label() << "   Instance: " << electronProducer_.instance() << std::endl;
   
   for (unsigned int j=0; j<nElectrons; j++)
   {
-    const reco::GsfElectron* electron = 0;	
-    electron = (const reco::GsfElectron*) ( & ((*patElectrons)[j]) );
+    const pat::Electron*  patElectron = &((*patElectrons)[j]);//dynamic_cast<const pat::Electron*>(&*electron);
+    const reco::GsfElectron* electron = (const reco::GsfElectron*) patElectron;//( & ((*patElectrons)[j]) );
   
     TRootElectron localElectron(
-		  electron->px()
-			,electron->py()
-			,electron->pz()
-			,electron->energy()
+       patElectron->ecalDrivenMomentum().px()//electron->px()
+      ,patElectron->ecalDrivenMomentum().py()//,electron->py()
+      ,patElectron->ecalDrivenMomentum().pz()//,electron->pz()
+      ,patElectron->ecalDrivenMomentum().energy()//,electron->energy()
 			,electron->vx()
 			,electron->vy()
 			,electron->vz()
@@ -114,22 +114,22 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
       localElectron.setTrackNormalizedChi2(myTrackRef->normalizedChi2());
       localElectron.setNValidHits(myTrackRef->numberOfValidHits());
     }
-      
+    
     reco::GsfTrackRef gsfTrack = electron->gsfTrack();
     if ( gsfTrack.isNonnull() )
     {
-	    localElectron.setd0( gsfTrack->dxy(beamSpot) );
-	    localElectron.setd0Error( sqrt( pow(gsfTrack->dxyError(),2) + pow(beamSpotHandle->BeamWidthX(),2) + pow(beamSpotHandle->BeamWidthY(),2) ) );
 	    localElectron.setGsfTrackNormalizedChi2(gsfTrack->normalizedChi2());
 	    localElectron.setTrackMissingHits(gsfTrack->trackerExpectedHitsInner().numberOfHits());
-        
+      
       if(doPrimaryVertex_ && pvHandle.isValid() && pvHandle->size() != 0)
 	    {
 	      reco::VertexRef vtx(pvHandle, 0);
-  	    localElectron.setdz(electron->gsfTrack()->dz( vtx->position() ));
-          
-        const double gsfsign   = ( (-electron->gsfTrack()->dxy(vtx->position()))   >=0 ) ? 1. : -1.;
-        const reco::TransientTrack &tt = thebuilder.build(electron->gsfTrack()); 
+        localElectron.setd0( gsfTrack->dxy(vtx->position()) );
+        localElectron.setd0Error( sqrt( pow(gsfTrack->dxyError(),2) + pow(vtx->xError(),2) + pow(vtx->yError(),2) ) );
+  	    localElectron.setdz( gsfTrack->dz(vtx->position()) );
+        
+        const double gsfsign   = ( (-gsfTrack->dxy(vtx->position()))   >=0 ) ? 1. : -1.;
+        const reco::TransientTrack &tt = thebuilder.build(gsfTrack);
         const std::pair<bool,Measurement1D> &ip3dpv =  IPTools::absoluteImpactParameter3D(tt,((*pvHandle)[j]));
         if (ip3dpv.first)
         {
@@ -140,8 +140,13 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 	  }
     else if ( myTrackRef.isNonnull() )
     {
-      localElectron.setd0( myTrackRef->dxy(beamSpot) );
-	    localElectron.setd0Error( sqrt( pow(myTrackRef->dxyError(),2) + pow(beamSpotHandle->BeamWidthX(),2) + pow(beamSpotHandle->BeamWidthY(),2) ) );
+      if(doPrimaryVertex_ && pvHandle.isValid() && pvHandle->size() != 0)
+	    {
+	      reco::VertexRef vtx(pvHandle, 0);
+        localElectron.setd0( myTrackRef->dxy(vtx->position()) );
+        localElectron.setd0Error( sqrt( pow(myTrackRef->dxyError(),2) + pow(vtx->xError(),2) + pow(vtx->yError(),2) ) );
+  	    localElectron.setdz( myTrackRef->dz(vtx->position()) );
+      }
     }
     
     reco::SuperClusterRef superCluster = electron->superCluster();
@@ -195,10 +200,9 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
     localElectron.setDCot(convInfo.dcot());
     
     // Some specific methods to pat::Electron
-    const pat::Electron *patElectron = dynamic_cast<const pat::Electron*>(&*electron);
     
-    localElectron.setdB(patElectron->dB());
-    localElectron.setdBError(patElectron->edB());
+    //localElectron.setdB(patElectron->dB());
+    //localElectron.setdBError(patElectron->edB());
     
     // Matched genParticle
     if(useMC_)

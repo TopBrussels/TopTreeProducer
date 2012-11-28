@@ -14,7 +14,8 @@
 #include "DataFormats/MuonReco/interface/MuonFwd.h"
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "DataFormats/MuonReco/interface/MuonSelectors.h"
-#include "DataFormats/BeamSpot/interface/BeamSpot.h"
+#include "DataFormats/VertexReco/interface/Vertex.h"
+#include "DataFormats/VertexReco/interface/VertexFwd.h"
 
 #include "../interface/TRootMuon.h"
 
@@ -35,7 +36,8 @@ public:
 private:
 	int verbosity_;
 	edm::InputTag muonProducer_;
-	std::vector<std::string> vMuonProducer;	
+	edm::InputTag primaryVertexProducer_;
+	std::vector<std::string> vMuonProducer;
 	bool useMC_;
 };
 

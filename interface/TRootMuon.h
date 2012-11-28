@@ -29,8 +29,8 @@ namespace TopTree
 		  ,nofValidPixelHits_(-9999)
 			,nofMatchedStations_(-9999)
 		  ,nofTrackerLayersWithMeasurement_(-9999)
-			,dB_(-9999.)
-			,dBError_(-9999.)
+//			,dB_(-9999.)
+//			,dBError_(-9999.)
 			,algo_(-9999)
 			,id_(-9999)
 			,chargedHadronIso_(-9999.)
@@ -56,8 +56,8 @@ namespace TopTree
 		  ,nofValidPixelHits_(muon.nofValidPixelHits_)
 			,nofMatchedStations_(muon.nofMatchedStations_)
 		  ,nofTrackerLayersWithMeasurement_(muon.nofTrackerLayersWithMeasurement_)
-			,dB_(muon.dB_)
-			,dBError_(muon.dBError_)
+//			,dB_(muon.dB_)
+//			,dBError_(muon.dBError_)
 			,algo_(muon.algo_)
 			,id_(muon.id_)
 			,chargedHadronIso_(muon.chargedHadronIso_)
@@ -83,8 +83,8 @@ namespace TopTree
 		  ,nofValidPixelHits_(-9999)
 			,nofMatchedStations_(-9999)
 		  ,nofTrackerLayersWithMeasurement_(-9999)
-			,dB_(-9999.)
-			,dBError_(-9999.)
+//			,dB_(-9999.)
+//			,dBError_(-9999.)
 			,algo_(-9999)
 			,id_(-9999)
 			,chargedHadronIso_(-9999.)
@@ -110,8 +110,8 @@ namespace TopTree
 		  ,nofValidPixelHits_(-9999)
 			,nofMatchedStations_(-9999)
 		  ,nofTrackerLayersWithMeasurement_(-9999)
-			,dB_(-9999.)
-			,dBError_(-9999.)
+//			,dB_(-9999.)
+//			,dBError_(-9999.)
 			,algo_(-9999)
 			,id_(-9999)
 			,chargedHadronIso_(-9999.)
@@ -137,8 +137,8 @@ namespace TopTree
 		  ,nofValidPixelHits_(-9999)
 			,nofMatchedStations_(-9999)
 		  ,nofTrackerLayersWithMeasurement_(-9999)
-			,dB_(-9999.)
-			,dBError_(-9999.)
+//			,dB_(-9999.)
+//			,dBError_(-9999.)
 			,algo_(-9999)
 			,id_(-9999)
 			,chargedHadronIso_(-9999.)
@@ -164,8 +164,8 @@ namespace TopTree
 		  ,nofValidPixelHits_(-9999)
 			,nofMatchedStations_(-9999)
 		  ,nofTrackerLayersWithMeasurement_(-9999)
-			,dB_(-9999.)
-			,dBError_(-9999.)
+//			,dB_(-9999.)
+//			,dBError_(-9999.)
 			,algo_(-9999)
 			,id_(-9999)
 			,chargedHadronIso_(-9999.)
@@ -191,8 +191,8 @@ namespace TopTree
 		  ,nofValidPixelHits_(-9999)
 			,nofMatchedStations_(-9999)
 		  ,nofTrackerLayersWithMeasurement_(-9999)
-			,dB_(-9999.)
-			,dBError_(-9999.)
+//			,dB_(-9999.)
+//			,dBError_(-9999.)
 			,algo_(-9999)
 			,id_(-9999)
 			,chargedHadronIso_(-9999.)
@@ -212,6 +212,8 @@ namespace TopTree
 		Bool_t isTrackerMuon() const { return algo_ & 4; }
 		Bool_t isStandAloneMuon() const { return algo_ & 8; }
 		Bool_t isCaloMuon() const { return algo_ & 16; }
+    Bool_t isPFMuon() const { return isPFMuon_; }
+
 		Int_t id() const { return id_;}
 		Bool_t idAllGlobalMuons() const { return id_ & 1; }
 		Bool_t idAllTrackerMuons() const { return id_ & 2; }
@@ -240,13 +242,12 @@ namespace TopTree
 		Int_t nofValidPixelHits() const { return nofValidPixelHits_;}
 		Int_t nofMatchedStations() const { return nofMatchedStations_;}
 		Int_t nofTrackerLayersWithMeasurement() const { return nofTrackerLayersWithMeasurement_;}
-		Float_t dB() const { return dB_; }
-		Float_t dBError() const { return dBError_; }
+//		Float_t dB() const { return dB_; }
+//		Float_t dBError() const { return dBError_; }
 		Float_t chargedHadronIso() const { return chargedHadronIso_; }
 		Float_t puChargedHadronIso() const { return puChargedHadronIso_; }
 		Float_t photonIso() const { return photonIso_; }
 		Float_t neutralHadronIso() const { return neutralHadronIso_; }
-		Float_t relativePfIso03() const { return( (chargedHadronIso_+neutralHadronIso_+photonIso_)/((TLorentzVector)(*this)).Pt() );}
 		virtual TString typeName() const { return "TRootMuon"; }
 
 		void setIsoR03(Float_t isoR03_emEt, Float_t isoR03_hadEt, Float_t isoR03_sumPt)
@@ -278,24 +279,24 @@ namespace TopTree
 				+ TMLastStationLoose*64 + TMLastStationTight*128 + TMLastStationAngTight*256 + TMOneStationLoose*512 + TMOneStationTight*1024 + TMLastStationOptimizedLowPtLoose*2048 
 				+ TMLastStationOptimizedLowPtTight*4096 + TM2DCompatibilityLoose*8192 + TM2DCompatibilityTight*16384;
 		}
-		void SetVetoEm(Float_t vetoEm) { vetoEm_ = vetoEm;}
-		void SetVetoHad(Float_t vetoHad) { vetoHad_ = vetoHad;}
-		void SetD0(Float_t d0) { d0_ = d0;}
-		void SetD0Error(Float_t d0Error) { d0error_ = d0Error;}   
-		void SetDZ(Float_t dz) { dz_ = dz;}    
-		void SetDZError(Float_t dzError) { dzerror_ = dzError;}
-		void SetChi2(Float_t chi2){ chi2_ = chi2;}
-		void SetNofValidHits(Int_t nofValidHits){ nofValidHits_ = nofValidHits;}
-		void SetNofValidMuHits(Int_t x){ nofValidMuHits_ = x;}
-		void SetNofValidPixelHits(Int_t x){ nofValidPixelHits_ = x;}
-		void SetNofMatchedStations(Int_t x){ nofMatchedStations_ = x;}
-		void SetNofTrackerLayersWithMeasurement(Int_t x){ nofTrackerLayersWithMeasurement_ = x;}
-		void SetdB(Float_t dB) { dB_ = dB; }
-		void SetdBError(Float_t dBError) { dBError_ = dBError; }
-		void SetChargedHadronIso(Float_t chargedHadronIso){chargedHadronIso_ = chargedHadronIso;}
+		void setVetoEm(Float_t vetoEm) { vetoEm_ = vetoEm;}
+		void setVetoHad(Float_t vetoHad) { vetoHad_ = vetoHad;}
+		void setD0(Float_t d0) { d0_ = d0;}
+		void setD0Error(Float_t d0Error) { d0error_ = d0Error;}
+		void setDZ(Float_t dz) { dz_ = dz;}
+		void setDZError(Float_t dzError) { dzerror_ = dzError;}
+		void setChi2(Float_t chi2){ chi2_ = chi2;}
+		void setNofValidHits(Int_t nofValidHits){ nofValidHits_ = nofValidHits;}
+		void setNofValidMuHits(Int_t x){ nofValidMuHits_ = x;}
+		void setNofValidPixelHits(Int_t x){ nofValidPixelHits_ = x;}
+		void setNofMatchedStations(Int_t x){ nofMatchedStations_ = x;}
+		void setNofTrackerLayersWithMeasurement(Int_t x){ nofTrackerLayersWithMeasurement_ = x;}
+		//void setdB(Float_t dB) { dB_ = dB; }
+		//void setdBError(Float_t dBError) { dBError_ = dBError; }
+		void setChargedHadronIso(Float_t chargedHadronIso){chargedHadronIso_ = chargedHadronIso;}
 		void setPuChargedHadronIso(Float_t iso) { puChargedHadronIso_ = iso; }
-		void SetPhotonIso(Float_t photonIso){photonIso_ = photonIso;}
-		void SetNeutralHadronIso(Float_t neutralHadronIso){neutralHadronIso_ = neutralHadronIso;}
+		void setPhotonIso(Float_t photonIso){photonIso_ = photonIso;}
+		void setNeutralHadronIso(Float_t neutralHadronIso){neutralHadronIso_ = neutralHadronIso;}
 
 		friend std::ostream& operator<< (std::ostream& stream, const TRootMuon& muon)
 		{
@@ -322,26 +323,27 @@ namespace TopTree
 		Float_t dzerror_;           // dZ error of Muon innertrack
 		Float_t chi2_;              // chi2 of global Muon
 		Int_t nofValidHits_;        // nof hits of inner track
-		Int_t nofValidMuHits_;        // nof hits on the global fit
-		Int_t nofValidPixelHits_;   //nof pixel hits of inner track
-		Int_t nofMatchedStations_; // number of stations with matched segments
+		Int_t nofValidMuHits_;      // nof hits on the global fit
+		Int_t nofValidPixelHits_;   // nof pixel hits of inner track
+		Int_t nofMatchedStations_;  // number of stations with matched segments
 		Int_t nofTrackerLayersWithMeasurement_; 
 
 		// In the standard PAT configuration, dB and edB are calculated wrt the primary vertex
 		// If this was not the case, dB is calculated wrt the beamspot and edb = -1 all the time
-		Float_t dB_;                // dB from PAT muon
-		Float_t dBError_;           // dBError from PAT muon
+		//Float_t dB_;                // dB from PAT muon
+		//Float_t dBError_;           // dBError from PAT muon
 
 		Int_t algo_; // binary => GlobalMuon=00010 , TrackerMuon=00100 , StandAloneMuon=01000 , CaloMuon=10000
 		Int_t id_; 		// MuonId coded in binary word id_ ==> TrackerMuonArbitrated=0000001 , AllArbitrated=0000010 , GlobalMuonPromptTight=0000100 ,
 		// TMLastStationLoose=0001000 , TMLastStationTight=0010000 , TM2DCompatibilityLoose=0100000 , TM2DCompatibilityTight=1000000
+    Bool_t isPFMuon_;
 		
 		Float_t chargedHadronIso_;  // charged hadron isolation value computed in the PF2PAT sequence, and stored in the pat muon
 		Float_t puChargedHadronIso_;
 		Float_t photonIso_;         // photon isolation value computed in the PF2PAT sequence, and stored in the pat muon
 		Float_t neutralHadronIso_;  // neutral hadron isolation value computed in the PF2PAT sequence, and stored in the pat muon
 
-		ClassDef (TRootMuon,1);
+		ClassDef (TRootMuon,2);
 	};
 }
 

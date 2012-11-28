@@ -37,10 +37,10 @@ namespace TopTree
       ip3d_(-9999.),
       ip3dErr_(-9999.),
 			d0_(-9999.),
-			dz_(-9999.),
 			d0Error_(-9999.),
-			dB_(-9999.),
-			dBError_(-9999.),
+      dz_(-9999.),
+//		dB_(-9999.),
+//		dBError_(-9999.),
 			missingHits_(-9999),
 			normalizedChi2_(9999.),
       normalizedChi2gsf_(9999.),
@@ -99,10 +99,10 @@ namespace TopTree
       ip3d_(e.ip3d_),
       ip3dErr_(e.ip3dErr_),
 			d0_(e.d0_),
+      d0Error_(e.d0Error_),
 			dz_(e.dz_),
-			d0Error_(e.d0Error_),
-			dB_(e.dB_),
-			dBError_(e.dBError_),
+//		dB_(e.dB_),
+//		dBError_(e.dBError_),
 			missingHits_(e.missingHits_),
 			normalizedChi2_(e.normalizedChi2_),
       normalizedChi2gsf_(e.normalizedChi2gsf_),
@@ -161,10 +161,10 @@ namespace TopTree
       ip3d_(-9999.),
       ip3dErr_(-9999.),
 			d0_(-9999.),
-			dz_(-9999.),
 			d0Error_(-9999.),
-			dB_(-9999.),
-			dBError_(-9999.),
+      dz_(-9999.),
+//		dB_(-9999.),
+//		dBError_(-9999.),
 			missingHits_(-9999),
 			normalizedChi2_(9999.),
       normalizedChi2gsf_(9999.),
@@ -223,10 +223,10 @@ namespace TopTree
       ip3d_(-9999.),
       ip3dErr_(-9999.),
 			d0_(-9999.),
-			dz_(-9999.),
 			d0Error_(-9999.),
-			dB_(-9999.),
-			dBError_(-9999.),
+      dz_(-9999.),
+//    dB_(-9999.),
+//    dBError_(-9999.),
 			missingHits_(-9999),
 			normalizedChi2_(9999.),
       normalizedChi2gsf_(9999.),
@@ -285,10 +285,10 @@ namespace TopTree
       ip3d_(-9999.),
       ip3dErr_(-9999.),
 			d0_(-9999.),
-			dz_(-9999.),
 			d0Error_(-9999.),
-			dB_(-9999.),
-			dBError_(-9999.),
+      dz_(-9999.),
+//    dB_(-9999.),
+//    dBError_(-9999.),
 			missingHits_(-9999),
 			normalizedChi2_(9999.),
       normalizedChi2gsf_(9999.),
@@ -347,10 +347,10 @@ namespace TopTree
       ip3d_(-9999.),
       ip3dErr_(-9999.),
 			d0_(-9999.),
-			dz_(-9999.),
 			d0Error_(-9999.),
-			dB_(-9999.),
-			dBError_(-9999.),
+      dz_(-9999.),
+//    dB_(-9999.),
+//    dBError_(-9999.),
 			missingHits_(-9999),
 			normalizedChi2_(9999.),
       normalizedChi2gsf_(9999.),
@@ -408,11 +408,11 @@ namespace TopTree
       nValidHits_(-9999),
       ip3d_(-9999.),
       ip3dErr_(-9999.),
-			d0_(-9999.),
-			dz_(-9999.),
+    	d0_(-9999.),
 			d0Error_(-9999.),
-			dB_(-9999.),
-			dBError_(-9999.),
+      dz_(-9999.),
+//		dB_(-9999.),
+//		dBError_(-9999.),
 			missingHits_(-9999),
 			normalizedChi2_(9999.),
       normalizedChi2gsf_(9999.),
@@ -480,8 +480,8 @@ namespace TopTree
 		Float_t d0() const { return d0_; }
 		Float_t d0Error()const { return d0Error_; }
 		Float_t dz()const { return dz_; }
-		Float_t dB() const { return dB_; }
-		Float_t dBError() const { return dBError_; }
+//		Float_t dB() const { return dB_; }
+//		Float_t dBError() const { return dBError_; }
 		Int_t missingHits() const { return missingHits_; }
 		Float_t trackNormalizedChi2() const { return normalizedChi2_; }
     Float_t gsfTrackNormalizedChi2() const { return normalizedChi2gsf_; }
@@ -574,11 +574,11 @@ namespace TopTree
     
     void setIp3d(Float_t x) { ip3d_ = x; }
     void setIp3dError(Float_t x) { ip3dErr_ = x; }
-		void setd0(Float_t x) { d0_ = x; }
-		void setdz(Float_t x) { dz_ = x; }
-		void setd0Error(Float_t d0Error) { d0Error_ = d0Error; }
-		void setdB(Float_t dB) { dB_ = dB; }
-		void setdBError(Float_t dBError) { dBError_ = dBError; }
+		void setD0(Float_t x) { d0_ = x; }
+		void setD0Error(Float_t d0Error) { d0Error_ = d0Error; }
+		void setDz(Float_t x) { dz_ = x; }
+		//void setDB(Float_t dB) { dB_ = dB; }
+		//void setDBError(Float_t dBError) { dBError_ = dBError; }
     
 		void setTrackMissingHits(Int_t x) { missingHits_ = x; }
 		void setTrackNormalizedChi2(Float_t x) { normalizedChi2_ = x; }
@@ -645,65 +645,65 @@ namespace TopTree
     Float_t ioEmIoP_;                          // (1.0/(ele.superCluster()->energy())) - (1.0 / ele.p())
     Float_t ioEmIoPgsf_;                       // (1.0/(ele.superCluster()->energy())) - (1.0 / ele.gsfTrack()->p())
 
-//		TrackProperties================================
-		Int_t pixelLayersWithMeasurement_;     // Number of pixel layers with at least one valid hit
-		Int_t stripLayersWithMeasurement_;     // Number of strip layers with at least one valid hit
-    Int_t nValidHits_;                     // Number of valid hits
-    Float_t ip3d_;
-    Float_t ip3dErr_;
-		Float_t d0_;                         	// Original d0
-		Float_t dz_;                          // dz wrt PV
-		Float_t d0Error_;                      // error on d0_
+//TrackProperties=====================================
+		Int_t pixelLayersWithMeasurement_;         // number of pixel layers with at least one valid hit
+		Int_t stripLayersWithMeasurement_;         // number of strip layers with at least one valid hit
+    Int_t nValidHits_;                         // number of valid hits
+    Float_t ip3d_;                             // 3D impact parameter
+    Float_t ip3dErr_;                          // error on ip3d_
+		Float_t d0_;                         	     // transverse impact parameter (wrt to PV)
+		Float_t d0Error_;                          // error on d0_
+    Float_t dz_;                               // longitudinal impact parameter (wrt to PV)
 
 		// In the standard PAT configuration, dB and edB are calculated wrt the primary vertex
 		// If this was not the case, dB is calculated wrt the beamspot and edb = -1 all the time
-		Float_t dB_;                           // dB from PAT muon
-		Float_t dBError_;                      // dBError from PAT muon
-		Int_t missingHits_;                    // Conversion Rejection: number of missing hits near beginning of track (also rejects really bad tracks)
-		Float_t normalizedChi2_;               // chi-squared divided by n.d.o.f. of track fit
-    Float_t normalizedChi2gsf_;            // chi2 / ndf from gsfTrack
+		//Float_t dB_;                             // dB from PAT muon
+		//Float_t dBError_;                        // dBError from PAT muon
+		Int_t missingHits_;                        // Conversion Rejection: number of missing hits near beginning of track (also rejects really bad tracks)
+		Float_t normalizedChi2_;                   // chi-squared divided by n.d.o.f. of track fit
+    Float_t normalizedChi2gsf_;                // chi2 / ndf from gsfTrack
 
 //SuperClusterProperties ===============================
 		Float_t superClusterRawEnergy_;
 		Float_t superClusterEta_;
 		Float_t preshowerEnergy_;
 
-//ShowerShape===================================
-		Float_t sigmaIetaIeta_;      // weighted cluster rms along eta and inside 5x5 (new, Xtal eta)
+//ShowerShape===========================================
+		Float_t sigmaIetaIeta_;                    // weighted cluster rms along eta and inside 5x5 (new, Xtal eta)
     Float_t sigmaIphiIphi_;
     Float_t sigmaIetaIphi_;
-		Float_t e1x5_;               // energy inside 1x5 in etaxphi around the seed Xtal
-		Float_t e5x5_;               // energy inside 5x5 in etaxphi around the seed Xtal
-		Float_t hcalDepth1OverEcal_ ; // hcal over ecal seed cluster energy using first hcal depth (hcal is energy of towers within dR=015)
-		Float_t hcalDepth2OverEcal_ ; // hcal over ecal seed cluster energy using 2nd hcal depth (hcal is energy of towers within dR=015)
+		Float_t e1x5_;                             // energy inside 1x5 in etaxphi around the seed Xtal
+		Float_t e5x5_;                             // energy inside 5x5 in etaxphi around the seed Xtal
+		Float_t hcalDepth1OverEcal_ ;              // hcal over ecal seed cluster energy using first hcal depth (hcal is energy of towers within dR=015)
+		Float_t hcalDepth2OverEcal_ ;              // hcal over ecal seed cluster energy using 2nd hcal depth (hcal is energy of towers within dR=015)
     Float_t etaWidth_;
     Float_t phiWidth_;
     Float_t r9_;
 
-//Isolation ==================================
-		Float_t tkSumPt03_;                // track iso deposit with electron footprint removed
-		Float_t ecalRecHitSumEt03_;        // ecal iso deposit with electron footprint removed
-		Float_t hcalDepth1TowerSumEt03_;   // hcal depht 1 iso deposit with electron footprint removed
-		Float_t hcalDepth2TowerSumEt03_;   // hcal depht 2 iso deposit with electron footprint removed
-		Float_t tkSumPt04_;                // track iso deposit with electron footprint removed
-		Float_t ecalRecHitSumEt04_;        // ecal iso deposit with electron footprint removed
-		Float_t hcalDepth1TowerSumEt04_;   // hcal depht 1 iso deposit with electron footprint removed
-		Float_t hcalDepth2TowerSumEt04_;   // hcal depht 2 iso deposit with electron footprint removed
-		Float_t chargedHadronIso_;         // charged hadron isolation value computed in the PF2PAT sequence, and stored in the pat electron
-    Float_t puChargedHadronIso_;
-		Float_t photonIso_;		   // photon isolation value computed in the PF2PAT sequence, and stored in the pat electron
-		Float_t neutralHadronIso_;	   // neutral hadron isolation value computed in the PF2PAT sequence, and stored in the pat electron
+//Isolation ============================================
+		Float_t tkSumPt03_;                        // track iso deposit with electron footprint removed
+		Float_t ecalRecHitSumEt03_;                // ecal iso deposit with electron footprint removed
+		Float_t hcalDepth1TowerSumEt03_;           // hcal depht 1 iso deposit with electron footprint removed
+		Float_t hcalDepth2TowerSumEt03_;           // hcal depht 2 iso deposit with electron footprint removed
+		Float_t tkSumPt04_;                        // track iso deposit with electron footprint removed
+		Float_t ecalRecHitSumEt04_;                // ecal iso deposit with electron footprint removed
+		Float_t hcalDepth1TowerSumEt04_;           // hcal depht 1 iso deposit with electron footprint removed
+		Float_t hcalDepth2TowerSumEt04_;           // hcal depht 2 iso deposit with electron footprint removed
+		Float_t chargedHadronIso_;                 // isolation calculated with only the charged hadron candidates
+    Float_t puChargedHadronIso_;               // isolation calculated with only the pile-up charged hadron candidates
+		Float_t photonIso_;                        // isolation calculated with only the gamma candidates
+		Float_t neutralHadronIso_;	               // isolation calculated with only the neutral hadron candidates
 
 // Electron classification && fBrem ====================
-		Float_t fBrem_;
-    Int_t nBrems_;
-		Float_t Dist_;
-		Float_t DCot_;
-    Bool_t passConversion_;
-    Float_t mvaTrigId_;               // MVA value
-    Float_t mvaNonTrigId_;            // MVA value
+		Float_t fBrem_;                            // brem fraction from gsf fit: (track momentum in - track momentum out) / track momentum in
+    Int_t   nBrems_;                           // number of basic clusters inside the supercluster - 1 
+		Float_t Dist_;                             // distance to the conversion partner
+		Float_t DCot_;                             // difference of cot(angle) with the conversion partner track
+    Bool_t  passConversion_;                   // boolean to flag converted candidates
+    Float_t mvaTrigId_;                        // MVA value
+    Float_t mvaNonTrigId_;                     // MVA value
 
-		ClassDef (TRootElectron,9);
+		ClassDef (TRootElectron,10);
 	};
 }
 
