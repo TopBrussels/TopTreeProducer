@@ -124,9 +124,9 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
       if(doPrimaryVertex_ && pvHandle.isValid() && pvHandle->size() != 0)
 	    {
 	      reco::VertexRef vtx(pvHandle, 0);
-        localElectron.setd0( gsfTrack->dxy(vtx->position()) );
-        localElectron.setd0Error( sqrt( pow(gsfTrack->dxyError(),2) + pow(vtx->xError(),2) + pow(vtx->yError(),2) ) );
-  	    localElectron.setdz( gsfTrack->dz(vtx->position()) );
+        localElectron.setD0( gsfTrack->dxy(vtx->position()) );
+        localElectron.setD0Error( sqrt( pow(gsfTrack->dxyError(),2) + pow(vtx->xError(),2) + pow(vtx->yError(),2) ) );
+  	    localElectron.setDz( gsfTrack->dz(vtx->position()) );
         
         const double gsfsign   = ( (-gsfTrack->dxy(vtx->position()))   >=0 ) ? 1. : -1.;
         const reco::TransientTrack &tt = thebuilder.build(gsfTrack);
@@ -143,9 +143,9 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
       if(doPrimaryVertex_ && pvHandle.isValid() && pvHandle->size() != 0)
 	    {
 	      reco::VertexRef vtx(pvHandle, 0);
-        localElectron.setd0( myTrackRef->dxy(vtx->position()) );
-        localElectron.setd0Error( sqrt( pow(myTrackRef->dxyError(),2) + pow(vtx->xError(),2) + pow(vtx->yError(),2) ) );
-  	    localElectron.setdz( myTrackRef->dz(vtx->position()) );
+        localElectron.setD0( myTrackRef->dxy(vtx->position()) );
+        localElectron.setD0Error( sqrt( pow(myTrackRef->dxyError(),2) + pow(vtx->xError(),2) + pow(vtx->yError(),2) ) );
+  	    localElectron.setDz( myTrackRef->dz(vtx->position()) );
       }
     }
     

@@ -257,6 +257,7 @@ namespace TopTree
 			isoR03_sumPt_ = isoR03_sumPt;
 		}
 		void setAlgo(Int_t algo) { algo_ = algo; }
+    void setIsPFMuon(Bool_t isPFMuon) {isPFMuon_ = isPFMuon; }
 		void setID(Int_t id) { id_ = id; }
 		void setID(
 			Int_t AllGlobalMuons,
