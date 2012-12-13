@@ -6,7 +6,7 @@ using namespace reco;
 using namespace edm;
 
 ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& producersNames):verbosity_(0),useMC_(false),runSuperCluster_(false),doPrimaryVertex_(false),isData_(false)
-									    
+
 {
   electronProducer_ = producersNames.getParameter<edm::InputTag>("electronProducer");
   primaryVertexProducer_ = producersNames.getParameter<edm::InputTag>("primaryVertexProducer");
@@ -68,19 +68,19 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
   {
     const pat::Electron*  patElectron = &((*patElectrons)[j]);//dynamic_cast<const pat::Electron*>(&*electron);
     const reco::GsfElectron* electron = (const reco::GsfElectron*) patElectron;//( & ((*patElectrons)[j]) );
-  
+    
     TRootElectron localElectron(
-       patElectron->ecalDrivenMomentum().px()//electron->px()
-      ,patElectron->ecalDrivenMomentum().py()//,electron->py()
-      ,patElectron->ecalDrivenMomentum().pz()//,electron->pz()
-      ,patElectron->ecalDrivenMomentum().energy()//,electron->energy()
-			,electron->vx()
-			,electron->vy()
-			,electron->vz()
-			,electron->pdgId()
-			,electron->charge()
-			);
-      
+                                electron->px()
+                                ,electron->py()
+                                ,electron->pz()
+                                ,electron->energy()
+                                ,electron->vx()
+                                ,electron->vy()
+                                ,electron->vz()
+                                ,electron->pdgId()
+                                ,electron->charge()
+                                );
+    
     //=======================================
     localElectron.setEcalSeeding(electron->ecalDrivenSeed());
     localElectron.setTrackerSeeding(electron->trackerDrivenSeed());
@@ -193,13 +193,14 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
     }
     edm::Handle<reco::TrackCollection> tracks_h;
     iEvent.getByLabel(TrackLabel_, tracks_h);
-      
+    
     ConversionFinder convFinder;
     const ConversionInfo convInfo = convFinder.getConversionInfo(*electron, tracks_h, evt_bField, 0.45);
     localElectron.setDist(convInfo.dist());
     localElectron.setDCot(convInfo.dcot());
     
     // Some specific methods to pat::Electron
+    localElectron.setEcalDrivenMomentum(patElectron->ecalDrivenMomentum());
     
     //localElectron.setdB(patElectron->dB());
     //localElectron.setdBError(patElectron->edB());
@@ -210,7 +211,7 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 	    if ((patElectron->genParticleRef()).isNonnull()) localElectron.setGenParticleIndex((patElectron->genParticleRef()).index());
 	    else localElectron.setGenParticleIndex(-1);
 	  }
-     
+    
     if(patElectron->chargedHadronIso() != -1) localElectron.setChargedHadronIso(patElectron->chargedHadronIso());
     if(patElectron->puChargedHadronIso() != -1) localElectron.setPuChargedHadronIso( patElectron->puChargedHadronIso() );
     if(patElectron->photonIso() != -1) localElectron.setPhotonIso(patElectron->photonIso());
