@@ -77,10 +77,14 @@ void PFJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets, co
 		localJet.setNeutralHadronEnergyFraction(patJet->neutralHadronEnergyFraction());
 		localJet.setChargedEmEnergyFraction(patJet->chargedEmEnergyFraction());
 		localJet.setChargedMuEnergyFraction(patJet->chargedMuEnergyFraction());
-		localJet.setNeutralEmEnergyFraction(patJet->neutralEmEnergyFraction());
+		localJet.setNeutralEmEnergyFraction(patJet->neutralEmEnergyFraction());		
+		localJet.setHFHadronEnergyFraction(patJet->HFHadronEnergyFraction());
+		localJet.setHFEMEnergyFraction(patJet->HFEMEnergyFraction());		
 		localJet.setChargedMultiplicity(patJet->chargedMultiplicity());
 		localJet.setNeutralMultiplicity(patJet->neutralMultiplicity());
-		localJet.setMuonMultiplicity(patJet->muonMultiplicity());
+		localJet.setMuonMultiplicity(patJet->muonMultiplicity());		
+		localJet.setHFHadronMultiplicity(patJet->HFHadronMultiplicity());
+		localJet.setHFEMMultiplicity(patJet->HFEMMultiplicity());
 
 		new( (*rootJets)[j] ) TRootPFJet(localJet);
 		if(verbosity_>2) cout << "   ["<< setw(3) << j << "] " << localJet << endl;
