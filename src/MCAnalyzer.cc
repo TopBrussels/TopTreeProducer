@@ -96,7 +96,7 @@ void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootM
 	int iJet=0, iMET=0, iJetSel=0, iMETSel=0;
 
 	for(unsigned int j=0; j<genParticles->size(); ++j )
-	{
+	{	
 		const reco::GenParticle & p = (*genParticles)[ j ];
 		//find the mother ID
 		Int_t motherID = 0; Int_t grannyID = 0;
@@ -168,8 +168,8 @@ void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootM
 			iMETSel++;
 		}
 
-		// add information on primary unstable particles: keep quarks, taus, Z, W, Higgs and susy particles, with status 3
-		if ( doUnstablePartsMC_ && (abs(p.pdgId()) < 38 || (abs(p.pdgId()) > 1000000 && abs(p.pdgId()) < 3000000) )	&& p.status()==3 )
+		// add information on primary unstable particles: keep quarks, taus, Z, W, Higgs, susy and vlq particles, with status 3
+		if ( doUnstablePartsMC_ && (abs(p.pdgId()) < 38 || (abs(p.pdgId()) > 1000000 && abs(p.pdgId()) < 3000000)  || (abs(p.pdgId()) > 4000000 && abs(p.pdgId()) < 6000000))	&& p.status()==3 )
 		{
 			iUnstableParticle++;	
 			Int_t daug0Id = 0;
