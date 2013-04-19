@@ -64,6 +64,11 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet, const edm::EventSetup& iSetu
 	localJet.setBtag_softMuonByIP3dBJetTags(patJet->bDiscriminator("softMuonByIP3dBJetTags"));
 	localJet.setBtag_softElectronByPtBJetTags(patJet->bDiscriminator("softElectronByPtBJetTags"));
 	localJet.setBtag_softElectronByIP3dBJetTags(patJet->bDiscriminator("softElectronByIP3dBJetTags"));
+	localJet.setBtag_combinedCSVJPBJetTags(patJet->bDiscriminator("combinedCSVJPBJetTags"));
+	localJet.setBtag_combinedCSVJPSLBJetTags(patJet->bDiscriminator("combinedCSVJPSLBJetTags"));
+	localJet.setBtag_combinedCSVSLBJetTags(patJet->bDiscriminator("combinedCSVSLBJetTags"));
+	localJet.setBtag_softPFElectronRetrainedBJetsTags(patJet->bDiscriminator("softPFElectronBJetTags"));
+	localJet.setBtag_softPFMuonRetrainedBJetsTags(patJet->bDiscriminator("softPFMuonBJetTags"));
 
 	//cout << "CSV old, new: " << patJet->bDiscriminator("combinedSecondaryVertexBJetTags") << ", " << patJet->bDiscriminator("combinedSecondaryVertexRetrainedBJetTags") << endl;
 	
