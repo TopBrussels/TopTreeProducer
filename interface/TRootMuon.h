@@ -32,6 +32,7 @@ namespace TopTree
 //			,dB_(-9999.)
 //			,dBError_(-9999.)
 			,algo_(-9999)
+			,isPFMuon_(false)
 			,id_(-9999)
 			,chargedHadronIso_(-9999.)
 			,puChargedHadronIso_(-9999.)
@@ -59,6 +60,7 @@ namespace TopTree
 //			,dB_(muon.dB_)
 //			,dBError_(muon.dBError_)
 			,algo_(muon.algo_)
+			,isPFMuon_(muon.isPFMuon_)
 			,id_(muon.id_)
 			,chargedHadronIso_(muon.chargedHadronIso_)
 			,puChargedHadronIso_(muon.puChargedHadronIso_)
@@ -86,6 +88,7 @@ namespace TopTree
 //			,dB_(-9999.)
 //			,dBError_(-9999.)
 			,algo_(-9999)
+			,isPFMuon_(false)
 			,id_(-9999)
 			,chargedHadronIso_(-9999.)
 			,puChargedHadronIso_(-9999.)
@@ -113,6 +116,7 @@ namespace TopTree
 //			,dB_(-9999.)
 //			,dBError_(-9999.)
 			,algo_(-9999)
+			,isPFMuon_(false)
 			,id_(-9999)
 			,chargedHadronIso_(-9999.)
 			,puChargedHadronIso_(-9999.)
@@ -140,6 +144,7 @@ namespace TopTree
 //			,dB_(-9999.)
 //			,dBError_(-9999.)
 			,algo_(-9999)
+			,isPFMuon_(false)
 			,id_(-9999)
 			,chargedHadronIso_(-9999.)
 			,puChargedHadronIso_(-9999.)
@@ -167,6 +172,7 @@ namespace TopTree
 //			,dB_(-9999.)
 //			,dBError_(-9999.)
 			,algo_(-9999)
+			,isPFMuon_(false)
 			,id_(-9999)
 			,chargedHadronIso_(-9999.)
 			,puChargedHadronIso_(-9999.)
@@ -194,6 +200,7 @@ namespace TopTree
 //			,dB_(-9999.)
 //			,dBError_(-9999.)
 			,algo_(-9999)
+			,isPFMuon_(false)
 			,id_(-9999)
 			,chargedHadronIso_(-9999.)
 			,puChargedHadronIso_(-9999.)
@@ -212,8 +219,7 @@ namespace TopTree
 		Bool_t isTrackerMuon() const { return algo_ & 4; }
 		Bool_t isStandAloneMuon() const { return algo_ & 8; }
 		Bool_t isCaloMuon() const { return algo_ & 16; }
-    Bool_t isPFMuon() const { return isPFMuon_; }
-
+                Bool_t isPFMuon() const { return isPFMuon_; }
 		Int_t id() const { return id_;}
 		Bool_t idAllGlobalMuons() const { return id_ & 1; }
 		Bool_t idAllTrackerMuons() const { return id_ & 2; }
@@ -257,7 +263,7 @@ namespace TopTree
 			isoR03_sumPt_ = isoR03_sumPt;
 		}
 		void setAlgo(Int_t algo) { algo_ = algo; }
-    void setIsPFMuon(Bool_t isPFMuon) {isPFMuon_ = isPFMuon; }
+                void setIsPFMuon(Bool_t isPFMuon) {isPFMuon_ = isPFMuon; }
 		void setID(Int_t id) { id_ = id; }
 		void setID(
 			Int_t AllGlobalMuons,
@@ -335,9 +341,9 @@ namespace TopTree
 		//Float_t dBError_;           // dBError from PAT muon
 
 		Int_t algo_; // binary => GlobalMuon=00010 , TrackerMuon=00100 , StandAloneMuon=01000 , CaloMuon=10000
+		Bool_t isPFMuon_;
 		Int_t id_; 		// MuonId coded in binary word id_ ==> TrackerMuonArbitrated=0000001 , AllArbitrated=0000010 , GlobalMuonPromptTight=0000100 ,
 		// TMLastStationLoose=0001000 , TMLastStationTight=0010000 , TM2DCompatibilityLoose=0100000 , TM2DCompatibilityTight=1000000
-    Bool_t isPFMuon_;
 		
 		Float_t chargedHadronIso_;  // charged hadron isolation value computed in the PF2PAT sequence, and stored in the pat muon
 		Float_t puChargedHadronIso_;
