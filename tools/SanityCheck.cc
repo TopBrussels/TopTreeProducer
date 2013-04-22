@@ -392,6 +392,26 @@ int main(int argc, char *argv[]){
 	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),50,-1,2);
 	  histos[myArrayName[p]+hist]->Fill(((TRootJet*)myArrays[p]->At(o))->btag_combinedSecondaryVertexRetrainedBJetTags());
 
+	  hist="_bTagDisc_softPFMuon";
+	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),50,-1,2);
+	  histos[myArrayName[p]+hist]->Fill(((TRootJet*)myArrays[p]->At(o))->btag_softPFMuonRetrainedBJetsTags());
+
+	  hist="_bTagDisc_softPFElectron";
+	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),50,-1,2);
+	  histos[myArrayName[p]+hist]->Fill(((TRootJet*)myArrays[p]->At(o))->btag_softPFElectronRetrainedBJetsTags());
+
+	  hist="_bTagDisc_Combined_CSV_SL";
+	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),50,-1,2);
+	  histos[myArrayName[p]+hist]->Fill(((TRootJet*)myArrays[p]->At(o))->btag_combinedCSVSLBJetTags());
+	  
+	  hist="_bTagDisc_Combined_CSV_JP";
+	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),50,-1,2);
+	  histos[myArrayName[p]+hist]->Fill(((TRootJet*)myArrays[p]->At(o))->btag_combinedCSVJPBJetTags());
+
+	   hist="_bTagDisc_Combined_CSV_JP_SL";
+	  if (histos.find(myArrayName[p]+hist) == histos.end()) histos[myArrayName[p]+hist]=new TH1F((myArrayName[p]+hist).c_str(),(myArrayName[p]).c_str(),50,-1,2);
+	  histos[myArrayName[p]+hist]->Fill(((TRootJet*)myArrays[p]->At(o))->btag_combinedCSVJPSLBJetTags());
+
 	}
 
 	// 
