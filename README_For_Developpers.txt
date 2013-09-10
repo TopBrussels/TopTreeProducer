@@ -42,33 +42,29 @@ Table of contents:
 
 This will help you in understanding how a CMSSW EDAnalyzer works. This knowledge is mandatory for all that follows.
 
-Set up your CVS connection (if not yet done):
-
-  export CVS_RSH=/usr/bin/ssh
-  export CVSROOT=:ext:<CERNUSERNAME>@cmscvs.cern.ch:/cvs_server/repositories/CMSSW <- replace <CERNUSERNAME> with yours!
+Make sure you have a git account with the ssh-key in there!
 
 Before you start developing you should have a clean environment. This means you have checked out the latest branch you want to develop in e.g. CMSSW_38X. Clean also means that this environment is not yet used for previous development, this to ensure that you will not create code collision or commit undesirable code to break the package.
 
 How to check out the code:
-
-  cvs co -r CMSSW_38X -d TopBrussels/TopTreeProducer UserCode/TopBrussels/TopTreeProducer
+TopTreeProducer: https://github.com/TopBrussels/TopTreeProducer/wiki/How-to-set-up-a-local-working-version-of-TopTreeProducer 
 
 Once you have your new environment, please first try to compile it and fix whatever bug is still present before starting development.
 
-Note: we have not used the HEAD branch on cvs for a long time, so always develop from a CMSSW_3XX branch.
+Note: we have not used the HEAD branch for a long time, so always develop from a CMSSW_3XX branch.
 
 2. How to make a new branch
 ---------------------------
 
 Let's say you want to start development for CMSSW_4_2_X versions, then you need to start with a new branch in the TopTreeProducer package e.g. CMSSW_42X. How do you do this?
 
-Well just check out the latest branch from CVS, in this case CMSSW_38X, inside your CMSSW_4_2_X CMSSW area:
-
-  cvs co -r CMSSW_38X -d TopBrussels/TopTreeProducer UserCode/TopBrussels/TopTreeProducer
+Well just check out the latest branch from git, in this case CMSSW_38X, inside your CMSSW_4_2_X CMSSW area:
+by following the instructions here:
+https://github.com/TopBrussels/TopTreeProducer/wiki/How-to-set-up-a-local-working-version-of-TopTreeProducer
 
 Once you have the code checked out, go to  TopBrussels/TopTreeProducer/ and do:
 
-  cvs tag -b CMSSW_42X (-b stands for "branch-tag")
+####  cvs tag -b CMSSW_42X (-b stands for "branch-tag") TO BE UPDATED!!!!
 	
 Remove your TopBrussels/TopTreeProducer folder and check out the new branch for CMSSW_42X rather than CMSSW_38X. If you don't you'll end up developing in CMSSW_38X and this is not desired.
 
@@ -92,11 +88,11 @@ Once you managed to get the thing compiling, you should get your hands on a samp
 
 Create a PATtuple based on it and then try to run the TopTreeProducer on it. If all goes well, you will have your first TopTree.
 
-Congratulations! You built the base of the CMSSW_42X development. Make sure to commit your changes to CVS.
+Congratulations! You built the base of the CMSSW_42X development. Make sure to commit your changes to git.
 
 Tag the base version by doing:
 
-cvs tag baseversion_CMSSW_42X
+#### cvs tag baseversion_CMSSW_42X TO BE UPDATED!!!
 
 Now you are ready to start working on your physics object.
 
@@ -110,7 +106,7 @@ Here we will try to summarize how the TopTreeProducer is built and how you can a
   3.1 The TopTreeProducer structure
   ---------------------------------
 
-  Here you can find a visual on the TopTreeProducer for CMSSW_38X: http://cmssw.cvs.cern.ch/cgi-bin/cmssw.cgi/UserCode/TopBrussels/TopTreeProducer/?pathrev=CMSSW_38X
+  To get a visual on the TopTreeProducer for CMSSW_38X you should look in your github account : https://github.com/TopBrussels/TopTreeProducer/tree/CMSSW_38X
 
   Directory Structure:
 
@@ -441,12 +437,12 @@ Test cases (this is the minimal set that should succeed!):
 
 Finally try to write a simple macro to read out the variables you changed in your object and validate them. An example standalone root macro can be found in test/Macro.C and compilation info in the README in the same dir.
 
-If you write an awesome Macro to validate your object please do commit it to CVS;-)
+If you write an awesome Macro to validate your object please do commit it to git;-)
 
 5. How to create a tag
 ----------------------
 
-When you are really - and I mean REALY - confident that your code works and the output is sane, you should commit all your changes to the CVS branch you are working in.
+When you are really - and I mean REALY - confident that your code works and the output is sane, you should commit all your changes to the git branch you are working in.
 
 All means:
 
@@ -465,7 +461,7 @@ This will ensure that there is nothing you forgot to commit:)
 Once all of that is done you should create a sticky tag which can be used for production e.g.: CMSSW_42X_v1
 
     cd path/to/TopBrussels/TopTreeProducer
-    cvs tag CMSSW_42X_v1
+####    cvs tag CMSSW_42X_v1 TO BE UPDATED!!!
 
 Then you should announce your new tag to the top-brussels mailing list and also write a changelog for this tag on https://mon.iihe.ac.be/trac/t2b/wiki/TopTreeProducer_Changelog
 
