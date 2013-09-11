@@ -1,7 +1,6 @@
 #include "../interface/ParticleTreeDrawer.h"
 
 using namespace std;
-using namespace TopTree;
 using namespace edm;
 using namespace reco;
 using namespace HepMC;

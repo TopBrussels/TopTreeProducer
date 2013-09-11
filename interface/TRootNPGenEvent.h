@@ -13,7 +13,6 @@
 namespace TopTree
 {
 	class TRootNPGenEvent: public TObject{
->>>>>>> .merge_file_yef35A
 
 	public:
 		TRootNPGenEvent(){isNewPhysics_ = false;};
