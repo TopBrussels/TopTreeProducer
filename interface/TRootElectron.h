@@ -717,5 +717,5 @@ namespace TopTree
       ClassDef (TRootElectron,11);
       };
       }
-      
+
 #endif
