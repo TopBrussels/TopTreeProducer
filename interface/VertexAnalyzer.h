@@ -12,19 +12,20 @@
 #include "DataFormats/VertexReco/interface/Vertex.h"
 #include "DataFormats/VertexReco/interface/VertexFwd.h"
 
-#include "../interface/TRootEvent.h"
+#include "../interface/TRootVertex.h"
 
 #include "TClonesArray.h"
 
+using namespace TopTree;
 
-class VertexAnalyzer{
+class VertexAnalyzer {
 	
 public:
 	VertexAnalyzer(const edm::ParameterSet& producersNames);
 	VertexAnalyzer(const edm::ParameterSet& producersNames, int verbosity);
 	~VertexAnalyzer();
-	void SetVerbosity(int verbosity) {verbosity_ = verbosity; };
-	void Process(const edm::Event& iEvent, TRootEvent* rootEvent);
+	void SetVerbosity(int verbosity) { verbosity_ = verbosity; };
+	void Process(const edm::Event& iEvent, TClonesArray* rootVertex);
 
 private:
 	int verbosity_;

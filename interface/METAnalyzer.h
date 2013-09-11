@@ -13,6 +13,8 @@
 //#include "DataFormats/METReco/interface/METFwd.h"
 #include "DataFormats/METReco/interface/CaloMET.h"
 #include "DataFormats/METReco/interface/CaloMETCollection.h"
+#include "DataFormats/METReco/interface/PFMET.h"
+#include "DataFormats/METReco/interface/PFMETCollection.h"
 #include "DataFormats/PatCandidates/interface/MET.h"
 
 #include "../interface/TRootEvent.h"
@@ -28,11 +30,10 @@ public:
 	METAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity);
 	~METAnalyzer();
 	void SetVerbosity(int verbosity) {verbosity_ = verbosity; };
-	void Process(const edm::Event& iEvent, TClonesArray* rootMET);
+	TopTree::TRootMET Process(const reco::Candidate* met);
 
 private:
 	int verbosity_;
-	std::string dataType_ ;
 	edm::InputTag metProducer_;
 	bool useMC_;
 };

@@ -8,400 +8,418 @@
 
 #include <iostream>
 #include <iomanip>
+#include <map>
+
+// Specific methods for PF and Calo can be found on:
+// http://cms-service-sdtweb.web.cern.ch/cms-service-sdtweb/doxygen/CMSSW_3_5_2/doc/html/df/d60/DataFormats_2PatCandidates_2interface_2Jet_8h-source.html#l00212
 
 using namespace std;
 
-namespace TopTree{
-class TRootJet : public TRootParticle
+namespace TopTree
 {
+	class TRootJet : public TRootParticle
+	{
 	
-public:
-	TRootJet() :
-		TRootParticle()
-		,jetType_(0)
-		,nConstituents_(-9999)
-		,chargedMultiplicity_(-9999)
-		,n90_(-9999)
-		,n60_(-9999)
-		,jetArea_(-9999.)
-		,pileupEnergy_(-9999.)
-		,maxDistance_(-9999.)
-		,ecalEnergyFraction_(-9999.)
-		,hcalEnergyFraction_(-9999.)
-		,chargedEnergyFraction_(-9999.)
-                ,maxEInEmTowers_(-9999.)
-                ,maxEInHadTowers_(-9999.)
-	        ,towersArea_(-9999.) 
-		,chargedBroadness_(-9999.)
-	        ,btag_combinedSecondaryVertexBJetTags_(-9999.)
-	        ,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
-	        ,btag_impactParameterMVABJetTags_(-9999.)
-	        ,btag_jetBProbabilityBJetTags_(-9999.)
-	        ,btag_jetProbabilityBJetTags_(-9999.)
-	        ,btag_simpleSecondaryVertexBJetTags_(-9999.)
-	        ,btag_softElectronBJetTags_(-9999.)
-	        ,btag_softMuonBJetTags_(-9999.)
-	        ,btag_softMuonNoIPBJetTags_(-9999.)
-	        ,btag_trackCountingHighEffBJetTags_(-9999.)
-	        ,btag_trackCountingHighPurBJetTags_(-9999.)
-		,bCorrection_(-9999.)
-		,cCorrection_(-9999.)
-		,udsCorrection_(-9999.)
-		,gCorrection_(-9999.)
-		,partonFlavour_(-999)
-		,isTopJet_(false)
-		,genParton_(0)
-		{;}
-
-	TRootJet(const TRootJet& jet) :
-		TRootParticle(jet)
-		,jetType_(jet.jetType_)
-		,nConstituents_(jet.nConstituents_)
-		,chargedMultiplicity_(jet.chargedMultiplicity_)
-		,n90_(jet.n90_)
-		,n60_(jet.n60_)
-		,jetArea_(jet.jetArea_)
-		,pileupEnergy_(jet.pileupEnergy_)
-		,maxDistance_(jet.maxDistance_)
-		,ecalEnergyFraction_(jet.ecalEnergyFraction_)
-		,hcalEnergyFraction_(jet.hcalEnergyFraction_)
-		,chargedEnergyFraction_(jet.chargedEnergyFraction_)
-                ,maxEInEmTowers_(jet.maxEInEmTowers_)
-                ,maxEInHadTowers_(jet.maxEInHadTowers_)
-	        ,towersArea_(jet.towersArea_) 
-		,chargedBroadness_(jet.chargedBroadness_)
-	        ,btag_combinedSecondaryVertexBJetTags_(jet.btag_combinedSecondaryVertexBJetTags_)
-	        ,btag_combinedSecondaryVertexMVABJetTags_(jet.btag_combinedSecondaryVertexMVABJetTags_)
-	        ,btag_impactParameterMVABJetTags_(jet.btag_impactParameterMVABJetTags_)
-	        ,btag_jetBProbabilityBJetTags_(jet.btag_jetBProbabilityBJetTags_)
-	        ,btag_jetProbabilityBJetTags_(jet.btag_jetProbabilityBJetTags_)
-	        ,btag_simpleSecondaryVertexBJetTags_(jet.btag_simpleSecondaryVertexBJetTags_)
-	        ,btag_softElectronBJetTags_(jet.btag_softElectronBJetTags_)
-	        ,btag_softMuonBJetTags_(jet.btag_softMuonBJetTags_)
-	        ,btag_softMuonNoIPBJetTags_(jet.btag_softMuonNoIPBJetTags_)
-	        ,btag_trackCountingHighEffBJetTags_(jet.btag_trackCountingHighEffBJetTags_)
-	        ,btag_trackCountingHighPurBJetTags_(jet.btag_trackCountingHighPurBJetTags_)
-		,bCorrection_(jet.bCorrection_)
-		,cCorrection_(jet.cCorrection_)
-		,udsCorrection_(jet.udsCorrection_)
-		,gCorrection_(jet.gCorrection_)
-	        ,partonFlavour_(jet.partonFlavour_)
-		,isTopJet_(jet.isTopJet_)
-		,genParton_(jet.genParton_)
-		{;}
-
-	TRootJet(Double_t px, Double_t py, Double_t pz, Double_t e) :
-		TRootParticle(px,py,pz,e)
-		,jetType_(0)
-		,nConstituents_(-9999)
-		,chargedMultiplicity_(-9999)
-		,n90_(-9999)
-		,n60_(-9999)
-		,jetArea_(-9999.)
-		,pileupEnergy_(-9999.)
-		,maxDistance_(-9999.)
-		,ecalEnergyFraction_(-9999.)
-		,hcalEnergyFraction_(-9999.)
-		,chargedEnergyFraction_(-9999.)
-                ,maxEInEmTowers_(-9999.)
-                ,maxEInHadTowers_(-9999.)
-	        ,towersArea_(-9999.) 
-		,chargedBroadness_(-9999.)
-	        ,btag_combinedSecondaryVertexBJetTags_(-9999.)
-	        ,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
-	        ,btag_impactParameterMVABJetTags_(-9999.)
-	        ,btag_jetBProbabilityBJetTags_(-9999.)
-	        ,btag_jetProbabilityBJetTags_(-9999.)
-	        ,btag_simpleSecondaryVertexBJetTags_(-9999.)
-	        ,btag_softElectronBJetTags_(-9999.)
-	        ,btag_softMuonBJetTags_(-9999.)
-	        ,btag_softMuonNoIPBJetTags_(-9999.)
-	        ,btag_trackCountingHighEffBJetTags_(-9999.)
-	        ,btag_trackCountingHighPurBJetTags_(-9999.)
-		,bCorrection_(-9999.)
-		,cCorrection_(-9999.)
-		,udsCorrection_(-9999.)
-		,gCorrection_(-9999.)
-		,partonFlavour_(-9999)
-		,isTopJet_(false)
-		,genParton_(0)
-		{;}
+	public:
+		TRootJet() :
+			TRootParticle()
+			,jetType_(0)
+			,nConstituents_(-9999)
+			,jetArea_(-9999.)
+			,maxDistance_(-9999.)
+			,btag_jetBProbabilityBJetTags_(-9999.)
+			,btag_jetProbabilityBJetTags_(-9999.)
+			,btag_trackCountingHighPurBJetTags_(-9999.)
+			,btag_trackCountingHighEffBJetTags_(-9999.)
+			,btag_simpleSecondaryVertexHighEffBJetTags_(-9999.)
+			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
+			,btag_combinedSecondaryVertexBJetTags_(-9999.)
+			,btag_combinedSecondaryVertexRetrainedBJetTags_(-9999.)
+			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
+			,btag_softMuonBJetTags_(-9999.)
+			,btag_softMuonByPtBJetTags_(-9999.)
+			,btag_softMuonByIP3dBJetTags_(-9999.)
+			,btag_softElectronByPtBJetTags_(-9999.)
+			,btag_softElectronByIP3dBJetTags_(-9999.)
+			,btag_combinedCSVJPBJetTags_(-9999.)
+			,btag_combinedCSVJPSLBJetTags_(-9999.)
+			,btag_combinedCSVSLBJetTags_(-9999.)
+			,btag_softPFElectronRetrainedBJetsTags_(-9999.)
+			,btag_softPFMuonRetrainedBJetsTags_(-9999.)
+			,partonFlavour_(-999)
+			,isTopJet_(false)
+			{;}
 	
-	TRootJet(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z) :
-		TRootParticle(px,py,pz,e,vtx_x,vtx_y,vtx_z)
-		,jetType_(0)
-		,nConstituents_(-9999)
-		,chargedMultiplicity_(-9999)
-		,n90_(-9999)
-		,n60_(-9999)
-		,jetArea_(-9999.)
-		,pileupEnergy_(-9999.)
-		,maxDistance_(-9999.)
-		,ecalEnergyFraction_(-9999.)
-		,hcalEnergyFraction_(-9999.)
-		,chargedEnergyFraction_(-9999.)
-                ,maxEInEmTowers_(-9999.)
-                ,maxEInHadTowers_(-9999.)
-	        ,towersArea_(-9999.) 
-		,chargedBroadness_(-9999.)
-	        ,btag_combinedSecondaryVertexBJetTags_(-9999.)
-	        ,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
-	        ,btag_impactParameterMVABJetTags_(-9999.)
-	        ,btag_jetBProbabilityBJetTags_(-9999.)
-	        ,btag_jetProbabilityBJetTags_(-9999.)
-	        ,btag_simpleSecondaryVertexBJetTags_(-9999.)
-	        ,btag_softElectronBJetTags_(-9999.)
-	        ,btag_softMuonBJetTags_(-9999.)
-	        ,btag_softMuonNoIPBJetTags_(-9999.)
-	        ,btag_trackCountingHighEffBJetTags_(-9999.)
-	        ,btag_trackCountingHighPurBJetTags_(-9999.)
-		,bCorrection_(-9999.)
-		,cCorrection_(-9999.)
-		,udsCorrection_(-9999.)
-		,gCorrection_(-9999.)
-		,partonFlavour_(-9999)
-		,isTopJet_(false)
-		,genParton_(0)
-		{;}
+		TRootJet(const TRootJet& jet) :
+			TRootParticle(jet)
+			,jetType_(jet.jetType_)
+			,nConstituents_(jet.nConstituents_)
+			,jetArea_(jet.jetArea_)
+			,maxDistance_(jet.maxDistance_)
+			,btag_jetBProbabilityBJetTags_(jet.btag_jetBProbabilityBJetTags_)
+			,btag_jetProbabilityBJetTags_(jet.btag_jetProbabilityBJetTags_)
+			,btag_trackCountingHighPurBJetTags_(jet.btag_trackCountingHighPurBJetTags_)
+			,btag_trackCountingHighEffBJetTags_(jet.btag_trackCountingHighEffBJetTags_)
+			,btag_simpleSecondaryVertexHighEffBJetTags_(jet.btag_simpleSecondaryVertexHighEffBJetTags_)
+			,btag_simpleSecondaryVertexHighPurBJetTags_(jet.btag_simpleSecondaryVertexHighPurBJetTags_)
+			,btag_combinedSecondaryVertexBJetTags_(jet.btag_combinedSecondaryVertexBJetTags_)
+			,btag_combinedSecondaryVertexRetrainedBJetTags_(jet.btag_combinedSecondaryVertexRetrainedBJetTags_)
+			,btag_combinedSecondaryVertexMVABJetTags_(jet.btag_combinedSecondaryVertexMVABJetTags_)
+			,btag_softMuonBJetTags_(jet.btag_softMuonBJetTags_)
+			,btag_softMuonByPtBJetTags_(jet.btag_softMuonByPtBJetTags_)
+			,btag_softMuonByIP3dBJetTags_(jet.btag_softMuonByIP3dBJetTags_)
+			,btag_softElectronByPtBJetTags_(jet.btag_softElectronByPtBJetTags_)
+			,btag_softElectronByIP3dBJetTags_(jet.btag_softElectronByIP3dBJetTags_)
+			,btag_combinedCSVJPBJetTags_(jet.btag_combinedCSVJPBJetTags_)
+			,btag_combinedCSVJPSLBJetTags_(jet.btag_combinedCSVJPSLBJetTags_)
+			,btag_combinedCSVSLBJetTags_(jet.btag_combinedCSVSLBJetTags_)
+			,btag_softPFElectronRetrainedBJetsTags_(jet.btag_softPFElectronRetrainedBJetsTags_)
+			,btag_softPFMuonRetrainedBJetsTags_(jet.btag_softPFMuonRetrainedBJetsTags_)
+			,partonFlavour_(jet.partonFlavour_)
+			,isTopJet_(jet.isTopJet_)
+		  {
+			unsigned int size = sizeof(JetCorrName_)/sizeof(JetCorrName_[0]);
+			for (unsigned int i=0; i<size; i++)
+			{
+				JetCorrName_[i] = jet.JetCorrName_[i];
+			    	JetCorrValue_[i] = jet.JetCorrValue_[i];
+			}
+			for(std::map<std::string,float>::const_iterator it = jet.mistag_SF_.begin(); it != jet.mistag_SF_.end(); it++) {
+				mistag_SF_[it->first] = it->second;
+			}
+			for(std::map<std::string,float>::const_iterator it = jet.btag_SF_.begin(); it != jet.btag_SF_.end(); it++) {
+				btag_SF_[it->first] = it->second;
+			}
+			for(std::map<std::string,float>::const_iterator it = jet.mistag_SFerr_.begin(); it != jet.mistag_SFerr_.end(); it++) {
+				mistag_SFerr_[it->first] = it->second;
+			}
+			for(std::map<std::string,float>::const_iterator it = jet.btag_SFerr_.begin(); it != jet.btag_SFerr_.end(); it++) {
+				btag_SFerr_[it->first] = it->second;
+			}
+		}
 
-	TRootJet(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z, Int_t type, Float_t charge) :
-		TRootParticle(px,py,pz,e,vtx_x,vtx_y,vtx_z,type,charge)
-		,jetType_(0)
-		,nConstituents_(-9999)
-		,chargedMultiplicity_(-9999)
-		,n90_(-9999)
-		,n60_(-9999)
-		,jetArea_(-9999.)
-		,pileupEnergy_(-9999.)
-		,maxDistance_(-9999.)
-		,ecalEnergyFraction_(-9999.)
-		,hcalEnergyFraction_(-9999.)
-		,chargedEnergyFraction_(-9999.)
-                ,maxEInEmTowers_(-9999.)
-                ,maxEInHadTowers_(-9999.)
-	        ,towersArea_(-9999.) 
-		,chargedBroadness_(-9999.)
-	        ,btag_combinedSecondaryVertexBJetTags_(-9999.)
-	        ,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
-	        ,btag_impactParameterMVABJetTags_(-9999.)
-	        ,btag_jetBProbabilityBJetTags_(-9999.)
-	        ,btag_jetProbabilityBJetTags_(-9999.)
-	        ,btag_simpleSecondaryVertexBJetTags_(-9999.)
-	        ,btag_softElectronBJetTags_(-9999.)
-	        ,btag_softMuonBJetTags_(-9999.)
-	        ,btag_softMuonNoIPBJetTags_(-9999.)
-	        ,btag_trackCountingHighEffBJetTags_(-9999.)
-	        ,btag_trackCountingHighPurBJetTags_(-9999.)
-		,bCorrection_(-9999.)
-		,cCorrection_(-9999.)
-		,udsCorrection_(-9999.)
-		,gCorrection_(-9999.)
-		,partonFlavour_(-9999)
-		,isTopJet_(false)
-		,genParton_(0)
-		{;}
+		TRootJet(Double_t px, Double_t py, Double_t pz, Double_t e) :
+			TRootParticle(px,py,pz,e)
+			,jetType_(0)
+			,nConstituents_(-9999)
+			,jetArea_(-9999.)
+			,maxDistance_(-9999.)
+			,btag_jetBProbabilityBJetTags_(-9999.)
+			,btag_jetProbabilityBJetTags_(-9999.)
+			,btag_trackCountingHighPurBJetTags_(-9999.)
+			,btag_trackCountingHighEffBJetTags_(-9999.)
+			,btag_simpleSecondaryVertexHighEffBJetTags_(-9999.)
+			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
+			,btag_combinedSecondaryVertexBJetTags_(-9999.)
+			,btag_combinedSecondaryVertexRetrainedBJetTags_(-9999.)
+			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
+			,btag_softMuonBJetTags_(-9999.)
+			,btag_softMuonByPtBJetTags_(-9999.)
+			,btag_softMuonByIP3dBJetTags_(-9999.)
+			,btag_softElectronByPtBJetTags_(-9999.)
+			,btag_softElectronByIP3dBJetTags_(-9999.)
+			,btag_combinedCSVJPBJetTags_(-9999.)
+			,btag_combinedCSVJPSLBJetTags_(-9999.)
+			,btag_combinedCSVSLBJetTags_(-9999.)
+			,btag_softPFElectronRetrainedBJetsTags_(-9999.)
+			,btag_softPFMuonRetrainedBJetsTags_(-9999.)
+			,partonFlavour_(-9999)
+			,isTopJet_(false)
+			{;}
+	
+		TRootJet(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z) :
+			TRootParticle(px,py,pz,e,vtx_x,vtx_y,vtx_z)
+			,jetType_(0)
+			,nConstituents_(-9999)
+			,jetArea_(-9999.)
+			,maxDistance_(-9999.)
+			,btag_jetBProbabilityBJetTags_(-9999.)
+			,btag_jetProbabilityBJetTags_(-9999.)
+			,btag_trackCountingHighPurBJetTags_(-9999.)
+			,btag_trackCountingHighEffBJetTags_(-9999.)
+			,btag_simpleSecondaryVertexHighEffBJetTags_(-9999.)
+			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
+			,btag_combinedSecondaryVertexBJetTags_(-9999.)
+			,btag_combinedSecondaryVertexRetrainedBJetTags_(-9999.)
+			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
+			,btag_softMuonBJetTags_(-9999.)
+			,btag_softMuonByPtBJetTags_(-9999.)
+			,btag_softMuonByIP3dBJetTags_(-9999.)
+			,btag_softElectronByPtBJetTags_(-9999.)
+			,btag_softElectronByIP3dBJetTags_(-9999.)
+			,btag_combinedCSVJPBJetTags_(-9999.)
+			,btag_combinedCSVJPSLBJetTags_(-9999.)
+			,btag_combinedCSVSLBJetTags_(-9999.)
+			,btag_softPFElectronRetrainedBJetsTags_(-9999.)
+			,btag_softPFMuonRetrainedBJetsTags_(-9999.)
+			,partonFlavour_(-9999)
+			,isTopJet_(false)
+			{;}
 
-	TRootJet(const TLorentzVector &momentum) :
-		TRootParticle(momentum)
-		,jetType_(0)
-		,nConstituents_(-9999)
-		,chargedMultiplicity_(-9999)
-		,n90_(-9999)
-		,n60_(-9999)
-		,jetArea_(-9999.)
-		,pileupEnergy_(-9999.)
-		,maxDistance_(-9999.)
-		,ecalEnergyFraction_(-9999.)
-		,hcalEnergyFraction_(-9999.)
-                ,maxEInEmTowers_(-9999.)
-                ,maxEInHadTowers_(-9999.)
-	        ,towersArea_(-9999.) 
-		,chargedBroadness_(-9999.)
-	        ,btag_combinedSecondaryVertexBJetTags_(-9999.)
-	        ,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
-	        ,btag_impactParameterMVABJetTags_(-9999.)
-	        ,btag_jetBProbabilityBJetTags_(-9999.)
-	        ,btag_jetProbabilityBJetTags_(-9999.)
-	        ,btag_simpleSecondaryVertexBJetTags_(-9999.)
-	        ,btag_softElectronBJetTags_(-9999.)
-	        ,btag_softMuonBJetTags_(-9999.)
-	        ,btag_softMuonNoIPBJetTags_(-9999.)
-	        ,btag_trackCountingHighEffBJetTags_(-9999.)
-	        ,btag_trackCountingHighPurBJetTags_(-9999.)
-		,bCorrection_(-9999.)
-		,cCorrection_(-9999.)
-		,udsCorrection_(-9999.)
-		,gCorrection_(-9999.)
-		,partonFlavour_(-9999)
-		,isTopJet_(false)
-		,genParton_(0)
-		{;}
+		TRootJet(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z, Int_t type, Float_t charge) :
+			TRootParticle(px,py,pz,e,vtx_x,vtx_y,vtx_z,type,charge)
+			,jetType_(0)
+			,nConstituents_(-9999)
+			,jetArea_(-9999.)
+			,maxDistance_(-9999.)
+			,btag_jetBProbabilityBJetTags_(-9999.)
+			,btag_jetProbabilityBJetTags_(-9999.)
+			,btag_trackCountingHighPurBJetTags_(-9999.)
+			,btag_trackCountingHighEffBJetTags_(-9999.)
+			,btag_simpleSecondaryVertexHighEffBJetTags_(-9999.)
+			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
+			,btag_combinedSecondaryVertexBJetTags_(-9999.)
+			,btag_combinedSecondaryVertexRetrainedBJetTags_(-9999.)
+			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
+			,btag_softMuonBJetTags_(-9999.)
+			,btag_softMuonByPtBJetTags_(-9999.)
+			,btag_softMuonByIP3dBJetTags_(-9999.)
+			,btag_softElectronByPtBJetTags_(-9999.)
+			,btag_softElectronByIP3dBJetTags_(-9999.)
+			,btag_combinedCSVJPBJetTags_(-9999.)
+			,btag_combinedCSVJPSLBJetTags_(-9999.)
+			,btag_combinedCSVSLBJetTags_(-9999.)
+			,btag_softPFElectronRetrainedBJetsTags_(-9999.)
+			,btag_softPFMuonRetrainedBJetsTags_(-9999.)
+			,partonFlavour_(-9999)
+			,isTopJet_(false)
+			{;}
 
-	TRootJet(const TLorentzVector &momentum, const TVector3 &vertex, Int_t type, Float_t charge) :
-		TRootParticle(momentum, vertex, type, charge)
-		,jetType_(0)
-		,nConstituents_(-9999)
-		,chargedMultiplicity_(-9999)
-		,n90_(-9999)
-		,n60_(-9999)
-		,jetArea_(-9999.)
-		,pileupEnergy_(-9999.)
-		,maxDistance_(-9999.)
-		,ecalEnergyFraction_(-9999.)
-		,hcalEnergyFraction_(-9999.)
-		,chargedEnergyFraction_(-9999.)
-                ,maxEInEmTowers_(-9999.)
-                ,maxEInHadTowers_(-9999.)
-	        ,towersArea_(-9999.) 
-		,chargedBroadness_(-9999.)
-	        ,btag_combinedSecondaryVertexBJetTags_(-9999.)
-	        ,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
-	        ,btag_impactParameterMVABJetTags_(-9999.)
-	        ,btag_jetBProbabilityBJetTags_(-9999.)
-	        ,btag_jetProbabilityBJetTags_(-9999.)
-	        ,btag_simpleSecondaryVertexBJetTags_(-9999.)
-	        ,btag_softElectronBJetTags_(-9999.)
-	        ,btag_softMuonBJetTags_(-9999.)
-	        ,btag_softMuonNoIPBJetTags_(-9999.)
-	        ,btag_trackCountingHighEffBJetTags_(-9999.)
-	        ,btag_trackCountingHighPurBJetTags_(-9999.)
-		,bCorrection_(-9999.)
-		,cCorrection_(-9999.)
-		,udsCorrection_(-9999.)
-		,gCorrection_(-9999.)
-		,partonFlavour_(-9999)
-		,isTopJet_(false)
-		,genParton_(0)
-		{;}
+		TRootJet(const TLorentzVector &momentum) :
+			TRootParticle(momentum)
+			,jetType_(0)
+			,nConstituents_(-9999)
+			,jetArea_(-9999.)
+			,maxDistance_(-9999.)
+			,btag_jetBProbabilityBJetTags_(-9999.)
+			,btag_jetProbabilityBJetTags_(-9999.)
+			,btag_trackCountingHighPurBJetTags_(-9999.)
+			,btag_trackCountingHighEffBJetTags_(-9999.)
+			,btag_simpleSecondaryVertexHighEffBJetTags_(-9999.)
+			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
+			,btag_combinedSecondaryVertexBJetTags_(-9999.)
+			,btag_combinedSecondaryVertexRetrainedBJetTags_(-9999.)
+			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
+			,btag_softMuonBJetTags_(-9999.)
+			,btag_softMuonByPtBJetTags_(-9999.)
+			,btag_softMuonByIP3dBJetTags_(-9999.)
+			,btag_softElectronByPtBJetTags_(-9999.)
+			,btag_softElectronByIP3dBJetTags_(-9999.)
+			,btag_combinedCSVJPBJetTags_(-9999.)
+			,btag_combinedCSVJPSLBJetTags_(-9999.)
+			,btag_combinedCSVSLBJetTags_(-9999.)
+			,btag_softPFElectronRetrainedBJetsTags_(-9999.)
+			,btag_softPFMuonRetrainedBJetsTags_(-9999.)
+			,partonFlavour_(-9999)
+			,isTopJet_(false)
+			{;}
 
-	~TRootJet() {;}
+		TRootJet(const TLorentzVector &momentum, const TVector3 &vertex, Int_t type, Float_t charge) :
+			TRootParticle(momentum, vertex, type, charge)
+			,jetType_(0)
+			,nConstituents_(-9999)
+			,jetArea_(-9999.)
+			,maxDistance_(-9999.)
+			,btag_jetBProbabilityBJetTags_(-9999.)
+			,btag_jetProbabilityBJetTags_(-9999.)
+			,btag_trackCountingHighPurBJetTags_(-9999.)
+			,btag_trackCountingHighEffBJetTags_(-9999.)
+			,btag_simpleSecondaryVertexHighEffBJetTags_(-9999.)
+			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
+			,btag_combinedSecondaryVertexBJetTags_(-9999.)
+			,btag_combinedSecondaryVertexRetrainedBJetTags_(-9999.)
+			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
+			,btag_softMuonBJetTags_(-9999.)
+			,btag_softMuonByPtBJetTags_(-9999.)
+			,btag_softMuonByIP3dBJetTags_(-9999.)
+			,btag_softElectronByPtBJetTags_(-9999.)
+			,btag_softElectronByIP3dBJetTags_(-9999.)
+			,btag_combinedCSVJPBJetTags_(-9999.)
+			,btag_combinedCSVJPSLBJetTags_(-9999.)
+			,btag_combinedCSVSLBJetTags_(-9999.)
+			,btag_softPFElectronRetrainedBJetsTags_(-9999.)
+			,btag_softPFMuonRetrainedBJetsTags_(-9999.)
+			,partonFlavour_(-9999)
+			,isTopJet_(false)
+			{;}
+
+		~TRootJet() {;}
+
+		Int_t jetType() const { return jetType_; }
+		Int_t nConstituents() const { return nConstituents_; }
+		Float_t jetArea() const { return jetArea_; }
+		Float_t maxDistance() const { return maxDistance_; }
+		Float_t btag_jetBProbabilityBJetTags() const { return btag_jetBProbabilityBJetTags_; }
+		Float_t btag_jetProbabilityBJetTags() const { return btag_jetProbabilityBJetTags_; }
+		Float_t btag_trackCountingHighPurBJetTags() const { return btag_trackCountingHighPurBJetTags_; }
+		Float_t btag_trackCountingHighEffBJetTags() const { return btag_trackCountingHighEffBJetTags_; }
+		Float_t btag_simpleSecondaryVertexHighEffBJetTags() const { return btag_simpleSecondaryVertexHighEffBJetTags_; }
+		Float_t btag_simpleSecondaryVertexHighPurBJetTags() const { return btag_simpleSecondaryVertexHighPurBJetTags_; }
+		Float_t btag_combinedSecondaryVertexBJetTags() const { return btag_combinedSecondaryVertexBJetTags_; }
+		Float_t btag_combinedSecondaryVertexRetrainedBJetTags() const { return btag_combinedSecondaryVertexRetrainedBJetTags_; }
+		Float_t btag_combinedSecondaryVertexMVABJetTags() const { return btag_combinedSecondaryVertexMVABJetTags_; }
+		Float_t btag_softMuonBJetTags() const { return btag_softMuonBJetTags_; }
+		Float_t btag_softMuonByPtBJetTags() const { return btag_softMuonByPtBJetTags_; }
+		Float_t	btag_softMuonByIP3dBJetTags() const { return btag_softMuonByIP3dBJetTags_; }
+		Float_t	btag_softElectronByPtBJetTags() const { return btag_softElectronByPtBJetTags_; }
+		Float_t	btag_softElectronByIP3dBJetTags() const { return btag_softElectronByIP3dBJetTags_; }
+		Float_t	btag_combinedCSVJPBJetTags() const { return btag_combinedCSVJPBJetTags_; }
+		Float_t	btag_combinedCSVJPSLBJetTags() const { return btag_combinedCSVJPSLBJetTags_; }
+		Float_t	btag_combinedCSVSLBJetTags() const { return btag_combinedCSVSLBJetTags_; }
+		Float_t	btag_softPFElectronRetrainedBJetsTags() const { return btag_softPFElectronRetrainedBJetsTags_; }
+    Float_t	btag_softPFMuonRetrainedBJetsTags() const { return btag_softPFMuonRetrainedBJetsTags_; }
+
+		std::map<std::string, float> getMistag_SF() const { 
+			std::cout << mistag_SF_.size() << endl;
+			return mistag_SF_;
+		}
+		std::map<std::string, float> getBtag_SF() const { return btag_SF_;}
+		std::map<std::string, float> getMistag_SFerr() const { return mistag_SFerr_;}
+		std::map<std::string, float> getBtag_SFerr() const { return btag_SFerr_;}
 
 
-	Int_t jetType() const { return jetType_; }
-	Int_t nConstituents() const { return nConstituents_; }
-	Int_t chargedMultiplicity() const { return chargedMultiplicity_; }
-	Int_t n90() const { return n90_; }
-	Int_t n60() const { return n60_; }
-	Float_t jetArea() const { return jetArea_; }
-	Float_t pileupEnergy() const { return pileupEnergy_; }
-	Float_t maxDistance() const { return maxDistance_; }
-	Float_t ecalEnergyFraction() const { return ecalEnergyFraction_; }
-	Float_t hcalEnergyFraction() const { return hcalEnergyFraction_; }
-	Float_t chargedEnergyFraction() const { return chargedEnergyFraction_; }
-        Float_t maxEInEmTowers() const { return maxEInEmTowers_; }
-        Float_t maxEInHadTowers() const { return maxEInHadTowers_;}
-	Float_t towersArea() const { return towersArea_;} 
-	Float_t chargedBroadness() const { return chargedBroadness_; }
-	Float_t btag_combinedSecondaryVertexBJetTags() const { return btag_combinedSecondaryVertexBJetTags_;}
-	Float_t btag_combinedSecondaryVertexMVABJetTags() const { return btag_combinedSecondaryVertexMVABJetTags_;}
-	Float_t btag_impactParameterMVABJetTags() const { return btag_impactParameterMVABJetTags_;}
-	Float_t btag_jetBProbabilityBJetTags() const { return btag_jetBProbabilityBJetTags_;}
-	Float_t btag_jetProbabilityBJetTags() const { return btag_jetProbabilityBJetTags_;}
-	Float_t btag_simpleSecondaryVertexBJetTags() const { return btag_simpleSecondaryVertexBJetTags_;}
-	Float_t btag_softElectronBJetTags() const { return btag_softElectronBJetTags_;}
-	Float_t btag_softMuonBJetTags() const { return btag_softMuonBJetTags_;}
-	Float_t btag_softMuonNoIPBJetTags() const { return btag_softMuonNoIPBJetTags_;}
-	Float_t btag_trackCountingHighEffBJetTags() const { return btag_trackCountingHighEffBJetTags_;}
-	Float_t btag_trackCountingHighPurBJetTags() const { return btag_trackCountingHighPurBJetTags_;}
-	Float_t bCorrection() const { return bCorrection_; }
-	Float_t cCorrection() const { return cCorrection_; }
-	Float_t udsCorrection() const { return udsCorrection_; }
-	Float_t gCorrection() const { return gCorrection_; }
-	TObject* genParton() const { return genParton_.GetObject(); }
-	Int_t partonFlavour() const {return partonFlavour_; }
-	//Float_t partonFlavour() const {return partonFlavour_; }
-	Bool_t isTopJet() const { return isTopJet_; }
+		Int_t partonFlavour() const {return partonFlavour_; }
+		//Float_t partonFlavour() const {return partonFlavour_; }
+		Bool_t isTopJet() const { return isTopJet_; }
 
-	virtual TString typeName() const { return "TRootJet"; }
+		float getJetCorrFactor(std::string name) {
+
+		  unsigned int size = sizeof(JetCorrName_)/sizeof(JetCorrName_[0]);
+
+		  for (unsigned int i=0; i<size; i++) {
+
+		    if ( JetCorrName_[i] == name )
+		      return JetCorrValue_[i];
+
+		  }
+
+		  // if we reach this point, the correction factor was not found -> print all possible names
+		  cout << "JetCorrFactor " << name << " was not found, possible names are: ";
+
+		  for (unsigned int i=0; i<size; i++)
+		    if (JetCorrName_[i] != "")
+		      cout << JetCorrName_[i] << endl;
+
+		  cout << endl;
+		  
+		  return 0;
+
+		}
+
+		virtual TString typeName() const { return "TRootJet"; }
+
+		void setJetType(Int_t jetType) { jetType_ = jetType; }
+		void setNConstituents(Int_t nConstituents) { nConstituents_ = nConstituents; }
+		void setJetArea(Float_t jetArea) { jetArea_ = jetArea; }
+		void setMaxDistance(Float_t maxDistance) { maxDistance_ = maxDistance; }
+		// btag
+		void setBtag_jetBProbabilityBJetTags(Float_t btag_jetBProbabilityBJetTags) { btag_jetBProbabilityBJetTags_ = btag_jetBProbabilityBJetTags; }
+		void setBtag_jetProbabilityBJetTags(Float_t btag_jetProbabilityBJetTags) { btag_jetProbabilityBJetTags_ = btag_jetProbabilityBJetTags; }
+		void setBtag_trackCountingHighPurBJetTags(Float_t btag_trackCountingHighPurBJetTags) { btag_trackCountingHighPurBJetTags_ = btag_trackCountingHighPurBJetTags; }
+		void setBtag_trackCountingHighEffBJetTags(Float_t btag_trackCountingHighEffBJetTags) { btag_trackCountingHighEffBJetTags_ = btag_trackCountingHighEffBJetTags; }
+		void setBtag_simpleSecondaryVertexHighEffBJetTags(Float_t btag_simpleSecondaryVertexHighEffBJetTags) { btag_simpleSecondaryVertexHighEffBJetTags_ = btag_simpleSecondaryVertexHighEffBJetTags; }
+		void setBtag_simpleSecondaryVertexHighPurBJetTags(Float_t btag_simpleSecondaryVertexHighPurBJetTags) { btag_simpleSecondaryVertexHighPurBJetTags_ = btag_simpleSecondaryVertexHighPurBJetTags; }
+		void setBtag_combinedSecondaryVertexBJetTags(Float_t btag_combinedSecondaryVertexBJetTags) { btag_combinedSecondaryVertexBJetTags_ = btag_combinedSecondaryVertexBJetTags; }
+		void setBtag_combinedSecondaryVertexRetrainedBJetTags(Float_t btag_combinedSecondaryVertexBJetTags) { btag_combinedSecondaryVertexRetrainedBJetTags_ = btag_combinedSecondaryVertexBJetTags; }
+		void setBtag_combinedSecondaryVertexMVABJetTags(Float_t btag_combinedSecondaryVertexMVABJetTags) { btag_combinedSecondaryVertexMVABJetTags_ = btag_combinedSecondaryVertexMVABJetTags; }
+		void setBtag_softMuonBJetTags(Float_t btag_softMuonBJetTags) { btag_softMuonBJetTags_ = btag_softMuonBJetTags; }
+		void setBtag_softMuonByPtBJetTags(Float_t btag_softMuonByPtBJetTags) { btag_softMuonByPtBJetTags_ = btag_softMuonByPtBJetTags; }
+		void setBtag_softMuonByIP3dBJetTags(Float_t btag_softMuonByIP3dBJetTags) { btag_softMuonByIP3dBJetTags_ = btag_softMuonByIP3dBJetTags; }
+		void setBtag_softElectronByPtBJetTags(Float_t btag_softElectronByPtBJetTags) { btag_softElectronByPtBJetTags_ = btag_softElectronByPtBJetTags; }
+		void setBtag_softElectronByIP3dBJetTags(Float_t btag_softElectronByIP3dBJetTags) { btag_softElectronByIP3dBJetTags_ = btag_softElectronByIP3dBJetTags; }
+    void setBtag_combinedCSVJPBJetTags(Float_t btag_combinedCSVJPBJetTags) { btag_combinedCSVJPBJetTags_ = btag_combinedCSVJPBJetTags; }
+    void setBtag_combinedCSVJPSLBJetTags(Float_t btag_combinedCSVJPSLBJetTags) { btag_combinedCSVJPSLBJetTags_ = btag_combinedCSVJPSLBJetTags; }
+    void setBtag_combinedCSVSLBJetTags(Float_t btag_combinedCSVSLBJetTags) { btag_combinedCSVSLBJetTags_ = btag_combinedCSVSLBJetTags; }
+    void setBtag_softPFElectronRetrainedBJetsTags(Float_t btag_softPFElectronRetrainedBJetsTags) { btag_softPFElectronRetrainedBJetsTags_ = btag_softPFElectronRetrainedBJetsTags; }
+    void setBtag_softPFMuonRetrainedBJetsTags(Float_t btag_softPFMuonRetrainedBJetsTags) { btag_softPFMuonRetrainedBJetsTags_ = btag_softPFMuonRetrainedBJetsTags; }
 
 
-	void setJetType(Int_t jetType) { jetType_ = jetType; }
-	void setNConstituents(Int_t nConstituents) { nConstituents_ = nConstituents; }
-	void setChargedMultiplicity(Int_t chargedMultiplicity) { chargedMultiplicity_ = chargedMultiplicity; }
-	void setN90(Int_t n90) { n90_ = n90; }
-	void setN60(Int_t n60) { n60_ = n60; }
-	void setJetArea(Float_t jetArea) { jetArea_ = jetArea; }
-	void setPileupEnergy(Float_t pileupEnergy) { pileupEnergy_ = pileupEnergy; }
-	void setMaxDistance(Float_t maxDistance) { maxDistance_ = maxDistance; }
-	void setMaxEInEmTowers(Float_t maxEInEmTowers) { maxEInEmTowers_ = maxEInEmTowers; }
-	void setTowersArea(Float_t towersArea) {towersArea_ = towersArea; }
-	void setMaxEInHadTowers(Float_t maxEInHadTowers) { maxEInHadTowers_ = maxEInHadTowers; }
-	void setEcalEnergyFraction(Float_t ecalEnergyFraction) { ecalEnergyFraction_ = ecalEnergyFraction; }
-	void setHcalEnergyFraction(Float_t hcalEnergyFraction) { hcalEnergyFraction_ = hcalEnergyFraction; }
-	void setChargedEnergyFraction(Float_t chargedEnergyFraction) { chargedEnergyFraction_ = chargedEnergyFraction; }
-	void setChargedBroadness(Float_t chargedBroadness) { chargedBroadness_ = chargedBroadness; }
-	//btag
-	void setBtag_combinedSecondaryVertexBJetTags(Float_t btag_combinedSecondaryVertexBJetTags) { btag_combinedSecondaryVertexBJetTags_ = btag_combinedSecondaryVertexBJetTags;};
-	void setBtag_combinedSecondaryVertexMVABJetTags(Float_t btag_combinedSecondaryVertexMVABJetTags ) { btag_combinedSecondaryVertexMVABJetTags_ = btag_combinedSecondaryVertexMVABJetTags;};
-	void setBtag_impactParameterMVABJetTags(Float_t btag_impactParameterMVABJetTags ) { btag_impactParameterMVABJetTags_ = btag_impactParameterMVABJetTags;};
-	void setBtag_jetBProbabilityBJetTags(Float_t btag_jetBProbabilityBJetTags ) { btag_jetBProbabilityBJetTags_ = btag_jetBProbabilityBJetTags;};
-	void setBtag_jetProbabilityBJetTags(Float_t btag_jetProbabilityBJetTags ) { btag_jetProbabilityBJetTags_ = btag_jetProbabilityBJetTags;};
-	void setBtag_simpleSecondaryVertexBJetTags(Float_t btag_simpleSecondaryVertexBJetTags ) { btag_simpleSecondaryVertexBJetTags_ = btag_simpleSecondaryVertexBJetTags;};
-	void setBtag_softElectronBJetTags(Float_t btag_softElectronBJetTags ) { btag_softElectronBJetTags_ = btag_softElectronBJetTags;};
-	void setBtag_softMuonBJetTags(Float_t btag_softMuonBJetTags ) { btag_softMuonBJetTags_ = btag_softMuonBJetTags;};
-	void setBtag_softMuonNoIPBJetTags(Float_t btag_softMuonNoIPBJetTags ) { btag_softMuonNoIPBJetTags_ = btag_softMuonNoIPBJetTags;};
-	void setBtag_trackCountingHighEffBJetTags(Float_t btag_trackCountingHighEffBJetTags ) { btag_trackCountingHighEffBJetTags_ = btag_trackCountingHighEffBJetTags;};
-	void setBtag_trackCountingHighPurBJetTags(Float_t btag_trackCountingHighPurBJetTags) { btag_trackCountingHighPurBJetTags_ = btag_trackCountingHighPurBJetTags;};
-	void setBCorrection(Float_t bCorrection) { bCorrection_ = bCorrection; }
-	void setCCorrection(Float_t cCorrection) { cCorrection_ = cCorrection; }
-	void setUDSCorrection(Float_t udsCorrection) { udsCorrection_ = udsCorrection; }
-	void setGCorrection(Float_t gCorrection) { gCorrection_ = gCorrection; }
-	void setPartonFlavour(Int_t partonFlavour) { partonFlavour_ = partonFlavour;}
-	void setIsTopJet(Bool_t isTopJet) { isTopJet_ = isTopJet; }
-	void setGenParton(TObject* genParton) { genParton_ = genParton; }
+		void setPartonFlavour(Int_t partonFlavour) { partonFlavour_ = partonFlavour; }
+		void setIsTopJet(Bool_t isTopJet) { isTopJet_ = isTopJet; }
 
-	friend std::ostream& operator<< (std::ostream& stream, const TRootJet& jet) {
-		stream << "TRootJet - Charge=" << setw(2) << jet.charge() << " (Et,eta,phi)=("<< setw(10) << jet.Et() <<","<< setw(10) << jet.Eta() <<","<< setw(10) << jet.Phi() << ")"
+		//btag scalefactors
+		void setMistag_SF(std::map<std::string, float> mistag_SF) { 
+			for(std::map<std::string,float>::const_iterator it = mistag_SF.begin(); it != mistag_SF.end(); it++) {
+				mistag_SF_[it->first] = it->second;
+			}
+		}
+		void setBtag_SF(std::map<std::string, float> btag_SF) { 
+			for(std::map<std::string,float>::const_iterator it = btag_SF.begin(); it != btag_SF.end(); it++) {
+				btag_SF_[it->first] = it->second;
+			}				
+		}
+		void setMistag_SFerr(std::map<std::string, float> mistag_SFerr) { 
+			for(std::map<std::string,float>::const_iterator it = mistag_SFerr.begin(); it != mistag_SFerr.end(); it++) {
+				mistag_SFerr_[it->first] = it->second;
+			}				
+		}
+		void setBtag_SFerr(std::map<std::string, float> btag_SFerr) { 
+			for(std::map<std::string,float>::const_iterator it = btag_SFerr.begin(); it != btag_SFerr.end(); it++) {
+				btag_SFerr_[it->first] = it->second;
+			}				
+		}
+
+
+		// JEC
+		void setJetCorrFactor(int pos, std::string name, float factor)
+		{  
+		  JetCorrName_[pos] = name;
+		  JetCorrValue_[pos] = factor;
+		}
+
+		friend std::ostream& operator<< (std::ostream& stream, const TRootJet& jet)
+		{
+			stream << "TRootJet - Charge=" << setw(2) << jet.charge() << " (Et,eta,phi)=("<< setw(10) << jet.Et() <<","<< setw(10) << jet.Eta() <<","<< setw(10) << jet.Phi() << ")"
 				<< " vertex(x,y,z)=("<< jet.vx() <<","<< jet.vy() <<","<< jet.vz() << ")";
-		return stream;
+			return stream;
+		};
+
+
+	private:
+		//Jet Info
+		Int_t jetType_;                     // 0 = Unknown ; 1 = CaloJet ; 2 = PFJet
+		Int_t nConstituents_;               // Number of constituents of the jet (calotowers for CaloJet / PFParticles for PFJet)
+		Float_t jetArea_;                   // Jet area
+		Float_t maxDistance_;               // Maximum distance from jet to constituent
+
+		// jet correction factors
+		std::string JetCorrName_[4]; 			// check in JetAnalyzer.cc that size is big enough to store all corrections!
+		float JetCorrValue_[4];
+
+		//btag Info
+		Float_t btag_jetBProbabilityBJetTags_;
+		Float_t btag_jetProbabilityBJetTags_;
+		Float_t btag_trackCountingHighPurBJetTags_;
+		Float_t btag_trackCountingHighEffBJetTags_;
+		Float_t btag_simpleSecondaryVertexHighEffBJetTags_;
+		Float_t btag_simpleSecondaryVertexHighPurBJetTags_;
+		Float_t btag_combinedSecondaryVertexBJetTags_;
+		Float_t btag_combinedSecondaryVertexRetrainedBJetTags_;
+		Float_t btag_combinedSecondaryVertexMVABJetTags_;
+		Float_t btag_softMuonBJetTags_;
+		Float_t btag_softMuonByPtBJetTags_;
+		Float_t btag_softMuonByIP3dBJetTags_;
+		Float_t btag_softElectronByPtBJetTags_;
+		Float_t btag_softElectronByIP3dBJetTags_;
+		Float_t btag_combinedCSVJPBJetTags_;
+		Float_t btag_combinedCSVJPSLBJetTags_;
+		Float_t btag_combinedCSVSLBJetTags_;
+		Float_t btag_softPFElectronRetrainedBJetsTags_;
+		Float_t btag_softPFMuonRetrainedBJetsTags_;
+
+		//btag scalefactors
+		std::map<std::string, float> mistag_SF_;
+		std::map<std::string, float> btag_SF_;
+		std::map<std::string, float> mistag_SFerr_;
+		std::map<std::string, float> btag_SFerr_;
+		
+
+		//MC info
+		Int_t partonFlavour_;
+		Bool_t isTopJet_;				// Is parton matched to the jet a decay product of the top quark ?
+
+		ClassDef (TRootJet,2);
 	};
-
-
-private:
-        //CaloJet Info
-        Int_t jetType_;                     // 0 = Unknown ; 1 = CaloJet ; 2 = PFJet
-	Int_t nConstituents_;               // Number of constituents of the jet (calotowers for CaloJet / PFParticles for PFJet)
-	Int_t chargedMultiplicity_;         // Number of tracks associated to the jet. Not available for reco::CaloJet
-	Int_t n90_;                         // Number of constituents of the jet carrying 90% of tje jet energy
-	Int_t n60_;                         // Number of constituents of the jet carrying 60% of tje jet energy
-	Float_t jetArea_;                   // Jet area
-	Float_t pileupEnergy_;               // Pile-up Energy
-	Float_t maxDistance_;               // Maximum distance from jet to constituent
-	Float_t ecalEnergyFraction_;        // ECAL Energy Fraction
-	Float_t hcalEnergyFraction_;        // HCAL Energy Fraction
-        Float_t chargedEnergyFraction_;     // Charged Energy Fraction - Only available for reco::PFJet        
-        Float_t maxEInEmTowers_;
-        Float_t maxEInHadTowers_;
-	Float_t towersArea_; 
-	
-	// Variables from pat::Jet
-        
-	Float_t chargedBroadness_;          // DR of the cone containing 75% of the jet charged energy 
-        
-	//btag Info
-	Float_t btag_combinedSecondaryVertexBJetTags_;
-	Float_t btag_combinedSecondaryVertexMVABJetTags_;
-	Float_t btag_impactParameterMVABJetTags_;
-	Float_t btag_jetBProbabilityBJetTags_;
-	Float_t btag_jetProbabilityBJetTags_;
-	Float_t btag_simpleSecondaryVertexBJetTags_;
-	Float_t btag_softElectronBJetTags_;
-	Float_t btag_softMuonBJetTags_;
-	Float_t btag_softMuonNoIPBJetTags_;
-	Float_t btag_trackCountingHighEffBJetTags_;
-	Float_t btag_trackCountingHighPurBJetTags_;
-
-        //Correction Info
-	Float_t bCorrection_;               // correction factor for b hypothesis
-	Float_t cCorrection_;               // correction factor for c hypothesis
-	Float_t udsCorrection_;             // correction factor for uds hypothesis
-	Float_t gCorrection_;               // correction factor for gluon hypothesis
-
-	//MC info
-        Int_t partonFlavour_;
-	Bool_t isTopJet_;				// Is parton matched to the jet a decay product of the top quark ?
-        TRef genParton_;	
-  ClassDef (TRootJet,1);
-};
 }
+
 #endif

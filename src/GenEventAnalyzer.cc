@@ -7,19 +7,16 @@ using namespace edm;
 
 GenEventAnalyzer::GenEventAnalyzer(const edm::ParameterSet& producersNames):verbosity_(0)
 {
-	dataType_ = producersNames.getUntrackedParameter<string>("dataType","unknown");
 	genEventProducer_ = producersNames.getParameter<edm::InputTag>("genEventProducer");
 }
 
 GenEventAnalyzer::GenEventAnalyzer(const edm::ParameterSet& producersNames, int verbosity):verbosity_(verbosity)
 {
-	dataType_ = producersNames.getUntrackedParameter<string>("dataType","unknown");
 	genEventProducer_ = producersNames.getParameter<edm::InputTag>("genEventProducer");
 }
 
 GenEventAnalyzer::GenEventAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
 {
-	dataType_ = producersNames.getUntrackedParameter<string>("dataType","unknown");
 	genEventProducer_ = producersNames.getParameter<edm::InputTag>("genEventProducer");
 }
 

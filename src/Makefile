@@ -10,27 +10,27 @@ ROOTLIBS      = $(shell root-config --libs) -lMinuit
 ROOTGLIBS     = $(shell root-config --glibs) -lMinuit
 
 # Linux with egcs
-DEFINES       = -DNO_ORCA_CLASSES
-CXX           = g++
+DEFINES 	= -DNO_ORCA_CLASSES
+CXX		= g++
 CXXFLAGS	= -O -Wall -fPIC $(DEFINES)
-LD			= g++
-LDFLAGS		= -g
-SOFLAGS		= -shared
+LD		= g++
+LDFLAGS 	= -g
+SOFLAGS 	= -shared
 
 CXXFLAGS	+= $(ROOTCFLAGS)
-LIBS		= $(ROOTLIBS)  -lEG
+LIBS		= $(ROOTLIBS) -lEG
 GLIBS		= $(ROOTGLIBS)
 #------------------------------------------------------------------------------
-SOURCES		= $(wildcard TRoot*.cc)
-HEADERS		= $(wildcard ../interface/TRoot*.h)
-OBJECTS		= $(SOURCES:.$(SrcSuf)=.$(ObjSuf))
-DEPENDS		= $(SOURCES:.$(SrcSuf)=.d)
+SOURCES 	= $(wildcard TRoot*.cc)
+HEADERS 	= $(wildcard ../interface/TRoot*.h)
+OBJECTS 	= $(SOURCES:.$(SrcSuf)=.$(ObjSuf))
+DEPENDS 	= $(SOURCES:.$(SrcSuf)=.d)
 SOBJECTS	= $(SOURCES:.$(SrcSuf)=.$(DllSuf))
 
 
 #PROGRAMS	=  $(SOBJECTS)
 
-all: libToto.so clean ; cp libToto.so ../test/. ; cp libToto.so ~/lib/.;
+all: libToto.so clean ; cp libToto.so ../test; cp libToto.so ../skimmer
 
 clean:
 	@echo "Cleaning..."

@@ -1,5 +1,6 @@
 #include "../interface/MCAssociator.h"
 
+using namespace TopTree;
 
 MCAssociator::MCAssociator(): verbosity_(0), nMC_(0), mcParticles_(0), genParticles_(), mcParticlesMap_()
 {
@@ -27,7 +28,7 @@ void MCAssociator::init(const edm::Event& iEvent, TClonesArray* mcParticles)
 	{
 		// TODO - remove indexInList in TRootMCParticle
 		//igen = ( (TRootParticle*)mcParticles_->At(imc))->genParticleIndex_();
-		igen = ( (TRootMCParticle*)mcParticles_->At(imc))->indexInList();
+		igen = ( (TRootMCParticle*)mcParticles_->At(imc))->genParticleIndex();
 		mcParticlesMap_[igen]=imc;
 	}
 }
@@ -35,14 +36,14 @@ void MCAssociator::init(const edm::Event& iEvent, TClonesArray* mcParticles)
 
 void MCAssociator::process(TClonesArray* recoParticles)
 {
-	int igen;
+	int igen=-1;
 	std::map<int,int>::iterator it;
 
 	for (int ipart=0; ipart<recoParticles->GetEntriesFast(); ipart++)
 	{
 		TRootParticle* recoParticle = (TRootParticle*)recoParticles->At(ipart);
 		igen = recoParticle->genParticleIndex();
-		if(igen<0)
+		if(igen<=0)
 		{
 			if(verbosity_>2) cout <<"   "<< recoParticle->typeName() << "[" << ipart << "] not matched (at CMSSW level)" << endl;
 			continue;
@@ -76,14 +77,12 @@ void MCAssociator::process(TClonesArray* recoParticles)
 
 			TRootMCParticle localMCParticle( p.px(), p.py(), p.pz(), p.energy(), p.vx(), p.vy(), p.vz(), p.pdgId(), p.charge(), p.status(), p.numberOfDaughters(), motherID, grannyID, 0, 0, 0, 0, igen );
 			new( (*mcParticles_)[nMC_] ) TRootMCParticle(localMCParticle);
-			recoParticle->setGenParticle( (TObject*)mcParticles_->At(nMC_) );
 			if(verbosity_>2) cout <<"      ===> now matched to mcParticle["<< nMC_<<"] "<< localMCParticle << endl;
 			nMC_++;
 		}
 		else
 		{
 			if(verbosity_>2) cout <<"   "<< ( (TRootParticle*)recoParticles->At(ipart))->typeName() << "[" << ipart << "] matched to mcParticles[" << it->second << "]" << endl;
-			recoParticle->setGenParticle( (TObject*)mcParticles_->At(it->second) );
 		}
 	}
 }
@@ -91,14 +90,22 @@ void MCAssociator::process(TClonesArray* recoParticles)
 
 void MCAssociator::printParticleAssociation(TClonesArray* recoParticles)
 {
+	for (Int_t imc=0; imc<nMC_; imc++) // reindexing to take into account matches that were not inserted with MCAssociator::Init
+	{
+		Int_t igen = ( (TRootMCParticle*)mcParticles_->At(imc))->genParticleIndex();
+		mcParticlesMap_[igen]=imc;
+	}
+	std::map<int,int>::iterator it;
 	for (int ipart=0; ipart<recoParticles->GetEntriesFast(); ipart++)
 	{
 		if (ipart==0) cout << endl;
 		TRootParticle* localParticle = (TRootParticle*)recoParticles->At(ipart);
-		if( localParticle->genParticle()!=0 )
+    Int_t indexRECO = localParticle->genParticleIndex();
+		it=mcParticlesMap_.find(indexRECO);
+		if(it!=mcParticlesMap_.end())
 		{
 			cout <<"   "<< localParticle->typeName() <<"["<< ipart << "] " << *localParticle<< endl;
-			cout <<"       ===> matched to mcParticles: " << *(localParticle->genParticle()) << endl;
+			cout <<"       ===> matched to mcParticles: " << *((TRootMCParticle*)mcParticles_->At(it->second)) << endl;
 
 		} else {
 			cout <<"   "<< localParticle->typeName() <<"["<< ipart << "] " << *localParticle<< endl;
