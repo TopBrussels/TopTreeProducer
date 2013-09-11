@@ -317,46 +317,6 @@ namespace TopTree
 
 	
 	private:
-	
-	// Variables from reco::Muon
-	Float_t et_em_;
-	Float_t et_had_;
-	Float_t et_ho_;
-	Float_t caloCompatibility_;
-	
-	Float_t isoR03_emEt_;
-	Float_t isoR03_hadEt_;
-	Float_t isoR03_hoEt_;
-	Float_t isoR03_sumPt_;
-	Int_t isoR03_nTracks_;
-	Int_t isoR03_nJets_;
-
-	Bool_t energyValid_;
-	Bool_t matchesValid_;
-	Bool_t isolationValid_;
-
-        //New variables
-        Bool_t vetoIso_;            //veto conesize is 0.07  in the ecal and 0.1 in the hcal
-	                            // if true-> Isolated
-	Float_t vetoEm_;            //veto conesize is 0.07  in the ecal
-	Float_t vetoHad_;           //veto conesize is 0.1  in the hcal
-	Float_t deltaRClosestJet_;  // minimal DeltaR with the closest Jet (after requirements)
-	Float_t d0_;                // d0 of global Muon
-	Float_t d0error_;           // d0 error of global Muon
-	Float_t chi2_;              // chi2 of global Muon
-        Int_t nofValidHits_;        // nof hits of inner track
-        TLorentzVector innerTrack_; // inner track 
-
-	Int_t direction_;	//  OutsideIn = -1, Undefined = 0, InsideOut = 1
-	Int_t algo_; // binary => GlobalMuon=00010 , TrackerMuon=00100 , StandAloneMuon=01000 , CaloMuon=10000
-	// MuonId coded in binary word id_ ==> TrackerMuonArbitrated=0000001 , AllArbitrated=0000010 , GlobalMuonPromptTight=0000100 ,
-	// TMLastStationLoose=0001000 , TMLastStationTight=0010000 , TM2DCompatibilityLoose=0100000 , TM2DCompatibilityTight=1000000
-	Int_t id_;
-
-	ClassDef (TRootMuon,1);
-};
-}
-=======
 		// Variables from reco::Muon
 		Float_t isoR03_emEt_;
 		Float_t isoR03_hadEt_;
