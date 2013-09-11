@@ -1,14 +1,17 @@
 #include <iomanip>
 #include "../interface/TRootMuon.h"
 #include "../interface/TRootElectron.h"
-#include "../interface/TRootJet.h"
+#include "../interface/TRootJe t.h"
+#include "../interface/TRootCaloJet.h"
+#include "../interface/TRootPFJet.h"
 #include "../interface/TRootMET.h"
 #include "../interface/TRootGenEvent.h"
-#include "../interface/TRootSignalEvent.h"
 #include "../interface/TRootEvent.h"
 #include "../interface/TRootRun.h"
 #include "../interface/TRootParticle.h"
 #include "../interface/TRootMCParticle.h"
+#include "../interface/TRootVertex.h"
+#include "../interface/TRootHLTInfo.h"
 
 #include <TFile.h>
 #include <TH1.h>
@@ -17,8 +20,13 @@
 #include <TBranch.h>
 #include <TTree.h>
 
-void Macro(){
-        int verbosity                 = 5;
+#include <fstream>
+#include <sstream>
+
+using namespace TopTree;
+
+int main(){
+        int verbosity                 = 1;
 	//0 muet
 	//1 Main Info
 	//2
@@ -26,16 +34,18 @@ void Macro(){
 	//4 Info for each event
 	//5 Debug
 
-	bool isCSA07Soup              = false;
-	bool doHLT                    = false;
+	bool realData						= false;
+	bool doHLT                    = true;
 	bool doMC                     = false;
-	bool doJet                    = false;
+	bool doCaloJet                = true;
 	bool doMuon                   = false;
 	bool doElectron               = false;
-	bool doMET                    = true;
-	bool doGenEvent               = true;
+	bool doMET                    = false;
+	bool doGenEvent               = false;
 
-	TFile* f=new TFile("TopTree.root");
+	cout << "Opening file" << endl;
+	TFile* f = new TFile("21052010_123157_TOPTREE.root");
+	//TFile* f=new TFile("TopTree_pythia.root");
 	//TFile* f=new TFile("/user/jmmaes/CMSSW/CMSSW_2_2_4_Sanity/CMSSW_2_2_4/src/TopBrussels/TopTreeProducer/test/TopTree.root");
 	TTree* runTree = (TTree*) f->Get("runTree");
 	TTree* eventTree = (TTree*) f->Get("eventTree");
@@ -48,11 +58,12 @@ void Macro(){
 	TRootEvent* event = 0;
 	event_br->SetAddress(&event);
 	
+	if(verbosity > 0) cout<<"Declaring Branches and TClonesArray"<<endl;
 	//Declartion of Branches and TClonesArray
 	TBranch* mcParticles_br;
 	TClonesArray* mcParticles;
-	TBranch* jets_br;
-	TClonesArray* jets;
+	TBranch* caloJets_br;
+	TClonesArray* caloJets;
 	TBranch* muons_br;
 	TClonesArray* muons;
 	TBranch* electrons_br;
@@ -65,44 +76,43 @@ void Macro(){
 	if(doMC)
 	{
 		mcParticles_br = (TBranch *) eventTree->GetBranch("MCParticles");
-		mcParticles = new TClonesArray("TRootParticle", 0);
+		mcParticles = new TClonesArray("TopTree::TRootParticle", 0);
 		mcParticles_br->SetAddress(&mcParticles);
 	}
 
-	if(doJet)
+	if(doCaloJet)
 	{
-		jets_br = (TBranch *) eventTree->GetBranch("Jets");
-		jets = new TClonesArray("TRootJet", 0);
-		jets_br->SetAddress(&jets);
+		caloJets_br = (TBranch *) eventTree->GetBranch("CaloJets_selectedPatJetsAK5Calo");
+//		caloJets_br = (TBranch *) eventTree->GetBranch("Jets_iterativeCone5CaloJets");
+		caloJets = new TClonesArray("TopTree::TRootCaloJet", 0);
+		caloJets_br->SetAddress(&caloJets);
 	}
 
-	
 	if(doMuon)
 	{
 		muons_br = (TBranch *) eventTree->GetBranch("Muons");
-		muons = new TClonesArray("TRootMuon", 0);
+		muons = new TClonesArray("TopTree::TRootMuon", 0);
 		muons_br->SetAddress(&muons);
 	}
 		
 	if(doElectron)
 	{
-
 		electrons_br = (TBranch *) eventTree->GetBranch("Electrons");
-		electrons = new TClonesArray("TRootElectron", 0);
+		electrons = new TClonesArray("TopTree::TRootElectron", 0);
 		electrons_br->SetAddress(&electrons);
 	}
 		
         if(doMET)
 	{
 		mets_br = (TBranch *) eventTree->GetBranch("MET");
-		mets = new TClonesArray("TRootMET", 0);
+		mets = new TClonesArray("TopTree::TRootMET", 0);
 		mets_br->SetAddress(&mets);
 	}
         
 	if(doGenEvent)
 	{
 		genEvents_br = (TBranch *) eventTree->GetBranch("GenEvent");
-		genEvents = new TClonesArray("TRootGenEvent", 0);
+		genEvents = new TClonesArray("TopTree::TRootGenEvent", 0);
 		genEvents_br->SetAddress(&genEvents);
 	}
 		
@@ -110,9 +120,9 @@ void Macro(){
 	// HLT Run Summary
 	if (doHLT)
 	{
-		cout << "runTree->GetEntries()="<<runTree->GetEntries()<<endl;
-		runTree->GetEvent(0);
-		cout << dec << endl;
+	  cout << "runTree->GetEntries()="<<runTree->GetEntries()<<endl;
+	  runTree->GetEvent(0);
+	  cout << dec << endl;
 		cout << "HLT-Report " << "---------- Event  Summary ------------\n";
 		cout << "HLT-Report"
 				<< " Events total = " << runInfos->nHLTEvents()
@@ -122,38 +132,137 @@ void Macro(){
 				<< "\n";
 
 		cout << endl;
-		cout << "HLT-Report " << "---------- HLTrig Summary ------------\n";
-		cout << "HLT-Report   HLT Bit#     WasRun     Passed     Errors  Name\n";
-
-		for (unsigned int i=0; i!=runInfos->nHLTPaths(); ++i)
-		{
-			printf("HLT-Report %10u %10u %10u %10u  ", i, runInfos->hltWasRun(i), runInfos->hltAccept(i), runInfos->hltErrors(i));
-			cout << runInfos->hltNames(i) << endl;
-		}
-
-		cout << endl;
+	
 	}
 
-
-
-        //Declaration of histograms
-        TH1F h_PtJets("PtJets","Pt of jets",50,0,500); 
+   //Declaration of histograms
+   TH1F h_PtJets("PtCaloJets","Pt of caloJets",50,0,500);
 	TH1F h_distrib("distrib","",100,-1,1);
 	//
+		vector< vector<int> > runLumiInfo;
+
+	if(realData)
+	{
+		if(verbosity > 3) cout << "Reading in JSON file " << endl;
+
+		string inputJSON;
+
+		ifstream myfile ("JSON_test.txt");
+		if (myfile.is_open())
+		{
+			getline (myfile,inputJSON); // Only the first line is needed
+			myfile.close();
+		}
+	
+		vector<string> splittedInputJSON;
+		size_t begin = 2, end = 2;
+
+		while(end < inputJSON.size())
+		{
+			end = inputJSON.find("]], \"",begin);
+			string splitted = inputJSON.substr(begin, end - begin + 1);
+			begin = end + 5;
+		
+			size_t tempEnd = splitted.find("\": [[", 0);
+			string runNr = splitted.substr(0, tempEnd);
+			stringstream ss(runNr);
+			int runNumber = 0;
+			ss >> runNumber;
+		
+			string remain = splitted.substr(tempEnd + 4, splitted.size() - ( tempEnd + 3 ) );
+			size_t tempEnd2 = remain.find("]", 0);
+			size_t tempBegin2 = 0;
+
+			while(tempEnd2 < remain.size())
+			{
+				string lumiInfo = remain.substr(tempBegin2 + 1, tempEnd2 - tempBegin2 - 1);
+				tempBegin2 = tempEnd2 + 3;
+				tempEnd2 = remain.find("]", tempBegin2);
+			
+				// parse lumiInfo string
+				size_t tempBegin3 = lumiInfo.find(", ",0);
+				string minLS = lumiInfo.substr(0,tempBegin3);
+				string maxLS = lumiInfo.substr(tempBegin3 + 2, lumiInfo.size());
+				int minLumiSection = 0;
+				int maxLumiSection = 0;
+				stringstream ssMin(minLS);		
+				stringstream ssMax(maxLS);
+				ssMin >> minLumiSection;
+				ssMax >> maxLumiSection;
+		
+				vector<int> tempInfo;
+				tempInfo.push_back(runNumber);
+				tempInfo.push_back(minLumiSection);
+				tempInfo.push_back(maxLumiSection);
+				runLumiInfo.push_back(tempInfo);
+			}
+		}
+	}
 
 	unsigned int nEvents = (int)eventTree->GetEntries();
-	
+
+	//nEvents = 5000;
+
+	int previous_run = 0;
+
 	for(unsigned int ievt=0; ievt<nEvents; ievt++)
 	{
 		eventTree->GetEvent(ievt);
+		runTree->GetEvent(0);
 		if(verbosity>3) cout <<"event "<< ievt <<endl;
 		if(verbosity>3) cout<<"event->nb()="<<event->nb()<<endl;
-		if (isCSA07Soup && verbosity>3) cout << "CSA07 Soup:  pid=" << event->csa07id() << " - " << event->csa07process() << " - weight=" << event->csa07weight() << endl;
 
+		bool goodEvent = true;
+		if(realData)
+		{
+			goodEvent = false;
+			for(unsigned int k=0; k<runLumiInfo.size(); k++)
+			{
+				if(event->runId() == runLumiInfo[k][0] && event->lumiBlockId() >= runLumiInfo[k][1] && event->lumiBlockId() <= runLumiInfo[k][2])
+					goodEvent = true;
+			}
+		}
+		
 		if (doHLT)
 		{
-			for(unsigned int ipath=36; ipath<40; ipath++) cout << "   " << runInfos->hltNames(ipath) << " decision=" << event->trigHLT(ipath) <<endl;
+
+		  TopTree::TRootHLTInfo hltInfo = runInfos->getHLTinfo(event->runId()); // get the triggerconfiguration for this run
+		  
+		  // get the trigger bits
+		  
+		  int HLT_Muon_bit = hltInfo.hltPath("HLT_Mu9");
+		  
+		  if(verbosity>5) cout << "HLT_Muon_bit: " <<  HLT_Muon_bit << endl;
+
+		  if( !event->trigHLT(HLT_Muon_bit) ) // skip event if it doesn't pass our selected muon trigger
+
+		    goodEvent=false;
+
+		  // print hlt summary for every new run 
+
+		  if ( event->runId() != previous_run ) {
+
+		    previous_run = event->runId();
+
+		    stringstream runID; runID << event->runId();
+		  
+		    cout << "HLT-Report " << "---------- HLTrig Summary for RUN "+runID.str()+" ------------\n";
+		    cout << "HLT-Report   HLT Bit#     WasRun     Passed     Errors  Name\n";
+
+		    for (unsigned int i=0; i!=hltInfo.nHLTPaths(); ++i)
+		      {
+
+			printf("HLT-Report %10u %10u %10u %10u  ", i, hltInfo.hltWasRun(i), hltInfo.hltAccept(i), hltInfo.hltErrors(i));
+			cout << hltInfo.hltNames(i) << endl;
+		      }
+		    
+		    cout << endl;
+		    //for(unsigned int ipath=36; ipath<40; ipath++) cout << "   " << runInfos->hltNames(ipath) << " decision=" << event->trigHLT(ipath) <<endl;
+		  }
+
 		}
+
+		if(goodEvent == false) continue; // skip events that don't pass JSON or HLT
 
 		//access to muons
 		if(doMuon){
@@ -175,18 +284,18 @@ void Macro(){
 		  }
 	        } 
 		
-		//access to jets
-		if(doJet){
-		  if(verbosity>4) cout<<"Access to jets"<<endl;
-                  if(verbosity>3) cout<<"Nof jets: "<<jets->GetEntriesFast()<<endl;
-		  TRootJet* jet;
-		  for(int i=0;i<jets->GetEntriesFast();i++){
-		    jet = (TRootJet*) jets->At(i);
-		    //h_PtJets.Fill(jet->Pt());
-		    //h_distrib.Fill(jet->btag_combinedSecondaryVertexBJetTags());
-		    h_distrib.Fill(jet->btag_trackCountingHighEffBJetTags());
+		//access to caloJets
+		if(doCaloJet){
+		  if(verbosity>4) cout<<"Access to caloJets"<<endl;
+        if(verbosity>3) cout<<"Nof caloJets: "<<caloJets->GetEntriesFast()<<endl;
+		  TRootCaloJet* caloJet;
+		  for(int i=0;i<caloJets->GetEntriesFast();i++){
+		    caloJet = (TRootCaloJet*) caloJets->At(i);
+		    h_PtJets.Fill(caloJet->Pt());
+		    //h_distrib.Fill(caloJet->btag_combinedSecondaryVertexBJetTags());
+		    h_distrib.Fill(caloJet->btag_trackCountingHighEffBJetTags());
 		  }
-                }
+		}
 		
 		//access to GenEvent
 		if(doGenEvent){

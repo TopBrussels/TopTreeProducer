@@ -14,29 +14,28 @@
 #include "DataFormats/PatCandidates/interface/Jet.h"
 #include "DataFormats/PatCandidates/interface/JetCorrFactors.h"
 
+#include "RecoBTag/Records/interface/BTagPerformanceRecord.h"
+#include "CondFormats/PhysicsToolsObjects/interface/BinningPointByMap.h"
+#include "RecoBTag/PerformanceDB/interface/BtagPerformance.h"
+
 #include "../interface/TRootJet.h"
 
-#include "TClonesArray.h"
+using namespace TopTree;
 
-
-class JetAnalyzer{
+class JetAnalyzer {
 	
 public:
-	JetAnalyzer(const edm::ParameterSet& producersNames);
-	JetAnalyzer(const edm::ParameterSet& producersNames, int verbosity);
-	JetAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity);
-	JetAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity);
+	JetAnalyzer();
+	JetAnalyzer(int verbosity);
+	JetAnalyzer(const edm::ParameterSet& myConfig, int verbosity);
 	~JetAnalyzer();
 	void SetVerbosity(int verbosity) {verbosity_ = verbosity; };
-	void Process(const edm::Event& iEvent, TClonesArray* rootJets);
+	TRootJet Process(const reco::Jet* jet, const edm::EventSetup& iSetup);
 
 private:
 	int verbosity_;
-	std::string dataType_ ;
-	edm::InputTag jetProducer_;
-	edm::InputTag mcProducer_;
 	bool useMC_;
-	std::vector<std::string> vJetProducer;
+	bool isData_;
 
 };
 

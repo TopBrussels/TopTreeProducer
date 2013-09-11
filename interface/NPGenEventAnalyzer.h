@@ -16,6 +16,8 @@
 #include "TClonesArray.h"
 #include "TLorentzVector.h"
 
+using namespace TopTree;
+
 class NPGenEventAnalyzer{
 	
 public:
@@ -31,7 +33,6 @@ public:
   
 private:
 	int verbosity_;
-	std::string dataType_ ;
 	edm::InputTag genParticlesProducer_;
  ///
 };

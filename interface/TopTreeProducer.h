@@ -18,48 +18,55 @@
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/ParameterSet/interface/FileInPath.h"
 
-#include "FWCore/Framework/interface/TriggerNames.h"
+#include "FWCore/Common/interface/TriggerNames.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
 
-#include "RecoEcal/EgammaCoreTools/interface/EcalClusterLazyTools.h"
-#include "RecoEgamma/EgammaTools/interface/ConversionLikelihoodCalculator.h"
+#include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h" 
 
 #include "../interface/HLTAnalyzer.h"
 #include "../interface/MCAnalyzer.h"
 #include "../interface/MCAssociator.h"
 #include "../interface/VertexAnalyzer.h"
 #include "../interface/JetAnalyzer.h"
+#include "../interface/JPTJetAnalyzer.h"
+#include "../interface/CaloJetAnalyzer.h"
+#include "../interface/GenJetAnalyzer.h"
+#include "../interface/PFJetAnalyzer.h"
 #include "../interface/MuonAnalyzer.h"
-#include "../interface/CosmicMuonAnalyzer.h"
-#include "../interface/CosmicMuonTrackAnalyzer.h"
 #include "../interface/ElectronAnalyzer.h"
 #include "../interface/METAnalyzer.h"
+#include "../interface/CaloMETAnalyzer.h"
+#include "../interface/PFMETAnalyzer.h"
+#include "../interface/TrackMETAnalyzer.h"
+#include "../interface/TCMETAnalyzer.h"
 #include "../interface/GenEventAnalyzer.h"
 #include "../interface/NPGenEventAnalyzer.h"
 #include "../interface/SpinCorrGenAnalyzer.h"
-#include "../interface/SemiLepEventAnalyzer.h"
 
 #include "../interface/TRootRun.h"
 #include "../interface/TRootEvent.h"
-#include "../interface/TRootSignalEvent.h"
 #include "../interface/TRootParticle.h"
 #include "../interface/TRootMCParticle.h"
 #include "../interface/TRootJet.h"
+#include "../interface/TRootCaloJet.h"
+#include "../interface/TRootGenJet.h"
+#include "../interface/TRootPFJet.h"
 #include "../interface/TRootMuon.h"
-#include "../interface/TRootCosmicMuon.h"
 #include "../interface/TRootElectron.h"
 #include "../interface/TRootMET.h"
+#include "../interface/TRootCaloMET.h"
+#include "../interface/TRootPFMET.h"
+#include "../interface/TRootTrackMET.h"
 #include "../interface/TRootGenEvent.h"
 #include "../interface/TRootNPGenEvent.h"
 #include "../interface/TRootSpinCorrGen.h"
-#include "../interface/TRootSemiLepEvent.h"
-#include "../interface/TRootTrack.h"
+#include "../interface/TRootVertex.h"
 
 #include "TFile.h"
 #include "TTree.h"
 #include "TClonesArray.h"
 
-
+//using namespace TopTree;
 
 class TopTreeProducer : public edm::EDAnalyzer {
 public:
@@ -68,7 +75,7 @@ public:
 	
 	
 private:
-	virtual void beginJob(const edm::EventSetup&) ;
+	virtual void beginJob() ;
 	virtual void analyze(const edm::Event&, const edm::EventSetup&);
 	virtual void endJob() ;
 
@@ -79,49 +86,56 @@ private:
 	std::string rootFileName_ ;
 	TFile* rootFile_ ;
 	TTree* eventTree_;
-	TTree* runTree_;	
-	std::string dataType_ ;
-	bool isCSA07Soup;
+	TTree* runTree_;
 	bool doHLT;
 	bool doMC;
 	bool doPDFInfo;
 	bool doSignalMuMuGamma;
 	bool doSignalTopTop;
 	bool doPrimaryVertex;
-	bool doJet;
-	bool doJetStudy;
+	bool runGeneralTracks;
+	bool doCaloJet;
+	bool doGenJet;
+	bool doPFJet;
+	bool doJPTJet;
 	bool doMuon;
-	bool doCosmicMuon;
-	bool doCosmicMuonTrack;
 	bool doElectron;
-	bool doMET;
+	bool doCaloMET;
+	bool doPFMET;
+	bool doTrackMET;
+	bool doTCMET;
 	bool doGenEvent;
 	bool doNPGenEvent;
 	bool doSpinCorrGen;
-	bool doSemiLepEvent;
 	bool drawMCTree;
-        std::vector<std::string> vJetProducer;	
-	
+	std::vector<std::string> vGenJetProducer;
+	std::vector<std::string> vCaloJetProducer;
+	std::vector<std::string> vPFJetProducer;
+	std::vector<std::string> vJPTJetProducer;
+	std::vector<std::string> vMuonProducer;
+	std::vector<std::string> vElectronProducer;
+        std::vector<std::string> vPFmetProducer;
+        std::vector<std::string> vTrackmetProducer; 
 	int nTotEvt_;
 	HLTAnalyzer* hltAnalyzer_;
 	TRootRun* runInfos_;
 	TRootEvent* rootEvent;
 	TClonesArray* mcParticles;
 	TClonesArray* tracks;
-	TClonesArray* jets;
-	vector<TClonesArray*> vjets;
-	TClonesArray* muons;
-	TClonesArray* CosmicMuons;
-	TClonesArray* electrons;
-	TClonesArray* met;
+	std::vector<TClonesArray*> vcaloJets;
+	std::vector<TClonesArray*> vgenJets;
+	std::vector<TClonesArray*> vpfJets;
+	std::vector<TClonesArray*> vjptJets;
+	std::vector<TClonesArray*> vmuons;
+	std::vector<TClonesArray*> velectrons;
+	TClonesArray* CALOmet;
+	std::vector<TClonesArray*> vPFmets;
+	std::vector<TClonesArray*> vTrackmets;
+	TClonesArray* TCmet;
 	TClonesArray* genEvent;
-        TClonesArray* NPgenEvent;
+	TClonesArray* NPgenEvent;
 	TClonesArray* spinCorrGen;
-	TClonesArray* semiLepEvent;
-
-	TClonesArray* CosmicMuonTracksGL;
-	TClonesArray* CosmicMuonTracksSTA;
-	TClonesArray* CosmicMuonTracksTR;
+	TClonesArray* primaryVertex;
 
 };
 
