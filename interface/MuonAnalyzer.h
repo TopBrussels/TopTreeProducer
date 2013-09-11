@@ -7,37 +7,37 @@
 
 // user include files
 #include "FWCore/Framework/interface/Event.h"
-#include "FWCore/ParameterSet/interface/ParameterSet.h"
-#include "FWCore/Framework/interface/ESHandle.h"
-
-#include "DataFormats/JetReco/interface/CaloJet.h"
-#include "DataFormats/JetReco/interface/PFJet.h"
-#include "DataFormats/PatCandidates/interface/Jet.h"
+#include "FWCore/Framework/interface/Frameworkfwd.h"
+#include "FWCore/Framework/interface/MakerMacros.h"
 
 #include "DataFormats/MuonReco/interface/Muon.h"
 #include "DataFormats/MuonReco/interface/MuonFwd.h"
 #include "DataFormats/PatCandidates/interface/Muon.h"
-#include "DataFormats/BeamSpot/interface/BeamSpot.h"
+#include "DataFormats/MuonReco/interface/MuonSelectors.h"
+#include "DataFormats/VertexReco/interface/Vertex.h"
+#include "DataFormats/VertexReco/interface/VertexFwd.h"
 
 #include "../interface/TRootMuon.h"
 
 #include "TClonesArray.h"
 
 
-class MuonAnalyzer{
+class MuonAnalyzer
+{
 	
 public:
 	MuonAnalyzer(const edm::ParameterSet& producersNames);
 	MuonAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity);
+	MuonAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity);
 	~MuonAnalyzer();
-	void SetVerbosity(int verbosity) {verbosity_ = verbosity; };
+	void SetVerbosity(int verbosity) { verbosity_ = verbosity; };
 	void Process(const edm::Event& iEvent, TClonesArray* rootMuons);
 
 private:
 	int verbosity_;
-	std::string dataType_ ;
 	edm::InputTag muonProducer_;
-	edm::InputTag jetProducer_;
+	edm::InputTag primaryVertexProducer_;
+	std::vector<std::string> vMuonProducer;
 	bool useMC_;
 };
 

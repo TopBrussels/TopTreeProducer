@@ -2,692 +2,720 @@
 #define TRootElectron_h
 
 #include <map>
+#include <iostream>
+#include <TLorentzVector.h>
+
 
 #include "../interface/TRootParticle.h"
 
 using namespace std;
 
-namespace TopTree{
-class TRootElectron : public TRootParticle
+namespace TopTree
 {
-
-public:
-
-	TRootElectron() :
-		TRootParticle()
-		,classification_(-9999)
-		,caloEnergy_(-9999.)
-		,caloEnergyError_(-9999.)
-		,trackMomentum_(-9999.)
-		,trackMomentumError_(-9999.)
-		,hadOverEm_(-9999.)
-		,deltaEtaIn_(-9999.)
-		,deltaPhiIn_(-9999.)
-		,energySuperClusterOverPin_(-9999.)
-		,deltaEtaOut_(-9999.)
-		,deltaPhiOut_(-9999.)
-		,energySeedClusterOverPout_(-9999.)
-		,energyScaleCorrected_(false)
-		,momentumCorrected_(false)
-		,pixelLayersWithMeasurement_(-1)
-		,stripLayersWithMeasurement_(-1)
-		,d0_(-9999.)
-		,d0Error_(-9999.) 
-		,dsz_(-9999.)
-		,dszError_(-9999.)
-		,normalizedChi2_(-9999.)
-		,ptError_(-9999.)
-		,etaError_(-9999.)
-		,phiError_(-9999.)
-		,nbClusters_(-9999)
-		,superClusterRawEnergy_(-9999.)
-		,preshowerEnergy_(-9999.)
-		,caloPosition_(-9999.,-9999.,-9999.)
-		,scRef_()
-		,clusterAlgo_(-9999)
-		,caloConeSize_(-9999.)
-		,e2x2_(-9999.)
-		,e3x3_(-9999.)
-		,e5x5_(-9999.)
-		,eMax_(-9999.)
-		,isoR01_sumPt_(-9999.)
-		,isoR01_nTracks_(-9999)
-		,isoR02_sumPt_(-9999.)
-		,isoR02_nTracks_(-9999)
-		,isoR03_emEt_(-9999.)
-		,isoR03_hadEt_(-9999.)
-		,isoR03_sumPt_(-9999.)
-		,isoR03_nTracks_(-9999)
-		,isoR05_emEt_(-9999.)
-		,isoR05_hadEt_(-9999.)
-		,isoR05_sumPt_(-9999.)
-		,isoR05_nTracks_(-9999)
-		,idCutBasedFixedThresholdLoose_(-1)
-		,idCutBasedFixedThresholdTight_(-1)
-		,idCutBasedFixedThresholdHighEnergy_(-1)
-		,idCutBasedCategorizedLoose_(-1)
-		,idCutBasedCategorizedTight_(-1)
-		,idLikelihood_(-9999.)
-		,idNeuralNet_(-9999.)
-		{;}
-
-	TRootElectron(const TRootElectron& electron) :
-		TRootParticle(electron)
-		,classification_(electron.classification_)
-		,caloEnergy_(electron.caloEnergy_)
-		,caloEnergyError_(electron.caloEnergyError_)
-		,trackMomentum_(electron.trackMomentum_)
-		,trackMomentumError_(electron.trackMomentumError_)
-		,hadOverEm_(electron.hadOverEm_)
-		,deltaEtaIn_(electron.deltaEtaIn_)
-		,deltaPhiIn_(electron.deltaPhiIn_)
-		,energySuperClusterOverPin_(electron.energySuperClusterOverPin_)
-		,deltaEtaOut_(electron.deltaEtaOut_)
-		,deltaPhiOut_(electron.deltaPhiOut_)
-		,energySeedClusterOverPout_(electron.energySeedClusterOverPout_)
-		,energyScaleCorrected_(electron.energyScaleCorrected_)
-		,momentumCorrected_(electron.momentumCorrected_)
-		,pixelLayersWithMeasurement_(electron.pixelLayersWithMeasurement_)
-		,stripLayersWithMeasurement_(electron.stripLayersWithMeasurement_)
-		,d0_(electron.d0_)
-		,d0Error_(electron.d0Error_) 
-		,dsz_(electron.dsz_)
-		,dszError_(electron.dszError_)
-		,normalizedChi2_(electron.normalizedChi2_)
-		,ptError_(electron.ptError_)
-		,etaError_(electron.etaError_)
-		,phiError_(electron.phiError_)
-		,nbClusters_(electron.nbClusters_)
-		,superClusterRawEnergy_(electron.superClusterRawEnergy_)
-		,preshowerEnergy_(electron.preshowerEnergy_)
-		,caloPosition_(electron.caloPosition_)
-		,scRef_(electron.scRef_)
-		,clusterAlgo_(electron.clusterAlgo_)
-		,caloConeSize_(electron.caloConeSize_)
-		,e2x2_(electron.e2x2_)
-		,e3x3_(electron.e3x3_)
-		,e5x5_(electron.e5x5_)
-		,eMax_(electron.eMax_)
-		,isoR01_sumPt_(electron.isoR01_sumPt_)
-		,isoR01_nTracks_(electron.isoR01_nTracks_)
-		,isoR02_sumPt_(electron.isoR02_sumPt_)
-		,isoR02_nTracks_(electron.isoR02_nTracks_)
-		,isoR03_emEt_(electron.isoR03_emEt_)
-		,isoR03_hadEt_(electron.isoR03_hadEt_)
-		,isoR03_sumPt_(electron.isoR03_sumPt_)
-		,isoR03_nTracks_(electron.isoR03_nTracks_)
-		,isoR05_emEt_(electron.isoR05_emEt_)
-		,isoR05_hadEt_(electron.isoR05_hadEt_)
-		,isoR05_sumPt_(electron.isoR05_sumPt_)
-		,isoR05_nTracks_(electron.isoR05_nTracks_)
-		,idCutBasedFixedThresholdLoose_(electron.idCutBasedFixedThresholdLoose_)
-		,idCutBasedFixedThresholdTight_(electron.idCutBasedFixedThresholdTight_)
-		,idCutBasedFixedThresholdHighEnergy_(electron.idCutBasedFixedThresholdHighEnergy_)
-		,idCutBasedCategorizedLoose_(electron.idCutBasedCategorizedLoose_)
-		,idCutBasedCategorizedTight_(electron.idCutBasedCategorizedTight_)
-		,idLikelihood_(electron.idLikelihood_)
-		,idNeuralNet_(electron.idNeuralNet_)
-		{;}
-
-	TRootElectron(Double_t px, Double_t py, Double_t pz, Double_t e) :
-		TRootParticle(px,py,pz,e)
-		,classification_(-9999)
-		,caloEnergy_(-9999.)
-		,caloEnergyError_(-9999.)
-		,trackMomentum_(-9999.)
-		,trackMomentumError_(-9999.)
-		,hadOverEm_(-9999.)
-		,deltaEtaIn_(-9999.)
-		,deltaPhiIn_(-9999.)
-		,energySuperClusterOverPin_(-9999.)
-		,deltaEtaOut_(-9999.)
-		,deltaPhiOut_(-9999.)
-		,energySeedClusterOverPout_(-9999.)
-		,energyScaleCorrected_(false)
-		,momentumCorrected_(false)
-		,pixelLayersWithMeasurement_(-1)
-		,stripLayersWithMeasurement_(-1)
-		,d0_(-9999.)
-		,d0Error_(-9999.) 
-		,dsz_(-9999.)
-		,dszError_(-9999.)
-		,normalizedChi2_(-9999.)
-		,ptError_(-9999.)
-		,etaError_(-9999.)
-		,phiError_(-9999.)
-		,nbClusters_(-9999)
-		,superClusterRawEnergy_(-9999.)
-		,preshowerEnergy_(-9999.)
-		,caloPosition_(-9999.,-9999.,-9999.)
-		,scRef_()
-		,clusterAlgo_(-9999)
-		,caloConeSize_(-9999.)
-		,e2x2_(-9999.)
-		,e3x3_(-9999.)
-		,e5x5_(-9999.)
-		,eMax_(-9999.)
-		,isoR01_sumPt_(-9999.)
-		,isoR01_nTracks_(-9999)
-		,isoR02_sumPt_(-9999.)
-		,isoR02_nTracks_(-9999)
-		,isoR03_emEt_(-9999.)
-		,isoR03_hadEt_(-9999.)
-		,isoR03_sumPt_(-9999.)
-		,isoR03_nTracks_(-9999)
-		,isoR05_emEt_(-9999.)
-		,isoR05_hadEt_(-9999.)
-		,isoR05_sumPt_(-9999.)
-		,isoR05_nTracks_(-9999)
-		,idCutBasedFixedThresholdLoose_(-1)
-		,idCutBasedFixedThresholdTight_(-1)
-		,idCutBasedFixedThresholdHighEnergy_(-1)
-		,idCutBasedCategorizedLoose_(-1)
-		,idCutBasedCategorizedTight_(-1)
-		,idLikelihood_(-9999.)
-		,idNeuralNet_(-9999.)
-		{;}
-	
-	TRootElectron(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z) :
-		TRootParticle(px,py,pz,e,vtx_x,vtx_y,vtx_z)
-		,classification_(-9999)
-		,caloEnergy_(-9999.)
-		,caloEnergyError_(-9999.)
-		,trackMomentum_(-9999.)
-		,trackMomentumError_(-9999.)
-		,hadOverEm_(-9999.)
-		,deltaEtaIn_(-9999.)
-		,deltaPhiIn_(-9999.)
-		,energySuperClusterOverPin_(-9999.)
-		,deltaEtaOut_(-9999.)
-		,deltaPhiOut_(-9999.)
-		,energySeedClusterOverPout_(-9999.)
-		,energyScaleCorrected_(false)
-		,momentumCorrected_(false)
-		,pixelLayersWithMeasurement_(-1)
-		,stripLayersWithMeasurement_(-1)
-		,d0_(-9999.)
-		,d0Error_(-9999.) 
-		,dsz_(-9999.)
-		,dszError_(-9999.)
-		,normalizedChi2_(-9999.)
-		,ptError_(-9999.)
-		,etaError_(-9999.)
-		,phiError_(-9999.)
-		,nbClusters_(-9999)
-		,superClusterRawEnergy_(-9999.)
-		,preshowerEnergy_(-9999.)
-		,caloPosition_(-9999.,-9999.,-9999.)
-		,scRef_()
-		,clusterAlgo_(-9999)
-		,caloConeSize_(-9999.)
-		,e2x2_(-9999.)
-		,e3x3_(-9999.)
-		,e5x5_(-9999.)
-		,eMax_(-9999.)
-		,isoR01_sumPt_(-9999.)
-		,isoR01_nTracks_(-9999)
-		,isoR02_sumPt_(-9999.)
-		,isoR02_nTracks_(-9999)
-		,isoR03_emEt_(-9999.)
-		,isoR03_hadEt_(-9999.)
-		,isoR03_sumPt_(-9999.)
-		,isoR03_nTracks_(-9999)
-		,isoR05_emEt_(-9999.)
-		,isoR05_hadEt_(-9999.)
-		,isoR05_sumPt_(-9999.)
-		,isoR05_nTracks_(-9999)
-		,idCutBasedFixedThresholdLoose_(-1)
-		,idCutBasedFixedThresholdTight_(-1)
-		,idCutBasedFixedThresholdHighEnergy_(-1)
-		,idCutBasedCategorizedLoose_(-1)
-		,idCutBasedCategorizedTight_(-1)
-		,idLikelihood_(-9999.)
-		,idNeuralNet_(-9999.)
-		{;}
-
-	TRootElectron(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z, Int_t type, Float_t charge) :
-		TRootParticle(px,py,pz,e,vtx_x,vtx_y,vtx_z,type,charge)
-		,classification_(-9999)
-		,caloEnergy_(-9999.)
-		,caloEnergyError_(-9999.)
-		,trackMomentum_(-9999.)
-		,trackMomentumError_(-9999.)
-		,hadOverEm_(-9999.)
-		,deltaEtaIn_(-9999.)
-		,deltaPhiIn_(-9999.)
-		,energySuperClusterOverPin_(-9999.)
-		,deltaEtaOut_(-9999.)
-		,deltaPhiOut_(-9999.)
-		,energySeedClusterOverPout_(-9999.)
-		,energyScaleCorrected_(false)
-		,momentumCorrected_(false)
-		,pixelLayersWithMeasurement_(-1)
-		,stripLayersWithMeasurement_(-1)
-		,d0_(-9999.)
-		,d0Error_(-9999.) 
-		,dsz_(-9999.)
-		,dszError_(-9999.)
-		,normalizedChi2_(-9999.)
-		,ptError_(-9999.)
-		,etaError_(-9999.)
-		,phiError_(-9999.)
-		,nbClusters_(-9999)
-		,superClusterRawEnergy_(-9999.)
-		,preshowerEnergy_(-9999.)
-		,caloPosition_(-9999.,-9999.,-9999.)
-		,scRef_()
-		,clusterAlgo_(-9999)
-		,caloConeSize_(-9999.)
-		,e2x2_(-9999.)
-		,e3x3_(-9999.)
-		,e5x5_(-9999.)
-		,eMax_(-9999.)
-		,isoR01_sumPt_(-9999.)
-		,isoR01_nTracks_(-9999)
-		,isoR02_sumPt_(-9999.)
-		,isoR02_nTracks_(-9999)
-		,isoR03_emEt_(-9999.)
-		,isoR03_hadEt_(-9999.)
-		,isoR03_sumPt_(-9999.)
-		,isoR03_nTracks_(-9999)
-		,isoR05_emEt_(-9999.)
-		,isoR05_hadEt_(-9999.)
-		,isoR05_sumPt_(-9999.)
-		,isoR05_nTracks_(-9999)
-		,idCutBasedFixedThresholdLoose_(-1)
-		,idCutBasedFixedThresholdTight_(-1)
-		,idCutBasedFixedThresholdHighEnergy_(-1)
-		,idCutBasedCategorizedLoose_(-1)
-		,idCutBasedCategorizedTight_(-1)
-		,idLikelihood_(-9999.)
-		,idNeuralNet_(-9999.)
-		{;}
-
-	TRootElectron(const TLorentzVector &momentum) :
-		TRootParticle(momentum)
-		,classification_(-9999)
-		,caloEnergy_(-9999.)
-		,caloEnergyError_(-9999.)
-		,trackMomentum_(-9999.)
-		,trackMomentumError_(-9999.)
-		,hadOverEm_(-9999.)
-		,deltaEtaIn_(-9999.)
-		,deltaPhiIn_(-9999.)
-		,energySuperClusterOverPin_(-9999.)
-		,deltaEtaOut_(-9999.)
-		,deltaPhiOut_(-9999.)
-		,energySeedClusterOverPout_(-9999.)
-		,energyScaleCorrected_(false)
-		,momentumCorrected_(false)
-		,pixelLayersWithMeasurement_(-1)
-		,stripLayersWithMeasurement_(-1)
-		,d0_(-9999.)
-		,d0Error_(-9999.) 
-		,dsz_(-9999.)
-		,dszError_(-9999.)
-		,normalizedChi2_(-9999.)
-		,ptError_(-9999.)
-		,etaError_(-9999.)
-		,phiError_(-9999.)
-		,nbClusters_(-9999)
-		,superClusterRawEnergy_(-9999.)
-		,preshowerEnergy_(-9999.)
-		,caloPosition_(-9999.,-9999.,-9999.)
-		,scRef_()
-		,clusterAlgo_(-9999)
-		,caloConeSize_(-9999.)
-		,e2x2_(-9999.)
-		,e3x3_(-9999.)
-		,e5x5_(-9999.)
-		,eMax_(-9999.)
-		,isoR01_sumPt_(-9999.)
-		,isoR01_nTracks_(-9999)
-		,isoR02_sumPt_(-9999.)
-		,isoR02_nTracks_(-9999)
-		,isoR03_emEt_(-9999.)
-		,isoR03_hadEt_(-9999.)
-		,isoR03_sumPt_(-9999.)
-		,isoR03_nTracks_(-9999)
-		,isoR05_emEt_(-9999.)
-		,isoR05_hadEt_(-9999.)
-		,isoR05_sumPt_(-9999.)
-		,isoR05_nTracks_(-9999)
-		,idCutBasedFixedThresholdLoose_(-1)
-		,idCutBasedFixedThresholdTight_(-1)
-		,idCutBasedFixedThresholdHighEnergy_(-1)
-		,idCutBasedCategorizedLoose_(-1)
-		,idCutBasedCategorizedTight_(-1)
-		,idLikelihood_(-9999.)
-		,idNeuralNet_(-9999.)
-		{;}
-
-	TRootElectron(const TLorentzVector &momentum, const TVector3 &vertex, Int_t type, Float_t charge) :
-		TRootParticle(momentum, vertex, type, charge)
-		,classification_(-9999)
-		,caloEnergy_(-9999.)
-		,caloEnergyError_(-9999.)
-		,trackMomentum_(-9999.)
-		,trackMomentumError_(-9999.)
-		,hadOverEm_(-9999.)
-		,deltaEtaIn_(-9999.)
-		,deltaPhiIn_(-9999.)
-		,energySuperClusterOverPin_(-9999.)
-		,deltaEtaOut_(-9999.)
-		,deltaPhiOut_(-9999.)
-		,energySeedClusterOverPout_(-9999.)
-		,energyScaleCorrected_(false)
-		,momentumCorrected_(false)
-		,pixelLayersWithMeasurement_(-1)
-		,stripLayersWithMeasurement_(-1)
-		,d0_(-9999.)
-		,d0Error_(-9999.) 
-		,dsz_(-9999.)
-		,dszError_(-9999.)
-		,normalizedChi2_(-9999.)
-		,ptError_(-9999.)
-		,etaError_(-9999.)
-		,phiError_(-9999.)
-		,nbClusters_(-9999)
-		,superClusterRawEnergy_(-9999.)
-		,preshowerEnergy_(-9999.)
-		,caloPosition_(-9999.,-9999.,-9999.)
-		,scRef_()
-		,clusterAlgo_(-9999)
-		,caloConeSize_(-9999.)
-		,e2x2_(-9999.)
-		,e3x3_(-9999.)
-		,e5x5_(-9999.)
-		,eMax_(-9999.)
-		,isoR01_sumPt_(-9999.)
-		,isoR01_nTracks_(-9999)
-		,isoR02_sumPt_(-9999.)
-		,isoR02_nTracks_(-9999)
-		,isoR03_emEt_(-9999.)
-		,isoR03_hadEt_(-9999.)
-		,isoR03_sumPt_(-9999.)
-		,isoR03_nTracks_(-9999)
-		,isoR05_emEt_(-9999.)
-		,isoR05_hadEt_(-9999.)
-		,isoR05_sumPt_(-9999.)
-		,isoR05_nTracks_(-9999)
-		,idCutBasedFixedThresholdLoose_(-1)
-		,idCutBasedFixedThresholdTight_(-1)
-		,idCutBasedFixedThresholdHighEnergy_(-1)
-		,idCutBasedCategorizedLoose_(-1)
-		,idCutBasedCategorizedTight_(-1)
-		,idLikelihood_(-9999.)
-		,idNeuralNet_(-9999.)
-		{;}
-
-	~TRootElectron() {;}
-
-
-	Int_t classification() const { return classification_ ;}
-	Float_t caloEnergy() const { return caloEnergy_ ;}
-	Float_t caloEnergyError() const { return caloEnergyError_ ;}
-	Float_t trackMomentum() const { return trackMomentum_ ;}
-	Float_t trackMomentumError() const { return trackMomentumError_ ;}
-	Float_t hadOverEm() const { return hadOverEm_ ;}
-	Float_t deltaEtaIn() const { return deltaEtaIn_ ;}
-	Float_t deltaPhiIn() const { return deltaPhiIn_ ;}
-	Float_t energySuperClusterOverPin() const { return energySuperClusterOverPin_ ;}
-	Float_t deltaEtaOut() const { return deltaEtaOut_ ;}
-	Float_t deltaPhiOut() const { return deltaPhiOut_ ;}
-	Float_t energySeedClusterOverPout() const { return energySeedClusterOverPout_ ;}
-	Bool_t energyScaleCorrected() const { return energyScaleCorrected_ ;}
-	Bool_t momentumCorrected() const { return momentumCorrected_ ;}
-	
-	Int_t pixelLayersWithMeasurement() const { return pixelLayersWithMeasurement_; }
-	Int_t stripLayersWithMeasurement() const { return stripLayersWithMeasurement_; }
-	Float_t d0() const { return d0_ ;}
-	Float_t d0Error() const { return d0Error_ ;}
-	Float_t dsz() const { return dsz_ ;}
-	Float_t dszError() const { return dszError_ ;}
-	Float_t normalizedChi2() const { return normalizedChi2_ ;}
-	Float_t ptError() const { return ptError_ ;}
-	Float_t etaError() const { return etaError_ ;}
-	Float_t phiError() const { return phiError_ ;}
-	
-	Int_t nbClusters() const { return nbClusters_ ;}
-	Float_t superClusterRawEnergy() const { return superClusterRawEnergy_ ;}
-	Float_t preshowerEnergy() const { return preshowerEnergy_ ;}
-	TVector3 caloPosition() const { return caloPosition_ ;}
-	map<Int_t,TRef> scRef() const { return scRef_ ;}
-	Int_t clusterAlgo() const { return clusterAlgo_ ;}
-	Float_t caloConeSize() const { return caloConeSize_ ;}
-	Float_t e2x2() const { return e2x2_ ;}
-	Float_t e3x3() const { return e3x3_ ;}
-	Float_t e5x5() const { return e5x5_ ;}
-	Float_t eMax() const { return eMax_ ;}
-	Float_t isoR01_sumPt() const { return isoR01_sumPt_ ;}
-	Int_t isoR01_nTracks() const { return isoR01_nTracks_ ;}
-	Float_t isoR02_sumPt() const { return isoR02_sumPt_ ;}
-	Int_t isoR02_nTracks() const { return isoR02_nTracks_ ;}
-	Float_t isoR03_emEt() const { return isoR03_emEt_ ;}
-	Float_t isoR03_hadEt() const { return isoR03_hadEt_ ;}
-	Float_t isoR03_sumPt() const { return isoR03_sumPt_ ;}
-	Int_t isoR03_nTracks() const { return isoR03_nTracks_ ;}
-	Float_t isoR05_emEt() const { return isoR05_emEt_ ;}
-	Float_t isoR05_hadEt() const { return isoR05_hadEt_ ;}
-	Float_t isoR05_sumPt() const { return isoR05_sumPt_ ;}
-	Int_t isoR05_nTracks() const { return isoR05_nTracks_ ;}
-	Int_t idCutBasedFixedThresholdLoose() const { return idCutBasedFixedThresholdLoose_ ;}
-	Int_t idCutBasedFixedThresholdTight() const { return idCutBasedFixedThresholdTight_ ;}
-	Int_t idCutBasedFixedThresholdHighEnergy() const { return idCutBasedFixedThresholdHighEnergy_ ;}
-	Int_t idCutBasedCategorizedLoose() const { return idCutBasedCategorizedLoose_ ;}
-	Int_t idCutBasedCategorizedTight() const { return idCutBasedCategorizedTight_ ;}
-	Float_t idLikelihood() const { return idLikelihood_ ;}
-	Float_t idNeuralNet() const { return idNeuralNet_ ;}
-
-	virtual TString typeName() const { return "TRootElectron"; }
-
-
-	void setClassification(Int_t classification) { classification_ = classification; }
-	void setCaloEnergy(Float_t caloEnergy) { caloEnergy_ = caloEnergy; }
-	void setCaloEnergyError(Float_t caloEnergyError) { caloEnergyError_ = caloEnergyError; }
-	void setTrackMomentum(Float_t trackMomentum) { trackMomentum_ = trackMomentum; }
-	void setTrackMomentumError(Float_t trackMomentumError) { trackMomentumError_ = trackMomentumError; }
-	void setHadOverEm(Float_t hadOverEm) { hadOverEm_ = hadOverEm; }
-	void setDeltaEtaIn(Float_t deltaEtaIn) { deltaEtaIn_ = deltaEtaIn; }
-	void setDeltaPhiIn(Float_t deltaPhiIn) { deltaPhiIn_ = deltaPhiIn; }
-	void setEnergySuperClusterOverPin(Float_t energySuperClusterOverPin) { energySuperClusterOverPin_ = energySuperClusterOverPin; }
-	void setDeltaEtaOut(Float_t deltaEtaOut) { deltaEtaOut_ = deltaEtaOut; }
-	void setDeltaPhiOut(Float_t deltaPhiOut) { deltaPhiOut_ = deltaPhiOut; }
-	void setEnergySeedClusterOverPout(Float_t energySeedClusterOverPout) { energySeedClusterOverPout_ = energySeedClusterOverPout; }
-	void setEnergyScaleCorrected(Bool_t energyScaleCorrected) { energyScaleCorrected_ = energyScaleCorrected; }
-	void setMomentumCorrected(Bool_t momentumCorrected) { momentumCorrected_ = momentumCorrected; }
-
-	void setPixelLayersWithMeasurement(Int_t pixelLayersWithMeasurement) { pixelLayersWithMeasurement_ = pixelLayersWithMeasurement; }
-	void setStripLayersWithMeasurement(Int_t stripLayersWithMeasurement) { stripLayersWithMeasurement_ = stripLayersWithMeasurement; }
-	void setD0(Float_t d0) { d0_ = d0; }
-	void setD0Error(Float_t d0Error) { d0Error_ = d0Error; }
-	void setDsz(Float_t dsz) { dsz_ = dsz; }
-	void setDszError(Float_t dszError) { dszError_ = dszError; }
-	void setNormalizedChi2(Float_t normalizedChi2) { normalizedChi2_ = normalizedChi2; }
-	void setPtError(Float_t ptError) { ptError_ = ptError; }
-	void setEtaError(Float_t etaError) { etaError_ = etaError; }
-	void setPhiError(Float_t phiError) { phiError_ = phiError; }
-
-	void setNbClusters(Int_t nbClusters) { nbClusters_ = nbClusters; }
-	void setSuperClusterRawEnergy(Float_t superClusterRawEnergy) { superClusterRawEnergy_ = superClusterRawEnergy; }
-	void setPreshowerEnergy(Float_t preshowerEnergy) { preshowerEnergy_ = preshowerEnergy; }
-	void setCaloPosition(TVector3 caloPosition) { caloPosition_ = caloPosition; }
-	void setCaloPosition(Double_t x, Double_t y, Double_t z) { caloPosition_.SetXYZ(x, y ,z); }
-	void setSCRef(map<Int_t,TRef> scRef) { scRef_ = scRef; }
-	void setClusterAlgo(Int_t clusterAlgo) { clusterAlgo_ = clusterAlgo; }
-	void setCaloConeSize(Float_t caloConeSize) { caloConeSize_ = caloConeSize; }
-	void setE2x2(Float_t e2x2) { e2x2_ = e2x2; }
-	void setE3x3(Float_t e3x3) { e3x3_ = e3x3; }
-	void setE5x5(Float_t e5x5) { e5x5_ = e5x5; }
-	void setEMax(Float_t eMax) { eMax_ = eMax; }
-	void setIsoR01_sumPt(Float_t isoR01_sumPt) { isoR01_sumPt_ = isoR01_sumPt; }
-	void setIsoR01_nTracks(Int_t isoR01_nTracks) { isoR01_nTracks_ = isoR01_nTracks; }
-	void setIsoR02_sumPt(Float_t isoR02_sumPt) { isoR02_sumPt_ = isoR02_sumPt; }
-	void setIsoR02_nTracks(Int_t isoR02_nTracks) { isoR02_nTracks_ = isoR02_nTracks; }
-	void setIsoR03_emEt(Float_t isoR03_emEt) { isoR03_emEt_ = isoR03_emEt; }
-	void setIsoR03_hadEt(Float_t isoR03_hadEt) { isoR03_hadEt_ = isoR03_hadEt; }
-	void setIsoR03_sumPt(Float_t isoR03_sumPt) { isoR03_sumPt_ = isoR03_sumPt; }
-	void setIsoR03_nTracks(Int_t isoR03_nTracks) { isoR03_nTracks_ = isoR03_nTracks; }
-	void setIsoR05_emEt(Float_t isoR05_emEt) { isoR05_emEt_ = isoR05_emEt; }
-	void setIsoR05_hadEt(Float_t isoR05_hadEt) { isoR05_hadEt_ = isoR05_hadEt; }
-	void setIsoR05_sumPt(Float_t isoR05_sumPt) { isoR05_sumPt_ = isoR05_sumPt; }
-	void setIsoR05_nTracks(Int_t isoR05_nTracks) { isoR05_nTracks_ = isoR05_nTracks; }
-	void setIDCutBasedFixedThresholdLoose(Int_t idCutBasedFixedThresholdLoose) { idCutBasedFixedThresholdLoose_ = idCutBasedFixedThresholdLoose; }
-	void setIDCutBasedFixedThresholdTight(Int_t idCutBasedFixedThresholdTight) { idCutBasedFixedThresholdTight_ = idCutBasedFixedThresholdTight; }
-	void setIDCutBasedFixedThresholdHighEnergy(Int_t idCutBasedFixedThresholdHighEnergy) { idCutBasedFixedThresholdHighEnergy_ = idCutBasedFixedThresholdHighEnergy; }
-	void setIDCutBasedCategorizedLoose(Int_t idCutBasedCategorizedLoose) { idCutBasedCategorizedLoose_ = idCutBasedCategorizedLoose; }
-	void setIDCutBasedCategorizedTight(Int_t idCutBasedCategorizedTight) { idCutBasedCategorizedTight_ = idCutBasedCategorizedTight; }
-	void setIDLikelihood(Float_t idLikelihood) { idLikelihood_ = idLikelihood; }
-	void setIDNeuralNet(Float_t idNeuralNet) { idNeuralNet_ = idNeuralNet; }
-	
-	friend std::ostream& operator<< (std::ostream& stream, const TRootElectron& electron) {
-		stream << "TRootElectron - Charge=" << electron.charge() << " (Et,eta,phi)=("<< electron.Et() <<","<< electron.Eta() <<","<< electron.Phi() << ")"
-				<< " vertex(x,y,z)=("<< electron.vx() <<","<< electron.vy() <<","<< electron.vz() << ")";
-		return stream;
-	};
-
+	class TRootElectron : public TRootParticle
+	{
+    
+	public:
+		TRootElectron() :
+    TRootParticle(),
+    trackerDrivenSeed_(false),
+    ecalDrivenSeed_(false),
+    ecalDrivenMomentum_(),
+    eSuperClusterOverPin_(-9999.),
+    eEleClusterOverPout_(-9999.),
+    eSeedClusterOverPout_(-9999.),
+    deltaEtaIn_(-9999.),
+    deltaEtaOut_(-9999.),
+    deltaPhiIn_(-9999.),
+    deltaPhiOut_(-9999.),
+    deltaPhiSuperClusterTrackAtCalo_(-9999.),
+    deltaEtaSuperClusterTrackAtCalo_(-9999.),
+    ioEmIoP_(-9999.),
+    ioEmIoPgsf_(-9999.),
+    pixelLayersWithMeasurement_(-9999),
+    stripLayersWithMeasurement_(-9999),
+    nValidHits_(-9999.),
+    ip3d_(-9999.),
+    ip3dErr_(-9999.),
+    d0_(-9999.),
+    d0Error_(-9999.),
+    dz_(-9999.),
+    //		dB_(-9999.),
+    //		dBError_(-9999.),
+    missingHits_(-9999),
+    normalizedChi2_(9999.),
+    normalizedChi2gsf_(9999.),
+    superClusterRawEnergy_(-9999.),
+    superClusterEta_(-9999.),
+    preshowerEnergy_(-9999.),
+    sigmaIetaIeta_(-9999.),
+    sigmaIphiIphi_(-9999.),
+    sigmaIetaIphi_(-9999.),
+    e1x5_(-9999.),
+    e5x5_(-9999.),
+    hcalDepth1OverEcal_(-9999.),
+    hcalDepth2OverEcal_(-9999.),
+    etaWidth_(-9999.),
+    phiWidth_(-9999.),
+    r9_(9999.),
+    tkSumPt03_(-9999.),
+    ecalRecHitSumEt03_(-9999.),
+    hcalDepth1TowerSumEt03_(-9999.),
+    hcalDepth2TowerSumEt03_(-9999.),
+    tkSumPt04_(-9999.),
+    ecalRecHitSumEt04_(-9999.),
+    hcalDepth1TowerSumEt04_(-9999.),
+    hcalDepth2TowerSumEt04_(-9999.),
+    chargedHadronIso_(-9999.),
+    puChargedHadronIso_(-9999.),
+    photonIso_(-9999.),
+    neutralHadronIso_(-9999.),
+    fBrem_(-9999.),
+    nBrems_(-9999),
+    Dist_(9999.),
+    DCot_(9999.),
+    passConversion_(false),
+    mvaTrigId_(-9999.),
+    mvaNonTrigId_(-9999.)
+    {;}
+    
+		TRootElectron(const TRootElectron& e) :
+    TRootParticle(e),
+    trackerDrivenSeed_(e.trackerDrivenSeed_),
+    ecalDrivenSeed_(e.ecalDrivenSeed_),
+    ecalDrivenMomentum_(e.ecalDrivenMomentum_),
+    eSuperClusterOverPin_(e.eSuperClusterOverPin_),
+    eEleClusterOverPout_(e.eEleClusterOverPout_),
+    eSeedClusterOverPout_(e.eSeedClusterOverPout_),
+    deltaEtaIn_(e.deltaEtaIn_),
+    deltaEtaOut_(e.deltaEtaOut_),
+    deltaPhiIn_(e.deltaPhiIn_),
+    deltaPhiOut_(e.deltaPhiOut_),
+    deltaPhiSuperClusterTrackAtCalo_(e.deltaPhiSuperClusterTrackAtCalo_),
+    deltaEtaSuperClusterTrackAtCalo_(e.deltaEtaSuperClusterTrackAtCalo_),
+    ioEmIoP_(e.ioEmIoP_),
+    ioEmIoPgsf_(e.ioEmIoPgsf_),
+    pixelLayersWithMeasurement_(e.pixelLayersWithMeasurement_),
+    stripLayersWithMeasurement_(e.stripLayersWithMeasurement_),
+    nValidHits_(e.nValidHits_),
+    ip3d_(e.ip3d_),
+    ip3dErr_(e.ip3dErr_),
+    d0_(e.d0_),
+    d0Error_(e.d0Error_),
+    dz_(e.dz_),
+    //		dB_(e.dB_),
+    //		dBError_(e.dBError_),
+    missingHits_(e.missingHits_),
+    normalizedChi2_(e.normalizedChi2_),
+    normalizedChi2gsf_(e.normalizedChi2gsf_),
+    superClusterRawEnergy_(e.superClusterRawEnergy_),
+    superClusterEta_(e.superClusterEta_),
+    preshowerEnergy_(e.preshowerEnergy_),
+    sigmaIetaIeta_(e.sigmaIetaIeta_),
+    sigmaIphiIphi_(e.sigmaIphiIphi_),
+    sigmaIetaIphi_(e.sigmaIetaIphi_),
+    e1x5_(e.e1x5_),
+    e5x5_(e.e5x5_),
+    hcalDepth1OverEcal_(e.hcalDepth1OverEcal_),
+    hcalDepth2OverEcal_(e.hcalDepth2OverEcal_),
+    etaWidth_(e.etaWidth_),
+    phiWidth_(e.phiWidth_),
+    r9_(e.r9_),
+    tkSumPt03_(e.tkSumPt03_),
+    ecalRecHitSumEt03_(e.ecalRecHitSumEt03_),
+    hcalDepth1TowerSumEt03_(e.hcalDepth1TowerSumEt03_),
+    hcalDepth2TowerSumEt03_(e.hcalDepth2TowerSumEt03_),
+    tkSumPt04_(e.tkSumPt04_),
+    ecalRecHitSumEt04_(e.ecalRecHitSumEt04_),
+    hcalDepth1TowerSumEt04_(e.hcalDepth1TowerSumEt04_),
+    hcalDepth2TowerSumEt04_(e.hcalDepth2TowerSumEt04_),
+    chargedHadronIso_(e.chargedHadronIso_),
+    puChargedHadronIso_(e.puChargedHadronIso_),
+    photonIso_(e.photonIso_),
+    neutralHadronIso_(e.neutralHadronIso_),
+    fBrem_(e.fBrem_),
+    nBrems_(e.nBrems_),
+    Dist_(e.Dist_),
+    DCot_(e.DCot_),
+    passConversion_(e.passConversion_),
+    mvaTrigId_(e.mvaTrigId_),
+    mvaNonTrigId_(e.mvaNonTrigId_)
+    {;}
+    
+		TRootElectron(Double_t px, Double_t py, Double_t pz, Double_t e) :
+    TRootParticle(px,py,pz,e),
+    trackerDrivenSeed_(false),
+    ecalDrivenSeed_(false),
+    ecalDrivenMomentum_(),
+    eSuperClusterOverPin_(-9999.),
+    eEleClusterOverPout_(-9999.),
+    eSeedClusterOverPout_(-9999.),
+    deltaEtaIn_(-9999.),
+    deltaEtaOut_(-9999.),
+    deltaPhiIn_(-9999.),
+    deltaPhiOut_(-9999.),
+    deltaPhiSuperClusterTrackAtCalo_(-9999.),
+    deltaEtaSuperClusterTrackAtCalo_(-9999.),
+    ioEmIoP_(-9999.),
+    ioEmIoPgsf_(-9999.),
+    pixelLayersWithMeasurement_(-9999),
+    stripLayersWithMeasurement_(-9999),
+    nValidHits_(-9999),
+    ip3d_(-9999.),
+    ip3dErr_(-9999.),
+    d0_(-9999.),
+    d0Error_(-9999.),
+    dz_(-9999.),
+    //		dB_(-9999.),
+    //		dBError_(-9999.),
+    missingHits_(-9999),
+    normalizedChi2_(9999.),
+    normalizedChi2gsf_(9999.),
+    superClusterRawEnergy_(-9999.),
+    superClusterEta_(-9999.),
+    preshowerEnergy_(-9999.),
+    sigmaIetaIeta_(-9999.),
+    sigmaIphiIphi_(-9999.),
+    sigmaIetaIphi_(-9999.),
+    e1x5_(-9999.),
+    e5x5_(-9999.),
+    hcalDepth1OverEcal_(-9999.),
+    hcalDepth2OverEcal_(-9999.),
+    etaWidth_(-9999.),
+    phiWidth_(-9999.),
+    r9_(-9999.),
+    tkSumPt03_(-9999.),
+    ecalRecHitSumEt03_(-9999.),
+    hcalDepth1TowerSumEt03_(-9999.),
+    hcalDepth2TowerSumEt03_(-9999.),
+    tkSumPt04_(-9999.),
+    ecalRecHitSumEt04_(-9999.),
+    hcalDepth1TowerSumEt04_(-9999.),
+    hcalDepth2TowerSumEt04_(-9999.),
+    chargedHadronIso_(-9999),
+    puChargedHadronIso_(-9999.),
+    photonIso_(-9999),
+    neutralHadronIso_(-9999),
+    fBrem_(-9999.),
+    nBrems_(-9999),
+    Dist_(9999),
+    DCot_(9999),
+    passConversion_(false),
+    mvaTrigId_(-9999.),
+    mvaNonTrigId_(-9999.)
+    {;}
+    
+		TRootElectron(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z) :
+    TRootParticle(px,py,pz,e,vtx_x,vtx_y,vtx_z),
+    trackerDrivenSeed_(false),
+    ecalDrivenSeed_(false),
+    ecalDrivenMomentum_(),
+    eSuperClusterOverPin_(-9999.),
+    eEleClusterOverPout_(-9999.),
+    eSeedClusterOverPout_(-9999.),
+    deltaEtaIn_(-9999.),
+    deltaEtaOut_(-9999.),
+    deltaPhiIn_(-9999.),
+    deltaPhiOut_(-9999.),
+    deltaPhiSuperClusterTrackAtCalo_(-9999.),
+    deltaEtaSuperClusterTrackAtCalo_(-9999.),
+    ioEmIoP_(-9999.),
+    ioEmIoPgsf_(-9999.),
+    pixelLayersWithMeasurement_(-9999),
+    stripLayersWithMeasurement_(-9999),
+    nValidHits_(-9999),
+    ip3d_(-9999.),
+    ip3dErr_(-9999.),
+    d0_(-9999.),
+    d0Error_(-9999.),
+    dz_(-9999.),
+    //    dB_(-9999.),
+    //    dBError_(-9999.),
+    missingHits_(-9999),
+    normalizedChi2_(9999.),
+    normalizedChi2gsf_(9999.),
+    superClusterRawEnergy_(-9999.),
+    superClusterEta_(-9999.),
+    preshowerEnergy_(-9999.),
+    sigmaIetaIeta_(-9999.),
+    sigmaIphiIphi_(-9999.),
+    sigmaIetaIphi_(-9999.),
+    e1x5_(-9999.),
+    e5x5_(-9999.),
+    hcalDepth1OverEcal_(-9999.),
+    hcalDepth2OverEcal_(-9999.),
+    etaWidth_(-9999.),
+    phiWidth_(-9999.),
+    r9_(-9999.),
+    tkSumPt03_(-9999.),
+    ecalRecHitSumEt03_(-9999.),
+    hcalDepth1TowerSumEt03_(-9999.),
+    hcalDepth2TowerSumEt03_(-9999.),
+    tkSumPt04_(-9999.),
+    ecalRecHitSumEt04_(-9999.),
+    hcalDepth1TowerSumEt04_(-9999.),
+    hcalDepth2TowerSumEt04_(-9999.),
+    chargedHadronIso_(-9999),
+    puChargedHadronIso_(-9999.),
+    photonIso_(-9999),
+    neutralHadronIso_(-9999),
+    fBrem_(-9999.),
+    nBrems_(-9999),
+    Dist_(9999),
+    DCot_(9999),
+    passConversion_(false),
+    mvaTrigId_(-9999.),
+    mvaNonTrigId_(-9999.)
+    {;}
+    
+		TRootElectron(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z, Int_t type, Int_t charge) :
+    TRootParticle(px,py,pz,e,vtx_x,vtx_y,vtx_z,type,charge),
+    trackerDrivenSeed_(false),
+    ecalDrivenSeed_(false),
+    ecalDrivenMomentum_(),
+    eSuperClusterOverPin_(-9999.),
+    eEleClusterOverPout_(-9999.),
+    eSeedClusterOverPout_(-9999.),
+    deltaEtaIn_(-9999.),
+    deltaEtaOut_(-9999.),
+    deltaPhiIn_(-9999.),
+    deltaPhiOut_(-9999.),
+    deltaPhiSuperClusterTrackAtCalo_(-9999.),
+    deltaEtaSuperClusterTrackAtCalo_(-9999.),
+    ioEmIoP_(-9999.),
+    ioEmIoPgsf_(-9999.),
+    pixelLayersWithMeasurement_(-9999),
+    stripLayersWithMeasurement_(-9999),
+    nValidHits_(-9999),
+    ip3d_(-9999.),
+    ip3dErr_(-9999.),
+    d0_(-9999.),
+    d0Error_(-9999.),
+    dz_(-9999.),
+    //    dB_(-9999.),
+    //    dBError_(-9999.),
+    missingHits_(-9999),
+    normalizedChi2_(9999.),
+    normalizedChi2gsf_(9999.),
+    superClusterRawEnergy_(-9999.),
+    superClusterEta_(-9999.),
+    preshowerEnergy_(-9999.),
+    sigmaIetaIeta_(-9999.),
+    sigmaIphiIphi_(-9999.),
+    sigmaIetaIphi_(-9999.),
+    e1x5_(-9999.),
+    e5x5_(-9999.),
+    hcalDepth1OverEcal_(-9999.),
+    hcalDepth2OverEcal_(-9999.),
+    etaWidth_(-9999.),
+    phiWidth_(-9999.),
+    r9_(-9999.),
+    tkSumPt03_(-9999.),
+    ecalRecHitSumEt03_(-9999.),
+    hcalDepth1TowerSumEt03_(-9999.),
+    hcalDepth2TowerSumEt03_(-9999.),
+    tkSumPt04_(-9999.),
+    ecalRecHitSumEt04_(-9999.),
+    hcalDepth1TowerSumEt04_(-9999.),
+    hcalDepth2TowerSumEt04_(-9999.),
+    chargedHadronIso_(-9999),
+    puChargedHadronIso_(-9999.),
+    photonIso_(-9999),
+    neutralHadronIso_(-9999),
+    fBrem_(-9999.),
+    nBrems_(-9999),
+    Dist_(9999),
+    DCot_(9999),
+    passConversion_(false),
+    mvaTrigId_(-9999.),
+    mvaNonTrigId_(-9999.)
+    {;}
+    
+		TRootElectron(const TLorentzVector &momentum) :
+    TRootParticle(momentum),
+    trackerDrivenSeed_(false),
+    ecalDrivenSeed_(false),
+    ecalDrivenMomentum_(),
+    eSuperClusterOverPin_(-9999.),
+    eEleClusterOverPout_(-9999.),
+    eSeedClusterOverPout_(-9999.),
+    deltaEtaIn_(-9999.),
+    deltaEtaOut_(-9999.),
+    deltaPhiIn_(-9999.),
+    deltaPhiOut_(-9999.),
+    deltaPhiSuperClusterTrackAtCalo_(-9999.),
+    deltaEtaSuperClusterTrackAtCalo_(-9999.),
+    ioEmIoP_(-9999.),
+    ioEmIoPgsf_(-9999.),
+    pixelLayersWithMeasurement_(-9999),
+    stripLayersWithMeasurement_(-9999),
+    nValidHits_(-9999),
+    ip3d_(-9999.),
+    ip3dErr_(-9999.),
+    d0_(-9999.),
+    d0Error_(-9999.),
+    dz_(-9999.),
+    //    dB_(-9999.),
+    //    dBError_(-9999.),
+    missingHits_(-9999),
+    normalizedChi2_(9999.),
+    normalizedChi2gsf_(9999.),
+    superClusterRawEnergy_(-9999.),
+    superClusterEta_(-9999.),
+    preshowerEnergy_(-9999.),
+    sigmaIetaIeta_(-9999.),
+    sigmaIphiIphi_(-9999.),
+    sigmaIetaIphi_(-9999.),
+    e1x5_(-9999.),
+    e5x5_(-9999.),
+    hcalDepth1OverEcal_(-9999.),
+    hcalDepth2OverEcal_(-9999.),
+    etaWidth_(-9999.),
+    phiWidth_(-9999.),
+    r9_(-9999.),
+    tkSumPt03_(-9999.),
+    ecalRecHitSumEt03_(-9999.),
+    hcalDepth1TowerSumEt03_(-9999.),
+    hcalDepth2TowerSumEt03_(-9999.),
+    tkSumPt04_(-9999.),
+    ecalRecHitSumEt04_(-9999.),
+    hcalDepth1TowerSumEt04_(-9999.),
+    hcalDepth2TowerSumEt04_(-9999.),
+    chargedHadronIso_(-9999),
+    puChargedHadronIso_(-9999.),
+    photonIso_(-9999),
+    neutralHadronIso_(-9999),
+    fBrem_(-9999.),
+    nBrems_(9999),
+    Dist_(9999),
+    DCot_(9999),
+    passConversion_(false),
+    mvaTrigId_(-9999.),
+    mvaNonTrigId_(-9999.)
+    {;}
+    
+		TRootElectron(const TLorentzVector &momentum, const TVector3 &vertex, Int_t type, Float_t charge) :
+    TRootParticle(momentum, vertex, type, charge),
+    trackerDrivenSeed_(false),
+    ecalDrivenSeed_(false),
+    ecalDrivenMomentum_(),
+    eSuperClusterOverPin_(-9999.),
+    eEleClusterOverPout_(-9999.),
+    eSeedClusterOverPout_(-9999.),
+    deltaEtaIn_(-9999.),
+    deltaEtaOut_(-9999.),
+    deltaPhiIn_(-9999.),
+    deltaPhiOut_(-9999.),
+    deltaPhiSuperClusterTrackAtCalo_(-9999.),
+    deltaEtaSuperClusterTrackAtCalo_(-9999.),
+    ioEmIoP_(-9999.),
+    ioEmIoPgsf_(-9999.),
+    pixelLayersWithMeasurement_(-9999),
+    stripLayersWithMeasurement_(-9999),
+    nValidHits_(-9999),
+    ip3d_(-9999.),
+    ip3dErr_(-9999.),
+    d0_(-9999.),
+    d0Error_(-9999.),
+    dz_(-9999.),
+    //		dB_(-9999.),
+    //		dBError_(-9999.),
+    missingHits_(-9999),
+    normalizedChi2_(9999.),
+    normalizedChi2gsf_(9999.),
+    superClusterRawEnergy_(-9999.),
+    superClusterEta_(-9999.),
+    preshowerEnergy_(-9999.),
+    sigmaIetaIeta_(-9999.),
+    sigmaIphiIphi_(-9999.),
+    sigmaIetaIphi_(-9999.),
+    e1x5_(-9999.),
+    e5x5_(-9999.),
+    hcalDepth1OverEcal_(-9999.),
+    hcalDepth2OverEcal_(-9999.),
+    etaWidth_(-9999.),
+    phiWidth_(-9999.),
+    r9_(-9999.),
+    tkSumPt03_(-9999.),
+    ecalRecHitSumEt03_(-9999.),
+    hcalDepth1TowerSumEt03_(-9999.),
+    hcalDepth2TowerSumEt03_(-9999.),
+    tkSumPt04_(-9999.),
+    ecalRecHitSumEt04_(-9999.),
+    hcalDepth1TowerSumEt04_(-9999.),
+    hcalDepth2TowerSumEt04_(-9999.),
+    chargedHadronIso_(-9999),
+    puChargedHadronIso_(-9999.),
+    photonIso_(-9999),
+    neutralHadronIso_(-9999),
+    fBrem_(-9999.),
+    nBrems_(9999),
+    Dist_(9999),
+    DCot_(9999),
+    passConversion_(false),
+    mvaTrigId_(-9999.),
+    mvaNonTrigId_(-9999.)
+    {;}
+    
+		~TRootElectron() {;}
+    
+    
+	public:
+		virtual TString typeName() const { return "TRootElectron"; }
+    
+		Bool_t isEcalDrivenSeed() const { return ecalDrivenSeed_; }
+		Bool_t isTrackerDrivenSeed() const { return trackerDrivenSeed_; }
+    
+    TLorentzVector ecalDrivenMomentum() const {return ecalDrivenMomentum_; }
+    
+		Float_t eScOverP() const { return eSuperClusterOverPin_; }
+    Float_t eEleClusterOverPout() const { return eEleClusterOverPout_; }
+    Float_t eSeedClusterOverPout() const { return eSeedClusterOverPout_; }
+		Float_t deltaEtaIn() const { return deltaEtaIn_; }
+		Float_t deltaEtaOut() const { return deltaEtaOut_; }
+		Float_t deltaPhiIn() const { return deltaPhiIn_; }
+		Float_t deltaPhiOut() const { return deltaPhiOut_; }
+		Float_t deltaPhiScTrkOut() const { return deltaPhiSuperClusterTrackAtCalo_; }
+		Float_t deltaEtaScTrkOut() const { return deltaEtaSuperClusterTrackAtCalo_; }
+    Float_t ioEmIoP() const { return ioEmIoP_; }
+    Float_t ioEmIoPgsf() const { return ioEmIoPgsf_; }
+    
+		Int_t trackPixelLayersWithMeasurement() const { return pixelLayersWithMeasurement_; }
+		Int_t trackStripLayersWithMeasurement() const { return stripLayersWithMeasurement_; }
+    Int_t trackerLayersWithMeasurement() const { return pixelLayersWithMeasurement_+stripLayersWithMeasurement_; }
+    Int_t trackNValidHits() const { return nValidHits_; }
+    Float_t ip3d() const { return ip3d_; }
+    Float_t ip3dError() const { return ip3dErr_; }
+		Float_t d0() const { return d0_; }
+		Float_t d0Error()const { return d0Error_; }
+		Float_t dz()const { return dz_; }
+    //		Float_t dB() const { return dB_; }
+    //		Float_t dBError() const { return dBError_; }
+		Int_t missingHits() const { return missingHits_; }
+		Float_t trackNormalizedChi2() const { return normalizedChi2_; }
+    Float_t gsfTrackNormalizedChi2() const { return normalizedChi2gsf_; }
+    
+		Float_t superClusterRawEnergy() const { return superClusterRawEnergy_; }
+		Float_t superClusterEta() const { return superClusterEta_; }
+		Float_t preshowerEnergy() const { return preshowerEnergy_; }
+		Float_t sigmaIEtaIEta() const { return sigmaIetaIeta_; }
+    Float_t sigmaIPhiIPhi() const { return sigmaIphiIphi_; }
+    Float_t sigmaIEtaIPhi() const { return sigmaIetaIphi_; }
+		Float_t e1x5() const { return e1x5_; }
+		Float_t e5x5() const { return e5x5_; }
+		Float_t hadronicOverEm() const { return (hcalDepth1OverEcal_ + hcalDepth2OverEcal_); }
+		Float_t hadronicDepth1OverEm() const { return hcalDepth1OverEcal_; }
+		Float_t hadronicDepth2OverEm() const { return hcalDepth2OverEcal_; }
+    Float_t etaWidth() const { return etaWidth_; }
+    Float_t phiWidth() const { return phiWidth_; }
+    Float_t r9() const { return r9_; }
+    
+		Float_t ecalIso(unsigned int cone) const
+		{
+			if(cone == 3) return ecalRecHitSumEt03_;
+			else if(cone == 4) return ecalRecHitSumEt04_;
+			else cout<<"Bad Cone Size! It returns 9999."<<endl;
+			return 9999.;
+		}
+		Float_t hcalIso(unsigned int cone) const
+		{
+			if(cone == 3) return (hcalDepth1TowerSumEt03_ + hcalDepth2TowerSumEt03_);
+			else if(cone == 4) return (hcalDepth1TowerSumEt04_ + hcalDepth2TowerSumEt04_);
+			else cout<<"Bad Cone Size! It returns 9999."<<endl;
+			return 9999.;
+  	}
+		Float_t hcalIso_Dept1(unsigned int cone) const
+		{
+			if(cone == 3) return hcalDepth1TowerSumEt03_;
+			else if(cone == 4) return hcalDepth1TowerSumEt04_;
+			else cout<<"Bad Cone Size! It returns 9999."<<endl;
+			return 9999.;
+		}
+		Float_t hcalIso_Dept2(unsigned int cone) const
+		{
+			if(cone == 3) return hcalDepth2TowerSumEt03_;
+			else if(cone == 4) return hcalDepth2TowerSumEt04_;
+			else cout<<"Bad Cone Size! It returns 9999."<<endl;
+			return 9999.;
+		}
+		Float_t caloIso(unsigned int cone) const
+		{
+			return (ecalIso(cone) + hcalIso(cone));
+		}
+		Float_t trackerIso(unsigned int cone) const
+		{
+			if(cone == 3) return tkSumPt03_;
+			else if(cone == 4) return tkSumPt04_;
+			else cout<<"Bad Cone Size! It returns 9999."<<endl;
+			return 9999.;
+		}
+		Float_t combinedIso(unsigned int tkcone, unsigned int ecalcone, unsigned int hcalcone) const
+		{
+			return (trackerIso(tkcone) + hcalIso(hcalcone) + ecalIso(ecalcone));
+		}
+		Float_t chargedHadronIso() const { return chargedHadronIso_; }
+    Float_t puChargedHadronIso() const { return puChargedHadronIso_; }
+		Float_t photonIso() const { return photonIso_; }
+		Float_t neutralHadronIso() const { return neutralHadronIso_; }
+		Float_t relativePfIso() const { return( (chargedHadronIso_+neutralHadronIso_+photonIso_)/((TLorentzVector)(*this)).Pt() );}
+		Float_t fbrem() const { return fBrem_; }
+		Int_t numberOfBrems() const { return nBrems_; }
+		Float_t Dist() const { return Dist_; }
+		Float_t DCot() const { return DCot_; }
+    Bool_t passConversion() const { return passConversion_; }
+    Float_t mvaTrigId() const { return mvaTrigId_; }
+    Float_t mvaNonTrigId() const { return mvaNonTrigId_; }
+    
+		//setters
+		void setEcalSeeding(Bool_t isEcal){ ecalDrivenSeed_ = isEcal; }
+    void setEcalDrivenMomentum(TLorentzVector ecalDrivenMomentum){ ecalDrivenMomentum_ = ecalDrivenMomentum; }
+		void setTrackerSeeding(Bool_t isTracker){ trackerDrivenSeed_ = isTracker; }
+		void setDeltaEtaIn(Float_t deltaEtaIn) { deltaEtaIn_ = deltaEtaIn; }
+		void setDeltaEtaOut(Float_t deltaEtaOut) { deltaEtaOut_ = deltaEtaOut; }
+		void setDeltaEtaSuperClusterTrackAtCalo(Float_t x) { deltaEtaSuperClusterTrackAtCalo_ = x; }
+		void setDeltaPhiIn(Float_t deltaPhiIn) { deltaPhiIn_ = deltaPhiIn; }
+		void setDeltaPhiOut(Float_t deltaPhiOut) { deltaPhiOut_ = deltaPhiOut; }
+		void setDeltaPhiSuperClusterTrackAtCalo(Float_t x) { deltaPhiSuperClusterTrackAtCalo_ = x; }
+		void setEnergySuperClusterOverP(Float_t x) { eSuperClusterOverPin_ = x; }
+    void setEnergyEleClusterOverPout(Float_t x) { eEleClusterOverPout_ = x; }
+    void setEnergySeedClusterOverPout(Float_t x) { eSeedClusterOverPout_ = x; }
+    void setIoEmIoP(Float_t x) { ioEmIoP_ = x; }
+    void setIoEmIoPgsf(Float_t x) { ioEmIoPgsf_ = x; }
+    
+    void setIp3d(Float_t x) { ip3d_ = x; }
+    void setIp3dError(Float_t x) { ip3dErr_ = x; }
+		void setD0(Float_t x) { d0_ = x; }
+		void setD0Error(Float_t d0Error) { d0Error_ = d0Error; }
+		void setDz(Float_t x) { dz_ = x; }
+		//void setDB(Float_t dB) { dB_ = dB; }
+		//void setDBError(Float_t dBError) { dBError_ = dBError; }
+    
+		void setTrackMissingHits(Int_t x) { missingHits_ = x; }
+		void setTrackNormalizedChi2(Float_t x) { normalizedChi2_ = x; }
+    void setGsfTrackNormalizedChi2(Float_t x) { normalizedChi2gsf_ = x; }
+		void setPixelLayersWithMeasurement(Int_t x) { pixelLayersWithMeasurement_ = x; }
+		void setStripLayersWithMeasurement(Int_t stripLayersWithMeasurement) { stripLayersWithMeasurement_ = stripLayersWithMeasurement; }
+    void setNValidHits(Int_t nHits) { nValidHits_ = nHits; }
+    
+		void setPreshowerEnergy(Float_t x) { preshowerEnergy_ = x; }
+		void setSuperClusterRawEnergy(Float_t x) { superClusterRawEnergy_ = x; }
+		void setSuperClusterEta(Float_t x) { superClusterEta_ = x; }
+    
+		void setE1x5(Float_t e1x5) { e1x5_ = e1x5; }
+		void setE5x5(Float_t e5x5) { e5x5_ = e5x5; }
+		void setHoverEDepth1(Float_t HoE1) { hcalDepth1OverEcal_ = HoE1; }
+		void setHoverEDepth2(Float_t HoE2) { hcalDepth2OverEcal_ = HoE2; }
+		void setSigmaIetaIeta(Float_t sieie) { sigmaIetaIeta_ = sieie; }
+    void setSigmaIphiIphi(Float_t sipip) { sigmaIphiIphi_ = sipip; }
+    void setSigmaIetaIphi(Float_t sieip) { sigmaIetaIphi_ = sieip; }
+    void setEtaWidth(Float_t etaWidth) { etaWidth_ = etaWidth; }
+    void setPhiWidth(Float_t phiWidth) { phiWidth_ = phiWidth; }
+    void setR9(Float_t r9) { r9_ = r9; }
+    
+		void setIsoR03_emEt(Float_t isoR03_emEt) { ecalRecHitSumEt03_ = isoR03_emEt; }
+		void setIsoR03_Depth1HadEt(Float_t isoR03_hadEt1) { hcalDepth1TowerSumEt03_ = isoR03_hadEt1; }
+		void setIsoR03_Depth2HadEt(Float_t isoR03_hadEt2) { hcalDepth2TowerSumEt03_ = isoR03_hadEt2; }
+		void setIsoR03_sumPt(Float_t isoR03_sumPt) { tkSumPt03_ = isoR03_sumPt; }
+		void setIsoR04_emEt(Float_t isoR04_emEt) { ecalRecHitSumEt04_ = isoR04_emEt; }
+		void setIsoR04_Depth1HadEt(Float_t isoR04_hadEt1) { hcalDepth1TowerSumEt04_ = isoR04_hadEt1; }
+		void setIsoR04_Depth2HadEt(Float_t isoR04_hadEt2) { hcalDepth2TowerSumEt04_ = isoR04_hadEt2; }
+		void setIsoR04_sumPt(Float_t isoR04_sumPt) { tkSumPt04_ = isoR04_sumPt; }
+		void setChargedHadronIso(Float_t chargedHadronIso){ chargedHadronIso_ = chargedHadronIso; }
+    void setPuChargedHadronIso(Float_t iso) { puChargedHadronIso_ = iso; }
+		void setPhotonIso(Float_t photonIso){ photonIso_ = photonIso; }
+		void setNeutralHadronIso(Float_t neutralHadronIso){ neutralHadronIso_ = neutralHadronIso; }
+    
+		void setFbrem(Float_t f) { fBrem_ = f; }
+    void setNBrems(Int_t n) { nBrems_ = n; }
+		void setDist(Float_t dist) { Dist_ = dist; }
+		void setDCot(Float_t dcot) { DCot_ = dcot; }
+    void setPassConversion(Bool_t pass) { passConversion_ = pass; }
+    void setMvaTrigId(Float_t id) { mvaTrigId_ = id; }
+    void setMvaNonTrigId(Float_t id) { mvaNonTrigId_ = id; }
 		
- private:
-	/*
-	TODO
-      if (fabs (eta) <= 1.4442) {
-	localElectron.setPosition (1);
+		friend std::ostream& operator<< (std::ostream& stream, const TRootElectron& electron) {
+			stream << "TRootElectron - Charge=" << electron.charge() << " (Et,eta,phi)=("<< electron.Et() <<","<< electron.Eta() <<","<< electron.Phi() << ")"
+      << " vertex(x,y,z)=("<< electron.vx() <<","<< electron.vy() <<","<< electron.vz() << ")";
+			return stream;
+      };
+      
+      
+    private:
+      Bool_t trackerDrivenSeed_;
+      Bool_t ecalDrivenSeed_;
+      TLorentzVector ecalDrivenMomentum_;        // ecal driven momentum, equivalent to gsf electron momentum.
+      Float_t eSuperClusterOverPin_;             // the supercluster energy / track momentum at the PCA to the beam spot
+      Float_t eEleClusterOverPout_;              // the electron cluster energy / track momentum at calo extrapolated from the outermost track state
+      Float_t eSeedClusterOverPout_;             // the seed cluster energy / track momentum at calo extrapolated from the outermost track state
+      Float_t deltaEtaIn_;                       // the supercluster eta - track eta position at calo extrapolated from innermost track state
+      Float_t deltaEtaOut_;                      // the seed cluster eta - track eta position at calo extrapolated from the outermost track state
+      Float_t deltaPhiIn_;                       // the supercluster phi - track phi position at calo extrapolated from the innermost track state
+      Float_t deltaPhiOut_;                      // the seed cluster phi - track phi position at calo extrapolated from the outermost track state
+      Float_t deltaPhiSuperClusterTrackAtCalo_;  // the electron cluster phi - track phi position at calo extrapolated from the outermost track state
+      Float_t deltaEtaSuperClusterTrackAtCalo_;  // the electron cluster eta - t
+      Float_t ioEmIoP_;                          // (1.0/(ele.superCluster()->energy())) - (1.0 / ele.p())
+      Float_t ioEmIoPgsf_;                       // (1.0/(ele.superCluster()->energy())) - (1.0 / ele.gsfTrack()->p())
+      
+      //TrackProperties=====================================
+      Int_t pixelLayersWithMeasurement_;         // number of pixel layers with at least one valid hit
+      Int_t stripLayersWithMeasurement_;         // number of strip layers with at least one valid hit
+      Int_t nValidHits_;                         // number of valid hits
+      Float_t ip3d_;                             // 3D impact parameter
+      Float_t ip3dErr_;                          // error on ip3d_
+      Float_t d0_;                         	     // transverse impact parameter (wrt to PV)
+      Float_t d0Error_;                          // error on d0_
+      Float_t dz_;                               // longitudinal impact parameter (wrt to PV)
+      
+      // In the standard PAT configuration, dB and edB are calculated wrt the primary vertex
+      // If this was not the case, dB is calculated wrt the beamspot and edb = -1 all the time
+      //Float_t dB_;                             // dB from PAT muon
+      //Float_t dBError_;                        // dBError from PAT muon
+      Int_t missingHits_;                        // Conversion Rejection: number of missing hits near beginning of track (also rejects really bad tracks)
+      Float_t normalizedChi2_;                   // chi-squared divided by n.d.o.f. of track fit
+      Float_t normalizedChi2gsf_;                // chi2 / ndf from gsfTrack
+      
+      //SuperClusterProperties ===============================
+      Float_t superClusterRawEnergy_;
+      Float_t superClusterEta_;
+      Float_t preshowerEnergy_;
+      
+      //ShowerShape===========================================
+      Float_t sigmaIetaIeta_;                    // weighted cluster rms along eta and inside 5x5 (new, Xtal eta)
+      Float_t sigmaIphiIphi_;
+      Float_t sigmaIetaIphi_;
+      Float_t e1x5_;                             // energy inside 1x5 in etaxphi around the seed Xtal
+      Float_t e5x5_;                             // energy inside 5x5 in etaxphi around the seed Xtal
+      Float_t hcalDepth1OverEcal_ ;              // hcal over ecal seed cluster energy using first hcal depth (hcal is energy of towers within dR=015)
+      Float_t hcalDepth2OverEcal_ ;              // hcal over ecal seed cluster energy using 2nd hcal depth (hcal is energy of towers within dR=015)
+      Float_t etaWidth_;
+      Float_t phiWidth_;
+      Float_t r9_;
+      
+      //Isolation ============================================
+      Float_t tkSumPt03_;                        // track iso deposit with electron footprint removed
+      Float_t ecalRecHitSumEt03_;                // ecal iso deposit with electron footprint removed
+      Float_t hcalDepth1TowerSumEt03_;           // hcal depht 1 iso deposit with electron footprint removed
+      Float_t hcalDepth2TowerSumEt03_;           // hcal depht 2 iso deposit with electron footprint removed
+      Float_t tkSumPt04_;                        // track iso deposit with electron footprint removed
+      Float_t ecalRecHitSumEt04_;                // ecal iso deposit with electron footprint removed
+      Float_t hcalDepth1TowerSumEt04_;           // hcal depht 1 iso deposit with electron footprint removed
+      Float_t hcalDepth2TowerSumEt04_;           // hcal depht 2 iso deposit with electron footprint removed
+      Float_t chargedHadronIso_;                 // isolation calculated with only the charged hadron candidates
+      Float_t puChargedHadronIso_;               // isolation calculated with only the pile-up charged hadron candidates
+      Float_t photonIso_;                        // isolation calculated with only the gamma candidates
+      Float_t neutralHadronIso_;	               // isolation calculated with only the neutral hadron candidates
+      
+      // Electron classification && fBrem ====================
+      Float_t fBrem_;                            // brem fraction from gsf fit: (track momentum in - track momentum out) / track momentum in
+      Int_t   nBrems_;                           // number of basic clusters inside the supercluster - 1
+      Float_t Dist_;                             // distance to the conversion partner
+      Float_t DCot_;                             // difference of cot(angle) with the conversion partner track
+      Bool_t  passConversion_;                   // boolean to flag converted candidates
+      Float_t mvaTrigId_;                        // MVA value
+      Float_t mvaNonTrigId_;                     // MVA value
+      
+      ClassDef (TRootElectron,11);
+      };
       }
-      else if (fabs (eta) > 1.4442 & fabs (eta) < 1.5560) {
-	localElectron.setPosition (0);
-      }
-      else if (fabs (eta) >= 1.5560) {
-	localElectron.setPosition (-1);
-      }
-	*/
 
-	// Variables from reco::GsfElectron
-
-	// Classification:
-	//	barrel  :   0: golden,  10: bigbrem,  20: narrow, 30-34: showering, 
-	//          (30: showering nbrem=0, 31: showering nbrem=1, 32: showering nbrem=2 ,33: showering nbrem=3, 34: showering nbrem>=4)
-	//           40: crack
-	//	endcaps : 100: golden, 110: bigbrem, 120: narrow, 130-134: showering
-	//            (130: showering nbrem=0, 131: showering nbrem=1, 132: showering nbrem=2 ,133: showering nbrem=3, 134: showering nbrem>=4)
-
-	Int_t classification_;             // Electron classification
-
-	Float_t caloEnergy_;                // SuperCluster energy corrected by EnergyScaleFactor
-	Float_t caloEnergyError_;           // Error on caloEnergy_
-	Float_t trackMomentum_;             // Track momentum at vertex
-	Float_t trackMomentumError_;        // Error on trackMomentum_
-
-	Float_t hadOverEm_;                 // hadronic over electromagnetic fraction
-
-	Float_t deltaEtaIn_;                // Supercluster eta - Track eta from helix extrapolation from impact point
-	Float_t deltaPhiIn_;                // Supercluster phi - Track phi from helix extrapolation from impact point
-	Float_t energySuperClusterOverPin_; // supercluster energy / track momentum at impact point
-
-	Float_t deltaEtaOut_;               // SeedCluster eta - Track eta at calo from outermost state
-	Float_t deltaPhiOut_;               // SeedCluster phi - Track phi at calo from outermost state
-	Float_t energySeedClusterOverPout_; // SeedCluster energy / track momentum at calo from outermost state
-
-	Bool_t energyScaleCorrected_;       // Has Energy Scale been applied ?
-	Bool_t momentumCorrected_;          // Tell if class dependant E-p combination has been determined
-
-
-	// Variables from reco::GsfTrack
-
-	/* cf: http://cmslxr.fnal.gov/lxr/source/DataFormats/TrackReco/interface/TrackBase.h
-	For tracks reconstructed in the CMS Tracker, the reference position is the point of closest approach to the centre
-	of CMS. For muons, this is not necessarily true. Parameters associated to the 5D curvilinear covariance matrix:
-		qoverp = q / abs(p) = signed inverse of momentum [1/GeV]
-		lambda = pi/2 - polar angle at the given point
-		phi = azimuth angle at the given point
-		dxy = -vx*sin(phi) + vy*cos(phi) [cm]
-		dsz = vz*cos(lambda) - (vx*cos(phi)+vy*sin(phi))*sin(lambda) [cm]
- 
-	Geometrically, dxy is the signed distance in the XY plane between the straight line passing through (vx,vy) with
-	azimuthal angle phi and the point (0,0). The dsz parameter is the signed distance in the SZ plane between the straight
-	line passing through (vx,vy,vz) with angles (phi, lambda) and the point (s=0,z=0). The S axis is defined by the projection
-	of the straight line onto the XY plane. The convention is to assign the S coordinate for (vx,vy) as the value
-	vx*cos(phi)+vy*sin(phi). This value is zero when (vx,vy) is the point of minimum transverse distance to (0,0).
-
-	Note that dxy and dsz provide sensible estimates of the distance from the true particle trajectory to (0,0,0) ONLY
-	in two cases:
-		- When (vx,vy,vz) already correspond to the point of minimum transverse distance to (0,0,0) or is close to it
-		(so that the differences between considering the exact trajectory or a straight line in this range  are negligible).
-		This is usually true for Tracker tracks.
-		- When the track has infinite or extremely high momentum */
-
-	Int_t pixelLayersWithMeasurement_; // Number of pixel layers with at least one valid hit
-	Int_t stripLayersWithMeasurement_; // Number of strip layers with at least one valid hit
-
-     Float_t d0_;             // d0=-dxy
-     Float_t d0Error_;        // error on d0_
-     Float_t dsz_;            // dsz parameter
-     Float_t dszError_;       // error on dsz_
-     Float_t normalizedChi2_; // chi-squared divided by n.d.o.f. of track fit
-
-     Float_t ptError_; // needed ?  ptError()
-     Float_t etaError_; // needed ?  etaError()
-     Float_t phiError_; // needed ?  phiError()
-
-
-	// Variables from reco::SuperCluster
-	Int_t nbClusters_; // Number of related brem clusters
-     Float_t superClusterRawEnergy_;
-     Float_t preshowerEnergy_;
-	TVector3 caloPosition_;		// SuperCluster centroid position
-	map<Int_t,TRef> scRef_;     // references to the seed SuperClusters (one per SC tytpe)
-
-
-	// Cluster Shape variables
-	// need reco::SuperCluster and reco::BasicCluster
-	Int_t clusterAlgo_; // reco::BasicCluster::algo() island = 0, hybrid = 1, fixedMatrix = 2, dynamicHybrid = 3, multi5x5 = 4
-	Float_t caloConeSize_; // Delta_R of the cone centered on the reco::GsfElectron and containing all its basic clusters constituents
-	// need reco::SuperCluster and reco::BasicCluster and reduced Ecal RecHits Collections for EcalClusterLazyTools
-	Float_t e2x2_;
-	Float_t e3x3_;
-	Float_t e5x5_;
-	Float_t eMax_;
-
-
-     // pat::Electron Isolation
-	Float_t isoR01_sumPt_;
-	Int_t isoR01_nTracks_;
-
-	Float_t isoR02_sumPt_;
-	Int_t isoR02_nTracks_;
-
-	Float_t isoR03_emEt_;
-	Float_t isoR03_hadEt_;
-	Float_t isoR03_sumPt_;
-	Int_t isoR03_nTracks_;
-
-	Float_t isoR05_emEt_;
-	Float_t isoR05_hadEt_;
-	Float_t isoR05_sumPt_; // Pt sum of tracks in a DR=0.5 cone around the electron
-	Int_t isoR05_nTracks_; // Tracks multiplicity in a DR=0.5 cone around the electron
-
-
-     // pat::Electron ID (cf https://twiki.cern.ch/twiki/bin/view/CMS/SWGuideElectronID)
-	// By default in 2.2.X, only cut based identification is available in pat (https://twiki.cern.ch/twiki/bin/view/CMS/SWGuideCutBasedElectronID
-     Int_t idCutBasedFixedThresholdLoose_;      // Simple cut based ID (aka 'robust') - Loose Thresholds on H/E, DeltaEta, DeltaPhi, SigmaEtaEta
-     Int_t idCutBasedFixedThresholdTight_;      // Simple cut based ID (default in EWK group) - Tight Thresholds on H/E, DeltaEta, DeltaPhi, SigmaEtaEta
-     Int_t idCutBasedFixedThresholdHighEnergy_; // Simple cut based ID - Thresholds optimized for high energy electron (~TeV)
-     Int_t idCutBasedCategorizedLoose_;         // Category based ID - Different loose thresholds on H/E, DeltaEta, DeltaPhi, SigmaEtaEta, eSeedOverPin for differents regions in the E/p vs fBrem plane
-     Int_t idCutBasedCategorizedTight_;         // Category based ID - Different tight thresholds on H/E, DeltaEta, DeltaPhi, SigmaEtaEta, eSeedOverPin for differents regions in the E/p vs fBrem plane
-     Float_t idLikelihood_;                       // Lieklihood ID - not activated by default in 2.2.X
-     Float_t idNeuralNet_;                        // NN ID - not activated by default in 2.2.X
-
-	
-	// Matched genParticle
-	TLorentzVector momentumMCElectron_;
-	TVector3 vertexMCElectron_;
-	Int_t pdgIdMCElectron_;
-
-	// needed ?
-	//Float_t sigmaEtaEta_;
-	//Float_t sigmaPhiPhi_;
-
-	
-	ClassDef (TRootElectron,3);
-};
-}
 #endif

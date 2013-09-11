@@ -30,7 +30,6 @@ public:
 
 private:
 	int verbosity_;
-	std::string dataType_ ;
 	edm::InputTag genEventProducer_;
  ///
 };
