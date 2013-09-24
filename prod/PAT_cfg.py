@@ -78,12 +78,16 @@ from PhysicsTools.PatAlgos.tools.pfTools import *
 postfix = "PF2PAT"
 usePF2PAT(process,runPF2PAT=True, jetAlgo="AK5", runOnMC=True, postfix=postfix, pvCollection=cms.InputTag('goodOfflinePrimaryVertices'), typeIMetCorrections=True)
 
+# TOP projection
 process.pfIsolatedMuonsPF2PAT.isolationCut = cms.double(0.2)
 process.pfIsolatedMuonsPF2PAT.doDeltaBetaCorrection = True
 process.pfSelectedMuonsPF2PAT.cut = cms.string('pt > 10. && abs(eta) < 2.5')
 process.pfIsolatedMuonsPF2PAT.isolationValueMapsCharged = cms.VInputTag(cms.InputTag("muPFIsoValueCharged04PF2PAT"))
 process.pfIsolatedMuonsPF2PAT.deltaBetaIsolationValueMap = cms.InputTag("muPFIsoValuePU04PF2PAT")
 process.pfIsolatedMuonsPF2PAT.isolationValueMapsNeutral = cms.VInputTag(cms.InputTag("muPFIsoValueNeutral04PF2PAT"), cms.InputTag("muPFIsoValueGamma04PF2PAT"))
+# leptons for top tree: no isolation requirement 
+# "pfMuons" is cloned from "pfIsolatedMuons" but the isolation cut is removed in the main PFBRECO sequence
+process.patMuonsPF2PAT.pfMuonSource = "pfMuonsPF2PAT"
 
 print "process.pfIsolatedMuonsPF2PAT.isolationCut -> "+str(process.pfIsolatedMuonsPF2PAT.isolationCut)
 
