@@ -180,7 +180,7 @@ process.patseq = cms.Sequence(
     process.ak5GenJetsSeq*
     process.primaryVertexFilter * #removes events with no good pv (but if cuts to determine good pv change...)
     getattr(process,"patPF2PATSequence"+postfix)* # main PF2PAT
-    getattr(process,"patPF2PATSequence"+postfix+postfixNoLeptonCleaning)* # PF2PAT FOR DATA_DRIVEN QCD
+#    getattr(process,"patPF2PATSequence"+postfix+postfixNoLeptonCleaning)* # PF2PAT FOR DATA_DRIVEN QCD
 #    getattr(process,"patPF2PATSequence"+postfix+postfixNoPFnoPU)* # PF2PAT FOR JETS WITHOUT PFnoPU
 #    process.patDefaultSequence*
     process.flavorHistorySeq
@@ -207,47 +207,5 @@ process.out.dropMetaData = cms.untracked.string("DROPPED")
 
 process.source.inputCommands = cms.untracked.vstring("keep *", "drop *_MEtoEDMConverter_*_*")
 
-process.out.outputCommands = [
-    'drop *_cleanPat*_*_*',
-    'keep *_selectedPat*_*_*',
-    'keep *_goodPat*_*_*',
-    'keep patJets_*_*_*',
-    'keep *_patMETs*_*_*',
-    'keep *_patType1CorrectedPFMet*_*_*',
-    'keep *_goodOfflinePrimaryVertices*_*_*',    
-    'drop patPFParticles_*_*_*',
-    'drop patTaus_*_*_*',
-    'keep double_*PF2PAT*_*_PAT',
-    'keep double_kt6PFJets_rho_*',
-#    'keep double_kt6PFJetsForIsolation_rho_*',
-    'keep *_TriggerResults_*_*',
-    'keep *_hltTriggerSummaryAOD_*_*',
-    'keep *_ak5GenJets*_*_*',
-    'keep double_genEvent*_*_*',
-    'keep TtGenEvent_*_*_*',
-    'keep GenRunInfoProduct_generator_*_*',
-    'keep GenEventInfoProduct_generator_*_*',
-    'keep *_genEventWeight_*_*',
-    'keep *_bFlavorHistoryProducer_*_*',
-    'keep *_cFlavorHistoryProducer_*_*',
-    'keep *_flavorHistoryFilter_*_*',
-    'keep PileupSummaryInfos_*_*_*',
-    'keep recoTracks_generalTracks_*_*',
-    'keep recoPFCandidates_selectedPatJets*_*_*',
-    'keep recoBaseTagInfosOwned_selectedPatJets*_*_*',
-    'keep CaloTowers_selectedPatJets*_*_*',
-    'keep *_*genParticles*_*_*',
-    'keep recoGenParticles_*_*_*',
-    'keep *_offlineBeamSpot_*_*',
-    'keep recoCaloClusters_*_*_*',
-    'keep *_reducedEcalRecHits*_*_*',
-    'keep edmHepMC*_*_*_*',
-    'keep recoPdfinfo_*_*_*',
-    'keep triggerTriggerEvent_*_*_*',
-    'keep GenEventInfoProduct_*_*_*',
-    'keep DcsStatuss_scalersRawToDigi__*',
-#    'keep *_patMETs_*_*',
-    'drop *_patMETs_*_*',
-    'drop *_selectedPatJets_*_*',
-    'drop *_selectedPatPhotons*_*_*'
-    ]
+from TopBrussels.TopTreeProducer.patEventContentTopTree_cff import patEventContentTopTree
+process.out.outputCommands = patEventContentTopTree  
