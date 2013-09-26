@@ -11,5 +11,4 @@ cd TopBrussels/TopTreeProducer/
 git checkout master
 ~~~
 
-Can't we compile the package with "scram b" along with other CMSSW packages? (TJ)
 We can use master branch for 6X release.(TJ)
