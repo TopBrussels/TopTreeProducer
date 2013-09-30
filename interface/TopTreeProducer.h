@@ -17,9 +17,11 @@
 #include "FWCore/Utilities/interface/EDMException.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/ParameterSet/interface/FileInPath.h"
+#include "FWCore/Framework/interface/LuminosityBlock.h"
 
 #include "FWCore/Common/interface/TriggerNames.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
+#include "DataFormats/Common/interface/MergeableCounter.h"
 
 #include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h" 
 
@@ -64,6 +66,7 @@
 
 #include "TFile.h"
 #include "TTree.h"
+#include "TH1.h"
 #include "TClonesArray.h"
 
 //using namespace TopTree;
@@ -77,6 +80,7 @@ public:
 private:
 	virtual void beginJob() ;
 	virtual void analyze(const edm::Event&, const edm::EventSetup&);
+        virtual void endLuminosityBlock(const edm::LuminosityBlock&, const EventSetup&);
 	virtual void endJob() ;
 
 	edm::ParameterSet myConfig_;
@@ -87,6 +91,7 @@ private:
 	TFile* rootFile_ ;
 	TTree* eventTree_;
 	TTree* runTree_;
+        TH1F* tmp_;
 	bool doHLT;
 	bool doMC;
 	bool doPDFInfo;
@@ -137,6 +142,8 @@ private:
 	TClonesArray* spinCorrGen;
 	TClonesArray* primaryVertex;
 
+        bool useEventCounter_;
+        std::vector<std::string> filters_;
 };
 
 #endif
