@@ -47,6 +47,8 @@ void TopTreeProducer::beginJob()
 	doGenEvent = myConfig_.getUntrackedParameter<bool>("doGenEvent",false);
 	doNPGenEvent = myConfig_.getUntrackedParameter<bool>("doNPGenEvent",false);
 	doSpinCorrGen = myConfig_.getUntrackedParameter<bool>("doSpinCorrGen",false);
+        useEventCounter_ = myConfig_.getUntrackedParameter<bool>("useEventCounter",true);
+        filters_ = myConfig_.getUntrackedParameter<std::vector<std::string> >("filters");
 	vector<string> defaultVec;
 	vGenJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vgenJetProducer",defaultVec);
 	vCaloJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vcaloJetProducer",defaultVec);
@@ -104,6 +106,8 @@ void TopTreeProducer::beginJob()
 	rootFile_ = new TFile(rootFileName_.c_str(), "recreate");
 	rootFile_->cd();
 	if(verbosity>0) cout << "New RootFile " << rootFileName_.c_str() << " is created" << endl;
+
+        tmp_ = new TH1F("EventSummary","EventSummary", filters_.size(),0,filters_.size());
 
 	runInfos_ = new TRootRun();
 	runTree_ = new TTree("runTree", "Global Run Infos");
@@ -281,7 +285,7 @@ void TopTreeProducer::endJob()
 	}
 
 	runTree_->Fill();
-	
+        tmp_->Write();
 	std::cout << "Total number of events: " << nTotEvt_ << std::endl;
 	std::cout << "Closing rootfile " << rootFile_->GetName() << std::endl;
 	rootFile_->Write();
@@ -289,6 +293,19 @@ void TopTreeProducer::endJob()
 
 }
 
+void TopTreeProducer::endLuminosityBlock(const edm::LuminosityBlock & lumi, const edm::EventSetup & setup){
+    if(useEventCounter_){
+      for(unsigned int i=0;i<filters_.size();++i) {
+        std::string name = filters_[i];
+        edm::Handle<edm::MergeableCounter> numEventsCounter;
+        lumi.getByLabel(name, numEventsCounter);
+        if( numEventsCounter.isValid()){
+          tmp_->AddBinContent(i+1, numEventsCounter->value);
+          tmp_->GetXaxis()->SetBinLabel(i+1,filters_[i].c_str());
+        }
+      }
+    }
+}
 
 // ------------ method called to for each event  ------------
 void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
