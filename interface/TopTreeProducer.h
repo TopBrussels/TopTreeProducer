@@ -53,6 +53,7 @@
 #include "../interface/TRootCaloJet.h"
 #include "../interface/TRootGenJet.h"
 #include "../interface/TRootPFJet.h"
+#include "../interface/TRootLepton.h"
 #include "../interface/TRootMuon.h"
 #include "../interface/TRootElectron.h"
 #include "../interface/TRootMET.h"

@@ -4,6 +4,7 @@ using namespace std;
 using namespace TopTree;
 using namespace reco;
 using namespace edm;
+using namespace isodeposit;
 
 ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& producersNames):verbosity_(0),useMC_(false),runSuperCluster_(false),doPrimaryVertex_(false),isData_(false)
 
@@ -162,15 +163,13 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 	  }
     
     //Isolation
-    localElectron.setIsoR03_Depth1HadEt(electron->dr03HcalDepth1TowerSumEt());
-    localElectron.setIsoR03_Depth2HadEt(electron->dr03HcalDepth2TowerSumEt());
-    localElectron.setIsoR03_emEt(electron->dr03EcalRecHitSumEt());
-    localElectron.setIsoR03_sumPt(electron->dr03TkSumPt());
+    localElectron.setIsoR03_hcalIso(electron->dr03HcalTowerSumEt());
+    localElectron.setIsoR03_ecalIso(electron->dr03EcalRecHitSumEt());
+    localElectron.setIsoR03_trackIso(electron->dr03TkSumPt());
     
-    localElectron.setIsoR04_Depth1HadEt(electron->dr04HcalDepth1TowerSumEt());
-    localElectron.setIsoR04_Depth2HadEt(electron->dr04HcalDepth2TowerSumEt());
-    localElectron.setIsoR04_emEt(electron->dr04EcalRecHitSumEt());
-    localElectron.setIsoR04_sumPt(electron->dr04TkSumPt());
+    localElectron.setIsoR04_hcalIso(electron->dr04HcalTowerSumEt());
+    localElectron.setIsoR04_ecalIso(electron->dr04EcalRecHitSumEt());
+    localElectron.setIsoR04_trackIso(electron->dr04TkSumPt());
     
     // Conversion:
     double evt_bField = 0; // need the magnetic field
@@ -213,11 +212,34 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 	    else localElectron.setGenParticleIndex(-1);
 	  }
     
-    if(patElectron->chargedHadronIso() != -1) localElectron.setChargedHadronIso(patElectron->chargedHadronIso());
-    if(patElectron->puChargedHadronIso() != -1) localElectron.setPuChargedHadronIso( patElectron->puChargedHadronIso() );
-    if(patElectron->photonIso() != -1) localElectron.setPhotonIso(patElectron->photonIso());
-    if(patElectron->neutralHadronIso() != -1) localElectron.setNeutralHadronIso(patElectron->neutralHadronIso());
-    
+    //set pf-isolation
+    //default cone size from PAT setup : currently r=0.3
+    if(patElectron->chargedHadronIso() != -1) localElectron.setIsoR03_ChargedHadronIso(patElectron->chargedHadronIso());
+    if(patElectron->puChargedHadronIso() != -1) localElectron.setIsoR03_PuChargedHadronIso( patElectron->puChargedHadronIso() );
+    if(patElectron->photonIso() != -1) localElectron.setIsoR03_PhotonIso(patElectron->photonIso());
+    if(patElectron->neutralHadronIso() != -1) localElectron.setIsoR03_NeutralHadronIso(patElectron->neutralHadronIso());
+
+    //this is for cone size r=0.4
+    //following EGM POG isolation definition
+    AbsVetos veto_ch;
+    AbsVetos veto_nh;
+    AbsVetos veto_ph;
+    Direction Dir = Direction(patElectron->superCluster()->eta(), patElectron->superCluster()->phi());
+    if( fabs( patElectron->superCluster()->eta() ) > 1.479 ){
+      veto_ch.push_back(new reco::isodeposit::ConeVeto( Dir, 0.015 ));
+      veto_ph.push_back(new reco::isodeposit::ConeVeto( Dir, 0.08 ));
+    }
+
+    const double chIso04 = patElectron->isoDeposit(pat::PfChargedHadronIso)->depositAndCountWithin(0.4, veto_ch).first;
+    const double nhIso04 = patElectron->isoDeposit(pat::PfNeutralHadronIso)->depositAndCountWithin(0.4, veto_nh).first;
+    const double phIso04 = patElectron->isoDeposit(pat::PfGammaIso)->depositAndCountWithin(0.4, veto_ph).first;
+    const double puChIso04 = patElectron->isoDeposit(pat::PfPUChargedHadronIso)->depositAndCountWithin(0.4, veto_ch).first;
+
+    localElectron.setIsoR04_ChargedHadronIso( chIso04 );
+    localElectron.setIsoR04_PuChargedHadronIso( puChIso04 );
+    localElectron.setIsoR04_PhotonIso( phIso04 );
+    localElectron.setIsoR04_NeutralHadronIso( nhIso04 );
+
     localElectron.setPassConversion(patElectron->passConversionVeto());
     localElectron.setSigmaIphiIphi( patElectron->sigmaIphiIphi() );
     localElectron.setSigmaIetaIphi( patElectron->sigmaIetaIphi() );

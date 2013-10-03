@@ -4,6 +4,7 @@ using namespace std;
 using namespace TopTree;
 using namespace reco;
 using namespace edm;
+using namespace isodeposit;
 
 MuonAnalyzer::MuonAnalyzer (const edm::ParameterSet & producersNames):
 verbosity_(0),
@@ -58,7 +59,12 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
       const reco::Muon* muon = (const reco::Muon *) patMuon;//(&((*patMuons)[j]));
 
       TRootMuon localMuon (muon->px (), muon->py (), muon->pz (), muon->energy (), muon->vx (), muon->vy (), muon->vz (), muon->pdgId (), muon->charge ());
-      localMuon.setIsoR03 (muon->isolationR03 ().emEt, muon->isolationR03 ().hadEt, muon->isolationR03 ().sumPt);
+
+      //set detector-based isolation
+      localMuon.setIsoR03_trackIso( muon->isolationR03().sumPt);
+      localMuon.setIsoR03_ecalIso( muon->isolationR03().emEt);
+      localMuon.setIsoR03_hcalIso( muon->isolationR03().hadEt);
+
       localMuon.setAlgo (muon->type ());
       localMuon.setID (int ( muon::isGoodMuon ( *muon, muon::AllGlobalMuons)), int ( muon::isGoodMuon ( *muon, muon::AllTrackerMuons)), int ( muon::isGoodMuon ( *muon, muon::AllStandAloneMuons)), int ( muon::isGoodMuon ( *muon, muon::TrackerMuonArbitrated)), int ( muon::isGoodMuon ( *muon, muon::AllArbitrated)), int ( muon::isGoodMuon ( *muon, muon::GlobalMuonPromptTight)), int ( muon::isGoodMuon (*muon, muon::TMLastStationLoose)), int ( muon::isGoodMuon ( *muon, muon::TMLastStationTight)),int ( muon::isGoodMuon ( *muon, muon::TMLastStationAngTight)) , int ( muon::isGoodMuon ( *muon, muon::TMOneStationLoose)), int ( muon::isGoodMuon ( *muon, muon::TMOneStationTight)), int ( muon::isGoodMuon ( *muon, muon::TMLastStationOptimizedLowPtLoose)), int ( muon::isGoodMuon ( *muon, muon::TMLastStationOptimizedLowPtTight)), int ( muon::isGoodMuon ( *muon, muon::TM2DCompatibilityLoose)), int ( muon::isGoodMuon ( *muon, muon::TM2DCompatibilityTight)));
 
@@ -69,14 +75,14 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
           reco::VertexRef vtx(pvHandle,0);
           localMuon.setD0 ( muon->innerTrack()->dxy(vtx->position()) );
           localMuon.setD0Error ( sqrt(pow(muon->innerTrack()->dxyError(),2)+pow(vtx->xError(),2)+ pow(vtx->yError(),2)) );
-          localMuon.setDZ ( muon->innerTrack()->dz(vtx->position()) );
-          localMuon.setDZError ( sqrt(pow(muon->innerTrack()->dzError(),2)+pow(vtx->zError(),2)) );
+          localMuon.setDz ( muon->innerTrack()->dz(vtx->position()) );
+          localMuon.setDzError ( sqrt(pow(muon->innerTrack()->dzError(),2)+pow(vtx->zError(),2)) );
         }
         else{
           localMuon.setD0 ( muon->innerTrack()->dxy() );
           localMuon.setD0Error ( muon->innerTrack()->dxyError() );
-          localMuon.setDZ ( muon->innerTrack()->dz() );
-          localMuon.setDZError ( muon->innerTrack()->dzError() );
+          localMuon.setDz ( muon->innerTrack()->dz() );
+          localMuon.setDzError ( muon->innerTrack()->dzError() );
           
         }
         localMuon.setNofValidHits ( muon->innerTrack()->numberOfValidHits() );
@@ -124,11 +130,35 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
           localMuon.setGenParticleIndex (-1);
         }
       }
+      
+      //set pf-isolation
+      //default cone size from PAT setup : currently r=0.4
+      if(patMuon->chargedHadronIso() != -1)   localMuon.setIsoR04_ChargedHadronIso(patMuon->chargedHadronIso());
+      if(patMuon->puChargedHadronIso() != -1) localMuon.setIsoR04_PuChargedHadronIso( patMuon->puChargedHadronIso() );
+      if(patMuon->photonIso() != -1)          localMuon.setIsoR04_PhotonIso(patMuon->photonIso());
+      if(patMuon->neutralHadronIso() != -1)   localMuon.setIsoR04_NeutralHadronIso(patMuon->neutralHadronIso());
 
-      if(patMuon->chargedHadronIso() != -1)   localMuon.setChargedHadronIso(patMuon->chargedHadronIso());
-      if(patMuon->puChargedHadronIso() != -1) localMuon.setPuChargedHadronIso( patMuon->puChargedHadronIso() );
-      if(patMuon->photonIso() != -1)          localMuon.setPhotonIso(patMuon->photonIso());
-      if(patMuon->neutralHadronIso() != -1)   localMuon.setNeutralHadronIso(patMuon->neutralHadronIso());
+       //this is for cone size r=0.3
+       //following Muon POG isolation definition
+       AbsVetos veto_ch;
+       AbsVetos veto_nh;
+       AbsVetos veto_ph;
+       Direction Dir = Direction(patMuon->eta(), patMuon->phi());
+       veto_ch.push_back(new reco::isodeposit::ConeVeto( Dir, 0.0001 ));
+       veto_nh.push_back(new reco::isodeposit::ConeVeto( Dir, 0.01 ));
+       veto_nh.push_back(new reco::isodeposit::ThresholdVeto( 0.5 ));
+       veto_ph.push_back(new reco::isodeposit::ConeVeto( Dir, 0.01 ));
+       veto_ph.push_back(new reco::isodeposit::ThresholdVeto( 0.5 ));
+
+       const double chIso03 = patMuon->isoDeposit(pat::PfChargedHadronIso)->depositAndCountWithin(0.3, veto_ch).first;
+       const double nhIso03 = patMuon->isoDeposit(pat::PfNeutralHadronIso)->depositAndCountWithin(0.3, veto_nh).first;
+       const double phIso03 = patMuon->isoDeposit(pat::PfGammaIso)->depositAndCountWithin(0.3, veto_ph).first;
+       const double puChIso03 = patMuon->isoDeposit(pat::PfPUChargedHadronIso)->depositAndCountWithin(0.3, veto_ch).first;
+
+       localMuon.setIsoR03_ChargedHadronIso( chIso03 );
+       localMuon.setIsoR03_PuChargedHadronIso( puChIso03 );
+       localMuon.setIsoR03_PhotonIso( phIso03 );
+       localMuon.setIsoR03_NeutralHadronIso( nhIso03 );
 
       new ((*rootMuons)[j]) TRootMuon (localMuon);
       if (verbosity_ > 2)
