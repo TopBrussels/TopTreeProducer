@@ -8,6 +8,7 @@
 #include "../interface/TRootCaloJet.h"
 #include "../interface/TRootGenJet.h"
 #include "../interface/TRootPFJet.h"
+#include "../interface/TRootLepton.h"
 #include "../interface/TRootMuon.h"
 #include "../interface/TRootElectron.h"
 #include "../interface/TRootMET.h"
@@ -30,6 +31,7 @@
 #include "../interface/TRootCaloJet.h"
 #include "../interface/TRootGenJet.h"
 #include "../interface/TRootPFJet.h"
+#include "../interface/TRootLepton.h"
 #include "../interface/TRootMuon.h"
 #include "../interface/TRootElectron.h"
 #include "../interface/TRootMET.h"
@@ -58,6 +60,7 @@
 #pragma link C++ class TopTree::TRootCaloJet;
 #pragma link C++ class TopTree::TRootGenJet;
 #pragma link C++ class TopTree::TRootPFJet;
+#pragma link C++ class TopTree::TRootLepton;
 #pragma link C++ class TopTree::TRootMuon;
 #pragma link C++ class TopTree::TRootElectron;
 #pragma link C++ class TopTree::TRootMET;

@@ -68,6 +68,11 @@ analysis = cms.EDAnalyzer("TopTreeProducer",
 		muonMC_ptMin = cms.double(0.0),
 		jetMC_etaMax = cms.double(6.0),
 		jetMC_ptMin = cms.double(5.0),
+                useEventCounter = cms.untracked.bool( True ),
+                filters = cms.untracked.vstring(
+                                             'prePathCounter',
+                                             'postPathCounter'
+                                               )
 	),
 
 	producersNames = cms.PSet(

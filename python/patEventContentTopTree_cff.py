@@ -23,5 +23,6 @@ patEventContentTopTree.extend([
     'keep recoGenParticles_genParticles_*_*',
     'keep triggerTriggerEvent_*_*_*',
     'keep GenEventInfoProduct_*_*_*',
+    'keep edmMergeableCounter_*_*_*',
     ])
 

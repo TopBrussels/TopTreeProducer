@@ -5,7 +5,8 @@ from PhysicsTools.PatAlgos.tools.coreTools import *
 
 process.source.fileNames = [
 #    '/store/mc/Summer12_DR53X/T_tW-channel-DR_TuneZ2star_8TeV-powheg-tauola/AODSIM/PU_S10_START53_V7A-v1/0000/0024E066-2BEA-E111-B72F-001BFCDBD11E.root'
-    '/store/mc/Summer12_DR53X/TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola/AODSIM/PU_S10_START53_V7A-v1/0000/FED775BD-B8E1-E111-8ED5-003048C69036.root',
+#    '/store/mc/Summer12_DR53X/TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola/AODSIM/PU_S10_START53_V7A-v1/0000/FED775BD-B8E1-E111-8ED5-003048C69036.root',
+    '/store/mc/Summer12_DR53X/TTJets_FullLeptMGDecays_8TeV-madgraph-tauola/AODSIM/PU_S10_START53_V7C-v2/10000/4085E811-F197-E211-8A95-002618943953.root',
 #'file:DYToEE_53X_AODSIM.root'
 ]
 
@@ -177,8 +178,12 @@ process.selectedPatJetsPF2PATNoLeptonCleaning.cut = cms.string("pt > 10")
 process.load("PhysicsTools.HepMCCandAlgos.flavorHistoryPaths_cfi")
 process.flavorHistoryFilter.pathToSelect = cms.int32(-1)
 
+process.prePathCounter = cms.EDProducer("EventCountProducer")
+process.postPathCounter = cms.EDProducer("EventCountProducer")
+
 # let it run
 process.patseq = cms.Sequence(
+    process.prePathCounter*
 #    process.kt6PFJetsForIsolation*
     process.goodOfflinePrimaryVertices*
     process.ak5GenJetsSeq*
@@ -187,12 +192,15 @@ process.patseq = cms.Sequence(
 #    getattr(process,"patPF2PATSequence"+postfix+postfixNoLeptonCleaning)* # PF2PAT FOR DATA_DRIVEN QCD
 #    getattr(process,"patPF2PATSequence"+postfix+postfixNoPFnoPU)* # PF2PAT FOR JETS WITHOUT PFnoPU
 #    process.patDefaultSequence*
-    process.flavorHistorySeq
+    process.flavorHistorySeq*
+    process.postPathCounter
     )
 
 #################
 #### ENDPATH ####
 #################
+
+nEventsInit = cms.EDProducer("EventCountProducer")
 
 process.p = cms.Path(
     process.patseq
