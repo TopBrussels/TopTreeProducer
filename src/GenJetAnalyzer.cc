@@ -160,13 +160,13 @@ bool GenJetAnalyzer::decayFromBHadron(const Candidate & c)
                                                   aParent ++ )
      {
          if( hasBottom(**aParent) ) isFromB = true;
-
+/*
  cout << " particle Parent is " << (*aParent)->status()
  << " type " << (*aParent)->pdgId()
  << " pt= " << (*aParent)->pt()
  << " isB = " << isFromB
  << endl;
-
+*/
      }
    return isFromB;
 }
