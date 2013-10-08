@@ -35,6 +35,14 @@ private:
 	edm::InputTag mcProducer_;
 	std::vector<std::string> vGenJetProducer;
 
+        std::vector<const reco::Candidate *> getAncestors(const reco::Candidate &c);
+        bool hasBottom(const reco::Candidate &c);
+        bool hasCharm(const reco::Candidate &c);
+        bool decayFromBHadron(const reco::Candidate &c);
+        bool decayFromCHadron(const reco::Candidate &c);
+        const reco::Candidate* lastBHadron(const reco::Candidate &c);
+        const reco::Candidate* lastCHadron(const reco::Candidate &c);
+
 };
 
 #endif
