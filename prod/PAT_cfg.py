@@ -97,6 +97,9 @@ print "process.pfIsolatedMuonsPF2PAT.isolationCut -> "+str(process.pfIsolatedMuo
 # there will be overlap between non-PF electrons and jets even though top projection is ON!
 useGsfElectrons(process,postfix,"03") # to change isolation cone size to 0.3 as it is recommended by EGM POG, use "04" for cone size 0.4
 
+from TopBrussels.TopTreeProducer.tools import *
+useRecoMuon(process,postfix,"04")
+
 #process.pfIsolatedElectronsPF2PAT.isolationCut = cms.double(0.2)
 #process.pfIsolatedElectronsPF2PAT.doDeltaBetaCorrection = False
 #process.pfSelectedElectronsPF2PAT.cut = cms.string('pt > 10. && abs(eta) < 2.5 && gsfTrackRef.isNonnull && gsfTrackRef.trackerExpectedHitsInner.numberOfLostHits<2')
