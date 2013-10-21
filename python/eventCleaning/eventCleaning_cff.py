@@ -35,7 +35,7 @@ eventCleaning = cms.Sequence(
                 scrapingFilter*
                 hcalLaserEventFilter*
                 EcalDeadCellTriggerPrimitiveFilter*
-                primaryVertexFilter * 
+#                primaryVertexFilter * # this will be applied before this sequence. do we need to apply this only for data?
                 trackingFailureFilter*
                 eeBadScFilter
 )
