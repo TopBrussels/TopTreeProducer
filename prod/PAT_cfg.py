@@ -13,6 +13,9 @@ process.source.fileNames = [
 # load the PAT config
 process.load("PhysicsTools.PatAlgos.patSequences_cff")
 
+
+runOnMC = True 
+
 ###############################
 ####### Global Setup ##########
 ###############################
@@ -37,7 +40,10 @@ process.options = cms.untracked.PSet(
 		                 wantSummary = cms.untracked.bool(True)
 	         	 	)
 
-process.GlobalTag.globaltag = cms.string('START53_V20::All')
+### Set the global tag from the dataset name
+from TopBrussels.TopTreeProducer.Tools.getGlobalTag import getGlobalTagByDataset
+process.GlobalTag.globaltag = getGlobalTagByDataset( runOnMC, process.source.fileNames[0])
+#process.GlobalTag.globaltag = cms.string('START53_V20::All')
 
 ##-------------------- Import the Jet RECO modules ----------------------- ## this makes cmsRun crash
 ##
@@ -77,7 +83,7 @@ process.eidMVASequence = cms.Sequence( process.mvaTrigV0 + process.mvaNonTrigV0 
 # Default PF2PAT with AK5 jets. Make sure to turn ON the L1fastjet stuff. 
 from PhysicsTools.PatAlgos.tools.pfTools import *
 postfix = "PF2PAT"
-usePF2PAT(process,runPF2PAT=True, jetAlgo="AK5", runOnMC=True, postfix=postfix, pvCollection=cms.InputTag('goodOfflinePrimaryVertices'), typeIMetCorrections=True)
+usePF2PAT(process,runPF2PAT=True, jetAlgo="AK5", runOnMC=runOnMC, postfix=postfix, pvCollection=cms.InputTag('goodOfflinePrimaryVertices'), typeIMetCorrections=True)
 
 # TOP projection
 process.pfIsolatedMuonsPF2PAT.isolationCut = cms.double(0.2)
@@ -97,7 +103,7 @@ print "process.pfIsolatedMuonsPF2PAT.isolationCut -> "+str(process.pfIsolatedMuo
 # there will be overlap between non-PF electrons and jets even though top projection is ON!
 useGsfElectrons(process,postfix,"03") # to change isolation cone size to 0.3 as it is recommended by EGM POG, use "04" for cone size 0.4
 
-from TopBrussels.TopTreeProducer.tools import *
+from TopBrussels.TopTreeProducer.Tools.tools import *
 useRecoMuon(process,postfix,"04")
 
 #process.pfIsolatedElectronsPF2PAT.isolationCut = cms.double(0.2)
@@ -184,6 +190,8 @@ process.flavorHistoryFilter.pathToSelect = cms.int32(-1)
 process.prePathCounter = cms.EDProducer("EventCountProducer")
 process.postPathCounter = cms.EDProducer("EventCountProducer")
 
+process.load('TopBrussels.TopTreeProducer.eventCleaning.eventCleaning_cff')
+
 # let it run
 process.patseq = cms.Sequence(
     process.prePathCounter*
@@ -191,6 +199,7 @@ process.patseq = cms.Sequence(
     process.goodOfflinePrimaryVertices*
     process.ak5GenJetsSeq*
     process.primaryVertexFilter * #removes events with no good pv (but if cuts to determine good pv change...)
+    process.eventCleaning*
     getattr(process,"patPF2PATSequence"+postfix)* # main PF2PAT
 #    getattr(process,"patPF2PATSequence"+postfix+postfixNoLeptonCleaning)* # PF2PAT FOR DATA_DRIVEN QCD
 #    getattr(process,"patPF2PATSequence"+postfix+postfixNoPFnoPU)* # PF2PAT FOR JETS WITHOUT PFnoPU
@@ -199,6 +208,11 @@ process.patseq = cms.Sequence(
     process.postPathCounter
     )
 
+
+if runOnMC is False:
+    process.patseq.remove( process.eventCleaning )
+    process.patseq.remove( process.flavorHistorySeq )
+    process.patJetCorrFactorsPF2PAT.levels = cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute','L2L3Residual']) 
 #################
 #### ENDPATH ####
 #################
