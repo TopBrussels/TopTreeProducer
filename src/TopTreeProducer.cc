@@ -29,7 +29,6 @@ void TopTreeProducer::beginJob()
 	verbosity = myConfig_.getUntrackedParameter<int>("verbosity", 0);
 	rootFileName_ = myConfig_.getUntrackedParameter<string>("RootFileName","noname.root");
 	doHLT = myConfig_.getUntrackedParameter<bool>("doHLT",false);
-	doMC = myConfig_.getUntrackedParameter<bool>("doMC",false);
 	doPDFInfo = myConfig_.getUntrackedParameter<bool>("doPDFInfo",false);
 	doPrimaryVertex = myConfig_.getUntrackedParameter<bool>("doPrimaryVertex",false);
 	runGeneralTracks = myConfig_.getUntrackedParameter<bool>("runGeneralTracks",false);
@@ -126,7 +125,7 @@ void TopTreeProducer::beginJob()
 		hltAnalyzer_->setVerbosity(verbosity);
 	}
 
-	if(doMC)
+	if(!isRealData_)
 	{
 		if(verbosity>0) cout << "MC Particles info will be added to rootuple" << endl;
 		mcParticles = new TClonesArray("TopTree::TRootMCParticle", 1000);
@@ -145,7 +144,7 @@ void TopTreeProducer::beginJob()
 		}
 	}
 
-	if(doGenJet)
+	if(!isRealData_ && doGenJet)
 	{
 		if(verbosity>0) cout << "GenJets info will be added to rootuple (for GenJetStudy)" << endl;
 		for(unsigned int s=0; s<vGenJetProducer.size(); s++)
@@ -310,6 +309,8 @@ void TopTreeProducer::endLuminosityBlock(const edm::LuminosityBlock & lumi, cons
 // ------------ method called to for each event  ------------
 void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
+        isRealData_ = iEvent.isRealData();
+
 	rootFile_->cd();
 	nTotEvt_++;
 	if( (verbosity>1) || (verbosity>0 && nTotEvt_%10==0 && nTotEvt_<=100)  || (verbosity>0 && nTotEvt_%100==0 && nTotEvt_>100) )
@@ -413,7 +414,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
   	//iEvent.getByLabel("kt6PFJetsForIsolation","rho",rhoIso);
   	//rootEvent->setKt6PFJetsForIsolation_rho(*rhoIso);
 	
-	if(doMC)
+	if(!isRealData_)
 	{
 		//flavorHistory path
 		edm::Handle<unsigned int> flavHist;
@@ -456,7 +457,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	}
 
 	// MC Info
-	if(doMC)
+	if(!isRealData_)
 	{
 		if(verbosity>1) cout << endl << "Analysing MC info..." << endl;
 		MCAnalyzer* myMCAnalyzer = new MCAnalyzer(myConfig_, producersNames_);
@@ -488,7 +489,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	}
 
 	// GenJet
-	if(doGenJet)
+	if(!isRealData_ && doGenJet)
 	{
 		if(verbosity>1) cout << endl << "Analysing GenJets collection ..." << endl;
 		for(unsigned int s=0; s<vGenJetProducer.size(); s++)
@@ -612,7 +613,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	}
 	
 	// Associate recoParticles to mcParticles
-	if(doMC)
+	if(!isRealData_)
 	{
 		MCAssociator* myMCAssociator = new MCAssociator(producersNames_, verbosity);
 		myMCAssociator->init(iEvent, mcParticles);
@@ -634,7 +635,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	eventTree_->Fill();
 	if(verbosity>1) cout << endl << "Deleting objects..." << endl;
 	delete rootEvent;
-	if(doMC) (*mcParticles).Delete();
+	if(!isRealData_) (*mcParticles).Delete();
 	if(doCaloJet)
 	{
 		for(unsigned int s=0;s<vCaloJetProducer.size();s++)
@@ -642,7 +643,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 			(*vcaloJets[s]).Delete();
 		}
 	}
-	if(doGenJet)
+	if(!isRealData_ && doGenJet)
 	{
 		for(unsigned int s=0;s<vGenJetProducer.size();s++)
 		{
