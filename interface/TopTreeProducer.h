@@ -145,6 +145,8 @@ private:
 
         bool useEventCounter_;
         std::vector<std::string> filters_;
+
+        bool isRealData_;
 };
 
 #endif
