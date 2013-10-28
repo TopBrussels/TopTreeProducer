@@ -25,5 +25,5 @@ float TRootGenTop::DeltaRMinHadronicTop() const
 	return dmin;
 }
  
-ClassImp(TRootGenTop)
+//ClassImp(TRootGenTop)
  

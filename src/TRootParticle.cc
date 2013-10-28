@@ -2,4 +2,4 @@
 
 using namespace TopTree;
 
-ClassImp(TRootParticle)
+//ClassImp(TRootParticle)
