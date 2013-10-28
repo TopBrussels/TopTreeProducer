@@ -2,5 +2,5 @@
 
 using namespace TopTree;
 
-ClassImp(triggeredObject)
-ClassImp(TRootEvent)
+//ClassImp(triggeredObject)
+//ClassImp(TRootEvent)

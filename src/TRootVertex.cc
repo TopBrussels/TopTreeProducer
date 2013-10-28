@@ -2,4 +2,4 @@
 
 using namespace TopTree;
 
-ClassImp(TRootVertex)
+//ClassImp(TRootVertex)
