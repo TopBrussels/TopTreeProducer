@@ -118,7 +118,7 @@ namespace TopTree
 		Float_t charge_;
 		Int_t genParticleIndex_;
 
-		ClassDef (TRootParticle,2);
+		ClassDef (TRootParticle,3);
 	};
 }
 

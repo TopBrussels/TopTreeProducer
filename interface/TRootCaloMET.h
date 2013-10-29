@@ -309,7 +309,7 @@ namespace TopTree
 		Float_t caloMETPhiInpHF_;    // CaloMET-phi in HF+
 		Float_t caloMETPhiInmHF_;    // CaloMET-phi in HF-
 
-		ClassDef (TRootCaloMET,1);
+		ClassDef (TRootCaloMET,2);
 	};
 }
 

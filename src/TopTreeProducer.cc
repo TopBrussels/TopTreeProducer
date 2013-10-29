@@ -283,8 +283,14 @@ void TopTreeProducer::endJob()
 		hltAnalyzer_->printStats();
 	}
 
+
+        runInfos_->setPrePathCounter(tmp_->GetBinContent(1));
+        runInfos_->setPostPathCounter(tmp_->GetBinContent(2));
+        
 	runTree_->Fill();
-        tmp_->Write();
+        //tmp_->Write(); // not saving histogram for consistency, instead we save these numbers in runTree (TJ) 
+        std::cout << "Initial number of events: " << tmp_->GetBinContent(1) << std::endl; 
+        //Initial number of events could be different from nTotEvt_ if there is any filter in the PAT sequence 
 	std::cout << "Total number of events: " << nTotEvt_ << std::endl;
 	std::cout << "Closing rootfile " << rootFile_->GetName() << std::endl;
 	rootFile_->Write();

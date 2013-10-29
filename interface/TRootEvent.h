@@ -23,7 +23,7 @@ namespace TopTree
 		Float_t eta;
 		Float_t phi;
 
-		ClassDef(triggeredObject,1);
+		ClassDef(triggeredObject,2);
 
 	};
 
@@ -174,7 +174,7 @@ namespace TopTree
 
 		std::map<std::string, std::vector<TopTree::triggeredObject> > triggerFilters_;
 
-		ClassDef (TRootEvent,3);
+		ClassDef (TRootEvent,4);
 	};
 }
 

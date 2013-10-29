@@ -64,7 +64,7 @@ namespace TopTree
 	  vector<UInt_t> hltErrors_;
 	  vector<UInt_t> hltAccept_;
 	    
-	    ClassDef (TRootHLTInfo,1);
+	    ClassDef (TRootHLTInfo,2);
 		    
 	};
 

@@ -77,7 +77,7 @@ namespace TopTree
 		Int_t METType_;
 		Float_t sumEt_;
 
-		ClassDef (TRootMET,1);
+		ClassDef (TRootMET,2);
 	};
 }
 

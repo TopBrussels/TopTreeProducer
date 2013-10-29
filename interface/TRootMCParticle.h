@@ -167,7 +167,7 @@ namespace TopTree
 		Int_t dauThreeId_;
 		Int_t dauFourId_;
 
-		ClassDef (TRootMCParticle,2);
+		ClassDef (TRootMCParticle,3);
 	};
 }
 

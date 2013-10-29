@@ -243,7 +243,7 @@ namespace TopTree
 		Float_t chargedHadronEnergyFraction_;
 		// neutralHadronEnergyFraction_, chargedEmEnergyFraction_, neutralEmEnergyFraction_ all not filled in PAT, so removed
 
-		ClassDef (TRootJPTJet,1);
+		ClassDef (TRootJPTJet,2);
 	};
 }
 

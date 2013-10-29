@@ -170,7 +170,7 @@ namespace TopTree
 		Float_t maxDistance_;					// Maximum distance from jet to constituent
                 TRootMCParticle BHadron_;
                 TRootMCParticle CHadron_;
-		ClassDef (TRootGenJet,4);
+		ClassDef (TRootGenJet,5);
 	};
 }
 

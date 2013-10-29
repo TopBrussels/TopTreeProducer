@@ -358,7 +358,7 @@ namespace TopTree
                 Float_t photonIso04_;                        // isolation calculated with only the gamma candidates
                 Float_t neutralHadronIso04_;                     // isolation calculated with only the neutral hadron candidates
       
-                ClassDef (TRootLepton,2);
+                ClassDef (TRootLepton,3);
         };
 }
 
