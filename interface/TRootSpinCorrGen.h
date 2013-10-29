@@ -66,7 +66,7 @@ namespace TopTree
 		Double_t cosPhi_;
 		Double_t topsZMFMass_ ; 
 	
-		ClassDef (TRootSpinCorrGen,2);
+		ClassDef (TRootSpinCorrGen,3);
 	};
 }
 

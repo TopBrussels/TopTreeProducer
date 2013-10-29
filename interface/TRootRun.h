@@ -28,6 +28,9 @@ namespace TopTree
 			{;}
 	
 		~TRootRun() {;}
+
+                int prePathCounter() const { return prePathCounter_; } 
+                int postPathCounter() const { return postPathCounter_; } 
 		
 		UInt_t  nHLTEvents() const { return nHLTEvents_; }
 		UInt_t  nHLTWasRun() const { return nHLTWasRun_; }
@@ -35,6 +38,9 @@ namespace TopTree
 		UInt_t  nHLTErrors() const { return nHLTErrors_; }
 
 		std::string hltInputTag() const { return hltInputTag_; }
+
+                void setPrePathCounter(int nevts) { prePathCounter_ = nevts; }
+                void setPostPathCounter(int nevts) { postPathCounter_ = nevts; }
 
 		void setHLTInputTag(std::string hltInputTag) { hltInputTag_ = hltInputTag; }
 
@@ -66,6 +72,9 @@ namespace TopTree
 		// new HLT method
 		vector<TopTree::TRootHLTInfo> hltInfos_;
 
+                int prePathCounter_;                        // number of events before PAT sequence
+                int postPathCounter_;                       // number of events after PAT sequence
+
 		UInt_t nHLTEvents_;			// Nb of events
 		UInt_t nHLTWasRun_;			// Nb of events where at least one HLT was run
 		UInt_t nHLTAccept_;			// Nb of accepted events
@@ -73,7 +82,7 @@ namespace TopTree
 
 		std::string hltInputTag_;							// name of the HLT inputtag provided in the TopTreeProducer config
 
-		ClassDef (TRootRun,1);
+		ClassDef (TRootRun,2);
 	};
 }
 

@@ -528,7 +528,7 @@ namespace TopTree
       Float_t mvaTrigId_;                        // MVA value
       Float_t mvaNonTrigId_;                     // MVA value
       
-      ClassDef (TRootElectron,12);
+      ClassDef (TRootElectron,13);
       };
 }
 

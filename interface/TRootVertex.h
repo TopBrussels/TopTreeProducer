@@ -92,7 +92,7 @@ namespace TopTree
 		Float_t yError_;
 		Float_t zError_;
 
-		ClassDef (TRootVertex,1);
+		ClassDef (TRootVertex,2);
 	};
 }
 

@@ -158,7 +158,7 @@ namespace TopTree
 		Double_t Type6EtFraction_;
 		Double_t Type7EtFraction_;
 
-		ClassDef (TRootPFMET,1);
+		ClassDef (TRootPFMET,2);
 	};
 }
 

@@ -199,7 +199,7 @@ namespace TopTree
 		Float_t HFHadronMultiplicity_;
 		Float_t HFEMMultiplicity_;
 
-		ClassDef (TRootPFJet,1);
+		ClassDef (TRootPFJet,2);
 	};
 }
 

@@ -90,7 +90,7 @@ namespace TopTree
 		std::vector<TRootMCParticle> gluinos_;
 		std::vector<TRootMCParticle> stops_;
   
-		ClassDef (TRootNPGenEvent,2); 
+		ClassDef (TRootNPGenEvent,3); 
 	};
 }
 

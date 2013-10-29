@@ -418,7 +418,7 @@ namespace TopTree
 		Int_t partonFlavour_;
 		Bool_t isTopJet_;				// Is parton matched to the jet a decay product of the top quark ?
 
-		ClassDef (TRootJet,2);
+		ClassDef (TRootJet,3);
 	};
 }
 

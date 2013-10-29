@@ -227,7 +227,7 @@ namespace TopTree
 		Int_t id_; 		// MuonId coded in binary word id_ ==> TrackerMuonArbitrated=0000001 , AllArbitrated=0000010 , GlobalMuonPromptTight=0000100 ,
 		// TMLastStationLoose=0001000 , TMLastStationTight=0010000 , TM2DCompatibilityLoose=0100000 , TM2DCompatibilityTight=1000000
 		
-		ClassDef (TRootMuon,3);
+		ClassDef (TRootMuon,4);
 	};
 }
 

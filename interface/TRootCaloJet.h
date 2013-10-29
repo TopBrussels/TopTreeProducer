@@ -232,7 +232,7 @@ namespace TopTree
 		Int_t nECALTowers_;
 		Int_t chargedMultiplicity_;         // Number of tracks associated to the jet. Not available for reco::CaloJet
 
-		ClassDef (TRootCaloJet,1);
+		ClassDef (TRootCaloJet,2);
 	};
 }
 

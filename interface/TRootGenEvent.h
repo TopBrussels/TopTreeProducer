@@ -148,7 +148,7 @@ namespace TopTree
 		std::vector<TLorentzVector> leptonicDecayTopRadiation_;
 		std::vector<TLorentzVector> hadronicDecayTopRadiation_;
 
-		ClassDef (TRootGenEvent,1);
+		ClassDef (TRootGenEvent,2);
 	};
 }
 
