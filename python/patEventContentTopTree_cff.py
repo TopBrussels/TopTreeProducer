@@ -9,7 +9,7 @@ patEventContentTopTree.extend([
     'keep patMuons_selectedPatMuonsPF2PAT__PAT',
     'keep patElectrons_selectedPatElectronsPF2PAT__PAT',
     'keep patMETs_patType1CorrectedPFMetPF2PAT__PAT',
-    'keep double_kt6PFJets_rho_RECO',
+    'keep double_kt6PFJets_rho_*',
     'keep *_goodOfflinePrimaryVertices*_*_*',
     'keep *_TriggerResults_*_*',
     'keep *_hltTriggerSummaryAOD_*_*',

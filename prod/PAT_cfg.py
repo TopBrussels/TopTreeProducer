@@ -31,6 +31,7 @@ process.load("PhysicsTools.PatAlgos.patSequences_cff")
 
 
 runOnMC = True 
+runOnFastSim = False 
 
 ###############################
 ####### Global Setup ##########
@@ -57,9 +58,11 @@ process.options = cms.untracked.PSet(
 	         	 	)
 
 ### Set the global tag from the dataset name
-from TopBrussels.TopTreeProducer.Tools.getGlobalTag import getGlobalTagByDataset
-process.GlobalTag.globaltag = getGlobalTagByDataset( runOnMC, process.source.fileNames[0])
-#process.GlobalTag.globaltag = cms.string('START53_V20::All')
+if runOnFastSim is False:
+  from TopBrussels.TopTreeProducer.Tools.getGlobalTag import getGlobalTagByDataset
+  process.GlobalTag.globaltag = getGlobalTagByDataset( runOnMC, process.source.fileNames[0])
+else:
+  process.GlobalTag.globaltag = cms.string('START53_V27::All')
 
 ##-------------------- Import the Jet RECO modules ----------------------- ## this makes cmsRun crash
 ##
@@ -230,9 +233,11 @@ process.patseq = cms.Sequence(
 
 
 if runOnMC is False:
-    process.patseq.remove( process.eventCleaning )
     process.patseq.remove( process.flavorHistorySeq )
     process.patJetCorrFactorsPF2PAT.levels = cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute','L2L3Residual']) 
+
+if runOnFastSim is True:
+    process.eventCleaning.remove(process.HBHENoiseFilter)
 
 #################
 #### ENDPATH ####
