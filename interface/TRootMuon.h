@@ -87,7 +87,7 @@ namespace TopTree
 			,id_(-9999)
 			{;}
 
-		TRootMuon(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z, Int_t type, Float_t charge) :
+		TRootMuon(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z, Int_t type, Int_t charge) :
 			TRootLepton(px,py,pz,e,vtx_x,vtx_y,vtx_z,type,charge)
 			,vetoEm_(-9999.)
 			,vetoHad_(-9999.)
@@ -117,7 +117,7 @@ namespace TopTree
 			,id_(-9999)
 			{;}
 
-		TRootMuon(const TLorentzVector &momentum, const TVector3 &vertex, Int_t type, Float_t charge) :
+		TRootMuon(const TLorentzVector &momentum, const TVector3 &vertex, Int_t type, Int_t charge) :
 			TRootLepton(momentum, vertex, type, charge)
 			,vetoEm_(-9999.)
 			,vetoHad_(-9999.)
