@@ -18,7 +18,9 @@ process.source.fileNames = [
 #    '/store/mc/Summer12_DR53X/T_tW-channel-DR_TuneZ2star_8TeV-powheg-tauola/AODSIM/PU_S10_START53_V7A-v1/0000/0024E066-2BEA-E111-B72F-001BFCDBD11E.root'
 #    '/store/mc/Summer12_DR53X/TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola/AODSIM/PU_S10_START53_V7A-v1/0000/FED775BD-B8E1-E111-8ED5-003048C69036.root',
     #T2 at Belgium
-    '/store/mc/Summer12_DR53X/TTJets_FullLeptMGDecays_8TeV-madgraph-tauola/AODSIM/PU_S10_START53_V7C-v2/10000/4085E811-F197-E211-8A95-002618943953.root',
+    #'/store/mc/Summer12_DR53X/TTJets_FullLeptMGDecays_8TeV-madgraph-tauola/AODSIM/PU_S10_START53_V7C-v2/10000/4085E811-F197-E211-8A95-002618943953.root',
+    #photon study
+    '/store/user/jdhondt/TTJetsTocHbW_HToGammaGamma_HctL_TuneZ2star_8TeV-madgraph-tauola_Summer12/TTJetsTocHbW_HToGammaGamma_HctL_TuneZ2star_8TeV-madgraph-tauola_Summer12/8132d4a0c87c4982c80015223c5f35f5/Hadronizer_MgmMatchTuneZ2star_8TeV_madgraph_tauola_tt_bWcH_cff_py_GEN_FASTSIM_HLT_PU_100_1_84J.root'
     #data at CERN
     #'/store/data/Run2012A/DoubleMu/AOD/22Jan2013-v1/30000/FEF469F7-0882-E211-8351-0026189438E6.root'
     #AOD at eos  
@@ -31,7 +33,7 @@ process.load("PhysicsTools.PatAlgos.patSequences_cff")
 
 
 runOnMC = True 
-runOnFastSim = False 
+runOnFastSim = True 
 
 ###############################
 ####### Global Setup ##########
@@ -215,6 +217,11 @@ process.postPathCounter = cms.EDProducer("EventCountProducer")
 
 process.load('TopBrussels.TopTreeProducer.eventCleaning.eventCleaning_cff')
 
+process.photonSequence = cms.Sequence (
+    process.makePatPhotons+
+    process.selectedPatPhotons
+)
+
 # let it run
 process.patseq = cms.Sequence(
     process.prePathCounter*
@@ -228,9 +235,8 @@ process.patseq = cms.Sequence(
 #    getattr(process,"patPF2PATSequence"+postfix+postfixNoPFnoPU)* # PF2PAT FOR JETS WITHOUT PFnoPU
 #    process.patDefaultSequence*
     process.flavorHistorySeq*
-    process.postPathCounter
+    process.photonSequence
     )
-
 
 if runOnMC is False:
     process.patseq.remove( process.flavorHistorySeq )
@@ -246,7 +252,8 @@ if runOnFastSim is True:
 nEventsInit = cms.EDProducer("EventCountProducer")
 
 process.p = cms.Path(
-    process.patseq
+    process.patseq+
+    process.postPathCounter
     )
 
 process.out.SelectEvents.SelectEvents = cms.vstring('p')
@@ -257,10 +264,11 @@ process.out.fileName = "PAT.root"
 # process all the events
 process.maxEvents.input = 100 #changed
 
-process.options.wantSummary = False
+process.options.wantSummary = True 
 process.out.dropMetaData = cms.untracked.string("DROPPED")
 
 process.source.inputCommands = cms.untracked.vstring("keep *", "drop *_MEtoEDMConverter_*_*")
 
 from TopBrussels.TopTreeProducer.patEventContentTopTree_cff import patEventContentTopTree
 process.out.outputCommands = patEventContentTopTree  
+#process.out.outputCommands.append('keep *_selectedPatPhotons*_*_*')

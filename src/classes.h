@@ -6,6 +6,7 @@
 #include "TopBrussels/TopTreeProducer/interface/TRootLepton.h"
 #include "TopBrussels/TopTreeProducer/interface/TRootMuon.h"
 #include "TopBrussels/TopTreeProducer/interface/TRootElectron.h"
+#include "TopBrussels/TopTreeProducer/interface/TRootPhoton.h"
 #include "TopBrussels/TopTreeProducer/interface/TRootJet.h"
 #include "TopBrussels/TopTreeProducer/interface/TRootPFJet.h"
 #include "TopBrussels/TopTreeProducer/interface/TRootJPTJet.h"
@@ -53,6 +54,9 @@ namespace {
 
     TopTree::TRootElectron TRootElectron_;
     std::vector<TopTree::TRootElectron> vTRootElectron_;
+
+    TopTree::TRootPhoton TRootPhoton_;
+    std::vector<TopTree::TRootPhoton> vTRootPhoton_;
 
     TopTree::TRootJet TRootJet_;
     std::vector<TopTree::TRootJet> vTRootJet_;
