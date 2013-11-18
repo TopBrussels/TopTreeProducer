@@ -16,6 +16,8 @@
   <class name="std::vector<TopTree::TRootMuon>" />
   <class name="TopTree::TRootElectron" />
   <class name="std::vector<TopTree::TRootElectron>" />
+  <class name="TopTree::TRootPhoton" />
+  <class name="std::vector<TopTree::TRootPhoton>" />
   <class name="TopTree::TRootJet" />
   <class name="std::vector<TopTree::TRootJet>" />
   <class name="TopTree::TRootPFJet" />

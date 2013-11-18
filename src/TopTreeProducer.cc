@@ -38,6 +38,7 @@ void TopTreeProducer::beginJob()
 	doJPTJet = myConfig_.getUntrackedParameter<bool>("doJPTJet",false);
 	doMuon = myConfig_.getUntrackedParameter<bool>("doMuon",false);
 	doElectron = myConfig_.getUntrackedParameter<bool>("doElectron",false);	
+	doPhoton = myConfig_.getUntrackedParameter<bool>("doPhoton",false);	
 	doCaloMET = myConfig_.getUntrackedParameter<bool>("doCaloMET",false);
 	doPFMET = myConfig_.getUntrackedParameter<bool>("doPFMET",false);
 	doTrackMET = myConfig_.getUntrackedParameter<bool>("doTrackMET",false);
@@ -55,6 +56,7 @@ void TopTreeProducer::beginJob()
 	vJPTJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vJPTJetProducer",defaultVec);
 	vMuonProducer = producersNames_.getUntrackedParameter<vector<string> >("vmuonProducer",defaultVec);
 	vElectronProducer = producersNames_.getUntrackedParameter<vector<string> >("velectronProducer",defaultVec);
+	vPhotonProducer = producersNames_.getUntrackedParameter<vector<string> >("vphotonProducer",defaultVec);
  	vPFmetProducer = producersNames_.getUntrackedParameter<vector<string> >("vpfmetProducer",defaultVec);
  	vTrackmetProducer = producersNames_.getUntrackedParameter<vector<string> >("vtrackmetProducer",defaultVec);	
 
@@ -87,7 +89,12 @@ void TopTreeProducer::beginJob()
 		TClonesArray* a;
 		velectrons.push_back(a);
 	}
-  
+ 
+        for(unsigned int s=0;s<vPhotonProducer.size();s++){
+                TClonesArray* a;
+                vphotons.push_back(a);
+        }
+ 
   for(unsigned int s=0; s<vPFmetProducer.size(); s++) {
     TClonesArray* a;
     vPFmets.push_back(a);
@@ -222,6 +229,17 @@ void TopTreeProducer::beginJob()
 			eventTree_->Branch (name, "TClonesArray", &velectrons[s]);
 		} 
 	}
+
+        if(doPhoton)
+        {
+                if(verbosity>0) cout << "Photons info will be added to rootuple" << endl;
+                for(unsigned int s=0;s<vPhotonProducer.size();s++) {
+                        vphotons[s] = new TClonesArray("TopTree::TRootPhoton", 1000);
+                        char name[100];
+                        sprintf(name,"Photons_%s",vPhotonProducer[s].c_str());
+                        eventTree_->Branch (name, "TClonesArray", &vphotons[s]);
+                }
+        }
 
 	if(doCaloMET)
 	{
@@ -579,6 +597,17 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		}
 	}	
 
+        // Photons
+        if(doPhoton)
+        {
+                if(verbosity>1) cout << endl << "Analysing photons collection..." << endl;
+                for(unsigned int s=0;s<vPhotonProducer.size();s++){
+                  PhotonAnalyzer* myPhotonAnalyzer = new PhotonAnalyzer(producersNames_, s, myConfig_, verbosity);
+                  myPhotonAnalyzer->Process(iEvent, vphotons[s], iSetup);
+                  delete myPhotonAnalyzer;
+                }
+        }
+
 	// MET 
 	if(doCaloMET)
 	{
@@ -676,6 +705,11 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 			(*velectrons[s]).Delete();
 		}
 	}
+        if(doPhoton){
+                for(unsigned int s=0;s<vPhotonProducer.size();s++){
+                        (*vphotons[s]).Delete();
+                }
+        }
 	if(doCaloMET) (*CALOmet).Delete();
 	if(doPFMET) {
     for(unsigned int s=0; s<vPFmetProducer.size(); s++) {

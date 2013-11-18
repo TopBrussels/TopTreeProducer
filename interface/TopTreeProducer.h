@@ -36,6 +36,7 @@
 #include "../interface/PFJetAnalyzer.h"
 #include "../interface/MuonAnalyzer.h"
 #include "../interface/ElectronAnalyzer.h"
+#include "../interface/PhotonAnalyzer.h"
 #include "../interface/METAnalyzer.h"
 #include "../interface/CaloMETAnalyzer.h"
 #include "../interface/PFMETAnalyzer.h"
@@ -106,6 +107,7 @@ private:
 	bool doJPTJet;
 	bool doMuon;
 	bool doElectron;
+	bool doPhoton;
 	bool doCaloMET;
 	bool doPFMET;
 	bool doTrackMET;
@@ -120,6 +122,7 @@ private:
 	std::vector<std::string> vJPTJetProducer;
 	std::vector<std::string> vMuonProducer;
 	std::vector<std::string> vElectronProducer;
+	std::vector<std::string> vPhotonProducer;
         std::vector<std::string> vPFmetProducer;
         std::vector<std::string> vTrackmetProducer; 
 	int nTotEvt_;
@@ -134,6 +137,7 @@ private:
 	std::vector<TClonesArray*> vjptJets;
 	std::vector<TClonesArray*> vmuons;
 	std::vector<TClonesArray*> velectrons;
+	std::vector<TClonesArray*> vphotons;
 	TClonesArray* CALOmet;
 	std::vector<TClonesArray*> vPFmets;
 	std::vector<TClonesArray*> vTrackmets;
