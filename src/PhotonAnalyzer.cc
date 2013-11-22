@@ -1,4 +1,5 @@
 #include "../interface/PhotonAnalyzer.h"
+#include "RecoEgamma/EgammaTools/interface/ConversionTools.h"
 
 using namespace std;
 using namespace TopTree;
@@ -36,6 +37,20 @@ PhotonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootPhotons, 
 {
   unsigned int nPhotons = 0;
 
+  ///following three collections are only needed for electron veto
+  ///currently these are hardcoded
+  ///we need to create corresponding member function in PAT photon object
+  ///otherwise, we need to keep these collections in our PAT output collections in order to produce TOPTREE from PAT (Taejeong)  
+  edm::Handle<reco::BeamSpot> bsHandle;
+  iEvent.getByLabel("offlineBeamSpot", bsHandle);
+  const reco::BeamSpot &beamspot = *bsHandle.product();
+
+  edm::Handle<reco::ConversionCollection> hConversions;
+  iEvent.getByLabel("allConversions", hConversions);
+
+  edm::Handle<reco::GsfElectronCollection> hElectrons;
+  iEvent.getByLabel("gsfElectrons", hElectrons);
+
   edm::Handle < std::vector < pat::Photon > >patPhotons;
   iEvent.getByLabel (photonProducer_, patPhotons);
   nPhotons = patPhotons->size ();
@@ -49,6 +64,19 @@ PhotonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootPhotons, 
       const reco::Photon* photon = (const reco::Photon *) patPhoton;//(&((*patPhotons)[j]));
 
       TRootPhoton localPhoton (photon->px (), photon->py (), photon->pz (), photon->energy ());
+
+      localPhoton.setSigmaIetaIeta( photon->sigmaIetaIeta() );
+      localPhoton.setHadronicOverEm( photon->hadronicOverEm() );
+      localPhoton.setHasPixelSeed( photon->hasPixelSeed() );
+
+      //prompt electron veto
+      bool passelectronveto = !ConversionTools::hasMatchedPromptElectron(photon->superCluster(), hElectrons, hConversions, beamspot.position());
+      localPhoton.setPasselectronveto(passelectronveto);
+
+      //currently PF isolation is directly from RECO, which is empty. need to change it (Taejeong) 
+      localPhoton.setIsoR03_ChargedHadronIso( photon->chargedHadronIso() );
+      localPhoton.setIsoR03_PhotonIso( photon->photonIso() );
+      localPhoton.setIsoR03_NeutralHadronIso( photon->neutralHadronIso() );
 
       if (useMC_)
       {

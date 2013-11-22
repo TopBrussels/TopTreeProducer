@@ -214,6 +214,11 @@ process.postPathCounter = cms.EDProducer("EventCountProducer")
 
 process.load('TopBrussels.TopTreeProducer.eventCleaning.eventCleaning_cff')
 
+process.photonSequence = cms.Sequence (
+    process.makePatPhotons+
+    process.selectedPatPhotons
+)
+
 # let it run
 process.patseq = cms.Sequence(
     process.prePathCounter*
@@ -227,7 +232,7 @@ process.patseq = cms.Sequence(
 #    getattr(process,"patPF2PATSequence"+postfix+postfixNoPFnoPU)* # PF2PAT FOR JETS WITHOUT PFnoPU
 #    process.patDefaultSequence*
     process.flavorHistorySeq*
-    process.postPathCounter
+    process.photonSequence
     )
 
 
@@ -246,7 +251,8 @@ if runOnFastSim is True:
 nEventsInit = cms.EDProducer("EventCountProducer")
 
 process.p = cms.Path(
-    process.patseq
+    process.patseq+
+    process.postPathCounter
     )
 
 process.out.SelectEvents.SelectEvents = cms.vstring('p')
@@ -302,6 +308,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 
                 doElectronMC = cms.untracked.bool(True),
                 doMuonMC = cms.untracked.bool(True),
+                doPhotonMC = cms.untracked.bool(True),
                 doJetMC = cms.untracked.bool(True),
                 doMETMC = cms.untracked.bool(True),
                 doUnstablePartsMC = cms.untracked.bool(True),
@@ -315,6 +322,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
                 doJPTJetId = cms.untracked.bool(False),
                 doMuon = cms.untracked.bool(True),
                 doElectron = cms.untracked.bool(True),
+                doPhoton = cms.untracked.bool(True),
                 runSuperCluster = cms.untracked.bool(True),#true only if SuperCluster are stored
                 doCaloMET = cms.untracked.bool(False),
                 doPFMET = cms.untracked.bool(True),
@@ -364,6 +372,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
                 vJPTJetProducer = cms.untracked.vstring(""),
                 vmuonProducer = cms.untracked.vstring("selectedPatMuonsPF2PAT"),
                 velectronProducer = cms.untracked.vstring("selectedPatElectronsPF2PAT"),
+                vphotonProducer = cms.untracked.vstring("selectedPatPhotons"),
                 CalometProducer = cms.InputTag("patMETs"),
                 vpfmetProducer = cms.untracked.vstring("patType1CorrectedPFMetPF2PAT"),
                 TCmetProducer = cms.InputTag("patMETsTC"),
