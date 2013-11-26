@@ -279,8 +279,8 @@ process.outpath = cms.EndPath(
 ###### TOP TREE #######
 #where do we use this database information in top tree? (TJ)
 #Data measurements from Summer11
-process.load("RecoBTag.PerformanceDB.BTagPerformanceDB1107")
-process.load("RecoBTag.PerformanceDB.PoolBTagPerformanceDB1107")
+#process.load("RecoBTag.PerformanceDB.BTagPerformanceDB1107")
+#process.load("RecoBTag.PerformanceDB.PoolBTagPerformanceDB1107")
 
 process.analysis = cms.EDAnalyzer("TopTreeProducer",
         myConfig = cms.PSet(

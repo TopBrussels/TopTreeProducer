@@ -71,11 +71,13 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet, const edm::EventSetup& iSetu
 	localJet.setBtag_softPFMuonRetrainedBJetsTags(patJet->bDiscriminator("softPFMuonBJetTags"));
 
 	//cout << "CSV old, new: " << patJet->bDiscriminator("combinedSecondaryVertexBJetTags") << ", " << patJet->bDiscriminator("combinedSecondaryVertexRetrainedBJetTags") << endl;
-	
-	// Save b-tag scalefactor information for each tagger
-	///////////////////////////////
-	///   Begin DB setup
-	///////////////////////////////
+
+// comment out the whole b-tag scale factor setup from DB below for now	
+/*
+  // Save b-tag scalefactor information for each tagger
+  ///////////////////////////////
+  ///   Begin DB setup
+ ///////////////////////////////
 
   //// This is needed for the DB
   std::map<std::string,PerformanceResult::ResultType> measureMap;
@@ -107,8 +109,8 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet, const edm::EventSetup& iSetu
 
 
   // Tell DB you want the SF. These are not user defined and need to be exact
-	// for the light eff or scalefactor, one needs the mistag algorithm in measureName at the same location
-	// for the b eff or scalefactor, one needs the btag algorithm in measureName at the same location
+  // for the light eff or scalefactor, one needs the mistag algorithm in measureName at the same location
+  // for the b eff or scalefactor, one needs the btag algorithm in measureName at the same location
   measureType.push_back("BTAGLEFFCORR");  measureType.push_back("BTAGBEFFCORR");  measureType.push_back("BTAGLERRCORR");	 measureType.push_back("BTAGBERRCORR");
   measureType.push_back("BTAGLEFFCORR");  measureType.push_back("BTAGBEFFCORR");  measureType.push_back("BTAGLERRCORR");	 measureType.push_back("BTAGBERRCORR");
   measureType.push_back("BTAGLEFFCORR");  measureType.push_back("BTAGBEFFCORR");  measureType.push_back("BTAGLERRCORR");	 measureType.push_back("BTAGBERRCORR");
@@ -123,68 +125,68 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet, const edm::EventSetup& iSetu
   measureType.push_back("BTAGLEFFCORR");  measureType.push_back("BTAGBEFFCORR");  measureType.push_back("BTAGLERRCORR");	 measureType.push_back("BTAGBERRCORR");
 		
   // These are user defined maps that we will use to store the SF 
-	std::map<std::string,float> MISTAG_SF;
-	std::map<std::string,float> BTAG_SF;
-	std::map<std::string,float> MISTAG_SFerr;
-	std::map<std::string,float> BTAG_SFerr;
+  std::map<std::string,float> MISTAG_SF;
+  std::map<std::string,float> BTAG_SF;
+  std::map<std::string,float> MISTAG_SFerr;
+  std::map<std::string,float> BTAG_SFerr;
 	
-	///////////////////////////////
+  ///////////////////////////////
   ///   End DB setup
   ///////////////////////////////
-	//cout<< "NEW JET" << endl;
-	//cout<< "measureName size: " << measureName.size() << endl;
-	//cout<< "measureType size: " << measureType.size() << endl;
-	//cout << "jet ET " << patJet->et() << endl;
-	//cout << "jet eta " << abs( patJet->eta() ) << endl;
+  //cout<< "NEW JET" << endl;
+  //cout<< "measureName size: " << measureName.size() << endl;
+  //cout<< "measureType size: " << measureType.size() << endl;
+  //cout << "jet ET " << patJet->et() << endl;
+  //cout << "jet eta " << abs( patJet->eta() ) << endl;
   edm::ESHandle<BtagPerformance> perfH;
   for( size_t iMeasure = 0; iMeasure < measureName.size(); iMeasure++ )
   {
-  	//std::cout << "Testing: " << measureName[ iMeasure ] << " of type " << measureType[ iMeasure ] << std::endl;
+    //std::cout << "Testing: " << measureName[ iMeasure ] << " of type " << measureType[ iMeasure ] << std::endl;
 
-		//Setup our measurement
+    //Setup our measurement
     iSetup.get<BTagPerformanceRecord>().get( measureName[ iMeasure ],perfH);
     const BtagPerformance & perf = *(perfH.product());
 
-		//Working point
+    //Working point
     //std::cout << "Working point: " << perf.workingPoint().cut() << std::endl;
 		
-		//Setup the point we wish to test!
-		BinningPointByMap measurePoint;
+    //Setup the point we wish to test!
+    BinningPointByMap measurePoint;
     measurePoint.reset();
     measurePoint.insert(BinningVariables::JetEt, patJet->et());
     measurePoint.insert(BinningVariables::JetAbsEta, abs(  patJet->eta() ));
 
-		std::string suffix = "_"+measureType[iMeasure];
-		//std::cout << "measureType = " << suffix << endl;
-		//std::cout << measureName[ iMeasure ] + suffix << endl;
-		if(measureType[iMeasure] == "BTAGLEFFCORR"){					
-			//std::cout << "mistag_SF " << perf.getResult( measureMap[ measureType[ iMeasure] ], measurePoint) << endl;
-			MISTAG_SF[ measureName[ iMeasure ] + suffix ] = perf.getResult( measureMap[ measureType[ iMeasure] ], measurePoint);
-		}else if(measureType[iMeasure] == "BTAGBEFFCORR"){
-			//std::cout << "btag_SF " << perf.getResult( measureMap[ measureType[ iMeasure] ], measurePoint) << endl;
-			BTAG_SF[ measureName[ iMeasure ] + suffix ] = perf.getResult( measureMap[ measureType[ iMeasure] ], measurePoint);
-		}else if(measureType[iMeasure] == "BTAGLERRCORR"){
-			//std::cout << "mistag_SFerr " << perf.getResult( measureMap[ measureType[ iMeasure] ], measurePoint) << endl;
-			MISTAG_SFerr[ measureName[ iMeasure ] + suffix ] = perf.getResult( measureMap[ measureType[ iMeasure] ], measurePoint);
-		}else if(measureType[iMeasure] == "BTAGBERRCORR"){
-			//std::cout << "btag_SFerr " << perf.getResult( measureMap[ measureType[ iMeasure] ], measurePoint) << endl;
-			BTAG_SFerr[ measureName[ iMeasure ] + suffix ] = perf.getResult( measureMap[ measureType[ iMeasure] ], measurePoint);
-		}
-	}
-	
-	//cout << "mistag_SF map size " << MISTAG_SF.size() << endl;
-	//for(std::map<std::string,float>::const_iterator it = MISTAG_SF.begin(); it != MISTAG_SF.end(); it++) {
-	//	cout << "for " << it->first << " the mistag scalefactor is " << it->second << endl;
-	//}
-	
-	localJet.setMistag_SF(MISTAG_SF);
-	localJet.setBtag_SF(BTAG_SF);
-	localJet.setMistag_SFerr(MISTAG_SFerr);
-	localJet.setBtag_SFerr(BTAG_SFerr);
-	
-	
-	//////////////////// end of saving b-tagging information
+    std::string suffix = "_"+measureType[iMeasure];
+    //std::cout << "measureType = " << suffix << endl;
+    //std::cout << measureName[ iMeasure ] + suffix << endl;
+    if(measureType[iMeasure] == "BTAGLEFFCORR"){					
+      //std::cout << "mistag_SF " << perf.getResult( measureMap[ measureType[ iMeasure] ], measurePoint) << endl;
+      MISTAG_SF[ measureName[ iMeasure ] + suffix ] = perf.getResult( measureMap[ measureType[ iMeasure] ], measurePoint);
+    }else if(measureType[iMeasure] == "BTAGBEFFCORR"){
+      //std::cout << "btag_SF " << perf.getResult( measureMap[ measureType[ iMeasure] ], measurePoint) << endl;
+      BTAG_SF[ measureName[ iMeasure ] + suffix ] = perf.getResult( measureMap[ measureType[ iMeasure] ], measurePoint);
+    }else if(measureType[iMeasure] == "BTAGLERRCORR"){
+      //std::cout << "mistag_SFerr " << perf.getResult( measureMap[ measureType[ iMeasure] ], measurePoint) << endl;
+      MISTAG_SFerr[ measureName[ iMeasure ] + suffix ] = perf.getResult( measureMap[ measureType[ iMeasure] ], measurePoint);
+    }else if(measureType[iMeasure] == "BTAGBERRCORR"){
+      //std::cout << "btag_SFerr " << perf.getResult( measureMap[ measureType[ iMeasure] ], measurePoint) << endl;
+      BTAG_SFerr[ measureName[ iMeasure ] + suffix ] = perf.getResult( measureMap[ measureType[ iMeasure] ], measurePoint);
+    }
+  }
 
+  //cout << "mistag_SF map size " << MISTAG_SF.size() << endl;
+  //for(std::map<std::string,float>::const_iterator it = MISTAG_SF.begin(); it != MISTAG_SF.end(); it++) {
+  //	cout << "for " << it->first << " the mistag scalefactor is " << it->second << endl;
+  //}
+	
+  localJet.setMistag_SF(MISTAG_SF);
+  localJet.setBtag_SF(BTAG_SF);
+  localJet.setMistag_SFerr(MISTAG_SFerr);
+  localJet.setBtag_SFerr(BTAG_SFerr);
+	
+	
+  //////////////////// end of saving b-tagging information
+*/
 	
 	
 	// jet correction factors
