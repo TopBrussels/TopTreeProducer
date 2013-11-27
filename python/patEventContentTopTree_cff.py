@@ -26,5 +26,17 @@ patEventContentTopTree.extend([
     'keep triggerTriggerEvent_*_*_*',
     'keep GenEventInfoProduct_*_*_*',
     'keep edmMergeableCounter_*_*_*',
+    ## we need following output collections below in order to produce top tree photon object from PAT.
+    ## it is OK with PAT2TOP_cfg.py without these collections as we can get directly from AOD
+    ## in order to avoid saving these, we need to modify PAT photon object
+    ## for the time being, let's save it. It should not matter as we don't save PAT.
+    'keep *_allConversions_*_*',
+    'keep *_offlineBeamSpot_*_*',   
+    'keep *_gsfElectron*_*_*', 
+    'keep recoPhotonCores_photonCore_*_*',
+    'keep *_phPFIsoValueCharged03PFIdPFIso_*_*',
+    'keep *_phPFIsoValueGamma03PFIdPFIso_*_*',
+    'keep *_phPFIsoValueNeutral03PFIdPFIso_*_*',
+    'keep *_phPFIsoValuePU03PFIdPFIso_*_*',
     ])
 
