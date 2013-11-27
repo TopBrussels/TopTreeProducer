@@ -13,8 +13,8 @@ process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 
 #Data measurements from Summer11
-process.load("RecoBTag.PerformanceDB.BTagPerformanceDB1107")
-process.load("RecoBTag.PerformanceDB.PoolBTagPerformanceDB1107")
+#process.load("RecoBTag.PerformanceDB.BTagPerformanceDB1107")
+#process.load("RecoBTag.PerformanceDB.PoolBTagPerformanceDB1107")
 
 process.GlobalTag.globaltag = cms.string('START53_V20::All')
 # geometry needed for clustering and calo shapes variables

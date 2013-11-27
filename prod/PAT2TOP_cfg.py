@@ -214,9 +214,14 @@ process.postPathCounter = cms.EDProducer("EventCountProducer")
 
 process.load('TopBrussels.TopTreeProducer.eventCleaning.eventCleaning_cff')
 
+### photon sequence ###
+from CommonTools.ParticleFlow.Tools.pfIsolation import setupPFElectronIso, setupPFMuonIso, setupPFPhotonIso
+process.phoIsoSequence = setupPFPhotonIso(process, 'selectedPatPhotons')
+
 process.photonSequence = cms.Sequence (
     process.makePatPhotons+
-    process.selectedPatPhotons
+    process.selectedPatPhotons+
+    process.phoIsoSequence
 )
 
 # let it run
@@ -282,8 +287,8 @@ process.outpath = cms.EndPath(
 ###### TOP TREE #######
 #where do we use this database information in top tree? (TJ)
 #Data measurements from Summer11
-process.load("RecoBTag.PerformanceDB.BTagPerformanceDB1107")
-process.load("RecoBTag.PerformanceDB.PoolBTagPerformanceDB1107")
+#process.load("RecoBTag.PerformanceDB.BTagPerformanceDB1107")
+#process.load("RecoBTag.PerformanceDB.PoolBTagPerformanceDB1107")
 
 process.analysis = cms.EDAnalyzer("TopTreeProducer",
         myConfig = cms.PSet(

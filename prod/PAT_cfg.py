@@ -217,9 +217,14 @@ process.postPathCounter = cms.EDProducer("EventCountProducer")
 
 process.load('TopBrussels.TopTreeProducer.eventCleaning.eventCleaning_cff')
 
+### photon sequence ### 
+from CommonTools.ParticleFlow.Tools.pfIsolation import setupPFElectronIso, setupPFMuonIso, setupPFPhotonIso
+process.phoIsoSequence = setupPFPhotonIso(process, 'selectedPatPhotons')
+
 process.photonSequence = cms.Sequence (
     process.makePatPhotons+
-    process.selectedPatPhotons
+    process.selectedPatPhotons+
+    process.phoIsoSequence
 )
 
 # let it run
