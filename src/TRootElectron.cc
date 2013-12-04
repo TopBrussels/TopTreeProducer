@@ -2,4 +2,4 @@
 
 using namespace TopTree;
 
-//ClassImp(TRootElectron)
+ClassImp(TRootElectron)
