@@ -27,6 +27,8 @@ process.source.fileNames = [
 # load the PAT config
 process.load("PhysicsTools.PatAlgos.patSequences_cff")
 
+# load the PU JetID sequence
+process.load("CMGTools.External.pujetidsequence_cff")
 
 runOnMC = True 
 runOnFastSim = False 
@@ -156,6 +158,16 @@ getattr(process,"pfNoElectron"+postfix).enable = True
 getattr(process,"pfNoTau"+postfix).enable = False
 getattr(process,"pfNoJet"+postfix).enable = False
 
+###################
+##### Jet Pile-Up ID ######
+###################
+#process.puJetId.jets =  cms.InputTag("selectedPatJetsPF2PAT")
+#process.puJetMva.jets =  cms.InputTag("selectedPatJetsPF2PAT")
+process.puJetIdChs.jets  =  cms.InputTag("selectedPatJetsPF2PAT")
+process.puJetMvaChs.jets =  cms.InputTag("selectedPatJetsPF2PAT")
+process.puJetIdChs.vertexes  =  cms.InputTag("goodOfflinePrimaryVertices")
+process.puJetMvaChs.vertexes =  cms.InputTag("goodOfflinePrimaryVertices")
+
 #####################################################################################################
 #### Clone the PF2PAT sequence for data-driven QCD estimate, and for Stijn's JetMET service work ####
 #####################################################################################################
@@ -235,14 +247,12 @@ process.patseq = cms.Sequence(
     process.photonSequence
     )
 
-
 if runOnMC is False:
     process.patseq.remove( process.flavorHistorySeq )
     process.patJetCorrFactorsPF2PAT.levels = cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute','L2L3Residual'])
 
 if runOnFastSim is True:
     process.eventCleaning.remove(process.HBHENoiseFilter)
-
 
 #################
 #### ENDPATH ####
@@ -251,7 +261,8 @@ if runOnFastSim is True:
 nEventsInit = cms.EDProducer("EventCountProducer")
 
 process.p = cms.Path(
-    process.patseq+
+    process.patseq*
+    process.puJetIdSqeuenceChs+
     process.postPathCounter
     )
 
@@ -261,7 +272,7 @@ process.out.SelectEvents.SelectEvents = cms.vstring('p')
 process.out.fileName = "PAT.root"
 
 # process all the events
-process.maxEvents.input = 100 #changed
+process.maxEvents.input = 10 #changed
 
 process.options.wantSummary = False
 process.out.dropMetaData = cms.untracked.string("DROPPED")
@@ -291,7 +302,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
                 #               3 = Liste of high level objects (jetss, muons, ...)
                 #               4 = List of all  objects 
                 #               5 = Debug
-                verbosity = cms.untracked.int32(0),
+                verbosity = cms.untracked.int32(2),
 
                 # used in the electron to see if the magneticfield is taken from DCS or from IDEALMAGFIELDRECORD
                 isData = cms.untracked.bool(False),

@@ -50,10 +50,16 @@ void PFJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets, co
 		|| pfJetProducer_.label()=="ak7PFJets"
 	) jetType="PF";
 
-	edm::Handle < std::vector <pat::Jet> > patJets;
+//	edm::Handle < std::vector <pat::Jet> > patJets;
+	Handle < View<pat::Jet> > patJets;
 	iEvent.getByLabel(pfJetProducer_, patJets);
 	nJets = patJets->size();
-	
+
+	Handle<ValueMap<StoredPileupJetIdentifier> > vmap;
+	iEvent.getByLabel("puJetIdChs",vmap);
+
+	Handle<ValueMap<float> > puJetIdMVA;
+	iEvent.getByLabel("puJetMvaChs","fullDiscriminant",puJetIdMVA);	
 		
 	if(verbosity_>1) std::cout << "   Number of jets = " << nJets << "   Label: " << pfJetProducer_.label() << "   Instance: " << pfJetProducer_.instance() << std::endl;
 
@@ -85,6 +91,28 @@ void PFJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets, co
 		localJet.setMuonMultiplicity(patJet->muonMultiplicity());		
 		localJet.setHFHadronMultiplicity(patJet->HFHadronMultiplicity());
 		localJet.setHFEMMultiplicity(patJet->HFEMMultiplicity());
+
+		// Pile-up ID variables
+		PileupJetIdentifier puIdentifier;
+		puIdentifier = (*vmap)[patJets->refAt(j)];
+
+		localJet.setDZ(puIdentifier.dZ());
+		localJet.setDRMean(puIdentifier.dRMean());
+		localJet.setFrac01(puIdentifier.frac01());
+		localJet.setFrac02(puIdentifier.frac02());
+		localJet.setFrac03(puIdentifier.frac03());
+		localJet.setFrac04(puIdentifier.frac04());
+		localJet.setFrac05(puIdentifier.frac05());
+		localJet.setFrac06(puIdentifier.frac06());
+		localJet.setFrac07(puIdentifier.frac07());
+		localJet.setRMS(puIdentifier.RMS());
+		localJet.setBeta(puIdentifier.beta()); 
+		localJet.setBetaStar(puIdentifier.betaStar()); 
+		localJet.setBetaClassic(puIdentifier.betaClassic()); 
+		localJet.setBetaStarClassic(puIdentifier.betaStarClassic()); 
+		localJet.setPtD(puIdentifier.ptD());
+		// Pile-up ID MVA
+		localJet.setMvaID((*puJetIdMVA)[patJets->refAt(j)]);
 
 		new( (*rootJets)[j] ) TRootPFJet(localJet);
 		if(verbosity_>2) cout << "   ["<< setw(3) << j << "] " << localJet << endl;

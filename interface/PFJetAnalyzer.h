@@ -13,6 +13,8 @@
 #include "DataFormats/PatCandidates/interface/Jet.h"
 #include "DataFormats/PatCandidates/interface/JetCorrFactors.h"
 
+#include "CMGTools/External/interface/PileupJetIdentifier.h"
+
 #include "../interface/TRootPFJet.h"
 #include "../interface/JetAnalyzer.h"
 

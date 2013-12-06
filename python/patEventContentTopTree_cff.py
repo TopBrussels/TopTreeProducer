@@ -10,6 +10,8 @@ patEventContentTopTree.extend([
     'keep patElectrons_selectedPatElectronsPF2PAT__PAT',
     'keep patMETs_patType1CorrectedPFMetPF2PAT__PAT',
     'keep *_selectedPatPhotons*_*_*',
+    'keep *_puJetId*_*_*',
+    'keep *_puJetMva*_*_*',
     #'keep *_photons*_*_*',
     'keep double_kt6PFJets_rho_*',
     'keep *_goodOfflinePrimaryVertices*_*_*',

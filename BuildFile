@@ -33,6 +33,8 @@
 <use name=Geometry/CaloTopology>
 <use name=RecoCaloTools/MetaCollections>
 
+<use name=CMGTools/External>
+
 <use name=AnalysisDataFormats/TopObjects>
 
 <use name=clhep>

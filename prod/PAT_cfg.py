@@ -18,9 +18,9 @@ process.source.fileNames = [
 #    '/store/mc/Summer12_DR53X/T_tW-channel-DR_TuneZ2star_8TeV-powheg-tauola/AODSIM/PU_S10_START53_V7A-v1/0000/0024E066-2BEA-E111-B72F-001BFCDBD11E.root'
 #    '/store/mc/Summer12_DR53X/TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola/AODSIM/PU_S10_START53_V7A-v1/0000/FED775BD-B8E1-E111-8ED5-003048C69036.root',
     #T2 at Belgium
-    #'/store/mc/Summer12_DR53X/TTJets_FullLeptMGDecays_8TeV-madgraph-tauola/AODSIM/PU_S10_START53_V7C-v2/10000/4085E811-F197-E211-8A95-002618943953.root',
+    '/store/mc/Summer12_DR53X/TTJets_FullLeptMGDecays_8TeV-madgraph-tauola/AODSIM/PU_S10_START53_V7C-v2/10000/4085E811-F197-E211-8A95-002618943953.root',
     #photon study
-    '/store/user/jdhondt/TTJetsTocHbW_HToGammaGamma_HctL_TuneZ2star_8TeV-madgraph-tauola_Summer12/TTJetsTocHbW_HToGammaGamma_HctL_TuneZ2star_8TeV-madgraph-tauola_Summer12/8132d4a0c87c4982c80015223c5f35f5/Hadronizer_MgmMatchTuneZ2star_8TeV_madgraph_tauola_tt_bWcH_cff_py_GEN_FASTSIM_HLT_PU_100_1_84J.root'
+    #'/store/user/jdhondt/TTJetsTocHbW_HToGammaGamma_HctL_TuneZ2star_8TeV-madgraph-tauola_Summer12/TTJetsTocHbW_HToGammaGamma_HctL_TuneZ2star_8TeV-madgraph-tauola_Summer12/8132d4a0c87c4982c80015223c5f35f5/Hadronizer_MgmMatchTuneZ2star_8TeV_madgraph_tauola_tt_bWcH_cff_py_GEN_FASTSIM_HLT_PU_100_1_84J.root'
     #data at CERN
     #'/store/data/Run2012A/DoubleMu/AOD/22Jan2013-v1/30000/FEF469F7-0882-E211-8351-0026189438E6.root'
     #AOD at eos  
@@ -31,6 +31,8 @@ process.source.fileNames = [
 # load the PAT config
 process.load("PhysicsTools.PatAlgos.patSequences_cff")
 
+# load the PU JetID sequence
+process.load("CMGTools.External.pujetidsequence_cff")
 
 runOnMC = True 
 runOnFastSim = True 
@@ -159,6 +161,16 @@ getattr(process,"pfNoElectron"+postfix).enable = True
 getattr(process,"pfNoTau"+postfix).enable = False
 getattr(process,"pfNoJet"+postfix).enable = False
 
+###################
+##### Jet Pile-Up ID ######
+###################
+#process.puJetId.jets =  cms.InputTag("selectedPatJetsPF2PAT")
+#process.puJetMva.jets =  cms.InputTag("selectedPatJetsPF2PAT")
+process.puJetIdChs.jets  =  cms.InputTag("selectedPatJetsPF2PAT")
+process.puJetMvaChs.jets =  cms.InputTag("selectedPatJetsPF2PAT")
+process.puJetIdChs.vertexes  =  cms.InputTag("goodOfflinePrimaryVertices")
+process.puJetMvaChs.vertexes =  cms.InputTag("goodOfflinePrimaryVertices")
+
 #####################################################################################################
 #### Clone the PF2PAT sequence for data-driven QCD estimate, and for Stijn's JetMET service work ####
 #####################################################################################################
@@ -252,8 +264,10 @@ if runOnFastSim is True:
 nEventsInit = cms.EDProducer("EventCountProducer")
 
 process.p = cms.Path(
-    process.patseq+
-    process.postPathCounter
+    	process.patseq
+#	*process.puJetIdSqeuence
+	*process.puJetIdSqeuenceChs
+	+process.postPathCounter
     )
 
 process.out.SelectEvents.SelectEvents = cms.vstring('p')
@@ -262,7 +276,7 @@ process.out.SelectEvents.SelectEvents = cms.vstring('p')
 process.out.fileName = "PAT.root"
 
 # process all the events
-process.maxEvents.input = 100 #changed
+process.maxEvents.input = 10 #changed
 
 process.options.wantSummary = True 
 process.out.dropMetaData = cms.untracked.string("DROPPED")
