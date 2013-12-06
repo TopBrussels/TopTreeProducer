@@ -36,7 +36,5 @@
 <use   name="CMGTools/External"/>
 <use   name="clhep"/>
 <use   name="root"/>
-<flags   LDFLAGS="-lTMVA"/>
-<export>
-  <lib name="1"/>
-</export>
+<flags LDFLAGS="-lTMVA"/>
+<flags EDM_PLUGIN="1"/>

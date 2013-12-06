@@ -12,6 +12,7 @@
 
 #include "DataFormats/PatCandidates/interface/Photon.h"
 #include "DataFormats/EgammaCandidates/interface/Photon.h"
+#include "DataFormats/Common/interface/ValueMap.h"
 
 #include "../interface/TRootPhoton.h"
 
@@ -29,11 +30,18 @@ public:
 	void SetVerbosity(int verbosity) { verbosity_ = verbosity; };
 	void Process(const edm::Event& iEvent, TClonesArray* rootMuons, const edm::EventSetup& iSetup);
 
+        typedef std::vector< edm::Handle< edm::ValueMap<reco::IsoDeposit> > > IsoDepositMaps;
+        typedef std::vector< edm::Handle< edm::ValueMap<double> > > IsoDepositVals;
+
 private:
 	int verbosity_;
 	edm::InputTag photonProducer_;
 	std::vector<std::string> vPhotonProducer;
 	bool useMC_;
+ 
+        //photon isolation
+        std::vector<edm::InputTag> inputTagIsoDepPhotons_;
+        std::vector<edm::InputTag> inputTagIsoValPhotons_; 
 };
 
 #endif

@@ -229,9 +229,14 @@ process.postPathCounter = cms.EDProducer("EventCountProducer")
 
 process.load('TopBrussels.TopTreeProducer.eventCleaning.eventCleaning_cff')
 
+### photon sequence ### 
+from CommonTools.ParticleFlow.Tools.pfIsolation import setupPFElectronIso, setupPFMuonIso, setupPFPhotonIso
+process.phoIsoSequence = setupPFPhotonIso(process, 'selectedPatPhotons')
+
 process.photonSequence = cms.Sequence (
     process.makePatPhotons+
-    process.selectedPatPhotons
+    process.selectedPatPhotons+
+    process.phoIsoSequence
 )
 
 # let it run
@@ -254,7 +259,10 @@ if runOnMC is False:
     process.patseq.remove( process.flavorHistorySeq )
     process.patJetCorrFactorsPF2PAT.levels = cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute','L2L3Residual']) 
 
-if runOnFastSim is True:
+##if runOnFastSim is True:
+##normally this option is only for fastsim simulation (and not full sim) but 
+## this isn't implemented yet 
+if runOnMC is True:
     process.eventCleaning.remove(process.HBHENoiseFilter)
 
 #################

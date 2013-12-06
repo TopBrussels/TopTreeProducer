@@ -2,4 +2,4 @@
 
 using namespace TopTree;
 
-//ClassImp(TRootJPTJet)
+ClassImp(TRootJPTJet)
