@@ -4,19 +4,19 @@ process = cms.Process("TOPTREE")
 
 #keep the logging output to a nice level
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
-process.load("TrackingTools/TransientTrack/TransientTrackBuilder_cfi")
-process.load("SimGeneral.HepPDTESSource.pythiapdt_cfi")
+#process.load("TrackingTools/TransientTrack/TransientTrackBuilder_cfi")
+#process.load("SimGeneral.HepPDTESSource.pythiapdt_cfi")
 
 # Global geometry
-process.load("Configuration.Geometry.GeometryIdeal_cff")
-process.load("Configuration.StandardSequences.MagneticField_cff")
-process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
+#process.load("Configuration.Geometry.GeometryIdeal_cff")
+#process.load("Configuration.StandardSequences.MagneticField_cff")
+#process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 
 #Data measurements from Summer11
 #process.load("RecoBTag.PerformanceDB.BTagPerformanceDB1107")
 #process.load("RecoBTag.PerformanceDB.PoolBTagPerformanceDB1107")
 
-process.GlobalTag.globaltag = cms.string('START53_V20::All')
+#process.GlobalTag.globaltag = cms.string('START53_V20::All')
 # geometry needed for clustering and calo shapes variables
 # process.load("RecoEcal.EgammaClusterProducers.geometryForClustering_cff")
 # 3 folllowing config files included in RecoEcal.EgammaClusterProducers.geometryForClustering_cff

@@ -55,9 +55,9 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
   edm::Handle< reco::VertexCollection > pvHandle;
   iEvent.getByLabel(primaryVertexProducer_, pvHandle);
   
-  edm::ESHandle<TransientTrackBuilder> builder;
-  iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder", builder);
-  TransientTrackBuilder thebuilder = *(builder.product());
+  //edm::ESHandle<TransientTrackBuilder> builder;
+  //iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder", builder);
+  //TransientTrackBuilder thebuilder = *(builder.product());
   
   //edm::Handle<reco::BeamSpot> beamSpotHandle;
   //iEvent.getByLabel("offlineBeamSpot", beamSpotHandle);
@@ -119,26 +119,29 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
     reco::GsfTrackRef gsfTrack = electron->gsfTrack();
     if ( gsfTrack.isNonnull() )
     {
-	    localElectron.setGsfTrackNormalizedChi2(gsfTrack->normalizedChi2());
-	    localElectron.setTrackMissingHits(gsfTrack->trackerExpectedHitsInner().numberOfHits());
+      localElectron.setGsfTrackNormalizedChi2(gsfTrack->normalizedChi2());
+      localElectron.setTrackMissingHits(gsfTrack->trackerExpectedHitsInner().numberOfHits());
       
-      if(doPrimaryVertex_ && pvHandle.isValid() && pvHandle->size() != 0)
-	    {
-	      reco::VertexRef vtx(pvHandle, 0);
+      if(doPrimaryVertex_ && pvHandle.isValid() && pvHandle->size() != 0){
+
+        reco::VertexRef vtx(pvHandle, 0);
         localElectron.setD0( gsfTrack->dxy(vtx->position()) );
         localElectron.setD0Error( sqrt( pow(gsfTrack->dxyError(),2) + pow(vtx->xError(),2) + pow(vtx->yError(),2) ) );
-  	    localElectron.setDz( gsfTrack->dz(vtx->position()) );
+  	localElectron.setDz( gsfTrack->dz(vtx->position()) );
         
-        const double gsfsign   = ( (-gsfTrack->dxy(vtx->position()))   >=0 ) ? 1. : -1.;
-        const reco::TransientTrack &tt = thebuilder.build(gsfTrack);
-        const std::pair<bool,Measurement1D> &ip3dpv =  IPTools::absoluteImpactParameter3D(tt,((*pvHandle)[j]));
-        if (ip3dpv.first)
-        {
-	        localElectron.setIp3d(gsfsign*ip3dpv.second.value());
-	        localElectron.setIp3dError(ip3dpv.second.error());
-  	    }
+        //do we really need to ip3d? we can use PAT member function instead of getting it from RECO (taejeong)
+        //const double gsfsign   = ( (-gsfTrack->dxy(vtx->position()))   >=0 ) ? 1. : -1.;
+        //const reco::TransientTrack &tt = thebuilder.build(gsfTrack);
+        //const std::pair<bool,Measurement1D> &ip3dpv =  IPTools::absoluteImpactParameter3D(tt,((*pvHandle)[j]));
+        //if (ip3dpv.first)
+        //{
+	//        localElectron.setIp3d(gsfsign*ip3dpv.second.value());
+	//        localElectron.setIp3dError(ip3dpv.second.error());
+  	//}
+        localElectron.setIp3d( patElectron->ip3d() );
+
       }
-	  }
+    }
     else if ( myTrackRef.isNonnull() )
     {
       if(doPrimaryVertex_ && pvHandle.isValid() && pvHandle->size() != 0)
@@ -172,6 +175,8 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
     localElectron.setIsoR04_trackIso(electron->dr04TkSumPt());
     
     // Conversion:
+    // we don't use this coversion anymore (taejeong) 
+    /*
     double evt_bField = 0; // need the magnetic field
     // if isData_ then derive bfield using the magnet current from DcsStatus otherwise take it from the IdealMagneticFieldRecord
     
@@ -197,7 +202,8 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
     const ConversionInfo convInfo = convFinder.getConversionInfo(*electron, tracks_h, evt_bField, 0.45);
     localElectron.setDist(convInfo.dist());
     localElectron.setDCot(convInfo.dcot());
-    
+    */
+
     // Some specific methods to pat::Electron
     TLorentzVector ecalDrivenMomentum(patElectron->ecalDrivenMomentum().px(),patElectron->ecalDrivenMomentum().py(),patElectron->ecalDrivenMomentum().pz(),patElectron->ecalDrivenMomentum().energy());
     localElectron.setEcalDrivenMomentum(ecalDrivenMomentum);
