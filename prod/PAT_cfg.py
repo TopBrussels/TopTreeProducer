@@ -221,6 +221,9 @@ process.load('TopBrussels.TopTreeProducer.eventCleaning.eventCleaning_cff')
 from CommonTools.ParticleFlow.Tools.pfIsolation import setupPFElectronIso, setupPFMuonIso, setupPFPhotonIso
 process.phoIsoSequence = setupPFPhotonIso(process, 'selectedPatPhotons')
 
+if runOnMC is False:
+  process.makePatPhotons.remove(process.photonMatch)
+
 process.photonSequence = cms.Sequence (
     process.makePatPhotons+
     process.selectedPatPhotons+
@@ -244,6 +247,7 @@ process.patseq = cms.Sequence(
     )
 
 if runOnMC is False:
+    
     process.patseq.remove( process.flavorHistorySeq )
     process.patJetCorrFactorsPF2PAT.levels = cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute','L2L3Residual']) 
 
