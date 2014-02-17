@@ -12,8 +12,10 @@
 
 #include "./tinyxml/tinyxml.h"
 
+#include "../interface/TRootLepton.h"
 #include "../interface/TRootMuon.h"
 #include "../interface/TRootElectron.h"
+#include "../interface/TRootPhoton.h"
 #include "../interface/TRootJet.h"
 #include "../interface/TRootPFJet.h"
 #include "../interface/TRootCaloJet.h"

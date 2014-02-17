@@ -9,9 +9,11 @@
 #include "../interface/TRootEvent.h"
 #include "../interface/TRootRun.h"
 
+#include "../interface/TRootLepton.h"
 #include "../interface/TRootMuon.h"
 #include "../interface/TRootElectron.h"
 
+#include "../interface/TRootPhoton.h"
 #include "../interface/TRootJet.h"
 #include "../interface/TRootCaloJet.h"
 #include "../interface/TRootJPTJet.h"
@@ -214,6 +216,8 @@ int main(int argc, char *argv[]){
       className="TopTree::TRootMuon";
     else if (strstr(ObjName.c_str(),"Electron"))
       className="TopTree::TRootElectron";
+    else if (strstr(ObjName.c_str(),"Photon"))
+      className="TopTree::TRootPhoton";
     else if (strstr(ObjName.c_str(),"TCMET"))
       className="TopTree::TRootMET";
     else if (strstr(ObjName.c_str(),"CaloMET"))
