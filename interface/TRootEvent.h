@@ -22,7 +22,8 @@ namespace TopTree
 		Float_t pt;
 		Float_t eta;
 		Float_t phi;
-
+                // this is a virtual destructor:
+	        virtual ~triggeredObject(){ cout<<"Destroying triggeredObject";}
 		ClassDef(triggeredObject,2);
 
 	};

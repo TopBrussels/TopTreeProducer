@@ -16,20 +16,32 @@ MCAssociator::MCAssociator(const edm::ParameterSet& producersNames, int verbosit
 
 void MCAssociator::init(const edm::Event& iEvent, TClonesArray* mcParticles)
 {
+
+         cout<<"In MC Associator...init 0"<<endl;
+
 	// FIXME - Protect against no genParticles collection in PoolSource
 	iEvent.getByLabel( genParticlesProducer_, genParticles_ );
 
+         cout<<"In MC Associator...init 1"<<endl;
 	// fill map<igen,imc> where igen=index in genParticle collection and imc=index in mcParticles TClonesArray
 	if(verbosity_>1) cout << endl << "Matching recoParticles to mcParticles... " << endl;
 	int igen;
 	mcParticles_ = mcParticles;
+ cout<<"In MC Associator...init 1.1"<<endl;
 	nMC_ = mcParticles_->GetEntriesFast();
+
+	cout<<"In MC Associator...init 1.2 "<< nMC_   <<endl;
 	for (int imc=0; imc<nMC_; imc++)
 	{
+
+         cout<<"In MC Associator...init 2"<<endl;
+
 		// TODO - remove indexInList in TRootMCParticle
 		//igen = ( (TRootParticle*)mcParticles_->At(imc))->genParticleIndex_();
 		igen = ( (TRootMCParticle*)mcParticles_->At(imc))->genParticleIndex();
 		mcParticlesMap_[igen]=imc;
+         cout<<"In MC Associator...init 3"<<endl;
+
 	}
 }
 
@@ -39,20 +51,26 @@ void MCAssociator::process(TClonesArray* recoParticles)
 	int igen=-1;
 	std::map<int,int>::iterator it;
 
+         cout<<"In MC Associator...process 0"<<endl;
 	for (int ipart=0; ipart<recoParticles->GetEntriesFast(); ipart++)
 	{
+
+         cout<<"In MC Associator...process 1"<<endl;
 		TRootParticle* recoParticle = (TRootParticle*)recoParticles->At(ipart);
 		igen = recoParticle->genParticleIndex();
 		if(igen<=0)
 		{
 			if(verbosity_>2) cout <<"   "<< recoParticle->typeName() << "[" << ipart << "] not matched (at CMSSW level)" << endl;
 			continue;
+         cout<<"In MC Associator...process 2"<<endl;
 		}
 		
 		it=mcParticlesMap_.find(igen);
 		if(it==mcParticlesMap_.end())
 		{
 			if(verbosity_>2) cout <<"   "<< recoParticle->typeName() << "[" << ipart << "] not matched (at TotoAna level)... add new TRootMCParticle..." << endl;
+
+         cout<<"In MC Associator...process 3"<<endl;
 			// if igen not found in mcParticles[], add genParticle in mcParticles[]
 			const reco::GenParticle & p = (*genParticles_)[igen];
 			//find the mother ID
@@ -85,6 +103,7 @@ void MCAssociator::process(TClonesArray* recoParticles)
 			if(verbosity_>2) cout <<"   "<< ( (TRootParticle*)recoParticles->At(ipart))->typeName() << "[" << ipart << "] matched to mcParticles[" << it->second << "]" << endl;
 		}
 	}
+         cout<<"In MC Associator...end of method"<<endl;
 }
 
 

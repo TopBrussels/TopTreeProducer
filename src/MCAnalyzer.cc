@@ -87,16 +87,24 @@ void MCAnalyzer::PDFInfo(const edm::Event& iEvent, TRootEvent* rootEvent)
 
 void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootMCParticles)
 {
+
+
+  cout<<"in process mc particle....1"<<endl;
 	// Fill TCloneArrays with preselected MC Electrons, Muons  and with the primary decaying particles
 	if(verbosity_>1) cout << endl << "   Process MC Particles..." << endl;
 	edm::Handle <reco::GenParticleCollection> genParticles;
+
+  cout<<"in process mc particle....2"<<endl;
 	iEvent.getByLabel( genParticlesProducer_, genParticles );
 	int iElectron=0; int iMuon=0; int iUnstableParticle=0;
 	int iPartSel=0;  int iElectronSel=0; int iMuonSel=0; 
 	int iJet=0, iMET=0, iJetSel=0, iMETSel=0;
 
+  cout<<"in process mc particle....3"<<endl;
 	for(unsigned int j=0; j<genParticles->size(); ++j )
 	{	
+
+  cout<<"in process mc particle....4, looping"<<endl;
 		const reco::GenParticle & p = (*genParticles)[ j ];
 		//find the mother ID
 		Int_t motherID = 0; Int_t grannyID = 0;
@@ -120,6 +128,8 @@ void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootM
 		
 		if ( doElectronMC_ && abs(p.pdgId()) == 11 && p.status()==1 )
 		{
+
+  cout<<"in process mc particle....5 el Mc"<<endl;
 			iElectron++;
 			if ( abs(p.eta()>electronMC_etaMax_) || p.pt()<electronMC_ptMin_ ) continue;
 			new( (*rootMCParticles)[iPartSel] ) TRootMCParticle( p.px(), p.py(), p.pz(), p.energy(), p.vx(), p.vy(), p.vz(), p.pdgId(), p.charge(), p.status(), p.numberOfDaughters(), motherID, grannyID, 0, 0, 0, 0, j );
@@ -128,6 +138,7 @@ void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootM
 			iElectronSel++;
 		}
 
+  cout<<"in process mc particle....6"<<endl;
 		if ( doMuonMC_ && abs(p.pdgId()) == 13 && p.status()==1 )
 		{
 			iMuon++;
@@ -137,6 +148,8 @@ void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootM
 			iPartSel++;
 			iMuonSel++;
 		}
+
+  cout<<"in process mc particle....7"<<endl;
 
 		// FIXME - GenJet collection instead
 		if ( doJetMC_ && (abs(p.pdgId()) < 7 || abs(p.pdgId()) == 21 )&& p.status()==1 )
@@ -158,16 +171,21 @@ void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootM
       iJetSel++;
     }
 
+  cout<<"in process mc particle....8"<<endl;
 		// FIXME - GenMET collection instead
 		if ( doMETMC_ && (abs(p.pdgId()) == 12 || abs(p.pdgId()) == 14 ||  abs(p.pdgId()) == 16 || ( abs(p.pdgId()) > 1000000 && abs(p.pdgId()) < 3000000 ) )&& p.status()==1 )
 		{
+
+  cout<<"in process mc particle....8.1"<<endl;
 			iMET++;
 			new( (*rootMCParticles)[iPartSel] ) TRootMCParticle( p.px(), p.py(), p.pz(), p.energy(), p.vx(), p.vy(), p.vz(), p.pdgId() , p.charge(), p.status(), p.numberOfDaughters(), motherID, grannyID, 0, 0, 0, 0, j );
 			if(verbosity_>2) cout << "   MC MET  " << (const TRootParticle&)(*rootMCParticles->At(iPartSel)) << endl;
+  cout<<"in process mc particle....8.2"<<endl;
 			iPartSel++;
 			iMETSel++;
 		}
 
+  cout<<"in process mc particle....9"<<endl;
 		// add information on primary unstable particles: keep quarks, taus, Z, W, Higgs, susy and vlq particles, with status 3
 		if ( doUnstablePartsMC_ && (abs(p.pdgId()) < 38 || (abs(p.pdgId()) > 1000000 && abs(p.pdgId()) < 3000000)  || (abs(p.pdgId()) > 4000000 && abs(p.pdgId()) < 6000000))	&& p.status()==3 )
 		{
@@ -189,13 +207,15 @@ void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootM
 
 	}
 	
-	if(verbosity_>1)
-	{
+
+  cout<<"in process mc particle....10 end of method"<<endl;
+  //	if(verbosity_>1)
+  //	{
 		cout << endl;
 		cout << "   Number of MC electrons = " << iElectron << ", preselected = " << iElectronSel << endl;
 		cout << "   Number of MC muons = " << iMuon << ", preselected = " << iMuonSel << endl;
 		cout << "   Number of primary unstable particles dumped in the ntuple = " << iUnstableParticle << endl;
-	}	
+		//	}	
 
 }
 

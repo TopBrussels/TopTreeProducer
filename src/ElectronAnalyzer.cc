@@ -82,6 +82,7 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
                                 ,electron->charge()
                                 );
     
+cout<<"in electronAnalyzer...1"<<endl;
     //=======================================
     localElectron.setEcalSeeding(electron->ecalDrivenSeed());
     localElectron.setTrackerSeeding(electron->trackerDrivenSeed());
@@ -105,9 +106,17 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
     localElectron.setHoverEDepth1( electron->hcalDepth1OverEcal() );
     localElectron.setHoverEDepth2( electron->hcalDepth2OverEcal() );
     localElectron.setSigmaIetaIeta( electron->sigmaIetaIeta() );
-    
+
+    cout<<"in electronAnalyzer...2"<<endl;    
+
+    //removing acces of electron track as it causes crash, need to find
+    //out how this is done for miniAOD
+    /*
     reco::TrackRef myTrackRef = electron->closestCtfTrackRef();
-    if ( myTrackRef.isNonnull() )
+ 
+    cout<<"in electronAnalyzer...2.-1"<<endl;    
+
+   if ( myTrackRef.isNonnull() )
     {
 	    const reco::HitPattern& hit = myTrackRef->hitPattern();
 	    localElectron.setPixelLayersWithMeasurement(hit.pixelLayersWithMeasurement());
@@ -115,15 +124,21 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
       localElectron.setTrackNormalizedChi2(myTrackRef->normalizedChi2());
       localElectron.setNValidHits(myTrackRef->numberOfValidHits());
     }
+    cout<<"in electronAnalyzer...2.0"<<endl;
+
     
     reco::GsfTrackRef gsfTrack = electron->gsfTrack();
+
+    cout<<"in electronAnalyzer...2.1"<<endl;
+
+
     if ( gsfTrack.isNonnull() )
     {
       localElectron.setGsfTrackNormalizedChi2(gsfTrack->normalizedChi2());
       localElectron.setTrackMissingHits(gsfTrack->trackerExpectedHitsInner().numberOfHits());
       
       if(doPrimaryVertex_ && pvHandle.isValid() && pvHandle->size() != 0){
-
+cout<<"in electronAnalyzer...3"<<endl;
         reco::VertexRef vtx(pvHandle, 0);
         localElectron.setD0( gsfTrack->dxy(vtx->position()) );
         localElectron.setD0Error( sqrt( pow(gsfTrack->dxyError(),2) + pow(vtx->xError(),2) + pow(vtx->yError(),2) ) );
@@ -144,6 +159,8 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
     }
     else if ( myTrackRef.isNonnull() )
     {
+
+cout<<"in electronAnalyzer...4"<<endl;
       if(doPrimaryVertex_ && pvHandle.isValid() && pvHandle->size() != 0)
 	    {
 	      reco::VertexRef vtx(pvHandle, 0);
@@ -164,7 +181,9 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
       localElectron.setEtaWidth( superCluster->etaWidth() );
       localElectron.setPhiWidth( superCluster->phiWidth() );
 	  }
-    
+
+cout<<"in electronAnalyzer...5"<<endl;    
+
     //Isolation
     localElectron.setIsoR03_hcalIso(electron->dr03HcalTowerSumEt());
     localElectron.setIsoR03_ecalIso(electron->dr03EcalRecHitSumEt());
@@ -174,6 +193,8 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
     localElectron.setIsoR04_ecalIso(electron->dr04EcalRecHitSumEt());
     localElectron.setIsoR04_trackIso(electron->dr04TkSumPt());
     
+    */
+
     // Conversion:
     // we don't use this coversion anymore (taejeong) 
     /*
@@ -236,24 +257,28 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
       veto_ph.push_back(new reco::isodeposit::ConeVeto( Dir, 0.08 ));
     }
 
-    const double chIso04 = patElectron->isoDeposit(pat::PfChargedHadronIso)->depositAndCountWithin(0.4, veto_ch).first;
-    const double nhIso04 = patElectron->isoDeposit(pat::PfNeutralHadronIso)->depositAndCountWithin(0.4, veto_nh).first;
-    const double phIso04 = patElectron->isoDeposit(pat::PfGammaIso)->depositAndCountWithin(0.4, veto_ph).first;
-    const double puChIso04 = patElectron->isoDeposit(pat::PfPUChargedHadronIso)->depositAndCountWithin(0.4, veto_ch).first;
+    //turning off access to remade isodeposits as it's not working for miniAOD
+    //    const double chIso04 = patElectron->isoDeposit(pat::PfChargedHadronIso)->depositAndCountWithin(0.4, veto_ch).first;
+    //const double nhIso04 = patElectron->isoDeposit(pat::PfNeutralHadronIso)->depositAndCountWithin(0.4, veto_nh).first;
+    //const double phIso04 = patElectron->isoDeposit(pat::PfGammaIso)->depositAndCountWithin(0.4, veto_ph).first;
+    //const double puChIso04 = patElectron->isoDeposit(pat::PfPUChargedHadronIso)->depositAndCountWithin(0.4, veto_ch).first;
 
-    localElectron.setIsoR04_ChargedHadronIso( chIso04 );
-    localElectron.setIsoR04_PuChargedHadronIso( puChIso04 );
-    localElectron.setIsoR04_PhotonIso( phIso04 );
-    localElectron.setIsoR04_NeutralHadronIso( nhIso04 );
+    //localElectron.setIsoR04_ChargedHadronIso( chIso04 );
+    //localElectron.setIsoR04_PuChargedHadronIso( puChIso04 );
+    //localElectron.setIsoR04_PhotonIso( phIso04 );
+    //localElectron.setIsoR04_NeutralHadronIso( nhIso04 );
 
     localElectron.setPassConversion(patElectron->passConversionVeto());
     localElectron.setSigmaIphiIphi( patElectron->sigmaIphiIphi() );
     localElectron.setSigmaIetaIphi( patElectron->sigmaIetaIphi() );
     localElectron.setR9( patElectron->r9() );
-    localElectron.setMvaTrigId( patElectron->electronID("mvaTrigV0") );
-    localElectron.setMvaNonTrigId( patElectron->electronID("mvaNonTrigV0") );
+
+    //have to change "mvaTrigV0", "mvaNonTrigV0"  to updated names for 70_X
+    localElectron.setMvaTrigId( patElectron->electronID("eidRobustLoose") );
+    localElectron.setMvaNonTrigId( patElectron->electronID("eidRobustTight") );
     
     new( (*rootElectrons)[j] ) TRootElectron(localElectron);
     if(verbosity_>2) cout << "   ["<< setw(3) << j << "] " << localElectron << endl;
-  }
+
 } 
+}
