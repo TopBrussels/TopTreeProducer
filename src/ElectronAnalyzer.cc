@@ -279,6 +279,12 @@ cout<<"in electronAnalyzer...5"<<endl;
     
     new( (*rootElectrons)[j] ) TRootElectron(localElectron);
     if(verbosity_>2) cout << "   ["<< setw(3) << j << "] " << localElectron << endl;
+    cout <<"size of array "<< sizeof(rootElectrons)/sizeof(*rootElectrons)  <<  " j  =  "<< j << endl;
 
 } 
+
+
+
+
+
 }

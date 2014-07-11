@@ -169,7 +169,7 @@ cout<<"in top tree producer...muonanalyzer process...6.2"<<endl;
 //       localMuon.setIsoR03_PhotonIso( phIso03 );
 //       localMuon.setIsoR03_NeutralHadronIso( nhIso03 );
 
-cout<<"in top tree producer...muonanalyzer process...6.3"<<endl;
+ cout<<"in top tree producer...muonanalyzer process...6. size Muons : "<<  (sizeof(rootMuons)/sizeof(*rootMuons))  <<endl;
       new ((*rootMuons)[j]) TRootMuon (localMuon);
       if (verbosity_ > 2)
         cout << "   [" << setw (3) << j << "] " << localMuon << endl;
