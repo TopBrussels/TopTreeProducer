@@ -39,9 +39,6 @@ void GenJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenJets
 	if( genJetProducer_.label()=="kt4GenJets" || genJetProducer_.label()=="kt6GenJets" || genJetProducer_.label()=="ak5GenJets"
 	    || genJetProducer_.label()=="ak7GenJets" || genJetProducer_.label()=="ak5GenJetsNoE" || genJetProducer_.label()=="ak5GenJetsNoNu" || genJetProducer_.label()=="ak5GenJetsNoMuNoNu" || genJetProducer_.label()== "slimmedGenJets") jetType="GOOD";
      
-
-	cout << "Analysing GenJets collection ...GJ type = " << genJetProducer_.label()  <<endl;
-
 	edm::Handle < edm::View <reco::GenJet> > recoGenJets;
 	iEvent.getByLabel(genJetProducer_, recoGenJets);
 	
@@ -55,7 +52,7 @@ void GenJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenJets
 
 	cout << "Analysing GenJets collection ...looping = " << j  <<endl;
 		const reco::GenJet* genJet = 0;	
-		if( jetType=="GOOD" ) genJet = (const reco::GenJet*) ( & ((*recoGenJets)[j]) );
+	      	if( jetType=="GOOD" ) genJet = (const reco::GenJet*) ( & ((*recoGenJets)[j]) );
 			
 	cout << "Analysing GenJets collection ...looping b= " << j  <<endl;
 
@@ -119,11 +116,11 @@ void GenJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenJets
                 if( isCHadron ) localGenJet.setCHadron(CHad); //if only no B-Hadron matched, assign C-Hadron
                 
 	cout << "Analysing GenJets collection ...checked hadrons. " << j  <<endl;
-	//	 new( (*rootGenJets)[j] ) TRootGenJet(localGenJet);
-
-	cout << "Analysing GenJets collection ...checked hadrons. " << localGenJet.Px()  <<" "<< localGenJet.Py()  <<"  "  << localGenJet.Pt() <<" size GJ : "<<  (sizeof(rootGenJets)/sizeof(*rootGenJets))  << endl;
-
 		 new( (*rootGenJets)[j] ) TRootGenJet(localGenJet);
+
+	//	cout << "Analysing GenJets collection ...checked hadrons. " << localGenJet.Px()  <<" "<< localGenJet.Py()  <<"  "  << localGenJet.Pt() <<" size GJ : "<<  (sizeof(rootGenJets))  << endl;
+
+		 //	new( (*rootGenJets)[j] ) TRootGenJet(localGenJet);
 
 	cout << "Analysing GenJets collection ..made new genjet " << j  <<endl;
 		if(verbosity_>2) cout << "   ["<< setw(3) << j << "] " << localGenJet << endl;

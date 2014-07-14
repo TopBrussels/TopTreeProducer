@@ -50,7 +50,7 @@ public:
 	void SetVerbosity(int verbosity) {verbosity_ = verbosity; };
 	void DrawMCTree(const edm::Event& iEvent, const edm::EventSetup& iSetup, const edm::ParameterSet& config, const edm::ParameterSet& producersNames);
 	void PDFInfo(const edm::Event& iEvent, TRootEvent* rootEvent);
-  void ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootMCParticles);	
+        void ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootMCParticles);	
 
 private:
 

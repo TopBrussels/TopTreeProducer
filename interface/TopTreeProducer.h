@@ -108,6 +108,7 @@ private:
 	bool doMuon;
 	bool doElectron;
 	bool doPhoton;
+	bool doPhotonMC;
 	bool doCaloMET;
 	bool doPFMET;
 	bool doTrackMET;

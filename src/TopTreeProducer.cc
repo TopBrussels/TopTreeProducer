@@ -37,7 +37,8 @@ void TopTreeProducer::beginJob()
 	doJPTJet = myConfig_.getUntrackedParameter<bool>("doJPTJet",false);
 	doMuon = myConfig_.getUntrackedParameter<bool>("doMuon",false);
 	doElectron = myConfig_.getUntrackedParameter<bool>("doElectron",false);	
-	doPhoton = myConfig_.getUntrackedParameter<bool>("doPhoton",false);	
+	doPhoton = myConfig_.getUntrackedParameter<bool>("doPhoton",false);
+	doPhotonMC = myConfig_.getUntrackedParameter<bool>("doPhotonMC",false);	
 	doCaloMET = myConfig_.getUntrackedParameter<bool>("doCaloMET",false);
 	doPFMET = myConfig_.getUntrackedParameter<bool>("doPFMET",false);
 	doTrackMET = myConfig_.getUntrackedParameter<bool>("doTrackMET",false);
@@ -232,7 +233,7 @@ void TopTreeProducer::beginJob()
 
         if(doPhoton)
         {
-                if(verbosity>0) cout << "Photons info will be added to rootuple" << endl;
+	  cout << "Photons info will be added to rootuple" << vPhotonProducer.size() <<endl;
                 for(unsigned int s=0;s<vPhotonProducer.size();s++) {
                         vphotons[s] = new TClonesArray("TopTree::TRootPhoton", 1000);
                         char name[100];
@@ -605,9 +606,11 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
         // Photons
         if(doPhoton)
         {
-                if(verbosity>1) cout << endl << "Analysing photons collection..." << endl;
+                 cout << endl << "Analysing photons collection...1" << endl;
                 for(unsigned int s=0;s<vPhotonProducer.size();s++){
+                 cout << endl << "Analysing photons collection...2" << endl;
                   PhotonAnalyzer* myPhotonAnalyzer = new PhotonAnalyzer(producersNames_, s, myConfig_, verbosity);
+                 cout << endl << "Analysing photons collection...3" << endl;
                   myPhotonAnalyzer->Process(iEvent, vphotons[s], iSetup);
                   delete myPhotonAnalyzer;
                 }
