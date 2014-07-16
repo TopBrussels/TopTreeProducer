@@ -33,7 +33,7 @@ GenJetAnalyzer::~GenJetAnalyzer()
 void GenJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenJets)
 {
 
- cout << "Analysing GenJets collection ...GJA 1 " << endl;
+  // cout << "Analysing GenJets collection ...GJA 1 " << endl;
 	// check if the genJet is of the good type
 	std::string jetType = "BASIC";
 	if( genJetProducer_.label()=="kt4GenJets" || genJetProducer_.label()=="kt6GenJets" || genJetProducer_.label()=="ak5GenJets"
@@ -43,18 +43,18 @@ void GenJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenJets
 	iEvent.getByLabel(genJetProducer_, recoGenJets);
 	
 	unsigned int nJets = recoGenJets->size();
-	cout << "Analysing GenJets collection ...GJ size = " << nJets  <<endl;
+	//	cout << "Analysing GenJets collection ...GJ size = " << nJets  <<endl;
 
 	if(verbosity_>1) std::cout << "   Number of jets = " << nJets << "   Label: " << genJetProducer_.label() << "   Instance: " << genJetProducer_.instance() << std::endl;
 
 	for (unsigned int j=0; j<nJets; j++)
 	{
 
-	cout << "Analysing GenJets collection ...looping = " << j  <<endl;
+	  //	cout << "Analysing GenJets collection ...looping = " << j  <<endl;
 		const reco::GenJet* genJet = 0;	
 	      	if( jetType=="GOOD" ) genJet = (const reco::GenJet*) ( & ((*recoGenJets)[j]) );
 			
-	cout << "Analysing GenJets collection ...looping b= " << j  <<endl;
+		//cout << "Analysing GenJets collection ...looping b= " << j  <<endl;
 
 		// Call JetAnalyzer to fill the basic Jet Properties
 //		TRootJet tempJet = (TRootJet) myJetAnalyzer->Process( &( *(genJet) ));
@@ -81,14 +81,16 @@ void GenJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenJets
 		localGenJet.setHadEnergy(genJet->hadEnergy());
 		localGenJet.setInvisibleEnergy(genJet->invisibleEnergy());
 
-	cout << "Analysing GenJets collection ...looping filled kineamtics " << j  <<endl;
+		//	cout << "Analysing GenJets collection ...looping filled kineamtics " << j  <<endl;
                 bool isBHadron = false;
                 bool isCHadron = false;
                 TRootMCParticle BHad;
                 TRootMCParticle CHad;
 
+
                 std::vector <const reco::GenParticle*> mcparts = genJet->getGenConstituents();
 
+		//		cout << "Analysing GenJets collection ...gen constituents..." << mcparts.size()   <<endl;
                 for (unsigned i = 0; i < mcparts.size (); i++) {
                   const GenParticle* mcpart = mcparts[i];
                   const reco::Candidate* lastB = lastBHadron(*mcpart);
@@ -115,14 +117,14 @@ void GenJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenJets
                 if( isBHadron ) localGenJet.setBHadron(BHad); //if B-Hadron matched, always assign B-Hadron
                 if( isCHadron ) localGenJet.setCHadron(CHad); //if only no B-Hadron matched, assign C-Hadron
                 
-	cout << "Analysing GenJets collection ...checked hadrons. " << j  <<endl;
+		//	cout << "Analysing GenJets collection ...checked hadrons. " << j  <<endl;
 		 new( (*rootGenJets)[j] ) TRootGenJet(localGenJet);
 
 	//	cout << "Analysing GenJets collection ...checked hadrons. " << localGenJet.Px()  <<" "<< localGenJet.Py()  <<"  "  << localGenJet.Pt() <<" size GJ : "<<  (sizeof(rootGenJets))  << endl;
 
 		 //	new( (*rootGenJets)[j] ) TRootGenJet(localGenJet);
 
-	cout << "Analysing GenJets collection ..made new genjet " << j  <<endl;
+		 //	cout << "Analysing GenJets collection ..made new genjet " << j  <<endl;
 		if(verbosity_>2) cout << "   ["<< setw(3) << j << "] " << localGenJet << endl;
 	}
 }

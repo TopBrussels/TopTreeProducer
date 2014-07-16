@@ -107,13 +107,13 @@ PhotonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootPhotons, 
 
       TRootPhoton localPhoton (photon->px (), photon->py (), photon->pz (), photon->energy ());
 
-      cout <<"PHOTON kinematics :  "<< photon->px ()<<"  "<< photon->py ()<<"  "<< photon->pz ()<<"  "<< photon->energy ()<<endl;
+      //      cout <<"PHOTON kinematics :  "<< photon->px ()<<"  "<< photon->py ()<<"  "<< photon->pz ()<<"  "<< photon->energy ()<<endl;
 
-      cout <<"PHOTON kinematics 1 :"<< endl; 
+      //      cout <<"PHOTON kinematics 1 :"<< endl; 
       localPhoton.setSigmaIetaIeta( photon->sigmaIetaIeta() );
-      cout <<"PHOTON kinematics 2 :"<< endl; 
+      //cout <<"PHOTON kinematics 2 :"<< endl; 
       localPhoton.setHadronicOverEm( photon->hadronicOverEm() );
-      cout <<"PHOTON kinematics 3 :"<< endl; 
+      //cout <<"PHOTON kinematics 3 :"<< endl; 
       localPhoton.setHasPixelSeed( photon->hasPixelSeed() );
 
       //prompt electron veto, commenting out for now, see **** above

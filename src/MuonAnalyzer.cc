@@ -37,14 +37,14 @@ MuonAnalyzer::~MuonAnalyzer ()
 void
 MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
 {
-cout<<"in top tree producer...muonanalyzer process...1"<<endl;
+  //cout<<"in top tree producer...muonanalyzer process...1"<<endl;
 	unsigned int nMuons = 0;
 
 	edm::Handle < std::vector < pat::Muon > >patMuons;
 	iEvent.getByLabel (muonProducer_, patMuons);
 	nMuons = patMuons->size ();
 
-cout<<"in top tree producer...muonanalyzer process...2"<<endl;
+	//cout<<"in top tree producer...muonanalyzer process...2"<<endl;
   edm::Handle< reco::VertexCollection > pvHandle;
   iEvent.getByLabel(primaryVertexProducer_, pvHandle);
   
@@ -55,10 +55,10 @@ cout<<"in top tree producer...muonanalyzer process...2"<<endl;
 	if (verbosity_ > 1)
 		std::cout << "   Number of muons = " << nMuons << "   Label: " << muonProducer_.label () << "   Instance: " << muonProducer_.instance () << std::endl;
 
-cout<<"in top tree producer...muonanalyzer process...3"<<endl;
+	//cout<<"in top tree producer...muonanalyzer process...3"<<endl;
     for (unsigned int j = 0; j < nMuons; j++)
     {
-cout<<"in top tree producer...muonanalyzer process...loop"<<endl;
+      //cout<<"in top tree producer...muonanalyzer process...loop"<<endl;
       const pat::Muon*  patMuon = &((*patMuons)[j]);//dynamic_cast < const pat::Muon * >(&*muon);
       const reco::Muon* muon = (const reco::Muon *) patMuon;//(&((*patMuons)[j]));
 
@@ -102,7 +102,7 @@ cout<<"in top tree producer...muonanalyzer process...loop"<<endl;
 
       // Some specific methods to pat::Muon
       localMuon.setIsPFMuon(patMuon->isPFMuon());
-cout<<"in top tree producer...muonanalyzer process...5"<<endl;
+      //cout<<"in top tree producer...muonanalyzer process...5"<<endl;
 
       /*if(patMuon->innerTrack().isNonnull() && patMuon->innerTrack().isAvailable())
        {
@@ -143,7 +143,7 @@ cout<<"in top tree producer...muonanalyzer process...5"<<endl;
       if(patMuon->photonIso() != -1)          localMuon.setIsoR04_PhotonIso(patMuon->photonIso());
       if(patMuon->neutralHadronIso() != -1)   localMuon.setIsoR04_NeutralHadronIso(patMuon->neutralHadronIso());
 
-cout<<"in top tree producer...muonanalyzer process...6"<<endl;
+      //cout<<"in top tree producer...muonanalyzer process...6"<<endl;
 
        //this is for cone size r=0.3
        //following Muon POG isolation definition
@@ -156,24 +156,24 @@ cout<<"in top tree producer...muonanalyzer process...6"<<endl;
        veto_nh.push_back(new reco::isodeposit::ThresholdVeto( 0.5 ));
        veto_ph.push_back(new reco::isodeposit::ConeVeto( Dir, 0.01 ));
        veto_ph.push_back(new reco::isodeposit::ThresholdVeto( 0.5 ));
-cout<<"in top tree producer...muonanalyzer process...6.1"<<endl;
+       //cout<<"in top tree producer...muonanalyzer process...6.1"<<endl;
 
 //       const double chIso03 = patMuon->isoDeposit(pat::PfChargedHadronIso)->depositAndCountWithin(0.3, veto_ch).first;
 //       const double nhIso03 = patMuon->isoDeposit(pat::PfNeutralHadronIso)->depositAndCountWithin(0.3, veto_nh).first;
 //       const double phIso03 = patMuon->isoDeposit(pat::PfGammaIso)->depositAndCountWithin(0.3, veto_ph).first;
 //       const double puChIso03 = patMuon->isoDeposit(pat::PfPUChargedHadronIso)->depositAndCountWithin(0.3, veto_ch).first;
 
-cout<<"in top tree producer...muonanalyzer process...6.2"<<endl;
+//cout<<"in top tree producer...muonanalyzer process...6.2"<<endl;
 //       localMuon.setIsoR03_ChargedHadronIso( chIso03 );
 //       localMuon.setIsoR03_PuChargedHadronIso( puChIso03 );
 //       localMuon.setIsoR03_PhotonIso( phIso03 );
 //       localMuon.setIsoR03_NeutralHadronIso( nhIso03 );
 
- cout<<"in top tree producer...muonanalyzer process...6. size Muons : "<<  (sizeof(rootMuons)/sizeof(*rootMuons))  <<endl;
+// cout<<"in top tree producer...muonanalyzer process...6. size Muons : "<<  (sizeof(rootMuons)/sizeof(*rootMuons))  <<endl;
       new ((*rootMuons)[j]) TRootMuon (localMuon);
       if (verbosity_ > 2)
         cout << "   [" << setw (3) << j << "] " << localMuon << endl;
 	}
 
-cout<<"in top tree producer...muonanalyzer process..end"<<endl;
+    //cout<<"in top tree producer...muonanalyzer process..end"<<endl;
 }

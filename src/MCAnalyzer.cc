@@ -83,7 +83,7 @@ void MCAnalyzer::PDFInfo(const edm::Event& iEvent, TRootEvent* rootEvent)
 void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootMCParticles)
 {
 
- cout<<"in ProcessMCParticle 1 "<<endl;
+  // cout<<"in ProcessMCParticle 1 "<<endl;
 
 	// Fill TCloneArrays with preselected MC Electrons, Muons  and with the primary decaying particles
 	if(verbosity_>1) cout << endl << "   Process MC Particles..." << endl;
@@ -97,7 +97,7 @@ void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootM
 
 	for(unsigned int j=0; j<genParticles->size(); ++j )
 	{	
-         cout<<"in ProcessMCParticle loop "<<endl;
+	  //         cout<<"in ProcessMCParticle loop "<<endl;
 		const reco::GenParticle & p = (*genParticles)[ j ];
 		//find the mother ID
 		Int_t motherID = 0; Int_t grannyID = 0;
@@ -118,17 +118,17 @@ void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootM
 				}
 			}
 		}
-		 cout<<"in ProcessMCParticle loop  x"<<endl;
+		//		 cout<<"in ProcessMCParticle loop  x"<<endl;
 		 //   if ( doElectronMC_ && abs(p.pdgId()) == 11 && p.status()==1 ){ 
 			iElectron++;
 			//	if ( abs(p.eta()>electronMC_etaMax_) || p.pt()<electronMC_ptMin_ ) continue;
 
 		 TRootMCParticle localMCElectron( p.px(), p.py(), p.pz(), p.energy(), p.vx(), p.vy(), p.vz(), p.pdgId(), p.charge(), p.status(), p.numberOfDaughters(), motherID, grannyID, 0, 0, 0, 0, j );
- cout<<"in ProcessMCParticle loop a "<<endl;
+		 //cout<<"in ProcessMCParticle loop a "<<endl;
 
 		 new  ((*rootMCParticles)[iPartSel]) TRootMCParticle(localMCElectron);
 
- cout<<"in ProcessMCParticle loop b "<<endl;
+		 // cout<<"in ProcessMCParticle loop b "<<endl;
  			if(verbosity_>2) cout << "   ["<< setw(3) << iPartSel << "] MC Electron  " << (const TRootMCParticle&)(*rootMCParticles->At(iPartSel)) << endl;
 
 			iPartSel++;

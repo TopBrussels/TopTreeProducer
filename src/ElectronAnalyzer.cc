@@ -82,7 +82,7 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
                                 ,electron->charge()
                                 );
     
-cout<<"in electronAnalyzer...1"<<endl;
+    //cout<<"in electronAnalyzer...1"<<endl;
     //=======================================
     localElectron.setEcalSeeding(electron->ecalDrivenSeed());
     localElectron.setTrackerSeeding(electron->trackerDrivenSeed());
@@ -107,7 +107,7 @@ cout<<"in electronAnalyzer...1"<<endl;
     localElectron.setHoverEDepth2( electron->hcalDepth2OverEcal() );
     localElectron.setSigmaIetaIeta( electron->sigmaIetaIeta() );
 
-    cout<<"in electronAnalyzer...2"<<endl;    
+    //    cout<<"in electronAnalyzer...2"<<endl;    
 
     //removing acces of electron track as it causes crash, need to find
     //out how this is done for miniAOD
@@ -279,7 +279,7 @@ cout<<"in electronAnalyzer...5"<<endl;
     
     new( (*rootElectrons)[j] ) TRootElectron(localElectron);
     if(verbosity_>2) cout << "   ["<< setw(3) << j << "] " << localElectron << endl;
-    cout <<"size of array "<< sizeof(rootElectrons)/sizeof(*rootElectrons)  <<  " j  =  "<< j << endl;
+    //    cout <<"size of array "<< sizeof(rootElectrons)/sizeof(*rootElectrons)  <<  " j  =  "<< j << endl;
 
 } 
 

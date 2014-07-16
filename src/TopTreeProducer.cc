@@ -233,7 +233,7 @@ void TopTreeProducer::beginJob()
 
         if(doPhoton)
         {
-	  cout << "Photons info will be added to rootuple" << vPhotonProducer.size() <<endl;
+	  //	  cout << "Photons info will be added to rootuple" << vPhotonProducer.size() <<endl;
                 for(unsigned int s=0;s<vPhotonProducer.size();s++) {
                         vphotons[s] = new TClonesArray("TopTree::TRootPhoton", 1000);
                         char name[100];
@@ -483,7 +483,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	// MC Info
 	if(!isRealData_)
 	{
- cout<<"in top tree producer...MCINFO1"<<endl;
+	  // cout<<"in top tree producer...MCINFO1"<<endl;
 		if(verbosity>1) cout << endl << "Analysing MC info..." << endl;
 		MCAnalyzer* myMCAnalyzer = new MCAnalyzer(myConfig_, producersNames_);
 		myMCAnalyzer->SetVerbosity(verbosity);
@@ -491,7 +491,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		if (doPDFInfo ) myMCAnalyzer->PDFInfo(iEvent, rootEvent);
                  myMCAnalyzer->ProcessMCParticle(iEvent, mcParticles);
 		delete myMCAnalyzer;
- cout<<"in top tree producer...MCINFO2"<<endl;
+		//cout<<"in top tree producer...MCINFO2"<<endl;
 
 	}
 
@@ -606,11 +606,8 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
         // Photons
         if(doPhoton)
         {
-                 cout << endl << "Analysing photons collection...1" << endl;
                 for(unsigned int s=0;s<vPhotonProducer.size();s++){
-                 cout << endl << "Analysing photons collection...2" << endl;
                   PhotonAnalyzer* myPhotonAnalyzer = new PhotonAnalyzer(producersNames_, s, myConfig_, verbosity);
-                 cout << endl << "Analysing photons collection...3" << endl;
                   myPhotonAnalyzer->Process(iEvent, vphotons[s], iSetup);
                   delete myPhotonAnalyzer;
                 }
@@ -663,7 +660,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	// Associate recoParticles to mcParticles
 	if(!isRealData_)
 	{
-         cout<<"in top tree producer...MC Association 0"<<endl;
+	  //         cout<<"in top tree producer...MC Association 0"<<endl;
 	 //	        	MCAssociator* myMCAssociator = new MCAssociator(producersNames_, verbosity);
 	 //      	myMCAssociator->init(iEvent, mcParticles);
 	 //		if(doCaloJet && vcaloJets.size() > 0) myMCAssociator->process(vcaloJets[0]);
@@ -677,7 +674,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	 //		//if(verbosity>2 && doPhoton) myMCAssociator->printParticleAssociation(photons);
 	 //		//if(verbosity>2 && doCaloMET) myMCAssociator->printParticleAssociation(CALOmet);
 	 //		delete myMCAssociator;
-         cout<<"in top tree producer...MC Association 1"<<endl;
+         //cout<<"in top tree producer...MC Association 1"<<endl;
 
 	}
 
@@ -746,7 +743,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
   }
 
 
- cout<<"in top tree producer.. end of method"<<endl;
+ // cout<<"in top tree producer.. end of method"<<endl;
 
 	if(doTCMET) (*TCmet).Delete();
 	if(doGenEvent) (*genEvent).Delete();
