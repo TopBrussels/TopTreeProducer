@@ -45,6 +45,9 @@
 #include "../interface/GenEventAnalyzer.h"
 #include "../interface/NPGenEventAnalyzer.h"
 #include "../interface/SpinCorrGenAnalyzer.h"
+#include "../interface/LHEEventProductAnalyzer.h"
+
+
 
 #include "../interface/TRootRun.h"
 #include "../interface/TRootEvent.h"
@@ -116,6 +119,7 @@ private:
 	bool doGenEvent;
 	bool doNPGenEvent;
 	bool doSpinCorrGen;
+	bool doLHEEventProd;
 	bool drawMCTree;
 	std::vector<std::string> vGenJetProducer;
 	std::vector<std::string> vCaloJetProducer;
@@ -128,6 +132,7 @@ private:
         std::vector<std::string> vTrackmetProducer; 
 	int nTotEvt_;
 	HLTAnalyzer* hltAnalyzer_;
+        LHEEventProductAnalyzer* lheEventProductAnalyzer_;
 	TRootRun* runInfos_;
 	TRootEvent* rootEvent;
 	TClonesArray* mcParticles;
@@ -144,6 +149,7 @@ private:
 	std::vector<TClonesArray*> vTrackmets;
 	TClonesArray* TCmet;
 	TClonesArray* genEvent;
+	//	TClonesArray* lheEventProduct;
 	TClonesArray* NPgenEvent;
 	TClonesArray* spinCorrGen;
 	TClonesArray* primaryVertex;

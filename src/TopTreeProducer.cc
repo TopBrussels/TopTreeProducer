@@ -1,3 +1,5 @@
+
+
 #include "../interface/TopTreeProducer.h"
 #include "DataFormats/HLTReco/interface/TriggerEvent.h"
 #include "DataFormats/Common/interface/Handle.h"
@@ -47,7 +49,9 @@ void TopTreeProducer::beginJob()
 	doGenEvent = myConfig_.getUntrackedParameter<bool>("doGenEvent",false);
 	doNPGenEvent = myConfig_.getUntrackedParameter<bool>("doNPGenEvent",false);
 	doSpinCorrGen = myConfig_.getUntrackedParameter<bool>("doSpinCorrGen",false);
+        doLHEEventProd  = myConfig_.getUntrackedParameter<bool>("doLHEEventProd",true);
         useEventCounter_ = myConfig_.getUntrackedParameter<bool>("useEventCounter",true);
+
 	vector<string> defaultVec;
         filters_ = myConfig_.getUntrackedParameter<std::vector<std::string> >("filters",defaultVec);
 	vGenJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vgenJetProducer",defaultVec);
@@ -130,6 +134,21 @@ void TopTreeProducer::beginJob()
 		hltAnalyzer_ = new HLTAnalyzer(producersNames_, myConfig_);
 		hltAnalyzer_->setVerbosity(verbosity);
 	}
+
+
+	if(doLHEEventProd)
+	{
+		if(verbosity>0) cout << "HLT info will be added to rootuple" << endl;
+		lheEventProductAnalyzer_ = new LHEEventProductAnalyzer(producersNames_,0);
+		//	lheEventProduct = new TClonesArray("LHEEventProduct", 1000);
+
+		//         	eventTree_->Branch ("LHEEventProd", "LHEEventProduct",&lheEventProduct);
+		//lheEventProductAnalyzer_->setVerbosity(verbosity);
+       
+
+
+}
+
 
 
 	//		if(!isRealData_)
@@ -492,6 +511,13 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
                  myMCAnalyzer->ProcessMCParticle(iEvent, mcParticles);
 		delete myMCAnalyzer;
 		//cout<<"in top tree producer...MCINFO2"<<endl;
+
+	}
+
+
+	if(doLHEEventProd)
+	{
+	  lheEventProductAnalyzer_->Process(iEvent,  rootEvent);
 
 	}
 
