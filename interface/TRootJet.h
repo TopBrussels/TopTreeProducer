@@ -48,6 +48,7 @@ namespace TopTree
 			,btag_softPFMuonRetrainedBJetsTags_(-9999.)
 			,partonFlavour_(-999)
 			,isTopJet_(false)
+                        ,puID_(-9999.)
 			{;}
 	
 		TRootJet(const TRootJet& jet) :
@@ -77,6 +78,7 @@ namespace TopTree
 			,btag_softPFMuonRetrainedBJetsTags_(jet.btag_softPFMuonRetrainedBJetsTags_)
 			,partonFlavour_(jet.partonFlavour_)
 			,isTopJet_(jet.isTopJet_)
+                        ,puID_(-9999.)
 		  {
 			unsigned int size = sizeof(JetCorrName_)/sizeof(JetCorrName_[0]);
 			for (unsigned int i=0; i<size; i++)
@@ -125,6 +127,7 @@ namespace TopTree
 			,btag_softPFMuonRetrainedBJetsTags_(-9999.)
 			,partonFlavour_(-9999)
 			,isTopJet_(false)
+                        ,puID_(-9999.)
 			{;}
 	
 		TRootJet(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z) :
@@ -154,6 +157,7 @@ namespace TopTree
 			,btag_softPFMuonRetrainedBJetsTags_(-9999.)
 			,partonFlavour_(-9999)
 			,isTopJet_(false)
+                        ,puID_(-9999.)
 			{;}
 
 		TRootJet(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z, Int_t type, Float_t charge) :
@@ -183,6 +187,7 @@ namespace TopTree
 			,btag_softPFMuonRetrainedBJetsTags_(-9999.)
 			,partonFlavour_(-9999)
 			,isTopJet_(false)
+                        ,puID_(-9999.)
 			{;}
 
 		TRootJet(const TLorentzVector &momentum) :
@@ -212,6 +217,7 @@ namespace TopTree
 			,btag_softPFMuonRetrainedBJetsTags_(-9999.)
 			,partonFlavour_(-9999)
 			,isTopJet_(false)
+                        ,puID_(-9999.)
 			{;}
 
 		TRootJet(const TLorentzVector &momentum, const TVector3 &vertex, Int_t type, Float_t charge) :
@@ -241,6 +247,7 @@ namespace TopTree
 			,btag_softPFMuonRetrainedBJetsTags_(-9999.)
 			,partonFlavour_(-9999)
 			,isTopJet_(false)
+                        ,puID_(-9999.)
 			{;}
 
 		~TRootJet() {;}
@@ -267,7 +274,8 @@ namespace TopTree
 		Float_t	btag_combinedCSVJPSLBJetTags() const { return btag_combinedCSVJPSLBJetTags_; }
 		Float_t	btag_combinedCSVSLBJetTags() const { return btag_combinedCSVSLBJetTags_; }
 		Float_t	btag_softPFElectronRetrainedBJetsTags() const { return btag_softPFElectronRetrainedBJetsTags_; }
-    Float_t	btag_softPFMuonRetrainedBJetsTags() const { return btag_softPFMuonRetrainedBJetsTags_; }
+                Float_t	btag_softPFMuonRetrainedBJetsTags() const { return btag_softPFMuonRetrainedBJetsTags_; }
+                Float_t	puID() const { return puID_; }
 
 		std::map<std::string, float> getMistag_SF() const { 
 			std::cout << mistag_SF_.size() << endl;
@@ -336,6 +344,7 @@ namespace TopTree
 
 		void setPartonFlavour(Int_t partonFlavour) { partonFlavour_ = partonFlavour; }
 		void setIsTopJet(Bool_t isTopJet) { isTopJet_ = isTopJet; }
+        	void setpuID(Float_t puID) { puID_ = puID; }
 
 		//btag scalefactors
 		void setMistag_SF(std::map<std::string, float> mistag_SF) { 
@@ -406,6 +415,7 @@ namespace TopTree
 		Float_t btag_combinedCSVSLBJetTags_;
 		Float_t btag_softPFElectronRetrainedBJetsTags_;
 		Float_t btag_softPFMuonRetrainedBJetsTags_;
+             
 
 		//btag scalefactors
 		std::map<std::string, float> mistag_SF_;
@@ -417,6 +427,7 @@ namespace TopTree
 		//MC info
 		Int_t partonFlavour_;
 		Bool_t isTopJet_;				// Is parton matched to the jet a decay product of the top quark ?
+                Float_t puID_;
 
 		ClassDef (TRootJet,3);
 	};
