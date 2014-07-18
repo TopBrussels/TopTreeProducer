@@ -97,7 +97,7 @@ void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootM
 
 	for(unsigned int j=0; j<genParticles->size(); ++j )
 	{	
-	  //         cout<<"in ProcessMCParticle loop "<<endl;
+	 	if(verbosity_>4)        cout<<"in ProcessMCParticle loop "<<endl;
 		const reco::GenParticle & p = (*genParticles)[ j ];
 		//find the mother ID
 		Int_t motherID = 0; Int_t grannyID = 0;
@@ -119,9 +119,10 @@ void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootM
 			}
 		}
 		//		 cout<<"in ProcessMCParticle loop  x"<<endl;
-		 //   if ( doElectronMC_ && abs(p.pdgId()) == 11 && p.status()==1 ){ 
+		   if ( doElectronMC_ && abs(p.pdgId()) == 11 && p.status()==1 ){ 
 			iElectron++;
-			//	if ( abs(p.eta()>electronMC_etaMax_) || p.pt()<electronMC_ptMin_ ) continue;
+
+		     	if ( abs(p.eta()>electronMC_etaMax_) || p.pt()<electronMC_ptMin_ ) continue;
 
 		 TRootMCParticle localMCElectron( p.px(), p.py(), p.pz(), p.energy(), p.vx(), p.vy(), p.vz(), p.pdgId(), p.charge(), p.status(), p.numberOfDaughters(), motherID, grannyID, 0, 0, 0, 0, j );
 		 //cout<<"in ProcessMCParticle loop a "<<endl;
@@ -133,7 +134,7 @@ void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootM
 
 			iPartSel++;
 			iElectronSel++;
-			//	}
+		       	}
 
 		if ( doMuonMC_ && abs(p.pdgId()) == 13 && p.status()==1 )
 		{

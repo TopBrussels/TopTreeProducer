@@ -107,15 +107,11 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
     localElectron.setHoverEDepth2( electron->hcalDepth2OverEcal() );
     localElectron.setSigmaIetaIeta( electron->sigmaIetaIeta() );
 
-    //    cout<<"in electronAnalyzer...2"<<endl;    
-
-    //removing acces of electron track as it causes crash, need to find
-    //out how this is done for miniAOD
-    /*
-    reco::TrackRef myTrackRef = electron->closestCtfTrackRef();
+    // switching to gsf track for miniAOD, seems this is the correct thing for
+    //now   
+    //    reco::TrackRef myTrackRef = electron->closestCtfTrackRef();
+    reco::GsfTrackRef myTrackRef = electron->gsfTrack();
  
-    cout<<"in electronAnalyzer...2.-1"<<endl;    
-
    if ( myTrackRef.isNonnull() )
     {
 	    const reco::HitPattern& hit = myTrackRef->hitPattern();
@@ -124,13 +120,8 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
       localElectron.setTrackNormalizedChi2(myTrackRef->normalizedChi2());
       localElectron.setNValidHits(myTrackRef->numberOfValidHits());
     }
-    cout<<"in electronAnalyzer...2.0"<<endl;
-
     
     reco::GsfTrackRef gsfTrack = electron->gsfTrack();
-
-    cout<<"in electronAnalyzer...2.1"<<endl;
-
 
     if ( gsfTrack.isNonnull() )
     {
@@ -138,7 +129,6 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
       localElectron.setTrackMissingHits(gsfTrack->trackerExpectedHitsInner().numberOfHits());
       
       if(doPrimaryVertex_ && pvHandle.isValid() && pvHandle->size() != 0){
-cout<<"in electronAnalyzer...3"<<endl;
         reco::VertexRef vtx(pvHandle, 0);
         localElectron.setD0( gsfTrack->dxy(vtx->position()) );
         localElectron.setD0Error( sqrt( pow(gsfTrack->dxyError(),2) + pow(vtx->xError(),2) + pow(vtx->yError(),2) ) );
@@ -160,7 +150,6 @@ cout<<"in electronAnalyzer...3"<<endl;
     else if ( myTrackRef.isNonnull() )
     {
 
-cout<<"in electronAnalyzer...4"<<endl;
       if(doPrimaryVertex_ && pvHandle.isValid() && pvHandle->size() != 0)
 	    {
 	      reco::VertexRef vtx(pvHandle, 0);
@@ -182,8 +171,6 @@ cout<<"in electronAnalyzer...4"<<endl;
       localElectron.setPhiWidth( superCluster->phiWidth() );
 	  }
 
-cout<<"in electronAnalyzer...5"<<endl;    
-
     //Isolation
     localElectron.setIsoR03_hcalIso(electron->dr03HcalTowerSumEt());
     localElectron.setIsoR03_ecalIso(electron->dr03EcalRecHitSumEt());
@@ -192,8 +179,7 @@ cout<<"in electronAnalyzer...5"<<endl;
     localElectron.setIsoR04_hcalIso(electron->dr04HcalTowerSumEt());
     localElectron.setIsoR04_ecalIso(electron->dr04EcalRecHitSumEt());
     localElectron.setIsoR04_trackIso(electron->dr04TkSumPt());
-    
-    */
+        
 
     // Conversion:
     // we don't use this coversion anymore (taejeong) 
@@ -229,7 +215,7 @@ cout<<"in electronAnalyzer...5"<<endl;
     TLorentzVector ecalDrivenMomentum(patElectron->ecalDrivenMomentum().px(),patElectron->ecalDrivenMomentum().py(),patElectron->ecalDrivenMomentum().pz(),patElectron->ecalDrivenMomentum().energy());
     localElectron.setEcalDrivenMomentum(ecalDrivenMomentum);
     
-    //localElectron.setdB(patElectron->dB());
+    //    localElectron.setdB(patElectron->dB());
     //localElectron.setdBError(patElectron->edB());
     
     // Matched genParticle
