@@ -116,7 +116,7 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
         localMuon.setChi2 (patMuon->normChi2 ());
       }
       catch (cms::Exception &lce) {
-        cerr << "MuonAnalyzer:: WARNING, unable to access muon normChi2 value!!!! (label: " << muonProducer_.label () << ")" << endl;
+        if (verbosity_ > 2)cout  << "MuonAnalyzer:: WARNING, unable to access muon normChi2 value!!!! (label: " << muonProducer_.label () << ")" << endl;
         localMuon.setChi2 (+99999.);
       }
 
@@ -129,6 +129,7 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
         if ((patMuon->genParticleRef ()).isNonnull ())
         {
           localMuon.setGenParticleIndex ((patMuon->genParticleRef ()).index ());
+	  localMuon.setPID((patMuon->genParticle())->pdgId());
         }
         else
         {
