@@ -25,6 +25,7 @@ namespace TopTree
 			,algo_(-9999)
 			,isPFMuon_(false)
 			,id_(-9999)
+	                ,PID_(-9999)
 			{;}
 
                 TRootMuon(const TRootLepton& l) :
@@ -40,6 +41,7 @@ namespace TopTree
                         ,algo_(-9999)
                         ,isPFMuon_(false)
                         ,id_(-9999)
+                        ,PID_(-9999)
                         {;}
 
 		TRootMuon(const TRootMuon& muon) :
@@ -55,6 +57,7 @@ namespace TopTree
 			,algo_(muon.algo_)
 			,isPFMuon_(muon.isPFMuon_)
 			,id_(muon.id_)
+			,PID_(-9999)
 			{;}
 
 		TRootMuon(Double_t px, Double_t py, Double_t pz, Double_t e) :
@@ -70,6 +73,7 @@ namespace TopTree
 			,algo_(-9999)
 			,isPFMuon_(false)
 			,id_(-9999)
+                        ,PID_(-9999)
 			{;}
 
 		TRootMuon(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z) :
@@ -85,6 +89,7 @@ namespace TopTree
 			,algo_(-9999)
 			,isPFMuon_(false)
 			,id_(-9999)
+                        ,PID_(-9999)
 			{;}
 
 		TRootMuon(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z, Int_t type, Int_t charge) :
@@ -100,6 +105,7 @@ namespace TopTree
 			,algo_(-9999)
 			,isPFMuon_(false)
 			,id_(-9999)
+                        ,PID_(-9999)
 			{;}
 
 		TRootMuon(const TLorentzVector &momentum) :
@@ -115,6 +121,7 @@ namespace TopTree
 			,algo_(-9999)
 			,isPFMuon_(false)
 			,id_(-9999)
+                        ,PID_(-9999)
 			{;}
 
 		TRootMuon(const TLorentzVector &momentum, const TVector3 &vertex, Int_t type, Int_t charge) :
@@ -130,6 +137,7 @@ namespace TopTree
 			,algo_(-9999)
 			,isPFMuon_(false)
 			,id_(-9999)
+                        ,PID_(-9999)
 			{;}
 
 		~TRootMuon() {;}
@@ -167,9 +175,11 @@ namespace TopTree
 //		Float_t dB() const { return dB_; }
 //		Float_t dBError() const { return dBError_; }
 		virtual TString typeName() const { return "TRootMuon"; }
+         	Int_t PID() const { return PID_;}
 
 		void setAlgo(Int_t algo) { algo_ = algo; }
                 void setIsPFMuon(Bool_t isPFMuon) {isPFMuon_ = isPFMuon; }
+                void setPID(Int_t PID ){PID_ = PID;}
 		void setID(Int_t id) { id_ = id; }
 		void setID(
 			Int_t AllGlobalMuons,
@@ -200,6 +210,7 @@ namespace TopTree
 		void setNofValidPixelHits(Int_t x){ nofValidPixelHits_ = x;}
 		void setNofMatchedStations(Int_t x){ nofMatchedStations_ = x;}
 		void setNofTrackerLayersWithMeasurement(Int_t x){ nofTrackerLayersWithMeasurement_ = x;}
+               
 
 		friend std::ostream& operator<< (std::ostream& stream, const TRootMuon& muon)
 		{
@@ -226,7 +237,9 @@ namespace TopTree
 		Bool_t isPFMuon_;
 		Int_t id_; 		// MuonId coded in binary word id_ ==> TrackerMuonArbitrated=0000001 , AllArbitrated=0000010 , GlobalMuonPromptTight=0000100 ,
 		// TMLastStationLoose=0001000 , TMLastStationTight=0010000 , TM2DCompatibilityLoose=0100000 , TM2DCompatibilityTight=1000000
-		
+		Int_t PID_;
+
+
 		ClassDef (TRootMuon,4);
 	};
 }
