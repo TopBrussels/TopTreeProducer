@@ -58,6 +58,7 @@ namespace TopTree
 		    passConversion_(false),
 		    mvaTrigId_(-9999.),
 		    mvaNonTrigId_(-9999.)
+		    ,isPF_(false)
 		    {;}
                 TRootElectron(const TRootLepton& l) :
 		    TRootLepton(l),
@@ -101,6 +102,7 @@ namespace TopTree
 		    passConversion_(false),
 		    mvaTrigId_(-9999.),
 		    mvaNonTrigId_(-9999.)
+		    ,isPF_(false)
 		    {;} 
 		TRootElectron(const TRootElectron& e) :
 		    TRootLepton(e),
@@ -144,6 +146,7 @@ namespace TopTree
 		    passConversion_(e.passConversion_),
 		    mvaTrigId_(e.mvaTrigId_),
 		    mvaNonTrigId_(e.mvaNonTrigId_)
+		    ,isPF_(e.isPF_)
 		    {;}
     
 		TRootElectron(Double_t px, Double_t py, Double_t pz, Double_t e) :
@@ -188,6 +191,7 @@ namespace TopTree
 		    passConversion_(false),
 		    mvaTrigId_(-9999.),
 		    mvaNonTrigId_(-9999.)
+		    ,isPF_(false)
 		    {;}
     
 		TRootElectron(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z) :
@@ -232,6 +236,7 @@ namespace TopTree
 		    passConversion_(false),
 		    mvaTrigId_(-9999.),
 		    mvaNonTrigId_(-9999.)
+		    ,isPF_(false)
 		    {;}
     
 		TRootElectron(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z, Int_t type, Int_t charge) :
@@ -276,6 +281,7 @@ namespace TopTree
 		    passConversion_(false),
 		    mvaTrigId_(-9999.),
 		    mvaNonTrigId_(-9999.)
+		    ,isPF_(false)
 		    {;}
     
 		TRootElectron(const TLorentzVector &momentum) :
@@ -320,6 +326,7 @@ namespace TopTree
 		    passConversion_(false),
 		    mvaTrigId_(-9999.),
 		    mvaNonTrigId_(-9999.)
+		    ,isPF_(false)
 		    {;}
 	    
                 TRootElectron(const TLorentzVector &momentum, const TVector3 &vertex, Int_t type, Float_t charge) :
@@ -364,6 +371,7 @@ namespace TopTree
 		    passConversion_(false),
 		    mvaTrigId_(-9999.),
 		    mvaNonTrigId_(-9999.)
+		    ,isPF_(false)
 		    {;}
 		    
 		~TRootElectron() {;}
@@ -374,7 +382,8 @@ namespace TopTree
 	  
 	        Bool_t isEcalDrivenSeed() const { return ecalDrivenSeed_; }
 	        Bool_t isTrackerDrivenSeed() const { return trackerDrivenSeed_; }
-	    
+		Bool_t isPF() const { return isPF_; }
+
                 TLorentzVector ecalDrivenMomentum() const {return ecalDrivenMomentum_; }
     
 		Float_t eScOverP() const { return eSuperClusterOverPin_; }
@@ -465,7 +474,8 @@ namespace TopTree
                 void setPassConversion(Bool_t pass) { passConversion_ = pass; }
                 void setMvaTrigId(Float_t id) { mvaTrigId_ = id; }
                 void setMvaNonTrigId(Float_t id) { mvaNonTrigId_ = id; }
-		
+		void setIsPF(Bool_t isPF) {isPF_ = isPF; }
+
 		friend std::ostream& operator<< (std::ostream& stream, const TRootElectron& electron) {
 			stream << "TRootElectron - Charge=" << electron.charge() << " (Et,eta,phi)=("<< electron.Et() <<","<< electron.Eta() <<","<< electron.Phi() << ")"
       << " vertex(x,y,z)=("<< electron.vx() <<","<< electron.vy() <<","<< electron.vz() << ")";
@@ -527,8 +537,9 @@ namespace TopTree
       Bool_t  passConversion_;                   // boolean to flag converted candidates
       Float_t mvaTrigId_;                        // MVA value
       Float_t mvaNonTrigId_;                     // MVA value
-      
-      ClassDef (TRootElectron,13);
+      Bool_t isPF_;
+
+      ClassDef (TRootElectron,14);
       };
 }
 
