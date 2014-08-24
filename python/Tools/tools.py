@@ -40,3 +40,40 @@ def useRecoMuon(process, postfix, dR = "03"):
                                                    pfParticleSelectionSequence+
                                                    pfMuonIsolationSequence+
                                                    getattr(process,"patMuons"+postfix) )
+
+#Copy-paste for now, could define useRecoMuons function to call this one
+def useOtherMuonCollection(process, postfix, sourceMuons, useParticleFlow, dR = "03"):
+ 
+
+  module = applyPostfix(process,"patMuons",postfix)
+
+  module.pfMuonSource = sourceMuons
+  module.useParticleFlow = useParticleFlow
+
+  muPFIsoDepositCharged.src = sourceMuons
+  muPFIsoDepositChargedAll.src = sourceMuons
+  muPFIsoDepositNeutral.src = sourceMuons
+  muPFIsoDepositGamma.src = sourceMuons
+  muPFIsoDepositPU.src = sourceMuons
+
+  module.isoDeposits = cms.PSet(
+      pfChargedHadrons = cms.InputTag("muPFIsoDepositCharged" ),
+      pfChargedAll = cms.InputTag("muPFIsoDepositChargedAll" ),
+      pfPUChargedHadrons = cms.InputTag("muPFIsoDepositPU" ),
+      pfNeutralHadrons = cms.InputTag("muPFIsoDepositNeutral" ),
+      pfPhotons = cms.InputTag("muPFIsoDepositGamma" ),
+      )
+
+  module.isolationValues = cms.PSet(
+      pfChargedHadrons = cms.InputTag("muPFIsoValueCharged"+dR),
+      pfChargedAll = cms.InputTag("muPFIsoValueChargedAll"+dR),
+      pfPUChargedHadrons = cms.InputTag("muPFIsoValuePU"+dR ),
+      pfNeutralHadrons = cms.InputTag("muPFIsoValueNeutral"+dR ),
+      pfPhotons = cms.InputTag("muPFIsoValueGamma"+dR ),
+      )
+
+  applyPostfix(process,"muonMatch",postfix).src = module.pfMuonSource
+  getattr(process,'patDefaultSequence'+postfix).replace( getattr(process,"patMuons"+postfix),
+                                                   pfParticleSelectionSequence+
+                                                   pfMuonIsolationSequence+
+                                                   getattr(process,"patMuons"+postfix) )
