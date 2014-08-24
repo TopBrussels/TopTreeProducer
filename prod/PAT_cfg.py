@@ -13,19 +13,13 @@ from PhysicsTools.PatAlgos.tools.coreTools import *
 #    )
 
 #process.source.fileNames = process.source.fileNames[:20]
+#import Run2012AData as InputFiles1
+#import Run2012BData as InputFiles2
+#process.source = InputFiles1.source
+#process.source.fileNames.extend(InputFiles2.readFiles)
 
 process.source.fileNames = [
-#    '/store/mc/Summer12_DR53X/T_tW-channel-DR_TuneZ2star_8TeV-powheg-tauola/AODSIM/PU_S10_START53_V7A-v1/0000/0024E066-2BEA-E111-B72F-001BFCDBD11E.root'
-#    '/store/mc/Summer12_DR53X/TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola/AODSIM/PU_S10_START53_V7A-v1/0000/FED775BD-B8E1-E111-8ED5-003048C69036.root',
-    #T2 at Belgium
-    #'/store/mc/Summer12_DR53X/TTJets_FullLeptMGDecays_8TeV-madgraph-tauola/AODSIM/PU_S10_START53_V7C-v2/10000/4085E811-F197-E211-8A95-002618943953.root',
-    #photon study
-    '/store/user/jdhondt/TTJetsTocHbW_HToGammaGamma_HctL_TuneZ2star_8TeV-madgraph-tauola_Summer12/TTJetsTocHbW_HToGammaGamma_HctL_TuneZ2star_8TeV-madgraph-tauola_Summer12/8132d4a0c87c4982c80015223c5f35f5/Hadronizer_MgmMatchTuneZ2star_8TeV_madgraph_tauola_tt_bWcH_cff_py_GEN_FASTSIM_HLT_PU_100_1_84J.root'
-    #data at CERN
-    #'/store/data/Run2012A/DoubleMu/AOD/22Jan2013-v1/30000/FEF469F7-0882-E211-8351-0026189438E6.root'
-    #AOD at eos  
-#    '/store/caf/user/tjkim/mc/Summer12_DR53X/DYJetsToLL_M-50_TuneZ2Star_8TeV-madgraph-tarball/AODSIM/PU_S10_START53_V7A-v1/0000/70300E2E-27D2-E111-92BD-001E67397AE4.root'
-#'file:DYToEE_53X_AODSIM.root'
+   'file://DYTOLL.root'
 ]
 
 # load the PAT config
@@ -106,8 +100,17 @@ from PhysicsTools.PatAlgos.tools.pfTools import *
 postfix = "PF2PAT"
 usePF2PAT(process,runPF2PAT=True, jetAlgo="AK5", runOnMC=runOnMC, postfix=postfix, pvCollection=cms.InputTag('goodOfflinePrimaryVertices'), typeIMetCorrections=True)
 
+
 # TOP projection
-process.pfIsolatedMuonsPF2PAT.isolationCut = cms.double(0.2)
+
+###Change this to 999 to remove iso cut
+#process.pfIsolatedMuonsPF2PAT.isolationCut = cms.double(0.2)
+process.pfIsolatedMuonsPF2PAT.isolationCut = 999
+getattr( process, 'pfMuonsFromVertex' + postfix ).d0Cut = cms.double(-1.0)
+getattr( process, 'pfMuonsFromVertex' + postfix ).dzCut = cms.double(-1.0)
+getattr( process, 'pfMuonsFromVertex' + postfix ).d0SigCut = cms.double(-1.0)
+getattr( process, 'pfMuonsFromVertex' + postfix ).dzSigCut = cms.double(-1.0)
+
 process.pfIsolatedMuonsPF2PAT.doDeltaBetaCorrection = True
 process.pfSelectedMuonsPF2PAT.cut = cms.string('pt > 10. && abs(eta) < 2.5')
 process.pfIsolatedMuonsPF2PAT.isolationValueMapsCharged = cms.VInputTag(cms.InputTag("muPFIsoValueCharged04PF2PAT"))
@@ -120,14 +123,31 @@ process.patMuonsPF2PAT.embedCaloMETMuonCorrs = False
 process.patMuonsPF2PAT.embedTcMETMuonCorrs= False
 
 print "process.pfIsolatedMuonsPF2PAT.isolationCut -> "+str(process.pfIsolatedMuonsPF2PAT.isolationCut)
+print "process.patMuonsPF2PAT.pfMuonSource -> "+str(process.patMuonsPF2PAT.pfMuonSource)
+
 
 # to use GsfElectrons instead of PF electrons
 # this will destory the feature of top projection which solves the ambiguity between leptons and jets because
 # there will be overlap between non-PF electrons and jets even though top projection is ON!
-useGsfElectrons(process,postfix,"03") # to change isolation cone size to 0.3 as it is recommended by EGM POG, use "04" for cone size 0.4
+#useGsfElectrons(process,postfix,"03") # to change isolation cone size to 0.3 as it is recommended by EGM POG, use "04" for cone size 0.4
 
+#disable useRecoMuon and use new function
 from TopBrussels.TopTreeProducer.Tools.tools import *
-useRecoMuon(process,postfix,"04")
+#useRecoMuon(process,postfix,"04")
+
+#actually it appears that pfMuons (i.e. pfIsolatedMuons clone without isolation) can be  used. See comment above
+muonSource = "pfMuonsPF2PAT"
+
+#use new function for muons in TopTreeProducer.Tools.tools
+useOtherMuonCollection(process,postfix,sourceMuons=muonSource,useParticleFlow=True, dR="04")
+
+
+#Anyway, print some info to check
+print "XXXX Some debug info"
+print "process.pfIsolatedMuonsPF2PAT.isolationCut -> "+str(process.pfIsolatedMuonsPF2PAT.isolationCut)
+print "process.patMuonsPF2PAT.pfMuonSource -> "+str(process.patMuonsPF2PAT.pfMuonSource)
+print "process.pfMuonsPF2PAT.isolationCut -> "+str(process.pfMuonsPF2PAT.isolationCut)
+print "process.muonmatchPF2PAT.src -> "+str(getattr(process,"muonMatch"+postfix).src)
 
 #process.pfIsolatedElectronsPF2PAT.isolationCut = cms.double(0.2)
 #process.pfIsolatedElectronsPF2PAT.doDeltaBetaCorrection = False
@@ -144,9 +164,32 @@ useRecoMuon(process,postfix,"04")
 #    pfPhotons = cms.InputTag("elPFIsoValueGamma03PFIdPF2PAT")
 #    )
 
+
+#Commented out use of gsf electrons. Adapting pf electrons:
+
+#from CommonTools.ParticleFlow.pfElectrons_cff  import *
+
+#process.patElectronsPF2PAT.pfElectronSource=cms.InputTag("pfElectrons" + postfix)
+
+#or could access isolation and disable it
+getattr(process,"pfIsolatedElectrons"+postfix).isolationCut = 999
+
+print "XXXX electron source:"
+print process.patElectronsPF2PAT.pfElectronSource
+print "YYYY isolation cut:"
+print process.pfElectronsPF2PAT.isolationCut
+
+getattr( process, 'pfElectronsFromVertex' + postfix ).d0Cut = cms.double(-1.0)
+getattr( process, 'pfElectronsFromVertex' + postfix ).dzCut = cms.double(-1.0)
+getattr( process, 'pfElectronsFromVertex' + postfix ).d0SigCut = cms.double(-1.0)
+getattr( process, 'pfElectronsFromVertex' + postfix ).dzSigCut = cms.double(-1.0)
+
 process.patElectronsPF2PAT.electronIDSources.mvaTrigV0    = cms.InputTag("mvaTrigV0")
 process.patElectronsPF2PAT.electronIDSources.mvaNonTrigV0 = cms.InputTag("mvaNonTrigV0") 
 process.patPF2PATSequencePF2PAT.replace( process.patElectronsPF2PAT, process.eidMVASequence * process.patElectronsPF2PAT )
+
+
+
 
 process.patJetCorrFactorsPF2PAT.payload = 'AK5PFchs'
 process.patJetCorrFactorsPF2PAT.levels = cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute'])
@@ -198,6 +241,9 @@ process.ak5GenJetsSeq = cms.Sequence(genParticlesForJetsNoMuNoNu*process.ak5GenJ
 ###############################
 #### Selections Setup #########
 ###############################
+
+
+
 
 # AK5 Jets
 #   PF
@@ -284,3 +330,4 @@ process.source.inputCommands = cms.untracked.vstring("keep *", "drop *_MEtoEDMCo
 from TopBrussels.TopTreeProducer.patEventContentTopTree_cff import patEventContentTopTree
 process.out.outputCommands = patEventContentTopTree  
 #process.out.outputCommands.append('keep *_selectedPatPhotons*_*_*')
+#process.out.outputCommands.append('keep *_pfSelectedElectronsLoose*_*_*')

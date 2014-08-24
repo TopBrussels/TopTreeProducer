@@ -89,7 +89,7 @@ void TopTreeProducer::beginJob()
 		TClonesArray* a;
 		velectrons.push_back(a);
 	}
- 
+	
         for(unsigned int s=0;s<vPhotonProducer.size();s++){
                 TClonesArray* a;
                 vphotons.push_back(a);
@@ -595,7 +595,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		  myElectronAnalyzer->Process(iEvent, velectrons[s], iSetup);
 		  delete myElectronAnalyzer;
 		}
-	}	
+	}
 
         // Photons
         if(doPhoton)
@@ -705,6 +705,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 			(*velectrons[s]).Delete();
 		}
 	}
+	
         if(doPhoton){
                 for(unsigned int s=0;s<vPhotonProducer.size();s++){
                         (*vphotons[s]).Delete();
