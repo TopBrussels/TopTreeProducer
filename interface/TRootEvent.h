@@ -23,24 +23,24 @@ namespace TopTree
 		Float_t eta;
 		Float_t phi;
                 // this is a virtual destructor:
-	        virtual ~triggeredObject(){ cout<<"Destroying triggeredObject";}
+	        virtual ~triggeredObject(){ }//cout<<"Destroying triggeredObject";}
 		ClassDef(triggeredObject,2);
 
 	};
 
-	
+
 	class TRootEvent : public TObject
 	{
-	
+
 	public:
-	
-		TRootEvent() : 
+
+		TRootEvent() :
 			nb_(0)
 			,eventId_(-1)
 			,runId_(-1)
 			,lumiBlockId_(-1)
 			,flavHistPath_(-1)
-			,kt6PFJets_rho_(-1)
+			,fixedGridRhoFastjetAll_(-1)
       			,kt6PFJetsForIsolation_rho_(-1)
 			,nTracks_(-1)
 			,nHighPurityTracks_(-1)
@@ -55,14 +55,19 @@ namespace TopTree
 			{;}
 
 		~TRootEvent() {;}
-	
+
 		// Event number
 		Int_t nb() const { return nb_; }
 		Int_t eventId() const { return eventId_; }
 		Int_t runId() const { return runId_; }
 		Int_t lumiBlockId() const {return lumiBlockId_; }
 		Int_t flavorHistoryPath() const { return flavHistPath_; }
-		double kt6PFJets_rho() const { return kt6PFJets_rho_; }
+		double fixedGridRhoAll() const { return fixedGridRhoAll_; }
+		double fixedGridRhoFastjetAll() const { return fixedGridRhoFastjetAll_; }
+		double fixedGridRhoFastjetAllCalo() const { return fixedGridRhoFastjetAllCalo_; }
+		double fixedGridRhoFastjetCentralCalo() const { return fixedGridRhoFastjetCentralCalo_; }
+		double fixedGridRhoFastjetCentralChargedPileUp() const { return fixedGridRhoFastjetCentralChargedPileUp_; }
+		double fixedGridRhoFastjetCentralNeutral() const { return fixedGridRhoFastjetCentralNeutral_; }
     		double kt6PFJetsForIsolation_rho() const { return kt6PFJetsForIsolation_rho_; }
 		// generalTracks infos (for cleaning of the scraping events)
 		Int_t nTracks() const { return nTracks_; }
@@ -78,7 +83,7 @@ namespace TopTree
 		{
 			if (trigHLT_.size()>i)
 			{
-				return trigHLT_.at(i); 
+				return trigHLT_.at(i);
 			}
 			else
 			{
@@ -86,7 +91,7 @@ namespace TopTree
 				return false;
 			}
 		}
-		
+
 		// PDF infos
 		// flavour first incoming parton
 		Int_t idParton1() const { return idParton1_; }
@@ -96,7 +101,7 @@ namespace TopTree
 		Int_t idParton2() const { return idParton2_; }
 		// energy fraction carried by first incoming parton
 		Float_t xParton2() const { return xParton2_; }
-		// Q-scale used in evaluation of PDF's (in GeV). 
+		// Q-scale used in evaluation of PDF's (in GeV).
 		Float_t factorizationScale() const { return factorizationScale_; }
 
 		std::map<std::string, std::vector<TopTree::triggeredObject> >  getTriggerFilters() const { return triggerFilters_;}
@@ -107,7 +112,12 @@ namespace TopTree
 		void setRunId(Int_t runId) { runId_ = runId; }
 		void setLumiBlockId(Int_t lumiBlockId) { lumiBlockId_ = lumiBlockId; }
 		void setflavorHistoryPath(Int_t flavHistPath) { flavHistPath_ = flavHistPath; }
-		void setKt6PFJets_rho(double kt6PFJets_rho) { kt6PFJets_rho_ = kt6PFJets_rho; }
+		void setfixedGridRhoAll(double fixedGridRhoAll) { fixedGridRhoAll_ = fixedGridRhoAll; }
+		void setfixedGridRhoFastjetAll(double fixedGridRhoFastjetAll) { fixedGridRhoFastjetAll_ = fixedGridRhoFastjetAll; }
+		void setfixedGridRhoFastjetAllCalo(double fixedGridRhoFastjetAllCalo) { fixedGridRhoFastjetAllCalo_ = fixedGridRhoFastjetAllCalo; }
+		void setfixedGridRhoFastjetCentralCalo(double fixedGridRhoFastjetCentralCalo) { fixedGridRhoFastjetCentralCalo_ = fixedGridRhoFastjetCentralCalo; }
+		void setfixedGridRhoFastjetCentralChargedPileUp(double fixedGridRhoFastjetCentralChargedPileUp) { fixedGridRhoFastjetCentralChargedPileUp_ = fixedGridRhoFastjetCentralChargedPileUp; }
+		void setfixedGridRhoFastjetCentralNeutral(double fixedGridRhoFastjetCentralNeutral) { fixedGridRhoFastjetCentralNeutral_ = fixedGridRhoFastjetCentralNeutral; }
 		void setKt6PFJetsForIsolation_rho(double kt6PFJetsForIsolation_rho) { kt6PFJetsForIsolation_rho_ = kt6PFJetsForIsolation_rho; }
 		void setNTracks(Int_t nTracks) { nTracks_ = nTracks; }
 		void setNPu(Int_t nBX, Int_t nPu) { nPu_[nBX] = nPu; }
@@ -135,7 +145,7 @@ namespace TopTree
 			object.phi = phi;
 			triggerFilters_[path].push_back(object);
 		}
-		
+
 		/*
 		// FIXME
 		friend std::ostream& operator<< (std::ostream& stream, const TRootEvent& event) {
@@ -143,22 +153,22 @@ namespace TopTree
 			return stream;
 		};
 		*/
-	
+
 	private:
-	
+
 		Int_t nb_;
 		Int_t eventId_;
 		Int_t runId_;
 		Int_t lumiBlockId_;
-		
+
 		Int_t flavHistPath_; // flavor history path, see https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideFlavorHistory
-		double kt6PFJets_rho_;
+		double fixedGridRhoAll_, fixedGridRhoFastjetAll_, fixedGridRhoFastjetAllCalo_, fixedGridRhoFastjetCentralCalo_, fixedGridRhoFastjetCentralChargedPileUp_, fixedGridRhoFastjetCentralNeutral_;
 		double kt6PFJetsForIsolation_rho_;
-		
+
 		// generalTracks infos (for cleaning of the scraping events)
 		Int_t nTracks_;
 		Int_t nHighPurityTracks_;
-		
+
 		// PileUp info
 		std::map<Int_t,Int_t> nPu_;
 		Float_t nTruePU_;

@@ -31,16 +31,19 @@ process.GlobalTag.globaltag = cms.string('PLS170_V6AN1::All')
 # pi0 discrimination variables
 #process.load("RecoEcal.EgammaClusterProducers.piZeroDiscriminators_cfi")
 
-process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(-1)
-)
+#process.maxEvents = cms.untracked.PSet(
+#    input = cms.untracked.int32(-1)
+#)
 
 #process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('file:miniAOD-prod_PAT_387.root'))
 
 #process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring('file:miniAOD-prod_PAT_387.root','file:miniAOD-prod_PAT_104.root','file:miniAOD-prod_PAT_105.root'))
 
 
-process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/mc/Spring14miniaod/TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU_S14_POSTLS170_V6-v1/00000/00080927-67FD-E311-B049-0025901D4854.root'))
+#process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/mc/Spring14miniaod/TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU_S14_POSTLS170_V6-v1/00000/00080927-67FD-E311-B049-0025901D4854.root'))
+
+#Test File for PU20bc25
+#process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/mc/Spring14miniaod/TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_POSTLS170_V5-v2/00000/004C6DA7-FB03-E411-96BD-0025905A497A.root'))
 
 #process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring('file:miniAOD-prod_PAT_104.root','file:miniAOD-prod_PAT_387.root','file:miniAOD-prod_PAT_105.root'))
 
@@ -48,9 +51,11 @@ process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring('roo
 
 #process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('dcap://maite.iihe.ac.be/pnfs/iihe/cms/store/user/keaveney/TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola/CSA14_test2/140706_140732/0000/miniAOD-prod_PAT_387.root'))
 
+#Python Fragment containing all PU20bx25 filenames through xrootd
+process.load("TopBrussels.TopTreeProducer.miniAODTTbar_PU20bx25_files_cfi")
 
-
-
+#Python Fragment containing all PU40bx50 filenames through xrootd
+#process.load("TopBrussels.TopTreeProducer.miniAODTTbar_PU40bx50_files_cfi")
 
 
 # reduce verbosity
@@ -63,7 +68,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
  		# 		1 = Number of evt every 100 evts
  		# 		2 = Give the functions executed & nof objects build per event
  		# 		3 = Liste of high level objects (jetss, muons, ...)
- 		# 		4 = List of all  objects 
+ 		# 		4 = List of all  objects
 		# 		5 = Debug
  		verbosity = cms.untracked.int32(0),
 
@@ -73,7 +78,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		# name of output root file
 		RootFileName = cms.untracked.string("TOPTREE.root"),
 
-		# What is written to rootuple		    
+		# What is written to rootuple
 		doHLT = cms.untracked.bool(False),
 		doMC = cms.untracked.bool(True),
 		doPDFInfo = cms.untracked.bool(True),
@@ -107,7 +112,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		doSpinCorrGen = cms.untracked.bool(False),#put on True only if you need SpinCorrelation Variables
         	doLHEEventProd = cms.untracked.bool(False),#put on True only if you need SpinCorrelation Variables
 		doSemiLepEvent = cms.untracked.bool(False),#put on True only if you need TtSemiLeptonicEvent Collection exist in PAT-uples (L2)
-                
+
 		conversionLikelihoodWeightsFile = cms.untracked.string('RecoEgamma/EgammaTools/data/TMVAnalysis_Likelihood.weights.txt'),
 
 
@@ -121,7 +126,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		mcTreePrintIndex = cms.untracked.bool(False),
 		mcTreeStatus = cms.untracked.vint32( 3 ),	# accepted status codes
 
-	
+
 		# MC particles acceptance cuts
 		electronMC_etaMax = cms.double(3.0),
 		electronMC_ptMin = cms.double(2.0),
@@ -154,6 +159,8 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		generalTrackLabel = cms.InputTag("generalTracks")
 	)
 )
+
+#process.TFileService = cms.Service("TFileService", fileName = cms.string('TFileTOPTREE.root') )
 
 process.p = cms.Path(process.analysis)
 temp = process.dumpPython()
