@@ -5,239 +5,229 @@ using namespace TopTree;
 using namespace reco;
 using namespace edm;
 
-GenJetAnalyzer::GenJetAnalyzer(const edm::ParameterSet& producersNames):verbosity_(0)
-{
-	genJetProducer_ = producersNames.getParameter<edm::InputTag>("genJetProducer");
-}
+GenJetAnalyzer::GenJetAnalyzer(const edm::ParameterSet& producersNames):verbosity_(0) {
+    genJetProducer_ = producersNames.getParameter<edm::InputTag>("genJetProducer");
+    }
 
-GenJetAnalyzer::GenJetAnalyzer(const edm::ParameterSet& producersNames, int verbosity):verbosity_(verbosity)
-{
-	genJetProducer_ = producersNames.getParameter<edm::InputTag>("genJetProducer");
-}
+GenJetAnalyzer::GenJetAnalyzer(const edm::ParameterSet& producersNames, int verbosity):verbosity_(verbosity) {
+    genJetProducer_ = producersNames.getParameter<edm::InputTag>("genJetProducer");
+    }
 
-GenJetAnalyzer::GenJetAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
-{
-	genJetProducer_ = producersNames.getParameter<edm::InputTag>("genJetProducer");
-}
+GenJetAnalyzer::GenJetAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity) {
+    genJetProducer_ = producersNames.getParameter<edm::InputTag>("genJetProducer");
+    }
 
-GenJetAnalyzer::GenJetAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
-{
-	vGenJetProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("vgenJetProducer");
-	genJetProducer_ = edm::InputTag(vGenJetProducer[iter]);
-}
+GenJetAnalyzer::GenJetAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity) {
+    vGenJetProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("vgenJetProducer");
+    genJetProducer_ = edm::InputTag(vGenJetProducer[iter]);
+    }
 
-GenJetAnalyzer::~GenJetAnalyzer()
-{
-}
+GenJetAnalyzer::~GenJetAnalyzer() {
+    }
 
-void GenJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenJets)
-{
+void GenJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenJets) {
 
-  // cout << "Analysing GenJets collection ...GJA 1 " << endl;
-	// check if the genJet is of the good type
-	std::string jetType = "BASIC";
-	if( genJetProducer_.label()=="kt4GenJets" || genJetProducer_.label()=="kt6GenJets" || genJetProducer_.label()=="ak5GenJets"
-	    || genJetProducer_.label()=="ak7GenJets" || genJetProducer_.label()=="ak5GenJetsNoE" || genJetProducer_.label()=="ak5GenJetsNoNu" || genJetProducer_.label()=="ak5GenJetsNoMuNoNu" || genJetProducer_.label()== "slimmedGenJets") jetType="GOOD";
-     
-	edm::Handle < edm::View <reco::GenJet> > recoGenJets;
-	iEvent.getByLabel(genJetProducer_, recoGenJets);
-	
-	unsigned int nJets = recoGenJets->size();
-	//	cout << "Analysing GenJets collection ...GJ size = " << nJets  <<endl;
+    // cout << "Analysing GenJets collection ...GJA 1 " << endl;
+    // check if the genJet is of the good type
+    std::string jetType = "BASIC";
+    if( genJetProducer_.label()=="kt4GenJets" || genJetProducer_.label()=="kt6GenJets" || genJetProducer_.label()=="ak5GenJets"
+            || genJetProducer_.label()=="ak7GenJets" || genJetProducer_.label()=="ak5GenJetsNoE" || genJetProducer_.label()=="ak5GenJetsNoNu" || genJetProducer_.label()=="ak5GenJetsNoMuNoNu" || genJetProducer_.label()== "slimmedGenJets") jetType="GOOD";
 
-	if(verbosity_>1) std::cout << "   Number of jets = " << nJets << "   Label: " << genJetProducer_.label() << "   Instance: " << genJetProducer_.instance() << std::endl;
+    edm::Handle < std::vector <reco::GenJet> > recoGenJets;
+//	edm::Handle < edm::View <reco::GenJet> > recoGenJets;
+    iEvent.getByLabel(genJetProducer_, recoGenJets);
 
-	for (unsigned int j=0; j<nJets; j++)
-	{
+    unsigned int nJets = recoGenJets->size();
+    //	cout << "Analysing GenJets collection ...GJ size = " << nJets  <<endl;
 
-	  	if(verbosity_>4)	cout << "Analysing GenJets collection ...looping = " << j  <<endl;
-		const reco::GenJet* genJet = 0;	
-	      	if( jetType=="GOOD" ) genJet = (const reco::GenJet*) ( & ((*recoGenJets)[j]) );
-			
+    if(verbosity_>1) std::cout << "   Number of jets = " << nJets << "   Label: " << genJetProducer_.label() << "   Instance: " << genJetProducer_.instance() << std::endl;
 
-		// Call JetAnalyzer to fill the basic Jet Properties
+    for (unsigned int j=0; j<nJets; j++) {
+
+        if(verbosity_>4)	cout << "Analysing GenJets collection ...looping = " << j  <<endl;
+        const reco::GenJet* genJet = 0;
+        if( jetType=="GOOD" ) genJet = (const reco::GenJet*) ( & ((*recoGenJets)[j]) );
+
+
+        // Call JetAnalyzer to fill the basic Jet Properties
 //		TRootJet tempJet = (TRootJet) myJetAnalyzer->Process( &( *(genJet) ));
 
-		TRootGenJet localGenJet(
-			genJet->px()
-			,genJet->py()
-			,genJet->pz()
-			,genJet->energy()
-			,genJet->vx()
-			,genJet->vy()
-			,genJet->vz()
-			,genJet->pdgId()
-			,genJet->charge()
-		);
+        TRootGenJet localGenJet(
+            genJet->px()
+            ,genJet->py()
+            ,genJet->pz()
+            ,genJet->energy()
+            ,genJet->vx()
+            ,genJet->vy()
+            ,genJet->vz()
+            ,genJet->pdgId()
+            ,genJet->charge()
+        );
 
-		localGenJet.setNConstituents(genJet->nConstituents());
-		localGenJet.setMaxDistance(genJet->maxDistance());
-		localGenJet.setN90(genJet->nCarrying(0.9));
-		localGenJet.setN60(genJet->nCarrying(0.6));
-		localGenJet.setetaetaMoment(genJet->etaetaMoment());
-		localGenJet.setphiphiMoment(genJet->phiphiMoment());
-		localGenJet.setEMEnergy(genJet->emEnergy());
-		localGenJet.setHadEnergy(genJet->hadEnergy());
-		localGenJet.setInvisibleEnergy(genJet->invisibleEnergy());
+        localGenJet.setNConstituents(genJet->nConstituents());
+        localGenJet.setMaxDistance(genJet->maxDistance());
+        localGenJet.setN90(genJet->nCarrying(0.9));
+        localGenJet.setN60(genJet->nCarrying(0.6));
+        localGenJet.setetaetaMoment(genJet->etaetaMoment());
+        localGenJet.setphiphiMoment(genJet->phiphiMoment());
+        localGenJet.setEMEnergy(genJet->emEnergy());
+        localGenJet.setHadEnergy(genJet->hadEnergy());
+        localGenJet.setInvisibleEnergy(genJet->invisibleEnergy());
 
-		//	cout << "Analysing GenJets collection ...looping filled kineamtics " << j  <<endl;
-                bool isBHadron = false;
-                bool isCHadron = false;
-                TRootMCParticle BHad;
-                TRootMCParticle CHad;
+        //	cout << "Analysing GenJets collection ...looping filled kineamtics " << j  <<endl;
+        bool isBHadron = false;
+        bool isCHadron = false;
+        TRootMCParticle BHad;
+        TRootMCParticle CHad;
 
 
-                std::vector <const reco::GenParticle*> mcparts = genJet->getGenConstituents();
+        std::vector <const reco::GenParticle*> mcparts = genJet->getGenConstituents();
 
-		//		cout << "Analysing GenJets collection ...gen constituents..." << mcparts.size()   <<endl;
-                for (unsigned i = 0; i < mcparts.size (); i++) {
-                  const GenParticle* mcpart = mcparts[i];
-                  const reco::Candidate* lastB = lastBHadron(*mcpart);
-                  if( lastB ) {
-                    isBHadron = true;
-                    TRootMCParticle tmp( lastB->px(), lastB->py(), lastB->pz(), lastB->energy() );
-                    BHad = tmp;
-                    break;
-                  }
+//        		cout << "Analysing GenJets collection ...gen constituents..." << mcparts.size()   <<endl;
+        for (unsigned i = 0; i < mcparts.size (); i++) {
+            const GenParticle* mcpart = mcparts[i];
+            const reco::Candidate* lastB = lastBHadron(*mcpart);
+            if( lastB ) {
+                isBHadron = true;
+                TRootMCParticle tmp( lastB->px(), lastB->py(), lastB->pz(), lastB->energy() );
+                BHad = tmp;
+                break;
                 }
+            }
 
-                for (unsigned i = 0; i < mcparts.size (); i++) {
-                  if( isBHadron ) break; //no need to loop over again, this is b-jet!
-                  const GenParticle* mcpart = mcparts[i];
-                  const reco::Candidate* lastC = lastCHadron(*mcpart);
-                  if( lastC ) {
-                    isCHadron = true;
-                    TRootMCParticle tmp( lastC->px(), lastC->py(), lastC->pz(), lastC->energy() );
-                    CHad = tmp;
-                    break;
-                  }
+        for (unsigned i = 0; i < mcparts.size (); i++) {
+            if( isBHadron ) break; //no need to loop over again, this is b-jet!
+            const GenParticle* mcpart = mcparts[i];
+            const reco::Candidate* lastC = lastCHadron(*mcpart);
+            if( lastC ) {
+                isCHadron = true;
+                TRootMCParticle tmp( lastC->px(), lastC->py(), lastC->pz(), lastC->energy() );
+                CHad = tmp;
+                break;
                 }
-                 
-                if( isBHadron ) localGenJet.setBHadron(BHad); //if B-Hadron matched, always assign B-Hadron
-                if( isCHadron ) localGenJet.setCHadron(CHad); //if only no B-Hadron matched, assign C-Hadron
-                
-	if(verbosity_>4)	cout << "Analysing GenJets collection ...set hadrons"  <<endl;
+            }
+        if(verbosity_>4)	cout << "B Hadron? : " << isBHadron <<endl;
+        if( isBHadron ) localGenJet.setBHadron(BHad); //if B-Hadron matched, always assign B-Hadron
+        else localGenJet.setBHadron(TRootMCParticle());
+        if(verbosity_>4)	cout << "C Hadron? : " << isCHadron <<endl;
+        if( isCHadron ) localGenJet.setCHadron(CHad); //if only no B-Hadron matched, assign C-Hadron
+        else localGenJet.setCHadron(TRootMCParticle());
 
-		//	cout << "Analysing GenJets collection ...checked hadrons. " << j  <<endl;
+        if(verbosity_>4)	cout << "Analysing GenJets collection ...set hadrons"  <<endl;
 
-	if(verbosity_>4)	cout << "Analysing GenJets collection ...checked hadrons. " << localGenJet.Px()  <<" "<< localGenJet.Py()  <<"  "  << localGenJet.Pt() <<" size GJ : "<<  (sizeof(rootGenJets))  << endl;
-		 new( (*rootGenJets)[j] ) TRootGenJet(localGenJet);
+        //	cout << "Analysing GenJets collection ...checked hadrons. " << j  <<endl;
 
-          	if(verbosity_>4)	cout << "Analysing GenJets colloction wrote genjet"  <<endl;
+        if(verbosity_>4)	cout << "Analysing GenJets collection ...checked hadrons. " << localGenJet.Px()  <<" "<< localGenJet.Py()  <<"  "  << localGenJet.Pt() <<" size GJ : "<<  (sizeof(rootGenJets))  << endl;
+        if(verbosity_>4){
+            TRootGenJet testjet(localGenJet);
+            cout << "Checking Copy Constructor of TRootGenJet" << endl;
+        }
+        new ((*rootGenJets)[j]) TRootGenJet(localGenJet);
+
+        if(verbosity_>4)	cout << "Analysing GenJets colloction wrote genjet"  <<endl;
 
 
-       
 
-		 //	new( (*rootGenJets)[j] ) TRootGenJet(localGenJet);
 
-		 //	cout << "Analysing GenJets collection ..made new genjet " << j  <<endl;
-		if(verbosity_>2) cout << "   ["<< setw(3) << j << "] " << localGenJet << endl;
-	}
-}
+        //	new( (*rootGenJets)[j] ) TRootGenJet(localGenJet);
 
-std::vector<const reco::Candidate *> GenJetAnalyzer::getAncestors(const reco::Candidate &c)
-{
-  vector<const reco::Candidate *> moms;
-  if( c.numberOfMothers() == 1 ) {
-    const Candidate * dau = &c;
-    const Candidate * mom = c.mother();
-    while ( dau->numberOfMothers() == 1) {
-      moms.push_back( dau );
-      dau = mom ;
-      mom = dau->mother();
+        //	cout << "Analysing GenJets collection ..made new genjet " << j  <<endl;
+        if(verbosity_>2) cout << "   ["<< setw(3) << j << "] " << localGenJet << endl;
+        }
     }
-  }
-  return moms;
-}
 
-bool GenJetAnalyzer::hasBottom(const reco::Candidate &c)
-{
-  int code1;
-  int code2;
-  bool tmpHasBottom = false;
-  code1 = (int)( ( abs(c.pdgId() ) / 100)%10 );
-  code2 = (int)( ( abs(c.pdgId() ) /1000)%10 );
-  if ( code1 == 5 || code2 == 5) tmpHasBottom = true;
-  return tmpHasBottom;
-}
+std::vector<const reco::Candidate *> GenJetAnalyzer::getAncestors(const reco::Candidate &c) {
+    vector<const reco::Candidate *> moms;
+    if( c.numberOfMothers() == 1 ) {
+        const Candidate * dau = &c;
+        const Candidate * mom = c.mother();
+        while ( dau->numberOfMothers() == 1) {
+            moms.push_back( dau );
+            dau = mom ;
+            mom = dau->mother();
+            }
+        }
+    return moms;
+    }
 
-bool GenJetAnalyzer::hasCharm(const reco::Candidate &c)
-{
-  int code1;
-  int code2;
-  bool tmpHasCharm = false;
-  code1 = (int)( ( abs(c.pdgId() ) / 100)%10 );
-  code2 = (int)( ( abs(c.pdgId() ) /1000)%10 );
-  if ( code1 == 4 || code2 == 4) tmpHasCharm = true;
-  return tmpHasCharm;
-}
+bool GenJetAnalyzer::hasBottom(const reco::Candidate &c) {
+    int code1;
+    int code2;
+    bool tmpHasBottom = false;
+    code1 = (int)( ( abs(c.pdgId() ) / 100)%10 );
+    code2 = (int)( ( abs(c.pdgId() ) /1000)%10 );
+    if ( code1 == 5 || code2 == 5) tmpHasBottom = true;
+    return tmpHasBottom;
+    }
 
-bool GenJetAnalyzer::decayFromBHadron(const Candidate & c)
-{
-   bool isFromB = false;
-   vector<const Candidate *> allParents = getAncestors( c );
-   for( vector<const Candidate *>::const_iterator aParent = allParents.begin();
-                                                  aParent != allParents.end();
-                                                  aParent ++ )
-     {
-         if( hasBottom(**aParent) ) isFromB = true;
-/*
- cout << " particle Parent is " << (*aParent)->status()
- << " type " << (*aParent)->pdgId()
- << " pt= " << (*aParent)->pt()
- << " isB = " << isFromB
- << endl;
-*/
-     }
-   return isFromB;
-}
+bool GenJetAnalyzer::hasCharm(const reco::Candidate &c) {
+    int code1;
+    int code2;
+    bool tmpHasCharm = false;
+    code1 = (int)( ( abs(c.pdgId() ) / 100)%10 );
+    code2 = (int)( ( abs(c.pdgId() ) /1000)%10 );
+    if ( code1 == 4 || code2 == 4) tmpHasCharm = true;
+    return tmpHasCharm;
+    }
 
-bool GenJetAnalyzer::decayFromCHadron(const Candidate & c)
-{
-  bool isFromC = false;
-  vector<const Candidate *> allParents = getAncestors( c );
-  for( vector<const Candidate *>::const_iterator aParent = allParents.begin();
-                                                 aParent != allParents.end();
-                                                 aParent ++ )
-  {
-    if( hasCharm(**aParent) ) isFromC = true;
-/*
-cout << " particle Parent is " << (*aParent)->status()
-<< " type " << (*aParent)->pdgId()
-<< " pt=" << (*aParent)->pt()
-<< " isC = " << isFromC
-<< endl;
-*/
-   }
-   return isFromC;
-}
+bool GenJetAnalyzer::decayFromBHadron(const Candidate & c) {
+    bool isFromB = false;
+    vector<const Candidate *> allParents = getAncestors( c );
+    for( vector<const Candidate *>::const_iterator aParent = allParents.begin();
+            aParent != allParents.end();
+            aParent ++ ) {
+        if( hasBottom(**aParent) ) isFromB = true;
+        /*
+         cout << " particle Parent is " << (*aParent)->status()
+         << " type " << (*aParent)->pdgId()
+         << " pt= " << (*aParent)->pt()
+         << " isB = " << isFromB
+         << endl;
+        */
+        }
+    return isFromB;
+    }
 
-const Candidate* GenJetAnalyzer::lastBHadron(const Candidate & c)
-{
-   const Candidate * out = 0;
-   
-   vector<const Candidate *> allParents = getAncestors( c );
-   for( vector<const Candidate *>::const_iterator aParent = allParents.begin();
-                                                  aParent != allParents.end();
-                                                  aParent ++ )
-     {
-         if( hasBottom(**aParent) ) out = *aParent;
-         
-     }
-   return out;
-}
+bool GenJetAnalyzer::decayFromCHadron(const Candidate & c) {
+    bool isFromC = false;
+    vector<const Candidate *> allParents = getAncestors( c );
+    for( vector<const Candidate *>::const_iterator aParent = allParents.begin();
+            aParent != allParents.end();
+            aParent ++ ) {
+        if( hasCharm(**aParent) ) isFromC = true;
+        /*
+        cout << " particle Parent is " << (*aParent)->status()
+        << " type " << (*aParent)->pdgId()
+        << " pt=" << (*aParent)->pt()
+        << " isC = " << isFromC
+        << endl;
+        */
+        }
+    return isFromC;
+    }
 
-const Candidate* GenJetAnalyzer::lastCHadron(const Candidate & c)
-{
-   const Candidate * out = 0;
+const Candidate* GenJetAnalyzer::lastBHadron(const Candidate & c) {
+    const Candidate * out = 0;
 
-   vector<const Candidate *> allParents = getAncestors( c );
-   for( vector<const Candidate *>::const_iterator aParent = allParents.begin();
-                                                  aParent != allParents.end();
-                                                  aParent ++ )
-     {
-         if( hasCharm(**aParent) ) out = *aParent;
+    vector<const Candidate *> allParents = getAncestors( c );
+    for( vector<const Candidate *>::const_iterator aParent = allParents.begin();
+            aParent != allParents.end();
+            aParent ++ ) {
+        if( hasBottom(**aParent) ) out = *aParent;
 
-     }
-   return out;
-}
+        }
+    return out;
+    }
+
+const Candidate* GenJetAnalyzer::lastCHadron(const Candidate & c) {
+    const Candidate * out = 0;
+
+    vector<const Candidate *> allParents = getAncestors( c );
+    for( vector<const Candidate *>::const_iterator aParent = allParents.begin();
+            aParent != allParents.end();
+            aParent ++ ) {
+        if( hasCharm(**aParent) ) out = *aParent;
+
+        }
+    return out;
+    }

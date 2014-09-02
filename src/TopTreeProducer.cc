@@ -163,10 +163,10 @@ void TopTreeProducer::beginJob() {
             }
         }
 
-    if(!isRealData_ && doGenJet) {
+    if(doGenJet) {
         if(verbosity>0) cout << "GenJets info will be added to rootuple (for GenJetStudy)" << endl;
         for(unsigned int s=0; s<vGenJetProducer.size(); s++) {
-            vgenJets[s] = new TClonesArray("TopTree::TRootGenJet", 1000);
+            vgenJets[s] = new TClonesArray("TopTree::TRootGenJet", 2000);
             char name[100];
             sprintf(name,"GenJets_%s",vGenJetProducer[s].c_str());
             eventTree_->Branch (name, "TClonesArray", &vgenJets[s]);

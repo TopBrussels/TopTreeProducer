@@ -27,7 +27,7 @@ public:
 	GenJetAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity);
 	~GenJetAnalyzer();
 	void SetVerbosity(int verbosity) { verbosity_ = verbosity; };
-	void Process(const edm::Event& iEvent, TClonesArray* rootGenJets);
+	void Process(const edm::Event& iEvent, TClonesArray * rootGenJets);
 
 private:
 	int verbosity_;
