@@ -763,5 +763,5 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
     if(doNPGenEvent) (*NPgenEvent).Delete();
     if(doSpinCorrGen) (*spinCorrGen).Delete();
     if(doPrimaryVertex) (*primaryVertex).Delete();
-    if(verbosity>0) cout << endl;
+//    if(verbosity>0) cout << endl;
     }

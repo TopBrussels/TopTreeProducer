@@ -126,7 +126,7 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
     if ( gsfTrack.isNonnull() )
     {
       localElectron.setGsfTrackNormalizedChi2(gsfTrack->normalizedChi2());
-      localElectron.setTrackMissingHits(gsfTrack->trackerExpectedHitsInner().numberOfHits());
+      localElectron.setTrackMissingHits(gsfTrack->numberOfLostHits());
       localElectron.setGsfTrackChi2(gsfTrack->chi2());
       localElectron.setGsfTrackNdof(gsfTrack->ndof());
 

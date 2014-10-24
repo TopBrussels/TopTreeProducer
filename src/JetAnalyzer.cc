@@ -25,7 +25,7 @@ JetAnalyzer::~JetAnalyzer()
 
 bool Rsortrule (std::pair <double,double> p1, std::pair <double,double> p2 )
 {
-	return p1.second<p2.second; 
+	return p1.second<p2.second;
 }
 
 TRootJet JetAnalyzer::Process(const reco::Jet* jet, const edm::EventSetup& iSetup)
@@ -40,7 +40,7 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet, const edm::EventSetup& iSetu
 		,jet->vz()
 		,jet->pdgId()
 		,jet->charge()
-	); 
+	);
 
 	// Some specific methods to pat::Jet
 	const pat::Jet *patJet = dynamic_cast<const pat::Jet*>(&*jet);
@@ -48,7 +48,7 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet, const edm::EventSetup& iSetu
 	localJet.setNConstituents(jet->nConstituents());
 	localJet.setJetArea(jet->jetArea()); // needs to be calculated with fastjet, not yet done in the standard cfg's
 	localJet.setMaxDistance(jet->maxDistance());
-	
+
 	// Variables from pat::Jet (Basic)
 	localJet.setBtag_jetBProbabilityBJetTags(patJet->bDiscriminator("jetBProbabilityBJetTags"));
 	localJet.setBtag_jetProbabilityBJetTags(patJet->bDiscriminator("jetProbabilityBJetTags"));
@@ -57,6 +57,7 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet, const edm::EventSetup& iSetu
 	localJet.setBtag_simpleSecondaryVertexHighEffBJetTags(patJet->bDiscriminator("simpleSecondaryVertexHighEffBJetTags"));
 	localJet.setBtag_simpleSecondaryVertexHighPurBJetTags(patJet->bDiscriminator("simpleSecondaryVertexHighPurBJetTags"));
 	localJet.setBtag_combinedSecondaryVertexBJetTags(patJet->bDiscriminator("combinedSecondaryVertexBJetTags"));
+	localJet.setBtag_combinedInclusiveSecondaryVertexV2BJetTags(patJet->bDiscriminator("combinedInclusiveSecondaryVertexV2BJetTags"));
 	localJet.setBtag_combinedSecondaryVertexRetrainedBJetTags(patJet->bDiscriminator("combinedSecondaryVertexRetrainedBJetTags"));
 	localJet.setBtag_combinedSecondaryVertexMVABJetTags(patJet->bDiscriminator("combinedSecondaryVertexMVABJetTags"));
 	localJet.setBtag_softMuonBJetTags(patJet->bDiscriminator("softMuonBJetTags"));
@@ -72,7 +73,7 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet, const edm::EventSetup& iSetu
         localJet.setpuID(patJet->userFloat("pileupJetId:fullDiscriminant"));
 	//cout << "CSV old, new: " << patJet->bDiscriminator("combinedSecondaryVertexBJetTags") << ", " << patJet->bDiscriminator("combinedSecondaryVertexRetrainedBJetTags") << endl;
 
-// comment out the whole b-tag scale factor setup from DB below for now	
+// comment out the whole b-tag scale factor setup from DB below for now
 /*
   // Save b-tag scalefactor information for each tagger
   ///////////////////////////////
@@ -92,7 +93,7 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet, const edm::EventSetup& iSetu
 
   std::vector<std::string> measureName;
   std::vector<std::string> measureType;
-  
+
   // Define which Btag and Mistag algorithm you want to use. These are not user defined and need to be exact
   measureName.push_back("MISTAGTCHEL");  measureName.push_back("BTAGTCHEL");  measureName.push_back("MISTAGTCHEL");  measureName.push_back("BTAGTCHEL");
   measureName.push_back("MISTAGTCHEM");  measureName.push_back("BTAGTCHEM");  measureName.push_back("MISTAGTCHEM");  measureName.push_back("BTAGTCHEM");
@@ -123,13 +124,13 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet, const edm::EventSetup& iSetu
   measureType.push_back("BTAGLEFFCORR");  measureType.push_back("BTAGBEFFCORR");  measureType.push_back("BTAGLERRCORR");	 measureType.push_back("BTAGBERRCORR");
   measureType.push_back("BTAGLEFFCORR");  measureType.push_back("BTAGBEFFCORR");  measureType.push_back("BTAGLERRCORR");	 measureType.push_back("BTAGBERRCORR");
   measureType.push_back("BTAGLEFFCORR");  measureType.push_back("BTAGBEFFCORR");  measureType.push_back("BTAGLERRCORR");	 measureType.push_back("BTAGBERRCORR");
-		
-  // These are user defined maps that we will use to store the SF 
+
+  // These are user defined maps that we will use to store the SF
   std::map<std::string,float> MISTAG_SF;
   std::map<std::string,float> BTAG_SF;
   std::map<std::string,float> MISTAG_SFerr;
   std::map<std::string,float> BTAG_SFerr;
-	
+
   ///////////////////////////////
   ///   End DB setup
   ///////////////////////////////
@@ -149,7 +150,7 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet, const edm::EventSetup& iSetu
 
     //Working point
     //std::cout << "Working point: " << perf.workingPoint().cut() << std::endl;
-		
+
     //Setup the point we wish to test!
     BinningPointByMap measurePoint;
     measurePoint.reset();
@@ -159,7 +160,7 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet, const edm::EventSetup& iSetu
     std::string suffix = "_"+measureType[iMeasure];
     //std::cout << "measureType = " << suffix << endl;
     //std::cout << measureName[ iMeasure ] + suffix << endl;
-    if(measureType[iMeasure] == "BTAGLEFFCORR"){					
+    if(measureType[iMeasure] == "BTAGLEFFCORR"){
       //std::cout << "mistag_SF " << perf.getResult( measureMap[ measureType[ iMeasure] ], measurePoint) << endl;
       MISTAG_SF[ measureName[ iMeasure ] + suffix ] = perf.getResult( measureMap[ measureType[ iMeasure] ], measurePoint);
     }else if(measureType[iMeasure] == "BTAGBEFFCORR"){
@@ -178,28 +179,28 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet, const edm::EventSetup& iSetu
   //for(std::map<std::string,float>::const_iterator it = MISTAG_SF.begin(); it != MISTAG_SF.end(); it++) {
   //	cout << "for " << it->first << " the mistag scalefactor is " << it->second << endl;
   //}
-	
+
   localJet.setMistag_SF(MISTAG_SF);
   localJet.setBtag_SF(BTAG_SF);
   localJet.setMistag_SFerr(MISTAG_SFerr);
   localJet.setBtag_SFerr(BTAG_SFerr);
-	
-	
+
+
   //////////////////// end of saving b-tagging information
 */
-	
-	
+
+
 	// jet correction factors
 	std::vector< std::string > jecLevels = patJet->availableJECLevels();
-	
+
 	pat::Jet rawJet = patJet->correctedJet("Uncorrected");
-	
+
 	localJet.setJetCorrFactor(0,jecLevels[1],rawJet.jecFactor(jecLevels[1]));
 	localJet.setJetCorrFactor(1,jecLevels[1]+"L2",rawJet.jecFactor("L2Relative"));
 	localJet.setJetCorrFactor(2,jecLevels[1]+"L2L3",rawJet.jecFactor("L3Absolute"));
 	if(jecLevels.size() > 4 && jecLevels[4] == "L2L3Residual" )
 		localJet.setJetCorrFactor(3,jecLevels[1]+"L2L3L23Residual",rawJet.jecFactor("L2L3Residual"));
-		
+
 	// Matched genParticle
 	if (useMC_)
 	{

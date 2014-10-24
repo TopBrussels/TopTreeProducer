@@ -74,7 +74,7 @@ void GenJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenJets
         localGenJet.setHadEnergy(genJet->hadEnergy());
         localGenJet.setInvisibleEnergy(genJet->invisibleEnergy());
 
-        //	cout << "Analysing GenJets collection ...looping filled kineamtics " << j  <<endl;
+        if(verbosity_>4)	cout << "Analysing GenJets collection ...looping Filled Kinematics= " << j  <<endl;
         bool isBHadron = false;
         bool isCHadron = false;
         TRootMCParticle BHad;
@@ -83,7 +83,7 @@ void GenJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenJets
 
         std::vector <const reco::GenParticle*> mcparts = genJet->getGenConstituents();
 
-//        		cout << "Analysing GenJets collection ...gen constituents..." << mcparts.size()   <<endl;
+if(verbosity_>4)	cout << "Analysing GenJets collection ...Constituates Loaded = " << j  <<endl;
         for (unsigned i = 0; i < mcparts.size (); i++) {
             const GenParticle* mcpart = mcparts[i];
             const reco::Candidate* lastB = lastBHadron(*mcpart);

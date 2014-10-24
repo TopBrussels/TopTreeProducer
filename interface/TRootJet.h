@@ -19,7 +19,7 @@ namespace TopTree
 {
 	class TRootJet : public TRootParticle
 	{
-	
+
 	public:
 		TRootJet() :
 			TRootParticle()
@@ -34,6 +34,7 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighEffBJetTags_(-9999.)
 			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexBJetTags_(-9999.)
+			,btag_combinedInclusiveSecondaryVertexV2BJetTags_(-9999.)
 			,btag_combinedSecondaryVertexRetrainedBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
 			,btag_softMuonBJetTags_(-9999.)
@@ -50,7 +51,7 @@ namespace TopTree
 			,isTopJet_(false)
                         ,puID_(-9999.)
 			{;}
-	
+
 		TRootJet(const TRootJet& jet) :
 			TRootParticle(jet)
 			,jetType_(jet.jetType_)
@@ -64,6 +65,7 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighEffBJetTags_(jet.btag_simpleSecondaryVertexHighEffBJetTags_)
 			,btag_simpleSecondaryVertexHighPurBJetTags_(jet.btag_simpleSecondaryVertexHighPurBJetTags_)
 			,btag_combinedSecondaryVertexBJetTags_(jet.btag_combinedSecondaryVertexBJetTags_)
+			,btag_combinedInclusiveSecondaryVertexV2BJetTags_(jet.btag_combinedInclusiveSecondaryVertexV2BJetTags_)
 			,btag_combinedSecondaryVertexRetrainedBJetTags_(jet.btag_combinedSecondaryVertexRetrainedBJetTags_)
 			,btag_combinedSecondaryVertexMVABJetTags_(jet.btag_combinedSecondaryVertexMVABJetTags_)
 			,btag_softMuonBJetTags_(jet.btag_softMuonBJetTags_)
@@ -113,6 +115,7 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighEffBJetTags_(-9999.)
 			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexBJetTags_(-9999.)
+			,btag_combinedInclusiveSecondaryVertexV2BJetTags_(-9999.)
 			,btag_combinedSecondaryVertexRetrainedBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
 			,btag_softMuonBJetTags_(-9999.)
@@ -129,7 +132,7 @@ namespace TopTree
 			,isTopJet_(false)
                         ,puID_(-9999.)
 			{;}
-	
+
 		TRootJet(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z) :
 			TRootParticle(px,py,pz,e,vtx_x,vtx_y,vtx_z)
 			,jetType_(0)
@@ -143,6 +146,7 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighEffBJetTags_(-9999.)
 			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexBJetTags_(-9999.)
+			,btag_combinedInclusiveSecondaryVertexV2BJetTags_(-9999.)
 			,btag_combinedSecondaryVertexRetrainedBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
 			,btag_softMuonBJetTags_(-9999.)
@@ -173,6 +177,7 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighEffBJetTags_(-9999.)
 			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexBJetTags_(-9999.)
+			,btag_combinedInclusiveSecondaryVertexV2BJetTags_(-9999.)
 			,btag_combinedSecondaryVertexRetrainedBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
 			,btag_softMuonBJetTags_(-9999.)
@@ -203,6 +208,7 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighEffBJetTags_(-9999.)
 			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexBJetTags_(-9999.)
+			,btag_combinedInclusiveSecondaryVertexV2BJetTags_(-9999.)
 			,btag_combinedSecondaryVertexRetrainedBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
 			,btag_softMuonBJetTags_(-9999.)
@@ -233,6 +239,7 @@ namespace TopTree
 			,btag_simpleSecondaryVertexHighEffBJetTags_(-9999.)
 			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexBJetTags_(-9999.)
+			,btag_combinedInclusiveSecondaryVertexV2BJetTags_(-9999.)
 			,btag_combinedSecondaryVertexRetrainedBJetTags_(-9999.)
 			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
 			,btag_softMuonBJetTags_(-9999.)
@@ -263,6 +270,7 @@ namespace TopTree
 		Float_t btag_simpleSecondaryVertexHighEffBJetTags() const { return btag_simpleSecondaryVertexHighEffBJetTags_; }
 		Float_t btag_simpleSecondaryVertexHighPurBJetTags() const { return btag_simpleSecondaryVertexHighPurBJetTags_; }
 		Float_t btag_combinedSecondaryVertexBJetTags() const { return btag_combinedSecondaryVertexBJetTags_; }
+		Float_t btag_combinedInclusiveSecondaryVertexV2BJetTags() const {return btag_combinedInclusiveSecondaryVertexV2BJetTags_; }
 		Float_t btag_combinedSecondaryVertexRetrainedBJetTags() const { return btag_combinedSecondaryVertexRetrainedBJetTags_; }
 		Float_t btag_combinedSecondaryVertexMVABJetTags() const { return btag_combinedSecondaryVertexMVABJetTags_; }
 		Float_t btag_softMuonBJetTags() const { return btag_softMuonBJetTags_; }
@@ -277,7 +285,7 @@ namespace TopTree
                 Float_t	btag_softPFMuonRetrainedBJetsTags() const { return btag_softPFMuonRetrainedBJetsTags_; }
                 Float_t	puID() const { return puID_; }
 
-		std::map<std::string, float> getMistag_SF() const { 
+		std::map<std::string, float> getMistag_SF() const {
 			std::cout << mistag_SF_.size() << endl;
 			return mistag_SF_;
 		}
@@ -309,7 +317,7 @@ namespace TopTree
 		      cout << JetCorrName_[i] << endl;
 
 		  cout << endl;
-		  
+
 		  return 0;
 
 		}
@@ -328,6 +336,7 @@ namespace TopTree
 		void setBtag_simpleSecondaryVertexHighEffBJetTags(Float_t btag_simpleSecondaryVertexHighEffBJetTags) { btag_simpleSecondaryVertexHighEffBJetTags_ = btag_simpleSecondaryVertexHighEffBJetTags; }
 		void setBtag_simpleSecondaryVertexHighPurBJetTags(Float_t btag_simpleSecondaryVertexHighPurBJetTags) { btag_simpleSecondaryVertexHighPurBJetTags_ = btag_simpleSecondaryVertexHighPurBJetTags; }
 		void setBtag_combinedSecondaryVertexBJetTags(Float_t btag_combinedSecondaryVertexBJetTags) { btag_combinedSecondaryVertexBJetTags_ = btag_combinedSecondaryVertexBJetTags; }
+		void setBtag_combinedInclusiveSecondaryVertexV2BJetTags_(Float_t btag_combinedInclusiveSecondaryVertexV2BJetTags) { btag_combinedInclusiveSecondaryVertexV2BJetTags_ = btag_combinedInclusiveSecondaryVertexV2BJetTags; }
 		void setBtag_combinedSecondaryVertexRetrainedBJetTags(Float_t btag_combinedSecondaryVertexBJetTags) { btag_combinedSecondaryVertexRetrainedBJetTags_ = btag_combinedSecondaryVertexBJetTags; }
 		void setBtag_combinedSecondaryVertexMVABJetTags(Float_t btag_combinedSecondaryVertexMVABJetTags) { btag_combinedSecondaryVertexMVABJetTags_ = btag_combinedSecondaryVertexMVABJetTags; }
 		void setBtag_softMuonBJetTags(Float_t btag_softMuonBJetTags) { btag_softMuonBJetTags_ = btag_softMuonBJetTags; }
@@ -347,31 +356,31 @@ namespace TopTree
         	void setpuID(Float_t puID) { puID_ = puID; }
 
 		//btag scalefactors
-		void setMistag_SF(std::map<std::string, float> mistag_SF) { 
+		void setMistag_SF(std::map<std::string, float> mistag_SF) {
 			for(std::map<std::string,float>::const_iterator it = mistag_SF.begin(); it != mistag_SF.end(); it++) {
 				mistag_SF_[it->first] = it->second;
 			}
 		}
-		void setBtag_SF(std::map<std::string, float> btag_SF) { 
+		void setBtag_SF(std::map<std::string, float> btag_SF) {
 			for(std::map<std::string,float>::const_iterator it = btag_SF.begin(); it != btag_SF.end(); it++) {
 				btag_SF_[it->first] = it->second;
-			}				
+			}
 		}
-		void setMistag_SFerr(std::map<std::string, float> mistag_SFerr) { 
+		void setMistag_SFerr(std::map<std::string, float> mistag_SFerr) {
 			for(std::map<std::string,float>::const_iterator it = mistag_SFerr.begin(); it != mistag_SFerr.end(); it++) {
 				mistag_SFerr_[it->first] = it->second;
-			}				
+			}
 		}
-		void setBtag_SFerr(std::map<std::string, float> btag_SFerr) { 
+		void setBtag_SFerr(std::map<std::string, float> btag_SFerr) {
 			for(std::map<std::string,float>::const_iterator it = btag_SFerr.begin(); it != btag_SFerr.end(); it++) {
 				btag_SFerr_[it->first] = it->second;
-			}				
+			}
 		}
 
 
 		// JEC
 		void setJetCorrFactor(int pos, std::string name, float factor)
-		{  
+		{
 		  JetCorrName_[pos] = name;
 		  JetCorrValue_[pos] = factor;
 		}
@@ -403,6 +412,7 @@ namespace TopTree
 		Float_t btag_simpleSecondaryVertexHighEffBJetTags_;
 		Float_t btag_simpleSecondaryVertexHighPurBJetTags_;
 		Float_t btag_combinedSecondaryVertexBJetTags_;
+		Float_t btag_combinedInclusiveSecondaryVertexV2BJetTags_;
 		Float_t btag_combinedSecondaryVertexRetrainedBJetTags_;
 		Float_t btag_combinedSecondaryVertexMVABJetTags_;
 		Float_t btag_softMuonBJetTags_;
@@ -415,14 +425,14 @@ namespace TopTree
 		Float_t btag_combinedCSVSLBJetTags_;
 		Float_t btag_softPFElectronRetrainedBJetsTags_;
 		Float_t btag_softPFMuonRetrainedBJetsTags_;
-             
+
 
 		//btag scalefactors
 		std::map<std::string, float> mistag_SF_;
 		std::map<std::string, float> btag_SF_;
 		std::map<std::string, float> mistag_SFerr_;
 		std::map<std::string, float> btag_SFerr_;
-		
+
 
 		//MC info
 		Int_t partonFlavour_;

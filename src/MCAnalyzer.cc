@@ -107,7 +107,7 @@ void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootM
                 mom = tempCand->mother();
                 }
             motherID = mom->pdgId();
-            if(p.status() == 1 || abs(p.pdgId()) < 7 && verbosity_>4 ) cout << "Mother ID " << mom->pdgId() << " Status " << mom->status() << endl;
+            if((p.status() == 1 || abs(p.pdgId()) < 7) && verbosity_>4 ) cout << "Mother ID " << mom->pdgId() << " Status " << mom->status() << endl;
             if (mom->numberOfMothers() > 0) {
                 const Candidate * granny = mom->mother();
                 while(granny->pdgId() == mom->pdgId() && granny->numberOfMothers() > 0) {
@@ -115,7 +115,7 @@ void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootM
                     granny = tempCand->mother();
                     }
                 grannyID = granny->pdgId();
-                if(p.status() == 1 || abs(p.pdgId()) < 7 && verbosity_>4 ) cout << "Granny ID " << granny->pdgId() << " Status " << granny->status() << endl;
+                if((p.status() == 1 || abs(p.pdgId()) < 7) && verbosity_>4 ) cout << "Granny ID " << granny->pdgId() << " Status " << granny->status() << endl;
                 }
             }
 
