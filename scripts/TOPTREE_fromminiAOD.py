@@ -52,10 +52,19 @@ process.GlobalTag.globaltag = cms.string('PLS170_V6AN1::All')
 #process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('dcap://maite.iihe.ac.be/pnfs/iihe/cms/store/user/keaveney/TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola/CSA14_test2/140706_140732/0000/miniAOD-prod_PAT_387.root'))
 
 #Python Fragment containing all PU20bx25 filenames through xrootd
-process.load("TopBrussels.TopTreeProducer.miniAODTTbar_PU20bx25_files_cfi")
+#process.load("TopBrussels.TopTreeProducer.miniAODTTbar_PU20bx25_files_cfi")
 
 #Python Fragment containing all PU40bx50 filenames through xrootd
 #process.load("TopBrussels.TopTreeProducer.miniAODTTbar_PU40bx50_files_cfi")
+
+#Python Fragment containing TTTT NLO 13TeV miniAOD files (Produced by Jesse)
+#process.load("TopBrussels.TopTreeProducer.FOURTOP_NLO_13TeV_miniAOD_Files_cfi")
+
+#Python Fragment containing TTTT LO 13TeV miniAOD files (Produced by Jesse)
+#process.load("TopBrussels.TopTreeProducer.FOURTOP_LO_13TeV_miniAOD_Files_cfi")
+
+#Python Fragment containing TTJets NLO 13TeV miniAOD files (Produced by Jesse)
+process.load("TopBrussels.TopTreeProducer.TTJets_NLO_aMCNLO_PYTHIA8_13TeV_miniAOD_Files_cfi")
 
 
 # reduce verbosity
@@ -70,7 +79,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
  		# 		3 = Liste of high level objects (jetss, muons, ...)
  		# 		4 = List of all  objects
 		# 		5 = Debug
- 		verbosity = cms.untracked.int32(0),
+ 		verbosity = cms.untracked.int32(1),
 
 		# used in the electron to see if the magneticfield is taken from DCS or from IDEALMAGFIELDRECORD
 		isData = cms.untracked.bool(False),
@@ -95,7 +104,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		doPrimaryVertex = cms.untracked.bool(True),
 		runGeneralTracks = cms.untracked.bool(True),#true only if generalTracks are stored.
 		doCaloJet = cms.untracked.bool(False),
-		doGenJet = cms.untracked.bool(True),
+		doGenJet = cms.untracked.bool(False),
 		doCaloJetId = cms.untracked.bool(False),
 		doPFJet = cms.untracked.bool(True),
 		doJPTJet = cms.untracked.bool(False),
