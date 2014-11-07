@@ -45,18 +45,19 @@ process.GlobalTag.globaltag = cms.string('PLS170_V6AN1::All')
 #Test File for PU20bc25
 #process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/mc/Spring14miniaod/TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_POSTLS170_V5-v2/00000/004C6DA7-FB03-E411-96BD-0025905A497A.root'))
 
-#process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring('file:miniAOD-prod_PAT_104.root','file:miniAOD-prod_PAT_387.root','file:miniAOD-prod_PAT_105.root'))
+#process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring('file:miniAOD-prod_PAT_10.root'))
 
 # skipEvents=cms.untracked.uint32(1000))
 
 #process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('dcap://maite.iihe.ac.be/pnfs/iihe/cms/store/user/keaveney/TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola/CSA14_test2/140706_140732/0000/miniAOD-prod_PAT_387.root'))
 
 #Python Fragment containing all PU20bx25 filenames through xrootd
-process.load("TopBrussels.TopTreeProducer.miniAODTTbar_PU20bx25_files_cfi")
+#process.load("TopBrussels.TopTreeProducer.miniAODTTbar_PU20bx25_files_cfi")
 
 #Python Fragment containing all PU40bx50 filenames through xrootd
 #process.load("TopBrussels.TopTreeProducer.miniAODTTbar_PU40bx50_files_cfi")
 
+process.load("TTJets_NLO_aMCNLO_PYTHIA8_13TeV_miniAOD_Files_cfi")
 
 # reduce verbosity
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(1000)
@@ -95,7 +96,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		doPrimaryVertex = cms.untracked.bool(True),
 		runGeneralTracks = cms.untracked.bool(True),#true only if generalTracks are stored.
 		doCaloJet = cms.untracked.bool(False),
-		doGenJet = cms.untracked.bool(True),
+		doGenJet = cms.untracked.bool(False),
 		doCaloJetId = cms.untracked.bool(False),
 		doPFJet = cms.untracked.bool(True),
 		doJPTJet = cms.untracked.bool(False),
@@ -110,7 +111,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		doGenEvent = cms.untracked.bool(False),#put on False when running non-ttbar or when running toptree from reco
 		doNPGenEvent = cms.untracked.bool(False),#put on True when running New Physics sample
 		doSpinCorrGen = cms.untracked.bool(False),#put on True only if you need SpinCorrelation Variables
-        	doLHEEventProd = cms.untracked.bool(False),#put on True only if you need SpinCorrelation Variables
+        	doLHEEventProd = cms.untracked.bool(True),#put on True only if you need SpinCorrelation Variables
 		doSemiLepEvent = cms.untracked.bool(False),#put on True only if you need TtSemiLeptonicEvent Collection exist in PAT-uples (L2)
 
 		conversionLikelihoodWeightsFile = cms.untracked.string('RecoEgamma/EgammaTools/data/TMVAnalysis_Likelihood.weights.txt'),
@@ -143,7 +144,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		hltProducer4th = cms.InputTag("TriggerResults","","REDIGI311X"),
 		pileUpProducer = cms.InputTag("addPileupInfo"),
 		genParticlesProducer = cms.InputTag("prunedGenParticles"),
-                lheEventProductProducer = cms.InputTag("externalLHEProducer"),
+                lheEventProductProducer = cms.InputTag("source"),
 		primaryVertexProducer = cms.InputTag("offlineSlimmedPrimaryVertices"),
 		vcaloJetProducer = cms.untracked.vstring("selectedPatJetsAK5Calo"),
 		vgenJetProducer = cms.untracked.vstring("slimmedGenJets"),

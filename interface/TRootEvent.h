@@ -52,11 +52,31 @@ namespace TopTree
 			,idParton2_(-1)
 			,xParton2_(-1.)
 			,factorizationScale_(-1.)
+			,weight0_(0.)
+			,weight1_(0.)
+			,weight2_(0.)
+			,weight3_(0.)
+			,weight4_(0.)
+			,weight5_(0.)
+			,weight6_(0.)
+			,weight7_(0.)
+			,weight8_(0.)
 			{;}
 
 		~TRootEvent() {;}
 
-		// Event number
+		// Event numbe
+
+        	double weight0() const { return weight0_; }
+        	double weight1() const { return weight1_; }
+	        double weight2() const { return weight2_; }
+     		double weight3() const { return weight3_; }
+        	double weight4() const { return weight4_; }
+	        double weight5() const { return weight5_; }
+		double weight6() const { return weight6_; }
+		double weight7() const { return weight7_; }
+		double weight8() const { return weight8_; }
+
 		Int_t nb() const { return nb_; }
 		Int_t eventId() const { return eventId_; }
 		Int_t runId() const { return runId_; }
@@ -106,6 +126,18 @@ namespace TopTree
 
 		std::map<std::string, std::vector<TopTree::triggeredObject> >  getTriggerFilters() const { return triggerFilters_;}
 
+
+		void setWeights(vector<double> weights) {
+		  weight0_ = weights[0]; 
+		  weight1_ = weights[1]; 
+		  weight2_ = weights[2]; 
+		  weight3_ = weights[3]; 
+		  weight4_ = weights[4]; 
+		  weight5_ = weights[5]; 
+		  weight6_ = weights[6]; 
+		  weight7_ = weights[7]; 
+		  weight8_ = weights[8]; 
+		}
 
 		void setNb(Int_t nb) { nb_ = nb; }
 		void setEventId(Int_t eventId) { eventId_ = eventId; }
@@ -161,6 +193,7 @@ namespace TopTree
 		Int_t runId_;
 		Int_t lumiBlockId_;
 
+
 		Int_t flavHistPath_; // flavor history path, see https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideFlavorHistory
 		double fixedGridRhoAll_, fixedGridRhoFastjetAll_, fixedGridRhoFastjetAllCalo_, fixedGridRhoFastjetCentralCalo_, fixedGridRhoFastjetCentralChargedPileUp_, fixedGridRhoFastjetCentralNeutral_;
 		double kt6PFJetsForIsolation_rho_;
@@ -182,6 +215,16 @@ namespace TopTree
 		Int_t idParton2_;
 		Float_t xParton2_;
 		Float_t factorizationScale_;
+
+		double weight0_;
+		double weight1_;
+		double weight2_;
+		double weight3_;
+		double weight4_;
+		double weight5_;
+		double weight6_;
+		double weight7_;
+		double weight8_;
 
 		std::map<std::string, std::vector<TopTree::triggeredObject> > triggerFilters_;
 
