@@ -41,7 +41,7 @@ namespace TopTree
 			,lumiBlockId_(-1)
 			,flavHistPath_(-1)
 			,fixedGridRhoFastjetAll_(-1)
-      			,kt6PFJetsForIsolation_rho_(-1)
+            ,kt6PFJetsForIsolation_rho_(-1)
 			,nTracks_(-1)
 			,nHighPurityTracks_(-1)
 			,nTruePU_(-1.)
@@ -67,12 +67,12 @@ namespace TopTree
 
 		// Event numbe
 
-        	double weight0() const { return weight0_; }
-        	double weight1() const { return weight1_; }
-	        double weight2() const { return weight2_; }
-     		double weight3() const { return weight3_; }
-        	double weight4() const { return weight4_; }
-	        double weight5() const { return weight5_; }
+        double weight0() const { return weight0_; }
+        double weight1() const { return weight1_; }
+        double weight2() const { return weight2_; }
+        double weight3() const { return weight3_; }
+        double weight4() const { return weight4_; }
+        double weight5() const { return weight5_; }
 		double weight6() const { return weight6_; }
 		double weight7() const { return weight7_; }
 		double weight8() const { return weight8_; }
@@ -128,15 +128,15 @@ namespace TopTree
 
 
 		void setWeights(vector<double> weights) {
-		  weight0_ = weights[0]; 
-		  weight1_ = weights[1]; 
-		  weight2_ = weights[2]; 
-		  weight3_ = weights[3]; 
-		  weight4_ = weights[4]; 
-		  weight5_ = weights[5]; 
-		  weight6_ = weights[6]; 
-		  weight7_ = weights[7]; 
-		  weight8_ = weights[8]; 
+		  weight0_ = weights[0];
+		  weight1_ = weights[1];
+		  weight2_ = weights[2];
+		  weight3_ = weights[3];
+		  weight4_ = weights[4];
+		  weight5_ = weights[5];
+		  weight6_ = weights[6];
+		  weight7_ = weights[7];
+		  weight8_ = weights[8];
 		}
 
 		void setNb(Int_t nb) { nb_ = nb; }
