@@ -66,7 +66,7 @@ void LHEEventProductAnalyzer::Process(const edm::Event& iEvent, TRootEvent* root
         double weight_val = weights[w].wgt;
         weights_d.push_back(weight_val);
 
-        cout <<"id  "<< weight_id  <<"  weight = " << weight_val << endl;
+	//        cout <<"id  "<< weight_id  <<"  weight = " << weight_val << endl;
 
     }
 
