@@ -36,6 +36,7 @@
 #include "../interface/CaloJetAnalyzer.h"
 #include "../interface/GenJetAnalyzer.h"
 #include "../interface/PFJetAnalyzer.h"
+#include "../interface/FatJetAnalyzer.h"
 #include "../interface/MuonAnalyzer.h"
 #include "../interface/ElectronAnalyzer.h"
 #include "../interface/PhotonAnalyzer.h"
@@ -109,6 +110,7 @@ private:
 	bool doCaloJet;
 	bool doGenJet;
 	bool doPFJet;
+	bool doFatJet;
 	bool doJPTJet;
 	bool doMuon;
 	bool doElectron;
@@ -126,6 +128,7 @@ private:
 	std::vector<std::string> vGenJetProducer;
 	std::vector<std::string> vCaloJetProducer;
 	std::vector<std::string> vPFJetProducer;
+	std::vector<std::string> vFatJetProducer;
 	std::vector<std::string> vJPTJetProducer;
 	std::vector<std::string> vMuonProducer;
 	std::vector<std::string> vElectronProducer;
@@ -142,6 +145,7 @@ private:
 	std::vector<TClonesArray*> vcaloJets;
 	std::vector<TClonesArray*> vgenJets;
 	std::vector<TClonesArray*> vpfJets;
+	std::vector<TClonesArray*> vfatJets;
 	std::vector<TClonesArray*> vjptJets;
 	std::vector<TClonesArray*> vmuons;
 	std::vector<TClonesArray*> velectrons;
