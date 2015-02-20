@@ -32,6 +32,7 @@ void TopTreeProducer::beginJob() {
     doCaloJet = myConfig_.getUntrackedParameter<bool>("doCaloJet",false);
     doGenJet = myConfig_.getUntrackedParameter<bool>("doGenJet",false);
     doPFJet = myConfig_.getUntrackedParameter<bool>("doPFJet",false);
+    doFatJet = myConfig_.getUntrackedParameter<bool>("doFatJet",false);
     doJPTJet = myConfig_.getUntrackedParameter<bool>("doJPTJet",false);
     doMuon = myConfig_.getUntrackedParameter<bool>("doMuon",false);
     doElectron = myConfig_.getUntrackedParameter<bool>("doElectron",false);
@@ -53,6 +54,7 @@ void TopTreeProducer::beginJob() {
     vGenJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vgenJetProducer",defaultVec);
     vCaloJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vcaloJetProducer",defaultVec);
     vPFJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vpfJetProducer",defaultVec);
+    vFatJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vfatJetProducer",defaultVec);
     vJPTJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vJPTJetProducer",defaultVec);
     vMuonProducer = producersNames_.getUntrackedParameter<vector<string> >("vmuonProducer",defaultVec);
     vElectronProducer = producersNames_.getUntrackedParameter<vector<string> >("velectronProducer",defaultVec);
@@ -73,6 +75,11 @@ void TopTreeProducer::beginJob() {
     for(unsigned int s=0; s<vPFJetProducer.size(); s++) {
         TClonesArray* a;
         vpfJets.push_back(a);
+        }
+
+    for(unsigned int s=0; s<vFatJetProducer.size(); s++) {
+        TClonesArray* a;
+        vfatJets.push_back(a);
         }
 
     for(unsigned int s=0; s<vJPTJetProducer.size(); s++) {
@@ -174,7 +181,7 @@ void TopTreeProducer::beginJob() {
         }
 
     if(doPFJet) {
-        if(verbosity>0) cout << "PFJets info will be added to rootuple" << endl;
+        if(verbosity>0) cout << "Test PFJets info will be added to rootuple" << endl;
         for(unsigned int s=0; s<vPFJetProducer.size(); s++) {
             vpfJets[s] = new TClonesArray("TopTree::TRootPFJet", 1000);
             char name[100];
@@ -182,6 +189,18 @@ void TopTreeProducer::beginJob() {
             eventTree_->Branch (name, "TClonesArray", &vpfJets[s]);
             }
         }
+
+
+    if(doFatJet) {
+        if(verbosity>0) cout << "FatJets info will be added to rootuple" << endl;
+        for(unsigned int s=0; s<vFatJetProducer.size(); s++) {
+            vfatJets[s] = new TClonesArray("TopTree::TRootPFJet", 1000);
+            char name[100];
+            sprintf(name,"FatJets_%s",vFatJetProducer[s].c_str());
+            eventTree_->Branch (name, "TClonesArray", &vfatJets[s]);
+            }
+        }
+
 
     if(doJPTJet) {
         if(verbosity>0) cout << "JPT Jets info will be added to rootuple" << endl;
@@ -364,6 +383,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
         //cout << rootEvent->nPu(0) << endl;
         //cout << rootEvent->nPu(1) << endl;
         }
+
 
     // we need to store some triggerFilter info to be able to emulate triggers on older data
     if (doHLT) {
@@ -567,6 +587,17 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
             }
         }
 
+    // FatJet
+    if(doFatJet) {
+        if(verbosity>1) cout << endl << "Analysing Fatjets collection..." << endl;
+        for(unsigned int s=0; s<vFatJetProducer.size(); s++) {
+            FatJetAnalyzer* myFatJetAnalyzer = new FatJetAnalyzer(producersNames_, s,  myConfig_, verbosity);
+            myFatJetAnalyzer->Process(iEvent, vfatJets[s], iSetup);
+            delete myFatJetAnalyzer;
+            }
+        }
+
+
     // JPT Jets
     if(doJPTJet) {
         if(verbosity>1) cout << endl << "Analysing JPT jets collection..." << endl;
@@ -721,6 +752,14 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
             (*vpfJets[s]).Delete();
             }
         }
+
+ if(doFatJet) {
+        for(unsigned int s=0; s<vFatJetProducer.size(); s++) {
+            (*vfatJets[s]).Delete();
+            }
+        }
+
+
     if(doJPTJet) {
         for(unsigned int s=0; s<vJPTJetProducer.size(); s++) {
             (*vjptJets[s]).Delete();
