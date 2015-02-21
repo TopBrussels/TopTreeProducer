@@ -1,4 +1,5 @@
 #include "../interface/FatJetAnalyzer.h"
+#include "DataFormats/JetReco/interface/CATopJetTagInfo.h"
 
 using namespace std;
 using namespace TopTree;
@@ -85,6 +86,23 @@ void FatJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets, c
 		localJet.setMuonMultiplicity(patJet->muonMultiplicity());		
 		localJet.setHFHadronMultiplicity(patJet->HFHadronMultiplicity());
 		localJet.setHFEMMultiplicity(patJet->HFEMMultiplicity());
+
+		//extract/write CMS TOP-TAGGING info
+		reco::CATopJetTagInfo const * tagInfo =  dynamic_cast<reco::CATopJetTagInfo const *>( patJet->tagInfo("caTop"));
+		//bool topTagged = false;
+
+		if ( tagInfo != 0 ) {
+		  double minMass = tagInfo->properties().minMass;
+		  double topMass = tagInfo->properties().topMass;
+		  int nSubJets = tagInfo->properties().nSubJets;
+
+		  localJet.setnSubJets(nSubJets);		
+		  localJet.settopMass(topMass);
+		  localJet.setminMass(minMass);
+		  // if ( nSubJets > 2 && minMass > 50.0 && topMass > 150.0 )
+		  //   topTagged = true;
+		  }
+
 
 		new( (*rootJets)[j] ) TRootPFJet(localJet);
 		if(verbosity_>2) cout << "   ["<< setw(3) << j << "] " << localJet << endl;
