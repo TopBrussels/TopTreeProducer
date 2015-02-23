@@ -194,7 +194,7 @@ void TopTreeProducer::beginJob() {
     if(doFatJet) {
         if(verbosity>0) cout << "FatJets info will be added to rootuple" << endl;
         for(unsigned int s=0; s<vFatJetProducer.size(); s++) {
-            vfatJets[s] = new TClonesArray("TopTree::TRootPFJet", 1000);
+            vfatJets[s] = new TClonesArray("TopTree::TRootSubstructureJet", 1000);
             char name[100];
             sprintf(name,"FatJets_%s",vFatJetProducer[s].c_str());
             eventTree_->Branch (name, "TClonesArray", &vfatJets[s]);

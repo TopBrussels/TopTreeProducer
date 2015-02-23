@@ -65,6 +65,9 @@ void FatJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets, c
 		if( (*patJets)[j].isPFJet() ) jetType="PF";
 			
 		// Call JetAnalyzer to fill the basic Jet Properties
+
+		cout <<" processing fatjets..."<< endl;
+
 		TRootJet tempJet = myJetAnalyzer->Process( &( *(jet) ), iSetup);
 		
 		TRootSubstructureJet localJet = TRootSubstructureJet(tempJet);
@@ -89,9 +92,10 @@ void FatJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets, c
 
 		//extract/write CMS TOP-TAGGING info
 		reco::CATopJetTagInfo const * tagInfo =  dynamic_cast<reco::CATopJetTagInfo const *>( patJet->tagInfo("caTop"));
-		//bool topTagged = false;
-
+	   
 		if ( tagInfo != 0 ) {
+
+	
             double minMass = tagInfo->properties().minMass;
             double topMass = tagInfo->properties().topMass;
             int nSubJets = tagInfo->properties().nSubJets;
@@ -103,7 +107,7 @@ void FatJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets, c
             double trimmed_mass = patJet->userFloat("ak8PFJetsCHSTrimmedLinks");   // access to trimmed mass
             double pruned_mass = patJet->userFloat("ak8PFJetsCHSPrunedLinks");     // access to pruned mass
             double filtered_mass = patJet->userFloat("ak8PFJetsCHSFilteredLinks"); // access to filtered mass
-            
+	 
             
             localJet.setCmsTopTagNsubjets(nSubJets);
             localJet.setCmsTopTagMass(topMass);
@@ -114,8 +118,7 @@ void FatJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets, c
             localJet.setFilteredMass(filtered_mass);
             localJet.setPrunedMass(pruned_mass);
             localJet.setTrimmedMass(trimmed_mass);
-            // if ( nSubJets > 2 && minMass > 50.0 && topMass > 150.0 )
-            //   topTagged = true;
+          
 		  }
 
 

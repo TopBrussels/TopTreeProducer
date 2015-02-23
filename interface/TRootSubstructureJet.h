@@ -35,15 +35,15 @@ namespace TopTree
 		
 		TRootSubstructureJet(const TRootSubstructureJet& jet) :
         TRootPFJet(jet)
-        ,_filteredMass(-9999.)
-        ,_prunedMass(-9999.)
-        ,_trimmedMass(-9999.)
-        ,_tau1(-9999.)
-        ,_tau2(-9999.)
-        ,_tau3(-9999.)
-        ,_cmsTopTagMinMass(-9999.)
-        ,_cmsTopTagMass(-9999.)
-        ,_cmsTopTagNsubjets(-9999)
+        ,_filteredMass(jet._filteredMass)
+        ,_prunedMass(jet._prunedMass)
+        ,_trimmedMass(jet._trimmedMass)
+        ,_tau1(jet._tau1)
+        ,_tau2(jet._tau2)
+        ,_tau3(jet._tau3)
+        ,_cmsTopTagMinMass(jet._cmsTopTagMinMass)
+        ,_cmsTopTagMass(jet._cmsTopTagMass)
+        ,_cmsTopTagNsubjets(jet._cmsTopTagNsubjets)
         {;}
 	
 		TRootSubstructureJet(const TRootPFJet& jet) :
@@ -145,7 +145,7 @@ namespace TopTree
         void setTau2(Float_t tau2){_tau2=tau2;}
         void setTau3(Float_t tau3){_tau3=tau3;}
         void setCmsTopTagMinMass(Float_t minMass){_cmsTopTagMinMass=minMass;}
-        void setCmsTopTagMass(Float_t mass){_cmsTopTagMinMass=mass;}
+        void setCmsTopTagMass(Float_t mass){_cmsTopTagMass=mass;}
         void setCmsTopTagNsubjets(Int_t nsubjets){_cmsTopTagNsubjets=nsubjets;}
         
         Float_t FilteredMass() const {return _filteredMass;}
