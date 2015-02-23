@@ -22,6 +22,7 @@
 #include "../interface/TRootSpinCorrGen.h"
 #include "../interface/TRootVertex.h"
 #include "../interface/TRootHLTInfo.h"
+#include "../interface/TRootSubstructureJet.h"
 #else
 #include "../interface/TRootRun.h"
 #include "../interface/TRootEvent.h"
@@ -46,6 +47,7 @@
 #include "../interface/TRootSpinCorrGen.h"
 #include "../interface/TRootVertex.h"
 #include "../interface/TRootHLTInfo.h"
+#include "../interface/TRootSubstructureJet.h"
 #endif
 
 #ifdef __CINT__
@@ -76,6 +78,7 @@
 #pragma link C++ class TopTree::TRootSpinCorrGen;
 #pragma link C++ class TopTree::TRootVertex;
 #pragma link C++ class TopTree::TRootHLTInfo;
+#pragma link C++ class TopTree::TRootSubstructureJet;
 
 #pragma link C++ struct TopTree::triggeredObject;
 
