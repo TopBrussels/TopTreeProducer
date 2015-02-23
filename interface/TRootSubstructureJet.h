@@ -146,7 +146,7 @@ namespace TopTree
         void setTau3(Float_t tau3){_tau3=tau3;}
         void setCmsTopTagMinMass(Float_t minMass){_cmsTopTagMinMass=minMass;}
         void setCmsTopTagMass(Float_t mass){_cmsTopTagMinMass=mass;}
-        void setCmsTOpTagNsubjets(Int_t nsubjets){_cmsTopTagNsubjets=nsubjets;}
+        void setCmsTopTagNsubjets(Int_t nsubjets){_cmsTopTagNsubjets=nsubjets;}
         
         Float_t FilteredMass() const {return _filteredMass;}
         Float_t PrunedMass() const {return _prunedMass;}
@@ -157,6 +157,19 @@ namespace TopTree
         Float_t CmsTopTagMinMass() const {return _cmsTopTagMinMass;}
         Float_t CmsTopTagMass() const {return _cmsTopTagMass;}
         Float_t CmsTopTagNsubjets() const {return _cmsTopTagNsubjets;}
+        
+        bool TopTag() const {
+                if(_cmsTopTagNsubjets > 2 && _cmsTopTagMinMass > 50.0 && _cmsTopTagMass > 150.0)
+                    return true;
+            return false;
+        }
+        bool WTag() const {
+            if( (_tau2/_tau1) > 0.6 && _prunedMass > 50.0)
+                return true;
+            return false;
+        }
+        
+            
         
 
 	private:

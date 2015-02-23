@@ -111,9 +111,9 @@ void FatJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets, c
             localJet.setTau1(tau1);
             localJet.setTau2(tau2);
             localJet.setTau3(tau3);
-            localJet.SetFilteredMass(filtered_mass);
-            localJet.SetPrunedMass(pruned_mass);
-            localJet.SetTrimmedMass(trimmed_mass);
+            localJet.setFilteredMass(filtered_mass);
+            localJet.setPrunedMass(pruned_mass);
+            localJet.setTrimmedMass(trimmed_mass);
             // if ( nSubJets > 2 && minMass > 50.0 && topMass > 150.0 )
             //   topTagged = true;
 		  }
