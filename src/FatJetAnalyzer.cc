@@ -67,7 +67,7 @@ void FatJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets, c
 		// Call JetAnalyzer to fill the basic Jet Properties
 		TRootJet tempJet = myJetAnalyzer->Process( &( *(jet) ), iSetup);
 		
-		TRootPFJet localJet = TRootPFJet(tempJet);
+		TRootSubstructureJet localJet = TRootSubstructureJet(tempJet);
 
 		localJet.setJetType(2); // 2 = PFJet
 
@@ -92,19 +92,34 @@ void FatJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets, c
 		//bool topTagged = false;
 
 		if ( tagInfo != 0 ) {
-		  double minMass = tagInfo->properties().minMass;
-		  double topMass = tagInfo->properties().topMass;
-		  int nSubJets = tagInfo->properties().nSubJets;
-
-		  localJet.setnSubJets(nSubJets);		
-		  localJet.settopMass(topMass);
-		  localJet.setminMass(minMass);
-		  // if ( nSubJets > 2 && minMass > 50.0 && topMass > 150.0 )
-		  //   topTagged = true;
+            double minMass = tagInfo->properties().minMass;
+            double topMass = tagInfo->properties().topMass;
+            int nSubJets = tagInfo->properties().nSubJets;
+            
+            double tau1 = patJet->userFloat("NjettinessAK8:tau1");    //
+            double tau2 = patJet->userFloat("NjettinessAK8:tau2");    //  Access the n-subjettiness variables
+            double tau3 = patJet->userFloat("NjettinessAK8:tau3");    //
+            
+            double trimmed_mass = patJet->userFloat("ak8PFJetsCHSTrimmedLinks");   // access to trimmed mass
+            double pruned_mass = patJet->userFloat("ak8PFJetsCHSPrunedLinks");     // access to pruned mass
+            double filtered_mass = patJet->userFloat("ak8PFJetsCHSFilteredLinks"); // access to filtered mass
+            
+            
+            localJet.setCmsTopTagNsubjets(nSubJets);
+            localJet.setCmsTopTagMass(topMass);
+            localJet.setCmsTopTagMinMass(minMass);
+            localJet.setTau1(tau1);
+            localJet.setTau2(tau2);
+            localJet.setTau3(tau3);
+            localJet.SetFilteredMass(filtered_mass);
+            localJet.SetPrunedMass(pruned_mass);
+            localJet.SetTrimmedMass(trimmed_mass);
+            // if ( nSubJets > 2 && minMass > 50.0 && topMass > 150.0 )
+            //   topTagged = true;
 		  }
 
 
-		new( (*rootJets)[j] ) TRootPFJet(localJet);
+		new( (*rootJets)[j] ) TRootSubstructureJet(localJet);
 		if(verbosity_>2) cout << "   ["<< setw(3) << j << "] " << localJet << endl;
 		
 	}
