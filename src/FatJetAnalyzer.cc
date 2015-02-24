@@ -66,7 +66,7 @@ void FatJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets, c
 			
 		// Call JetAnalyzer to fill the basic Jet Properties
 
-		cout <<" processing fatjets..."<< endl;
+		//		cout <<" processing fatjets..."<< endl;
 
 		TRootJet tempJet = myJetAnalyzer->Process( &( *(jet) ), iSetup);
 		
