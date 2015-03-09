@@ -65,9 +65,9 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
       TRootMuon localMuon (muon->px (), muon->py (), muon->pz (), muon->energy (), muon->vx (), muon->vy (), muon->vz (), muon->pdgId (), muon->charge ());
 
       //set detector-based isolation
-      localMuon.setIsoR03_trackIso( muon->isolationR03().sumPt);
-      localMuon.setIsoR03_ecalIso( muon->isolationR03().emEt);
-      localMuon.setIsoR03_hcalIso( muon->isolationR03().hadEt);
+      //      localMuon.setIsoR03_trackIso( muon->isolationR03().sumPt);
+      // localMuon.setIsoR03_ecalIso( muon->isolationR03().emEt);
+      //localMuon.setIsoR03_hcalIso( muon->isolationR03().hadEt);
 
       localMuon.setAlgo (muon->type ());
       localMuon.setID (int ( muon::isGoodMuon ( *muon, muon::AllGlobalMuons)), int ( muon::isGoodMuon ( *muon, muon::AllTrackerMuons)), int ( muon::isGoodMuon ( *muon, muon::AllStandAloneMuons)), int ( muon::isGoodMuon ( *muon, muon::TrackerMuonArbitrated)), int ( muon::isGoodMuon ( *muon, muon::AllArbitrated)), int ( muon::isGoodMuon ( *muon, muon::GlobalMuonPromptTight)), int ( muon::isGoodMuon (*muon, muon::TMLastStationLoose)), int ( muon::isGoodMuon ( *muon, muon::TMLastStationTight)),int ( muon::isGoodMuon ( *muon, muon::TMLastStationAngTight)) , int ( muon::isGoodMuon ( *muon, muon::TMOneStationLoose)), int ( muon::isGoodMuon ( *muon, muon::TMOneStationTight)), int ( muon::isGoodMuon ( *muon, muon::TMLastStationOptimizedLowPtLoose)), int ( muon::isGoodMuon ( *muon, muon::TMLastStationOptimizedLowPtTight)), int ( muon::isGoodMuon ( *muon, muon::TM2DCompatibilityLoose)), int ( muon::isGoodMuon ( *muon, muon::TM2DCompatibilityTight)));
@@ -120,8 +120,8 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
         localMuon.setChi2 (+99999.);
       }
 
-      if (patMuon->ecalIsoDeposit ()) localMuon.setVetoEm  (patMuon->ecalIsoDeposit ()->candEnergy ());
-      if (patMuon->hcalIsoDeposit ()) localMuon.setVetoHad (patMuon->hcalIsoDeposit ()->candEnergy ());
+      //      if (patMuon->ecalIsoDeposit ()) localMuon.setVetoEm  (patMuon->ecalIsoDeposit ()->candEnergy ());
+      // if (patMuon->hcalIsoDeposit ()) localMuon.setVetoHad (patMuon->hcalIsoDeposit ()->candEnergy ());
 
       if (useMC_)
       {
@@ -157,7 +157,12 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
        veto_nh.push_back(new reco::isodeposit::ThresholdVeto( 0.5 ));
        veto_ph.push_back(new reco::isodeposit::ConeVeto( Dir, 0.01 ));
        veto_ph.push_back(new reco::isodeposit::ThresholdVeto( 0.5 ));
-       //cout<<"in top tree producer...muonanalyzer process...6.1"<<endl;
+
+       //the code below is for re-calulaing the iso for non-standard conesizes
+       // not sure if it is really needed and would need to be be adapted for 
+       // miniAOD
+
+//cout<<"in top tree producer...muonanalyzer process...6.1"<<endl;
 
 //       const double chIso03 = patMuon->isoDeposit(pat::PfChargedHadronIso)->depositAndCountWithin(0.3, veto_ch).first;
 //       const double nhIso03 = patMuon->isoDeposit(pat::PfNeutralHadronIso)->depositAndCountWithin(0.3, veto_nh).first;

@@ -174,13 +174,13 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 	  }
 
     //Isolation
-    localElectron.setIsoR03_hcalIso(electron->dr03HcalTowerSumEt());
-    localElectron.setIsoR03_ecalIso(electron->dr03EcalRecHitSumEt());
-    localElectron.setIsoR03_trackIso(electron->dr03TkSumPt());
+    //  localElectron.setIsoR03_hcalIso(electron->dr03HcalTowerSumEt());
+    // localElectron.setIsoR03_ecalIso(electron->dr03EcalRecHitSumEt());
+    //localElectron.setIsoR03_trackIso(electron->dr03TkSumPt());
 
-    localElectron.setIsoR04_hcalIso(electron->dr04HcalTowerSumEt());
-    localElectron.setIsoR04_ecalIso(electron->dr04EcalRecHitSumEt());
-    localElectron.setIsoR04_trackIso(electron->dr04TkSumPt());
+    //localElectron.setIsoR04_hcalIso(electron->dr04HcalTowerSumEt());
+    // localElectron.setIsoR04_ecalIso(electron->dr04EcalRecHitSumEt());
+    //    localElectron.setIsoR04_trackIso(electron->dr04TkSumPt());
 
 
     // Conversion:
