@@ -108,7 +108,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		doCaloJet = cms.untracked.bool(False),
 		doGenJet = cms.untracked.bool(False),
 		doCaloJetId = cms.untracked.bool(False),
-		doPFJet = cms.untracked.bool(True),
+		doPFJet = cms.untracked.bool(False),
          	doFatJet = cms.untracked.bool(True),
 		doJPTJet = cms.untracked.bool(False),
 		doJPTJetId = cms.untracked.bool(False),
@@ -141,11 +141,11 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 
 		# MC particles acceptance cuts
 		electronMC_etaMax = cms.double(3.0),
-		electronMC_ptMin = cms.double(2.0),
+		electronMC_ptMin = cms.double(10.0), #checking effect on filesize by tightening cuts here 2.0 -> 10.0
 		muonMC_etaMax = cms.double(3.0),
-		muonMC_ptMin = cms.double(0.0),
+		muonMC_ptMin = cms.double(10.0),  #checking effect on filesize by tightening cuts here 0.0 -> 10.0
 		jetMC_etaMax = cms.double(6.0),
-		jetMC_ptMin = cms.double(5.0),
+		jetMC_ptMin = cms.double(15.0), #checking effect on filesize by tightening cuts here 5.0 -> 15.0
 	),
 
 	producersNames = cms.PSet(
