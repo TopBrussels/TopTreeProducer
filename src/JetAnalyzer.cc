@@ -57,7 +57,7 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet, const edm::EventSetup& iSetu
 	localJet.setBtag_simpleSecondaryVertexHighEffBJetTags(patJet->bDiscriminator("simpleSecondaryVertexHighEffBJetTags"));
 	localJet.setBtag_simpleSecondaryVertexHighPurBJetTags(patJet->bDiscriminator("simpleSecondaryVertexHighPurBJetTags"));
 	localJet.setBtag_combinedSecondaryVertexBJetTags(patJet->bDiscriminator("combinedSecondaryVertexBJetTags"));
-	localJet.setBtag_combinedInclusiveSecondaryVertexV2BJetTags(patJet->bDiscriminator("combinedInclusiveSecondaryVertexV2BJetTags"));
+	localJet.setBtag_combinedInclusiveSecondaryVertexV2BJetTags(patJet->bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"));
 	localJet.setBtag_combinedSecondaryVertexRetrainedBJetTags(patJet->bDiscriminator("combinedSecondaryVertexRetrainedBJetTags"));
 	localJet.setBtag_combinedSecondaryVertexMVABJetTags(patJet->bDiscriminator("combinedSecondaryVertexMVABJetTags"));
 	localJet.setBtag_softMuonBJetTags(patJet->bDiscriminator("softMuonBJetTags"));
@@ -71,7 +71,7 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet, const edm::EventSetup& iSetu
 	localJet.setBtag_softPFElectronRetrainedBJetsTags(patJet->bDiscriminator("softPFElectronBJetTags"));
 	localJet.setBtag_softPFMuonRetrainedBJetsTags(patJet->bDiscriminator("softPFMuonBJetTags"));
         localJet.setpuID(patJet->userFloat("pileupJetId:fullDiscriminant"));
-	if(verbosity_ > 1) cout << "CSV old, new: " << patJet->bDiscriminator("combinedSecondaryVertexBJetTags") << ", " << patJet->bDiscriminator("combinedInclusiveSecondaryVertexV2BJetTags") << endl;
+	if(verbosity_ > 1) cout << "CSV old, new: " << patJet->bDiscriminator("combinedSecondaryVertexBJetTags") << ", " << patJet->bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags") << endl;
 
 // comment out the whole b-tag scale factor setup from DB below for now
 /*
