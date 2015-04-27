@@ -1,5 +1,5 @@
 #include "../interface/FatJetAnalyzer.h"
-#include "DataFormats/JetReco/interface/CATopJetTagInfo.h"
+#include "DataFormats/BTauReco/interface/CATopJetTagInfo.h"
 
 using namespace std;
 using namespace TopTree;
@@ -54,61 +54,61 @@ void FatJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets, c
 	edm::Handle < std::vector <pat::Jet> > patJets;
 	iEvent.getByLabel(fatJetProducer_, patJets);
 	nJets = patJets->size();
-	
-		
+
+
 	if(verbosity_>1) std::cout << "   Number of jets = " << nJets << "   Label: " << fatJetProducer_.label() << "   Instance: " << fatJetProducer_.instance() << std::endl;
 
 	for (unsigned int j=0; j<nJets; j++)
 	{
-		const reco::Jet* jet = 0;	
+		const reco::Jet* jet = 0;
 		jet = (const reco::Jet*) ( & ((*patJets)[j]) );
 		if( (*patJets)[j].isPFJet() ) jetType="PF";
-			
+
 		// Call JetAnalyzer to fill the basic Jet Properties
 
 		//		cout <<" processing fatjets..."<< endl;
 
 		TRootJet tempJet = myJetAnalyzer->Process( &( *(jet) ), iSetup);
-		
+
 		TRootSubstructureJet localJet = TRootSubstructureJet(tempJet);
 
 		localJet.setJetType(2); // 2 = PFJet
 
 		// Some specific methods to pat::Jet
 		const pat::Jet *patJet = dynamic_cast<const pat::Jet*>(&*jet);
-			
+
 		localJet.setChargedHadronEnergyFraction(patJet->chargedHadronEnergyFraction());
 		localJet.setNeutralHadronEnergyFraction(patJet->neutralHadronEnergyFraction());
 		localJet.setChargedEmEnergyFraction(patJet->chargedEmEnergyFraction());
 		localJet.setChargedMuEnergyFraction(patJet->chargedMuEnergyFraction());
-		localJet.setNeutralEmEnergyFraction(patJet->neutralEmEnergyFraction());		
+		localJet.setNeutralEmEnergyFraction(patJet->neutralEmEnergyFraction());
 		localJet.setHFHadronEnergyFraction(patJet->HFHadronEnergyFraction());
-		localJet.setHFEMEnergyFraction(patJet->HFEMEnergyFraction());		
+		localJet.setHFEMEnergyFraction(patJet->HFEMEnergyFraction());
 		localJet.setChargedMultiplicity(patJet->chargedMultiplicity());
 		localJet.setNeutralMultiplicity(patJet->neutralMultiplicity());
-		localJet.setMuonMultiplicity(patJet->muonMultiplicity());		
+		localJet.setMuonMultiplicity(patJet->muonMultiplicity());
 		localJet.setHFHadronMultiplicity(patJet->HFHadronMultiplicity());
 		localJet.setHFEMMultiplicity(patJet->HFEMMultiplicity());
 
 		//extract/write CMS TOP-TAGGING info
 		reco::CATopJetTagInfo const * tagInfo =  dynamic_cast<reco::CATopJetTagInfo const *>( patJet->tagInfo("caTop"));
-	   
+
 		if ( tagInfo != 0 ) {
 
-	
+
             double minMass = tagInfo->properties().minMass;
             double topMass = tagInfo->properties().topMass;
             int nSubJets = tagInfo->properties().nSubJets;
-            
+
             double tau1 = patJet->userFloat("NjettinessAK8:tau1");    //
             double tau2 = patJet->userFloat("NjettinessAK8:tau2");    //  Access the n-subjettiness variables
             double tau3 = patJet->userFloat("NjettinessAK8:tau3");    //
-            
+
             double trimmed_mass = patJet->userFloat("ak8PFJetsCHSTrimmedLinks");   // access to trimmed mass
             double pruned_mass = patJet->userFloat("ak8PFJetsCHSPrunedLinks");     // access to pruned mass
             double filtered_mass = patJet->userFloat("ak8PFJetsCHSFilteredLinks"); // access to filtered mass
-	 
-            
+
+
             localJet.setCmsTopTagNsubjets(nSubJets);
             localJet.setCmsTopTagMass(topMass);
             localJet.setCmsTopTagMinMass(minMass);
@@ -118,13 +118,13 @@ void FatJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets, c
             localJet.setFilteredMass(filtered_mass);
             localJet.setPrunedMass(pruned_mass);
             localJet.setTrimmedMass(trimmed_mass);
-          
+
 		  }
 
 
 		new( (*rootJets)[j] ) TRootSubstructureJet(localJet);
 		if(verbosity_>2) cout << "   ["<< setw(3) << j << "] " << localJet << endl;
-		
+
 	}
 
 }

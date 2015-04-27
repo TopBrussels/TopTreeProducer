@@ -71,7 +71,7 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet, const edm::EventSetup& iSetu
 	localJet.setBtag_softPFElectronRetrainedBJetsTags(patJet->bDiscriminator("softPFElectronBJetTags"));
 	localJet.setBtag_softPFMuonRetrainedBJetsTags(patJet->bDiscriminator("softPFMuonBJetTags"));
         localJet.setpuID(patJet->userFloat("pileupJetId:fullDiscriminant"));
-	//cout << "CSV old, new: " << patJet->bDiscriminator("combinedSecondaryVertexBJetTags") << ", " << patJet->bDiscriminator("combinedSecondaryVertexRetrainedBJetTags") << endl;
+	if(verbosity_ > 1) cout << "CSV old, new: " << patJet->bDiscriminator("combinedSecondaryVertexBJetTags") << ", " << patJet->bDiscriminator("combinedInclusiveSecondaryVertexV2BJetTags") << endl;
 
 // comment out the whole b-tag scale factor setup from DB below for now
 /*

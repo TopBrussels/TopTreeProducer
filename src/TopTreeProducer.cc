@@ -157,6 +157,7 @@ void TopTreeProducer::beginJob() {
     if(verbosity>0) cout << "MC Particles info will be added to rootuple" << endl;
     cout << "MC Particles info will be added to rootuple" << endl;
     mcParticles = new TClonesArray("TopTree::TRootMCParticle", 1000);
+    cout << "MC Particles info will be added to rootuple" << endl;
     eventTree_->Branch ("MCParticles", "TClonesArray", &mcParticles);
     //     	}
 

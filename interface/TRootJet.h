@@ -5,6 +5,7 @@
 
 #include "Rtypes.h"
 #include "TObject.h"
+#include "TString.h"
 
 #include <iostream>
 #include <iomanip>
@@ -401,7 +402,7 @@ namespace TopTree
 		Float_t maxDistance_;               // Maximum distance from jet to constituent
 
 		// jet correction factors
-		std::string JetCorrName_[4]; 			// check in JetAnalyzer.cc that size is big enough to store all corrections!
+		TString JetCorrName_[4]; 			// check in JetAnalyzer.cc that size is big enough to store all corrections!
 		float JetCorrValue_[4];
 
 		//btag Info

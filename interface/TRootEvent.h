@@ -129,6 +129,7 @@ namespace TopTree
 
 		void setWeights(vector<double> weights) {
 		  weight0_ = weights[0];
+		  //cout << "Weight0 set: " << weight0_ << endl;
 		  weight1_ = weights[1];
 		  weight2_ = weights[2];
 		  weight3_ = weights[3];

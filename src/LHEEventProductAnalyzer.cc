@@ -39,24 +39,24 @@ LHEEventProductAnalyzer::~LHEEventProductAnalyzer()
 void LHEEventProductAnalyzer::Process(const edm::Event& iEvent, TRootEvent* rootEvent)
 {
 
-    //  cout << "Analysing LHEEventProduct collection ... = "<<  lheEventProductProducer_.label()  << endl;
+      if(verbosity_ > 1) cout << "Analysing LHEEventProduct collection ... = "<<  lheEventProductProducer_.label()  << endl;
 
 
     //  if( lheEventProductProducer_.label()) != ""
 
 //    	edm::Handle < edm::View <LHEEventProduct> > lheEventProduct;
     edm::Handle<LHEEventProduct> lheEventProduct;
-//    cout << "Analysing LHEEventProduct collection ..1. = "<<endl;
+    if(verbosity_ > 1) cout << "Analysing LHEEventProduct collection ..1. = "<<endl;
 
     iEvent.getByLabel( lheEventProductProducer_ ,lheEventProduct );
 
-//    cout << "Analysing LHEEventProduct collection ..2. = "<<endl;
-//    double muf_down_mur_down_weight = lheEventProduct->originalXWGTUP();
+    if(verbosity_ > 1) cout << "Analysing LHEEventProduct collection ..2. = "<<endl;
+    double muf_down_mur_down_weight = lheEventProduct->originalXWGTUP();
 
 
 
     const std::vector<WGT>& weights  = lheEventProduct->weights();
-////    cout << "Analysing LHEEventProduct collection ..3 = "<< muf_down_mur_down_weight  << endl;
+    if(verbosity_ > 1) cout << "Analysing LHEEventProduct collection ..3 = "<< muf_down_mur_down_weight  << endl;
 
     std::vector<double> weights_d;
 
@@ -66,7 +66,7 @@ void LHEEventProductAnalyzer::Process(const edm::Event& iEvent, TRootEvent* root
         double weight_val = weights[w].wgt;
         weights_d.push_back(weight_val);
 
-	//        cout <<"id  "<< weight_id  <<"  weight = " << weight_val << endl;
+	        if(verbosity_ > 1) cout <<"id  "<< weight_id  <<"  weight = " << weight_val << endl;
 
     }
 
@@ -74,7 +74,7 @@ void LHEEventProductAnalyzer::Process(const edm::Event& iEvent, TRootEvent* root
 
 
 
-//    cout << "Analysing LHEEventProduct collection ..3. = " <<muf_down_mur_down_weight<<   endl;
+    if(verbosity_ > 1) cout << "Analysing LHEEventProduct collection ..3. = " <<muf_down_mur_down_weight<<   endl;
 
 
 
