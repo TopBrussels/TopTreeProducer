@@ -22,6 +22,8 @@ namespace TopTree
 			ip3dErr_(-9999.),
 			d0_(-9999.),
 			d0Error_(-9999.),
+			d0BeamSpot_(-9999.),
+			d0BeamSpotError_(-9999.),
 			dz_(-9999.),
 			dzError_(-9999.),
 			//    dB_(-9999.),
@@ -48,6 +50,8 @@ namespace TopTree
                         ip3dErr_(lepton.ip3dErr_),
                         d0_(lepton.d0_),
                         d0Error_(lepton.d0Error_),
+			d0BeamSpot_(lepton.d0BeamSpot_),
+			d0BeamSpotError_(lepton.d0BeamSpotError_),
                         dz_(lepton.dz_),
                         dzError_(lepton.dzError_),
                         //    dB_(lepton.dB_),
@@ -74,6 +78,8 @@ namespace TopTree
                         ip3dErr_(-9999.),
                         d0_(-9999.),
                         d0Error_(-9999.),
+			d0BeamSpot_(-9999.),
+			d0BeamSpotError_(-9999.),
                         dz_(-9999.),
                         dzError_(-9999.),
                         //    dB_(-9999.),
@@ -100,6 +106,8 @@ namespace TopTree
                         ip3dErr_(-9999.),
                         d0_(-9999.),
                         d0Error_(-9999.),
+			d0BeamSpot_(-9999.),
+			d0BeamSpotError_(-9999.),
                         dz_(-9999.),
                         dzError_(-9999.),
                         //    dB_(-9999.),
@@ -126,6 +134,8 @@ namespace TopTree
                         ip3dErr_(-9999.),
                         d0_(-9999.),
                         d0Error_(-9999.),
+			d0BeamSpot_(-9999.),
+			d0BeamSpotError_(-9999.),
                         dz_(-9999.),
                         dzError_(-9999.),
                         //    dB_(-9999.),
@@ -152,6 +162,8 @@ namespace TopTree
                         ip3dErr_(-9999.),
                         d0_(-9999.),
                         d0Error_(-9999.),
+			d0BeamSpot_(-9999.),
+			d0BeamSpotError_(-9999.),
                         dz_(-9999.),
                         dzError_(-9999.),
                         //    dB_(-9999.),
@@ -178,6 +190,8 @@ namespace TopTree
                         ip3dErr_(-9999.),
                         d0_(-9999.),
                         d0Error_(-9999.),
+			d0BeamSpot_(-9999.),
+			d0BeamSpotError_(-9999.),
                         dz_(-9999.),
                         dzError_(-9999.),
                         //    dB_(-9999.),
@@ -208,6 +222,8 @@ namespace TopTree
                 Float_t ip3dError() const { return ip3dErr_; }
 		Float_t d0() const { return d0_; }
 		Float_t d0Error()const { return d0Error_; }
+		Float_t d0BeamSpot() const { return d0BeamSpot_; }
+		Float_t d0BeamSpotError()const { return d0BeamSpotError_; }
 		Float_t dz()const { return dz_; }
 		Float_t dzError()const { return dzError_; }
     //		Float_t dB() const { return dB_; }
@@ -302,6 +318,8 @@ namespace TopTree
                 void setIp3dError(Float_t x) { ip3dErr_ = x; }
 		void setD0(Float_t x) { d0_ = x; }
 		void setD0Error(Float_t d0Error) { d0Error_ = d0Error; }
+		void setD0BeamSpot(Float_t x) { d0BeamSpot_ = x; }
+		void setD0BeamSpotError(Float_t d0BeamSpotError) { d0BeamSpotError_ = d0BeamSpotError; }
 		void setDz(Float_t x) { dz_ = x; }
 		void setDzError(Float_t x) { dzError_ = x; }
 		//void setDB(Float_t dB) { dB_ = dB; }
@@ -332,6 +350,8 @@ namespace TopTree
 	        Float_t ip3dErr_;                          // error on ip3d_
 	        Float_t d0_;                         	     // transverse impact parameter (wrt to PV)
 	        Float_t d0Error_;                          // error on d0_
+	        Float_t d0BeamSpot_;                         	     // transverse impact parameter (wrt to beam spot)
+	        Float_t d0BeamSpotError_;                          // error on d0BeamSpot_
 	        Float_t dz_;                               // longitudinal impact parameter (wrt to PV)
 	        Float_t dzError_;                          // error on dz_ 
 	      
