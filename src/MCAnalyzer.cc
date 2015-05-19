@@ -125,6 +125,7 @@ void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootM
             if ( abs(p.eta()>electronMC_etaMax_) || p.pt()<electronMC_ptMin_ ) continue;
 
             TRootMCParticle localMCElectron( p.px(), p.py(), p.pz(), p.energy(), p.vx(), p.vy(), p.vz(), p.pdgId(), p.charge(), p.status(), p.numberOfDaughters(), motherID, grannyID, 0, 0, 0, 0, j );
+            localMCElectron.setStateFlags(p.isPromptFinalState(), p.isPromptDecayed(), p.fromHardProcessBeforeFSR(), p.isHardProcess(), p.fromHardProcessFinalState(), p.fromHardProcessDecayed());
 
             new  ((*rootMCParticles)[iPartSel]) TRootMCParticle(localMCElectron);
 
@@ -143,6 +144,7 @@ void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootM
 
 
             TRootMCParticle localMCMuon( p.px(), p.py(), p.pz(), p.energy(), p.vx(), p.vy(), p.vz(), p.pdgId(), p.charge(), p.status(), p.numberOfDaughters(), motherID, grannyID, 0, 0, 0, 0, j );
+            localMCMuon.setStateFlags(p.isPromptFinalState(), p.isPromptDecayed(), p.fromHardProcessBeforeFSR(), p.isHardProcess(), p.fromHardProcessFinalState(), p.fromHardProcessDecayed());
 
             new  ((*rootMCParticles)[iPartSel]) TRootMCParticle(localMCMuon);
 
@@ -160,6 +162,7 @@ void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootM
             if ( abs(p.eta()>jetMC_etaMax_) || p.pt()<jetMC_ptMin_ ) continue;
 
             TRootMCParticle localMCParton( p.px(), p.py(), p.pz(), p.energy(), p.vx(), p.vy(), p.vz(), p.pdgId(), p.charge(), p.status(), p.numberOfDaughters(), motherID, grannyID, 0, 0, 0, 0, j );
+            localMCParton.setStateFlags(p.isPromptFinalState(), p.isPromptDecayed(), p.fromHardProcessBeforeFSR(), p.isHardProcess(), p.fromHardProcessFinalState(), p.fromHardProcessDecayed());
 
             new( (*rootMCParticles)[iPartSel] ) TRootMCParticle(localMCParton);
             if(verbosity_>2) cout << "   MC Jet  " << (const TRootParticle&)(*rootMCParticles->At(iPartSel)) << endl;
@@ -182,6 +185,7 @@ void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootM
         if ( doMETMC_ && (abs(p.pdgId()) == 12 || abs(p.pdgId()) == 14 ||  abs(p.pdgId()) == 16 || ( abs(p.pdgId()) > 1000000 && abs(p.pdgId()) < 3000000 ) ) ) {
             iMET++;
             TRootMCParticle  localMCNeutrino( p.px(), p.py(), p.pz(), p.energy(), p.vx(), p.vy(), p.vz(), p.pdgId() , p.charge(), p.status(), p.numberOfDaughters(), motherID, grannyID, 0, 0, 0, 0, j );
+            localMCNeutrino.setStateFlags(p.isPromptFinalState(), p.isPromptDecayed(), p.fromHardProcessBeforeFSR(), p.isHardProcess(), p.fromHardProcessFinalState(), p.fromHardProcessDecayed());
 
             new( (*rootMCParticles)[iPartSel] ) TRootMCParticle( localMCNeutrino );
             if(verbosity_>2) cout << "   MC MET  " << (const TRootParticle&)(*rootMCParticles->At(iPartSel)) << endl;
@@ -202,6 +206,7 @@ void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootM
             if (p.numberOfDaughters() > 3) daug3Id = p.daughter( 3 )->pdgId();
 
             TRootMCParticle   localMCUnstable( p.px(), p.py(), p.pz(), p.energy(), p.vx(), p.vy(),p.vz(), p.pdgId(), p.charge(), p.status(), p.numberOfDaughters(), motherID, grannyID, daug0Id, daug1Id, daug2Id, daug3Id, j );
+            localMCUnstable.setStateFlags(p.isPromptFinalState(), p.isPromptDecayed(), p.fromHardProcessBeforeFSR(), p.isHardProcess(), p.fromHardProcessFinalState(), p.fromHardProcessDecayed());
 
             new( (*rootMCParticles)[iPartSel] ) TRootMCParticle(localMCUnstable);
             if(verbosity_>2) cout << "   ["<< setw(3) << iPartSel << "] unstable particle  " << (const TRootMCParticle&)(*rootMCParticles->At(iPartSel)) << endl;
