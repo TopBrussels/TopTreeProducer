@@ -77,19 +77,17 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
 
 
       const reco::BeamSpot &mybeamspot = *beamSpotHandle.product();
+
       localMuon.setD0BeamSpot ( muon->muonBestTrack()->dxy(mybeamspot.position()) );
       localMuon.setD0BeamSpotError ( sqrt(pow(muon->muonBestTrack()->dxyError(),2)+pow(mybeamspot.x0Error(),2)+ pow(mybeamspot.y0Error(),2)) );
+
+      localMuon.setDzBeamSpot ( muon->muonBestTrack()->dz(mybeamspot.position()) );
+      localMuon.setDzBeamSpotError ( sqrt(pow(muon->muonBestTrack()->dzError(),2)+pow(mybeamspot.x0Error(),2)+ pow(mybeamspot.y0Error(),2)) );
       
 
       if(muon->innerTrack().isNonnull() && muon->innerTrack().isAvailable())
       {
 
-	/*
-	//	m.muonBestTrack()->dxy
-	const reco::BeamSpot &mybeamspot = *beamSpotHandle.product();
-	localMuon.setD0BeamSpot ( muon->innerTrack()->dxy(mybeamspot.position()) );
-	localMuon.setD0BeamSpotError ( sqrt(pow(muon->innerTrack()->dxyError(),2)+pow(mybeamspot.x0Error(),2)+ pow(mybeamspot.y0Error(),2)) );
-	*/
 
         if(pvHandle.isValid() && pvHandle->size() != 0)
         {

@@ -26,6 +26,8 @@ namespace TopTree
 			d0BeamSpotError_(-9999.),
 			dz_(-9999.),
 			dzError_(-9999.),
+			dzBeamSpot_(-9999.),
+			dzBeamSpotError_(-9999.),
 			//    dB_(-9999.),
 			//    dBError_(-9999.),
 			trackIso03_(-9999.),
@@ -54,6 +56,8 @@ namespace TopTree
 			d0BeamSpotError_(lepton.d0BeamSpotError_),
                         dz_(lepton.dz_),
                         dzError_(lepton.dzError_),
+			dzBeamSpot_(lepton.dzBeamSpot_),
+			dzBeamSpotError_(lepton.dzBeamSpotError_),
                         //    dB_(lepton.dB_),
                         //    dBError_(lepton.dBError_),
                         trackIso03_(lepton.trackIso03_),
@@ -82,6 +86,8 @@ namespace TopTree
 			d0BeamSpotError_(-9999.),
                         dz_(-9999.),
                         dzError_(-9999.),
+			dzBeamSpot_(-9999.),
+			dzBeamSpotError_(-9999.),
                         //    dB_(-9999.),
                         //    dBError_(-9999.),
                         trackIso03_(-9999.),
@@ -110,6 +116,8 @@ namespace TopTree
 			d0BeamSpotError_(-9999.),
                         dz_(-9999.),
                         dzError_(-9999.),
+			dzBeamSpot_(-9999.),
+			dzBeamSpotError_(-9999.),
                         //    dB_(-9999.),
                         //    dBError_(-9999.),
                         trackIso03_(-9999.),
@@ -138,6 +146,8 @@ namespace TopTree
 			d0BeamSpotError_(-9999.),
                         dz_(-9999.),
                         dzError_(-9999.),
+			dzBeamSpot_(-9999.),
+			dzBeamSpotError_(-9999.),
                         //    dB_(-9999.),
                         //    dBError_(-9999.),
                         trackIso03_(-9999.),
@@ -166,6 +176,8 @@ namespace TopTree
 			d0BeamSpotError_(-9999.),
                         dz_(-9999.),
                         dzError_(-9999.),
+			dzBeamSpot_(-9999.),
+			dzBeamSpotError_(-9999.),
                         //    dB_(-9999.),
                         //    dBError_(-9999.),
                         trackIso03_(-9999.),
@@ -194,6 +206,8 @@ namespace TopTree
 			d0BeamSpotError_(-9999.),
                         dz_(-9999.),
                         dzError_(-9999.),
+			dzBeamSpot_(-9999.),
+			dzBeamSpotError_(-9999.),
                         //    dB_(-9999.),
                         //    dBError_(-9999.),
                         trackIso03_(-9999.),
@@ -226,6 +240,8 @@ namespace TopTree
 		Float_t d0BeamSpotError()const { return d0BeamSpotError_; }
 		Float_t dz()const { return dz_; }
 		Float_t dzError()const { return dzError_; }
+		Float_t dzBeamSpot() const { return dzBeamSpot_; }
+		Float_t dzBeamSpotError()const { return dzBeamSpotError_; }
     //		Float_t dB() const { return dB_; }
     //		Float_t dBError() const { return dBError_; }
     
@@ -317,11 +333,13 @@ namespace TopTree
                 void setIp3d(Float_t x) { ip3d_ = x; }
                 void setIp3dError(Float_t x) { ip3dErr_ = x; }
 		void setD0(Float_t x) { d0_ = x; }
-		void setD0Error(Float_t d0Error) { d0Error_ = d0Error; }
+		void setD0Error(Float_t x) { d0Error_ = x; }
 		void setD0BeamSpot(Float_t x) { d0BeamSpot_ = x; }
-		void setD0BeamSpotError(Float_t d0BeamSpotError) { d0BeamSpotError_ = d0BeamSpotError; }
+		void setD0BeamSpotError(Float_t x) { d0BeamSpotError_ = x; }
 		void setDz(Float_t x) { dz_ = x; }
 		void setDzError(Float_t x) { dzError_ = x; }
+		void setDzBeamSpot(Float_t x) { dzBeamSpot_ = x; }
+		void setDzBeamSpotError(Float_t x) { dzBeamSpotError_ = x; }
 		//void setDB(Float_t dB) { dB_ = dB; }
 		//void setDBError(Float_t dBError) { dBError_ = dBError; }
    
@@ -354,6 +372,8 @@ namespace TopTree
 	        Float_t d0BeamSpotError_;                          // error on d0BeamSpot_
 	        Float_t dz_;                               // longitudinal impact parameter (wrt to PV)
 	        Float_t dzError_;                          // error on dz_ 
+	        Float_t dzBeamSpot_;                         	     // longitudinal impact parameter (wrt to beam spot)
+	        Float_t dzBeamSpotError_;                          // error on dzBeamSpot_
 	      
 	        // If this was not the case, dB is calculated wrt the beamspot and edb = -1 all the time
 	        //Float_t dB_;                             // dB from PAT muon
