@@ -47,6 +47,9 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
 	//cout<<"in top tree producer...muonanalyzer process...2"<<endl;
   edm::Handle< reco::VertexCollection > pvHandle;
   iEvent.getByLabel(primaryVertexProducer_, pvHandle);
+
+  edm::Handle<reco::BeamSpot> beamSpotHandle;
+  iEvent.getByLabel("offlineBeamSpot", beamSpotHandle);
   
 //	edm::Handle<reco::BeamSpot> beamSpotHandle;
 //	iEvent.getByLabel("offlineBeamSpot", beamSpotHandle);
@@ -72,13 +75,27 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
       localMuon.setAlgo (muon->type ());
       localMuon.setID (int ( muon::isGoodMuon ( *muon, muon::AllGlobalMuons)), int ( muon::isGoodMuon ( *muon, muon::AllTrackerMuons)), int ( muon::isGoodMuon ( *muon, muon::AllStandAloneMuons)), int ( muon::isGoodMuon ( *muon, muon::TrackerMuonArbitrated)), int ( muon::isGoodMuon ( *muon, muon::AllArbitrated)), int ( muon::isGoodMuon ( *muon, muon::GlobalMuonPromptTight)), int ( muon::isGoodMuon (*muon, muon::TMLastStationLoose)), int ( muon::isGoodMuon ( *muon, muon::TMLastStationTight)),int ( muon::isGoodMuon ( *muon, muon::TMLastStationAngTight)) , int ( muon::isGoodMuon ( *muon, muon::TMOneStationLoose)), int ( muon::isGoodMuon ( *muon, muon::TMOneStationTight)), int ( muon::isGoodMuon ( *muon, muon::TMLastStationOptimizedLowPtLoose)), int ( muon::isGoodMuon ( *muon, muon::TMLastStationOptimizedLowPtTight)), int ( muon::isGoodMuon ( *muon, muon::TM2DCompatibilityLoose)), int ( muon::isGoodMuon ( *muon, muon::TM2DCompatibilityTight)));
 
+
+      const reco::BeamSpot &mybeamspot = *beamSpotHandle.product();
+
+      localMuon.setD0BeamSpot ( muon->muonBestTrack()->dxy(mybeamspot.position()) );
+      localMuon.setD0BeamSpotError ( sqrt(pow(muon->muonBestTrack()->dxyError(),2)+pow(mybeamspot.x0Error(),2)+ pow(mybeamspot.y0Error(),2)) );
+
+      localMuon.setDzBeamSpot ( muon->muonBestTrack()->dz(mybeamspot.position()) );
+      localMuon.setDzBeamSpotError ( sqrt(pow(muon->muonBestTrack()->dzError(),2)+pow(mybeamspot.x0Error(),2)+ pow(mybeamspot.y0Error(),2)) );
+      
+
       if(muon->innerTrack().isNonnull() && muon->innerTrack().isAvailable())
       {
+
+
         if(pvHandle.isValid() && pvHandle->size() != 0)
         {
           reco::VertexRef vtx(pvHandle,0);
           localMuon.setD0 ( muon->innerTrack()->dxy(vtx->position()) );
           localMuon.setD0Error ( sqrt(pow(muon->innerTrack()->dxyError(),2)+pow(vtx->xError(),2)+ pow(vtx->yError(),2)) );
+
+
           localMuon.setDz ( muon->innerTrack()->dz(vtx->position()) );
           localMuon.setDzError ( sqrt(pow(muon->innerTrack()->dzError(),2)+pow(vtx->zError(),2)) );
         }

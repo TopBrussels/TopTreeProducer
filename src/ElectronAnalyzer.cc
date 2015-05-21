@@ -55,6 +55,9 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
   edm::Handle< reco::VertexCollection > pvHandle;
   iEvent.getByLabel(primaryVertexProducer_, pvHandle);
 
+  edm::Handle<reco::BeamSpot> beamSpotHandle;
+  iEvent.getByLabel("offlineBeamSpot", beamSpotHandle);
+
   //edm::ESHandle<TransientTrackBuilder> builder;
   //iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder", builder);
   //TransientTrackBuilder thebuilder = *(builder.product());
@@ -135,6 +138,16 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
         localElectron.setD0( gsfTrack->dxy(vtx->position()) );
         localElectron.setD0Error( sqrt( pow(gsfTrack->dxyError(),2) + pow(vtx->xError(),2) + pow(vtx->yError(),2) ) );
   	localElectron.setDz( gsfTrack->dz(vtx->position()) );
+	localElectron.setDzError( gsfTrack->dzError());
+
+
+	// get the beam spot and use that to get relative position. Used in displaced lepton analysis 
+	const reco::BeamSpot &mybeamspot = *beamSpotHandle.product();
+	localElectron.setD0BeamSpot(patElectron->gsfTrack()->dxy(mybeamspot.position()));
+        localElectron.setD0BeamSpotError( sqrt( pow(patElectron->gsfTrack()->dxyError(),2) + pow(mybeamspot.x0Error(),2) + pow(mybeamspot.y0Error(),2) ) );
+	localElectron.setDzBeamSpot(patElectron->gsfTrack()->dz(mybeamspot.position()));
+	localElectron.setDzBeamSpotError( sqrt( pow(patElectron->gsfTrack()->dzError(),2) + pow(mybeamspot.x0Error(),2) + pow(mybeamspot.y0Error(),2) ) );
+
 
         //do we really need to ip3d? we can use PAT member function instead of getting it from RECO (taejeong)
         //const double gsfsign   = ( (-gsfTrack->dxy(vtx->position()))   >=0 ) ? 1. : -1.;
