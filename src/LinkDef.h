@@ -55,30 +55,30 @@
 #pragma link off all classes;
 #pragma link off all functions;
 
-#pragma link C++ class TopTree::TRootRun;
-#pragma link C++ class TopTree::TRootEvent;
-#pragma link C++ class TopTree::TRootParticle;
+#pragma link C++ class TopTree::TRootRun+;
+#pragma link C++ class TopTree::TRootEvent+;
+#pragma link C++ class TopTree::TRootParticle+;
 #pragma link C++ class TopTree::TRootMCParticle+;
-#pragma link C++ class TopTree::TRootJet;
-#pragma link C++ class TopTree::TRootJPTJet;
-#pragma link C++ class TopTree::TRootCaloJet;
+#pragma link C++ class TopTree::TRootJet+;
+#pragma link C++ class TopTree::TRootJPTJet+;
+#pragma link C++ class TopTree::TRootCaloJet+;
 #pragma link C++ class TopTree::TRootGenJet;
 #pragma link C++ class TopTree::TRootPFJet+;
 #pragma link C++ class TopTree::TRootMuon+;
 #pragma link C++ class TopTree::TRootElectron+;
-#pragma link C++ class TopTree::TRootLepton;
+#pragma link C++ class TopTree::TRootLepton+;
 #pragma link C++ class TopTree::TRootPhoton+;
-#pragma link C++ class TopTree::TRootMET;
-#pragma link C++ class TopTree::TRootCaloMET;
+#pragma link C++ class TopTree::TRootMET+;
+#pragma link C++ class TopTree::TRootCaloMET+;
 #pragma link C++ class TopTree::TRootPFMET+;
-#pragma link C++ class TopTree::TRootTrackMET;
-#pragma link C++ class TopTree::TRootGenEvent;
-#pragma link C++ class TopTree::TRootGenTop;
-#pragma link C++ class TopTree::TRootNPGenEvent;
-#pragma link C++ class TopTree::TRootSpinCorrGen;
+#pragma link C++ class TopTree::TRootTrackMET+;
+#pragma link C++ class TopTree::TRootGenEvent+;
+#pragma link C++ class TopTree::TRootGenTop+;
+#pragma link C++ class TopTree::TRootNPGenEvent+;
+#pragma link C++ class TopTree::TRootSpinCorrGen+;
 #pragma link C++ class TopTree::TRootVertex+;
-#pragma link C++ class TopTree::TRootHLTInfo;
-#pragma link C++ class TopTree::TRootSubstructureJet;
+#pragma link C++ class TopTree::TRootHLTInfo+;
+#pragma link C++ class TopTree::TRootSubstructureJet+;
 
 #pragma link C++ struct TopTree::triggeredObject;
 

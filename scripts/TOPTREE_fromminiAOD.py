@@ -17,7 +17,7 @@ process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 process.load("RecoBTag.PerformanceDB.BTagPerformanceDB1107")
 process.load("RecoBTag.PerformanceDB.PoolBTagPerformanceDB1107")
 
-process.GlobalTag.globaltag = cms.string('PLS170_V6AN1::All')
+process.GlobalTag.globaltag = cms.string('MCRUN2_74_V9A')
 # geometry needed for clustering and calo shapes variables
 # process.load("RecoEcal.EgammaClusterProducers.geometryForClustering_cff")
 # 3 folllowing config files included in RecoEcal.EgammaClusterProducers.geometryForClustering_cff
@@ -31,46 +31,27 @@ process.GlobalTag.globaltag = cms.string('PLS170_V6AN1::All')
 # pi0 discrimination variables
 #process.load("RecoEcal.EgammaClusterProducers.piZeroDiscriminators_cfi")
 
-#process.maxEvents = cms.untracked.PSet(
-#    input = cms.untracked.int32(-1)
-#)
+process.maxEvents = cms.untracked.PSet(
+    input = cms.untracked.int32(10)
+)
 
-#process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('file:miniAOD-prod_PAT_387.root'))
+#process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('file:miniAOD_PAT.root'))
 
+process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/mc/RunIISpring15DR74/TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt50ns_MCRUN2_74_V9A-v1/50000/94B04F22-1EFE-E411-96AB-90B11C2CA412.root'))
+
+#process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('file:miniAOD-prod_PAT_1.root'))
 #process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring('file:miniAOD-prod_PAT_387.root','file:miniAOD-prod_PAT_104.root','file:miniAOD-prod_PAT_105.root'))
 
 
-#process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/mc/Spring14miniaod/TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU_S14_POSTLS170_V6-v1/00000/00080927-67FD-E311-B049-0025901D4854.root'))
+#process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/mc/Fall14DR73/TTJets_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/AODSIM/PFr1_Flat_20_50_50ns_GSFromFall14_MCRUN2_73_V11-v1/00000/000B17A2-E6E6-E411-B185-003048FFD740.root'))
 
-#Test File for PU20bc25
-#process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/mc/Spring14miniaod/TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_POSTLS170_V5-v2/00000/004C6DA7-FB03-E411-96BD-0025905A497A.root'))
-
-#process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring('file:miniAOD-prod_PAT_10.root'))
-
-# skipEvents=cms.untracked.uint32(1000))
-
-#process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('dcap://maite.iihe.ac.be/pnfs/iihe/cms/store/user/keaveney/TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola/CSA14_test2/140706_140732/0000/miniAOD-prod_PAT_387.root'))
-
-#Python Fragment containing all PU20bx25 filenames through xrootd
-#process.load("TopBrussels.TopTreeProducer.miniAODTTbar_PU20bx25_files_cfi")
-
-#Python Fragment containing all PU40bx50 filenames through xrootd
-#process.load("TopBrussels.TopTreeProducer.miniAODTTbar_PU40bx50_files_cfi")
-
-
-#Python Fragment containing TTTT NLO 13TeV miniAOD files (Produced by Jesse)
-#process.load("TopBrussels.TopTreeProducer.FOURTOP_NLO_13TeV_miniAOD_Files_cfi")
-
-#Python Fragment containing TTTT LO 13TeV miniAOD files (Produced by Jesse)
-#process.load("TopBrussels.TopTreeProducer.FOURTOP_LO_13TeV_miniAOD_Files_cfi")
-
-#Python Fragment containing TTJets NLO 13TeV miniAOD files (Produced by Jesse)
-process.load("TopBrussels.TopTreeProducer.TTJets_NLO_aMCNLO_PYTHIA8_13TeV_miniAOD_Files_cfi")
 
 
 
 # reduce verbosity
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(1000)
+
+process.options = cms.untracked.PSet(SkipEvent = cms.untracked.vstring('ProductNotFound'))
 
 process.analysis = cms.EDAnalyzer("TopTreeProducer",
 	myConfig = cms.PSet(
@@ -81,7 +62,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
  		# 		3 = Liste of high level objects (jetss, muons, ...)
  		# 		4 = List of all  objects
 		# 		5 = Debug
- 		verbosity = cms.untracked.int32(1),
+ 		verbosity = cms.untracked.int32(2),
 
 		# used in the electron to see if the magneticfield is taken from DCS or from IDEALMAGFIELDRECORD
 		isData = cms.untracked.bool(False),
@@ -109,6 +90,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		doGenJet = cms.untracked.bool(False),
 		doCaloJetId = cms.untracked.bool(False),
 		doPFJet = cms.untracked.bool(True),
+                doFatJet = cms.untracked.bool(True),
 		doJPTJet = cms.untracked.bool(False),
 		doJPTJetId = cms.untracked.bool(False),
 		doMuon = cms.untracked.bool(True),
@@ -121,7 +103,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		doGenEvent = cms.untracked.bool(False),#put on False when running non-ttbar or when running toptree from reco
 		doNPGenEvent = cms.untracked.bool(False),#put on True when running New Physics sample
 		doSpinCorrGen = cms.untracked.bool(False),#put on True only if you need SpinCorrelation Variables
-        	doLHEEventProd = cms.untracked.bool(True),#put on True only if you need SpinCorrelation Variables
+        	doLHEEventProd = cms.untracked.bool(False),#put on True only if you need SpinCorrelation Variables
 		doSemiLepEvent = cms.untracked.bool(False),#put on True only if you need TtSemiLeptonicEvent Collection exist in PAT-uples (L2)
 
 		conversionLikelihoodWeightsFile = cms.untracked.string('RecoEgamma/EgammaTools/data/TMVAnalysis_Likelihood.weights.txt'),
@@ -159,6 +141,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		vcaloJetProducer = cms.untracked.vstring("selectedPatJetsAK5Calo"),
 		vgenJetProducer = cms.untracked.vstring("slimmedGenJets"),
 		vpfJetProducer = cms.untracked.vstring("slimmedJets"),#,"selectedPatJetsPF2PATNoPFnoPU"),
+                vfatJetProducer = cms.untracked.vstring("slimmedJetsAK8"),#,"selectedPatJetsPF2PATNoPFnoPU"),
 		vJPTJetProducer = cms.untracked.vstring(""),
 		vmuonProducer = cms.untracked.vstring("slimmedMuons"),#,"selectedPatMuonsPF2PATNoPFnoPU"),
 		velectronProducer = cms.untracked.vstring("slimmedElectrons"),#,"selectedPatElectronsPF2PATNoPFnoPU"),

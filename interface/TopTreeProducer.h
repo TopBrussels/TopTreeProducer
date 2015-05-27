@@ -25,7 +25,7 @@
 #include "DataFormats/Common/interface/TriggerResults.h"
 #include "DataFormats/Common/interface/MergeableCounter.h"
 
-#include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h" 
+#include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h"
 
 #include "../interface/HLTAnalyzer.h"
 #include "../interface/MCAnalyzer.h"
@@ -84,8 +84,8 @@ class TopTreeProducer : public edm::EDAnalyzer {
 public:
 	explicit TopTreeProducer(const edm::ParameterSet&);
 	~TopTreeProducer();
-	
-	
+
+
 private:
 	virtual void beginJob() ;
 	virtual void analyze(const edm::Event&, const edm::EventSetup&);
@@ -94,7 +94,7 @@ private:
 
 	edm::ParameterSet myConfig_;
 	edm::ParameterSet producersNames_;
-	
+
 	int verbosity;
 	std::string rootFileName_ ;
 	TFile* rootFile_ ;
@@ -135,7 +135,7 @@ private:
 	std::vector<std::string> vElectronProducer;
 	std::vector<std::string> vPhotonProducer;
         std::vector<std::string> vPFmetProducer;
-        std::vector<std::string> vTrackmetProducer; 
+        std::vector<std::string> vTrackmetProducer;
 	int nTotEvt_;
 	HLTAnalyzer* hltAnalyzer_;
         LHEEventProductAnalyzer* lheEventProductAnalyzer_;

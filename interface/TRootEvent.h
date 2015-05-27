@@ -67,28 +67,28 @@ namespace TopTree
 
 		// Event numbe
 
-        double weight0() const { return weight0_; }
-        double weight1() const { return weight1_; }
-        double weight2() const { return weight2_; }
-        double weight3() const { return weight3_; }
-        double weight4() const { return weight4_; }
-        double weight5() const { return weight5_; }
-		double weight6() const { return weight6_; }
-		double weight7() const { return weight7_; }
-		double weight8() const { return weight8_; }
+        Float_t weight0() const { return weight0_; }
+        Float_t weight1() const { return weight1_; }
+        Float_t weight2() const { return weight2_; }
+        Float_t weight3() const { return weight3_; }
+        Float_t weight4() const { return weight4_; }
+        Float_t weight5() const { return weight5_; }
+		Float_t weight6() const { return weight6_; }
+		Float_t weight7() const { return weight7_; }
+		Float_t weight8() const { return weight8_; }
 
 		Int_t nb() const { return nb_; }
 		Int_t eventId() const { return eventId_; }
 		Int_t runId() const { return runId_; }
 		Int_t lumiBlockId() const {return lumiBlockId_; }
 		Int_t flavorHistoryPath() const { return flavHistPath_; }
-		double fixedGridRhoAll() const { return fixedGridRhoAll_; }
-		double fixedGridRhoFastjetAll() const { return fixedGridRhoFastjetAll_; }
-		double fixedGridRhoFastjetAllCalo() const { return fixedGridRhoFastjetAllCalo_; }
-		double fixedGridRhoFastjetCentralCalo() const { return fixedGridRhoFastjetCentralCalo_; }
-		double fixedGridRhoFastjetCentralChargedPileUp() const { return fixedGridRhoFastjetCentralChargedPileUp_; }
-		double fixedGridRhoFastjetCentralNeutral() const { return fixedGridRhoFastjetCentralNeutral_; }
-    		double kt6PFJetsForIsolation_rho() const { return kt6PFJetsForIsolation_rho_; }
+		Float_t fixedGridRhoAll() const { return fixedGridRhoAll_; }
+		Float_t fixedGridRhoFastjetAll() const { return fixedGridRhoFastjetAll_; }
+		Float_t fixedGridRhoFastjetAllCalo() const { return fixedGridRhoFastjetAllCalo_; }
+		Float_t fixedGridRhoFastjetCentralCalo() const { return fixedGridRhoFastjetCentralCalo_; }
+		Float_t fixedGridRhoFastjetCentralChargedPileUp() const { return fixedGridRhoFastjetCentralChargedPileUp_; }
+		Float_t fixedGridRhoFastjetCentralNeutral() const { return fixedGridRhoFastjetCentralNeutral_; }
+        Float_t kt6PFJetsForIsolation_rho() const { return kt6PFJetsForIsolation_rho_; }
 		// generalTracks infos (for cleaning of the scraping events)
 		Int_t nTracks() const { return nTracks_; }
 		Int_t nHighPurityTracks() const { return nHighPurityTracks_; }
@@ -127,7 +127,7 @@ namespace TopTree
 		std::map<std::string, std::vector<TopTree::triggeredObject> >  getTriggerFilters() const { return triggerFilters_;}
 
 
-		void setWeights(vector<double> weights) {
+		void setWeights(vector<Float_t> weights) {
 		  weight0_ = weights[0];
 		  //cout << "Weight0 set: " << weight0_ << endl;
 		  weight1_ = weights[1];
@@ -196,8 +196,8 @@ namespace TopTree
 
 
 		Int_t flavHistPath_; // flavor history path, see https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideFlavorHistory
-		double fixedGridRhoAll_, fixedGridRhoFastjetAll_, fixedGridRhoFastjetAllCalo_, fixedGridRhoFastjetCentralCalo_, fixedGridRhoFastjetCentralChargedPileUp_, fixedGridRhoFastjetCentralNeutral_;
-		double kt6PFJetsForIsolation_rho_;
+		Float_t fixedGridRhoAll_, fixedGridRhoFastjetAll_, fixedGridRhoFastjetAllCalo_, fixedGridRhoFastjetCentralCalo_, fixedGridRhoFastjetCentralChargedPileUp_, fixedGridRhoFastjetCentralNeutral_;
+		Float_t kt6PFJetsForIsolation_rho_;
 
 		// generalTracks infos (for cleaning of the scraping events)
 		Int_t nTracks_;
@@ -217,15 +217,15 @@ namespace TopTree
 		Float_t xParton2_;
 		Float_t factorizationScale_;
 
-		double weight0_;
-		double weight1_;
-		double weight2_;
-		double weight3_;
-		double weight4_;
-		double weight5_;
-		double weight6_;
-		double weight7_;
-		double weight8_;
+		Float_t weight0_;
+		Float_t weight1_;
+		Float_t weight2_;
+		Float_t weight3_;
+		Float_t weight4_;
+		Float_t weight5_;
+		Float_t weight6_;
+		Float_t weight7_;
+		Float_t weight8_;
 
 		std::map<std::string, std::vector<TopTree::triggeredObject> > triggerFilters_;
 

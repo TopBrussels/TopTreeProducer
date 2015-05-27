@@ -58,7 +58,7 @@ void LHEEventProductAnalyzer::Process(const edm::Event& iEvent, TRootEvent* root
     const std::vector<WGT>& weights  = lheEventProduct->weights();
     if(verbosity_ > 1) cout << "Analysing LHEEventProduct collection ..3 = "<< muf_down_mur_down_weight  << endl;
 
-    std::vector<double> weights_d;
+    std::vector<Float_t> weights_d;
 
     for (int w = 0; w < 9; w++)
     {
@@ -74,7 +74,7 @@ void LHEEventProductAnalyzer::Process(const edm::Event& iEvent, TRootEvent* root
 
 
 
-    if(verbosity_ > 1) cout << "Analysing LHEEventProduct collection ..3. = " <<muf_down_mur_down_weight<<   endl;
+    if(verbosity_ > 1) cout << "Analysing LHEEventProduct collection ..3. = " <<rootEvent->weight0()<<   endl;
 
 
 
