@@ -410,7 +410,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
     rootEvent->setRunId(iEvent.id().run());
     rootEvent->setLumiBlockId(iEvent.luminosityBlock());
 
-    if(verbosity>2)
+    if(verbosity>4)
     {
         cout << "Root Event things set." << endl;
     }
@@ -428,17 +428,19 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
         // (then, for example, you can do)
         for(PVI = PupInfo->begin(); PVI != PupInfo->end(); ++PVI)
         {
-
-            std::cout << " Pileup Information: bunchXing, nvtx: " << PVI->getBunchCrossing() << " " << PVI->getPU_NumInteractions() << std::endl;
+            if(verbosity>2)
+            {
+                std::cout << " Pileup Information: bunchXing, nvtx: " << PVI->getBunchCrossing() << " " << PVI->getPU_NumInteractions() << std::endl;
+            }
 
             rootEvent->setNPu(PVI->getBunchCrossing(), PVI->getPU_NumInteractions());
-            if(verbosity>2)
+            if(verbosity>4)
             {
                 cout << "Root Event PU Stuff 1." << endl;
             }
             if(PVI->getBunchCrossing() == 0) rootEvent->setNTruePU(PVI->getTrueNumInteractions());
         }
-        if(verbosity>2)
+        if(verbosity>4)
         {
             cout << "Root Event PU Stuff 2." << endl;
         }
