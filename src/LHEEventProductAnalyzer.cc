@@ -39,25 +39,18 @@ LHEEventProductAnalyzer::~LHEEventProductAnalyzer()
 void LHEEventProductAnalyzer::Process(const edm::Event& iEvent, TRootEvent* rootEvent)
 {
 
+
       if(verbosity_ > 1) cout << "Analysing LHEEventProduct collection ... = "<<  lheEventProductProducer_.label()  << endl;
 
-
-    //  if( lheEventProductProducer_.label()) != ""
-
-//    	edm::Handle < edm::View <LHEEventProduct> > lheEventProduct;
     edm::Handle<LHEEventProduct> lheEventProduct;
     if(verbosity_ > 1) cout << "Analysing LHEEventProduct collection ..1. = "<<endl;
 
-    iEvent.getByLabel( lheEventProductProducer_ ,lheEventProduct );
+    if(    iEvent.getByLabel( lheEventProductProducer_ ,lheEventProduct ) ){
 
-    if(verbosity_ > 1) cout << "Analysing LHEEventProduct collection ..2. = "<<endl;
-    double muf_down_mur_down_weight = lheEventProduct->originalXWGTUP();
-
-
-
+    if(verbosity_ > 1) cout << "Analysing LHEEventProduct, collection present "<<endl;
+ 
     const std::vector<WGT>& weights  = lheEventProduct->weights();
-    if(verbosity_ > 1) cout << "Analysing LHEEventProduct collection ..3 = "<< muf_down_mur_down_weight  << endl;
-
+ 
     std::vector<Float_t> weights_d;
 
     for (int w = 0; w < 9; w++)
@@ -72,11 +65,9 @@ void LHEEventProductAnalyzer::Process(const edm::Event& iEvent, TRootEvent* root
 
     rootEvent->setWeights(weights_d);
 
+    if(verbosity_ > 1) cout << "Weights succesfully extracted  "<<   endl;
 
-
-    if(verbosity_ > 1) cout << "Analysing LHEEventProduct collection ..3. = " <<rootEvent->weight0()<<   endl;
-
-
+    } 
 
 
 }
