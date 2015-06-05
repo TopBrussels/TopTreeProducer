@@ -62,7 +62,7 @@
 #pragma link C++ class TopTree::TRootJet+;
 #pragma link C++ class TopTree::TRootJPTJet+;
 #pragma link C++ class TopTree::TRootCaloJet+;
-#pragma link C++ class TopTree::TRootGenJet;
+#pragma link C++ class TopTree::TRootGenJet+;
 #pragma link C++ class TopTree::TRootPFJet+;
 #pragma link C++ class TopTree::TRootMuon+;
 #pragma link C++ class TopTree::TRootElectron+;
