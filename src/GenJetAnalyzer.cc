@@ -81,11 +81,18 @@ void GenJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenJets
         TRootMCParticle CHad;
 
 
-        std::vector <const reco::GenParticle*> mcparts = genJet->getGenConstituents();
+//        std::vector <const reco::GenParticle*> mcparts = genJet->getGenConstituents();
+        std::vector <const reco::Candidate*> mcparts;
+//        const reco::Candidate*  p;
+        for(unsigned genidx = 0; genidx < genJet->numberOfDaughters(); genidx++)
+        {
+//            p = genJet->daughter(genidx);
+            mcparts.push_back(genJet->daughter(genidx));
+        }
 
 if(verbosity_>4)	cout << "Analysing GenJets collection ...Constituates Loaded = " << j  <<endl;
         for (unsigned i = 0; i < mcparts.size (); i++) {
-            const GenParticle* mcpart = mcparts[i];
+            const reco::Candidate* mcpart = mcparts[i];
             const reco::Candidate* lastB = lastBHadron(*mcpart);
             if( lastB ) {
                 isBHadron = true;
@@ -97,7 +104,7 @@ if(verbosity_>4)	cout << "Analysing GenJets collection ...Constituates Loaded = 
 
         for (unsigned i = 0; i < mcparts.size (); i++) {
             if( isBHadron ) break; //no need to loop over again, this is b-jet!
-            const GenParticle* mcpart = mcparts[i];
+            const reco::Candidate* mcpart = mcparts[i];
             const reco::Candidate* lastC = lastCHadron(*mcpart);
             if( lastC ) {
                 isCHadron = true;
