@@ -3,13 +3,13 @@
 <inputdatasets>
 <!-- <i file="../test/TopTree_CRAFT09_test.root"/> -->
 <!-- <i file="TTbar_Summer09_7TeV_TopTree_1.root"/> -->
-<i file="DYToMuMu_Spring11_TOPTREE.root"/>
+<i file="TOPTREE_1.root"/>
 </inputdatasets>
 
 <outputfilename>
 <!-- <o file="TopTree_CRAFT09_Skimmed_test.root"/> -->
 <!-- <o file="TTbar_Summer09_7TeV_TopTree_Skimmed.root"/> -->
-<o file="DYToMuMu_Spring11_Skimmed_TOPTREE.root"/>
+<o file="Skimmed_TOPTREE.root"/>
 </outputfilename>
 
 <options>
@@ -22,9 +22,9 @@
 <k type="TopTree::TRootMHT" name="MHT" minPt="15" maxEta="2.4" skipObjects="0" minNObjects="0"/>
 skipObjects:  1 = True | 0 = False
 -->
-<k type="TopTree::TRootMuon" name="Muons_selectedPatMuons" minPt="15" maxEta="2.4" skipObjects="0" minNObjects="0"/>
-<k type="TopTree::TRootCaloJet" name="CaloJets_selectedPatJetsAK5Calo" minPt="15" maxEta="2.4" skipObjects="0" minNObjects="0"/>
-<k type="TopTree::TRootPFJet" name="PFJets_selectedPatJetsAK5PF" minPt="15" maxEta="2.4" skipObjects="0" minNObjects="0"/>
-<k type="TopTree::TRootVertex" name="PrimaryVertex" minPt="0" maxEta="9999" skipObjects="0" minNObjects="0"/>
-<k type="TopTree::TRootPFMET" name="PFMET" minPt="0" maxEta="2.4" skipObjects="0" minNObjects="0"/>
+<k type="TopTree::TRootMuon" name="Muons_slimmedMuons" minPt="15" maxEta="2.1" skipObjects="0" minNObjects="0"/>
+<k type="TopTree::TRootElectron" name="Electrons_slimmedElectrons" minPt="15" maxEta="2.5" skipObjects="0" minNObjects="1"/>
+<k type="TopTree::TRootPFJet" name="PFJets_slimmedJets" minPt="30" maxEta="2.4" skipObjects="0" minNObjects="6"/>
+<k type="TopTree::TRootVertex" name="PrimaryVertex" minPt="0" maxEta="999" skipObjects="0" minNObjects="0"/>
+<k type="TopTree::TRootPFMET" name="PFMET_slimmedMETs" minPt="15" maxEta="2.4" skipObjects="0" minNObjects="0"/>
 </keepbranches>

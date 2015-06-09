@@ -409,7 +409,8 @@ int main()
 		vector<TopTree::TRootHLTInfo> tmpRunInfos = outRunInfos->copyHLTinfos();
 
 		//loop over events
-		for(unsigned int ievt=0; ievt<nTempEvents; ievt++)
+	     	for(unsigned int ievt=0; ievt<nTempEvents; ievt++)
+		  //	for(unsigned int ievt=0; ievt<10000; ievt++)
 		{
 			if( verbosity > 1 ) cout << ">>> Trying to get event " << ievt << endl;
 
