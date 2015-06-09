@@ -62,7 +62,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
  		# 		3 = Liste of high level objects (jetss, muons, ...)
  		# 		4 = List of all  objects
 		# 		5 = Debug
- 		verbosity = cms.untracked.int32(2),
+ 		verbosity = cms.untracked.int32(1),
 
 		# used in the electron to see if the magneticfield is taken from DCS or from IDEALMAGFIELDRECORD
 		isData = cms.untracked.bool(False),
