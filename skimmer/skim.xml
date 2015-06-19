@@ -18,10 +18,6 @@
 </options>
 
 <keepbranches>
-<!-- Branches which need to be kept
-<k type="TopTree::TRootMHT" name="MHT" minPt="15" maxEta="2.4" skipObjects="0" minNObjects="0"/>
-skipObjects:  1 = True | 0 = False
--->
 <k type="TopTree::TRootMuon" name="Muons_slimmedMuons" minPt="15" maxEta="2.1" skipObjects="0" minNObjects="0"/>
 <k type="TopTree::TRootElectron" name="Electrons_slimmedElectrons" minPt="15" maxEta="2.5" skipObjects="0" minNObjects="1"/>
 <k type="TopTree::TRootPFJet" name="PFJets_slimmedJets" minPt="30" maxEta="2.4" skipObjects="0" minNObjects="6"/>
