@@ -18,6 +18,7 @@
 #include "../interface/TRootPhoton.h"
 #include "../interface/TRootJet.h"
 #include "../interface/TRootPFJet.h"
+#include "../interface/TRootSubstructureJet.h"
 #include "../interface/TRootCaloJet.h"
 #include "../interface/TRootJPTJet.h"
 #include "../interface/TRootGenJet.h"
@@ -451,9 +452,14 @@ int main()
 		      
 			// The HLT info is stored per run in the TRootRun. For file >= 0, we just copy the elements from the hltInfos vector and it's done...
 
-		     	if (outRunInfos->getHLTinfo(inEvent->runId()).RunID() == 0) // if this run is not yet in the vector, add it.
-			  tmpRunInfos.push_back(inRunInfos->getHLTinfo(inEvent->runId()));
-			  outRunInfos->setHLTinfos(tmpRunInfos); // put the new vector in TRootRun
+                  	////////////////////////////////////////////////////////////////////////
+			///////  HLT INFO... CAUSES MAJOR MEMORY LEAK in 74, even when trig info is correct in toptrees,
+			////////////////
+			///////////////////////////////////////////////////////////////////////
+
+			//		     	if (outRunInfos->getHLTinfo(inEvent->runId()).RunID() == 0) // if this run is not yet in the vector, add it.
+			// tmpRunInfos.push_back(inRunInfos->getHLTinfo(inEvent->runId()));
+			//  outRunInfos->setHLTinfos(tmpRunInfos); // put the new vector in TRootRun
 
 
 //			if( verbosity > 1 )
@@ -647,6 +653,46 @@ int main()
 					if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
 					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
 				}
+
+
+	else if(objectsToKeep[j].type == "TopTree::TRootSubstructureJet")
+{
+					TRootSubstructureJet* fatJet;
+					int fatJetsKept=0;
+					for(int i=0; i<(objectsToKeep[j].inArray)->GetEntriesFast(); i++)
+					{
+						fatJet = (TRootSubstructureJet*) (objectsToKeep[j].inArray)->At(i);
+						bool keepFatJet = true;
+						
+						if(fatJet->Pt() < objectsToKeep[j].minPt || fabs(fatJet->Eta()) > objectsToKeep[j].maxEta)
+						{
+							keepFatJet = false;
+							if( verbosity > 1 ) cout << "skip FatJet with pT = " << fatJet->Pt() << " and eta = " << fatJet->Eta() << endl;
+						}
+						else fatJetsKept++;
+						
+						if( ! objectsToKeep[j].skipObjects )
+							new( (*(objectsToKeep[j].outArray))[i] ) TRootSubstructureJet(*fatJet);
+						else if(keepFatJet)
+							new( (*(objectsToKeep[j].outArray))[fatJetsKept-1] ) TRootSubstructureJet(*fatJet);			
+					}
+				
+					if(fatJetsKept < objectsToKeep[j].minNObjects)
+					{
+						keepEvent = false;
+						if( verbosity > 1 ) cout << "Too small number of selected jets: fatJetsKept = " << fatJetsKept << endl;
+					}
+				
+					if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
+					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
+				}
+
+
+
+
+
+
+
 
 				else if(objectsToKeep[j].type == "TopTree::TRootCaloJet")
 				{

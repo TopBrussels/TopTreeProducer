@@ -3,7 +3,7 @@
 <inputdatasets>
 <!-- <i file="../test/TopTree_CRAFT09_test.root"/> -->
 <!-- <i file="TTbar_Summer09_7TeV_TopTree_1.root"/> -->
-<i file="TOPTREE_1.root"/>
+<i file="dcap://maite.iihe.ac.be///pnfs/iihe/cms/store/user/fblekman/TopTree/CMSSW_74X_v2/TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/crab_TOPTREE-TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2-MINIAODSIM--CMSSW_74X_v2--MCRUN2_74_V9-All/150623_163453/0000/TOPTREE_57.root"/>
 </inputdatasets>
 
 <outputfilename>
@@ -18,9 +18,11 @@
 </options>
 
 <keepbranches>
-<k type="TopTree::TRootMuon" name="Muons_slimmedMuons" minPt="15" maxEta="2.1" skipObjects="0" minNObjects="0"/>
+<k type="TopTree::TRootMCParticle" name="MCParticles" minPt="0" maxEta="10" skipObjects="0" minNObjects="0"/>
+<k type="TopTree::TRootMuon" name="Muons_slimmedMuons" minPt="15" maxEta="2.5" skipObjects="0" minNObjects="1"/>
 <k type="TopTree::TRootElectron" name="Electrons_slimmedElectrons" minPt="15" maxEta="2.5" skipObjects="0" minNObjects="1"/>
-<k type="TopTree::TRootPFJet" name="PFJets_slimmedJets" minPt="30" maxEta="2.4" skipObjects="0" minNObjects="6"/>
+<k type="TopTree::TRootPFJet" name="PFJets_slimmedJets" minPt="30" maxEta="2.5" skipObjects="0" minNObjects="4"/>
+<k type="TopTree::TRootSubstructureJet" name="FatJets_slimmedJetsAK8" minPt="30" maxEta="2.5" skipObjects="0" minNObjects="4"/>
 <k type="TopTree::TRootVertex" name="PrimaryVertex" minPt="0" maxEta="999" skipObjects="0" minNObjects="0"/>
 <k type="TopTree::TRootPFMET" name="PFMET_slimmedMETs" minPt="15" maxEta="2.4" skipObjects="0" minNObjects="0"/>
 </keepbranches>
