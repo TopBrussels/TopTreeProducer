@@ -24,6 +24,12 @@ while IFS=" "  read samplename version globaltag  ; do
     echo "config.JobType.psetName = '"$cmsswfilename"'" >> bla
     echo "config.section_(\"User\")" >> bla
     echo "config.User.voGroup = 'becms'" >> bla
+    grep -v "config.Data.inputDataset" bla > bla2; mv bla2 bla
+    echo "config.Data.inputDataset = '"$samplename"'" >> bla 
+    echo "config.Data.outLFNDirBase = '/store/user/"`whoami`"/TopTree/"$version"'" >> bla
+ 
+    echo $samplename >> endprintout.txt  #" config files "$cmsswfilename" "$crabfilename >> endprintout.txt
+
 #    move the resulting file to the right location
     mv bla $crabfilename
 #    cat $crabfilename
@@ -46,4 +52,4 @@ echo "SUMMARY: CREATED CONFIGS FOR THE FOLLOWING SAMPLES: "
 cat endprintout.txt
 
 
-rm -rf endprintout.txt
+
