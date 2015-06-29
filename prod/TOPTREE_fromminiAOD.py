@@ -93,7 +93,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		RootFileName = cms.untracked.string("TOPTREE.root"),
 
 		# What is written to rootuple
-		doHLT = cms.untracked.bool(False),
+		doHLT = cms.untracked.bool(True),
 		doMC = cms.untracked.bool(True),
 		doPDFInfo = cms.untracked.bool(True),
 		signalGenerator = cms.untracked.string('PYTHIA'),

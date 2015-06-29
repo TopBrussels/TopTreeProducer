@@ -412,9 +412,24 @@ int main()
 	     	for(unsigned int ievt=0; ievt<nTempEvents; ievt++)
 		  //	for(unsigned int ievt=0; ievt<10000; ievt++)
 		{
+
 			if( verbosity > 1 ) cout << ">>> Trying to get event " << ievt << endl;
 
+                    	time_t t = time(0);
+			struct tm * now = localtime( & t );
+
+			if( verbosity > 1 ) cout << ">>> Analyzing event " << ievt << endl;
+
+			else if((int) ievt/1000 == (double) ievt/1000){
+			  cout << ">>> Analyzing event " << ievt << endl;
+			  cout << asctime(now) << endl;
+			}
+
+			
 			inEventTree->GetEvent(ievt);
+			
+		
+					
 			
 			// updating the outRunTree info
 			if(ievt == 0 && nFile == 0)
@@ -430,22 +445,29 @@ int main()
 					exit (4);
 				}
 			}
+		      
 			
 			// updating HLT info
-
+		      
 			// The HLT info is stored per run in the TRootRun. For file >= 0, we just copy the elements from the hltInfos vector and it's done...
-			if (outRunInfos->getHLTinfo(inEvent->runId()).RunID() == 0) // if this run is not yet in the vector, add it.
+
+		     	if (outRunInfos->getHLTinfo(inEvent->runId()).RunID() == 0) // if this run is not yet in the vector, add it.
 			  tmpRunInfos.push_back(inRunInfos->getHLTinfo(inEvent->runId()));
+			  outRunInfos->setHLTinfos(tmpRunInfos); // put the new vector in TRootRun
 
-			outRunInfos->setHLTinfos(tmpRunInfos); // put the new vector in TRootRun
 
-			if( verbosity > 1 ) cout << "outRunInfos->copyHLTinfos().size(): " << outRunInfos->copyHLTinfos().size() << endl;
-
-			if( verbosity > 1 ) cout << ">>> Analyzing event " << ievt << endl;
-			else if((int) ievt/10000 == (double) ievt/10000)  cout << ">>> Analyzing event " << ievt << endl;
+//			if( verbosity > 1 )
+			//	cout << "outRunInfos->copyHLTinfos().size(): " << outRunInfos->copyHLTinfos().size() << endl;
 		
+	
+			////////////////////////////////////////////////////////////////////////
+			///////  HLT INFO... CAUSES MAJOR MEMORY LEAK in 74     ////////////////
+			///////////////////////////////////////////////////////////////////////		       	
+			
+
 			bool keepEvent = true;
 
+			
 			// apply JSON
 			if(optionsToUse.useJSON)
 			{
@@ -530,6 +552,7 @@ int main()
 
 					if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
 					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
+				       
 				}
 
 				else if(objectsToKeep[j].type == "TopTree::TRootGenEvent")
@@ -542,6 +565,7 @@ int main()
 
 					if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
 					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
+					
 				}
 
 				else if(objectsToKeep[j].type == "TopTree::TRootNPGenEvent")
@@ -554,6 +578,8 @@ int main()
 
 					if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
 					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
+					
+
 				}
 
 				else if(objectsToKeep[j].type == "TopTree::TRootGenJet")
@@ -586,6 +612,8 @@ int main()
 					
 					if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
 					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
+
+				
 				}
 
 				else if(objectsToKeep[j].type == "TopTree::TRootPFJet")
@@ -906,6 +934,7 @@ int main()
 						passHLT = true;
 					}
 				}
+
 				if(passHLT) NHLTAccept++;
 
 				if( verbosity > 1 ) cout << "Filling the outEventTree" << endl;
@@ -922,13 +951,16 @@ int main()
 //				if( verbosity > 1 ) cout << "iter->outArray: " << iter->outArray << endl;
 
 				( *(iter->outArray) ).Delete();
-
+				( *(iter->inArray) ).Delete();
+				
 				if( verbosity > 1 ) cout << "Deleted the output TClonesArray" << endl;
 
 			}
 
 			if( verbosity > 1 ) cout << "Analyzing event is " << ievt << " finished!" << endl;
 		
+
+			
 		} // loop over events
 	
 		if( verbosity > 1 ) cout << "Analyzing input file " << inFileName[nFile] << " finished!" << endl;
