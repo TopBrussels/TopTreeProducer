@@ -31,9 +31,13 @@ process.GlobalTag.globaltag = cms.string('PLS170_V6AN1::All')
 # pi0 discrimination variables
 #process.load("RecoEcal.EgammaClusterProducers.piZeroDiscriminators_cfi")
 
-#process.maxEvents = cms.untracked.PSet(
-#    input = cms.untracked.int32(-1)
-#)
+process.maxEvents = cms.untracked.PSet(
+    input = cms.untracked.int32(-1)
+)
+
+process.options = cms.untracked.PSet(
+     SkipEvent = cms.untracked.vstring('ProductNotFound')
+)
 
 #process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('file:miniAOD-prod_PAT.root'))
 
@@ -109,7 +113,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		doPrimaryVertex = cms.untracked.bool(True),
 		runGeneralTracks = cms.untracked.bool(True),#true only if generalTracks are stored.
 		doCaloJet = cms.untracked.bool(False),
-		doGenJet = cms.untracked.bool(False),
+		doGenJet = cms.untracked.bool(True),
 		doCaloJetId = cms.untracked.bool(False),
 		doPFJet = cms.untracked.bool(True),
          	doFatJet = cms.untracked.bool(True),
