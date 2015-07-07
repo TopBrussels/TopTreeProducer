@@ -23,7 +23,7 @@
 <k type="TopTree::TRootElectron" name="Electrons_slimmedElectrons" minPt="15" maxEta="2.5" skipObjects="0" minNObjects="1"/>
 <k type="TopTree::TRootPFJet" name="PFJets_slimmedJets" minPt="30" maxEta="2.5" skipObjects="0" minNObjects="4"/>
 <k type="TopTree::TRootGenJet" name="GenJets_slimmedGenJets" minPt="30" maxEta="2.5" skipObjects="0" minNObjects="0"/>
-<k type="TopTree::TRootSubstructureJet" name="FatJets_slimmedJetsAK8" minPt="30" maxEta="2.5" skipObjects="0" minNObjects="4"/>
+<k type="TopTree::TRootSubstructureJet" name="FatJets_slimmedJetsAK8" minPt="30" maxEta="2.5" skipObjects="0" minNObjects="0"/>
 <k type="TopTree::TRootVertex" name="PrimaryVertex" minPt="0" maxEta="999" skipObjects="0" minNObjects="0"/>
 <k type="TopTree::TRootPFMET" name="PFMET_slimmedMETs" minPt="15" maxEta="2.4" skipObjects="0" minNObjects="0"/>
 </keepbranches>
