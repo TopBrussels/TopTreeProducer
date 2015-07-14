@@ -2,14 +2,14 @@
 # macro intended to set up the bookkeeping for the analysis structure
 
 rm -rf endprintout.txt
-rm -rf auto-cmsswconfig
-rm -rf mkdir auto-crabconfig
+#rm -rf auto-cmsswconfig
+#rm -rf mkdir auto-crabconfig
 
 inputfile=$1
 mkdir auto-cmsswconfig
 mkdir auto-crabconfig
 while IFS=" "  read samplename version globaltag  ; do
-#    echo $samplename "  --- " $version " --- " $globaltag
+    echo $samplename "  --- " $version " --- " $globaltag
     totalworkname=$samplename"--"$version"--"$globaltag
     cleanedtotalworkname="TOPTREE"`echo $totalworkname | sed -e s%"/"%"-"%g -e s%"::"%"-"%g `
 #    echo $cleanedtotalworkname
