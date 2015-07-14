@@ -5,6 +5,18 @@ rm -rf endprintout.txt
 #rm -rf auto-cmsswconfig
 #rm -rf mkdir auto-crabconfig
 
+    
+    echo "usage:" 
+    echo ". scriptFileStructure.sh <txtfile> "
+    echo "where text file is space separated list of format:"
+    echo "DATASETNAME TOPTREEPRODUCERTAG GLOBALTAGFORTTP"
+    echo "OTHERDATASETNAME TOPTREEPRODUCERTAG GLOBALTAGFORTTP"
+    echo "DIFFERENTSETNAME TOPTREEPRODUCERTAG GLOBALTAGFORTTP"
+    echo " example:"
+    echo "/ZZ_TuneCUETP8M1_13TeV-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v3/MINIAODSIM CMSSW_74X_v2 MCRUN2_74_V9::All
+/MuonEG/Run2015B-PromptReco-v1/MINIAOD CMSSW_74X_v2 GR_P_V56::All"
+
+
 inputfile=$1
 mkdir auto-cmsswconfig
 mkdir auto-crabconfig
