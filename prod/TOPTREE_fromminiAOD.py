@@ -32,7 +32,7 @@ process.GlobalTag.globaltag = cms.string('PLS170_V6AN1::All')
 #process.load("RecoEcal.EgammaClusterProducers.piZeroDiscriminators_cfi")
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(-1)
+    input = cms.untracked.int32(10000)
 )
 
 process.options = cms.untracked.PSet(
