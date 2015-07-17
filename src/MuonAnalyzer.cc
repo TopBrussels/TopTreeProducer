@@ -50,7 +50,7 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
 
   edm::Handle<reco::BeamSpot> beamSpotHandle;
   iEvent.getByLabel("offlineBeamSpot", beamSpotHandle);
-  
+
 //	edm::Handle<reco::BeamSpot> beamSpotHandle;
 //	iEvent.getByLabel("offlineBeamSpot", beamSpotHandle);
 //	const reco::TrackBase::Point & beamSpot = reco::TrackBase::Point(beamSpotHandle->x0(), beamSpotHandle->y0(), beamSpotHandle->z0());
@@ -83,7 +83,7 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
 
       localMuon.setDzBeamSpot ( muon->muonBestTrack()->dz(mybeamspot.position()) );
       localMuon.setDzBeamSpotError ( sqrt(pow(muon->muonBestTrack()->dzError(),2)+pow(mybeamspot.x0Error(),2)+ pow(mybeamspot.y0Error(),2)) );
-      
+
 
       if(muon->innerTrack().isNonnull() && muon->innerTrack().isAvailable())
       {
@@ -92,19 +92,19 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
         if(pvHandle.isValid() && pvHandle->size() != 0)
         {
           reco::VertexRef vtx(pvHandle,0);
-          localMuon.setD0 ( muon->innerTrack()->dxy(vtx->position()) );
-          localMuon.setD0Error ( sqrt(pow(muon->innerTrack()->dxyError(),2)+pow(vtx->xError(),2)+ pow(vtx->yError(),2)) );
+          localMuon.setD0 ( muon->muonBestTrack()->dxy(vtx->position()) );
+          localMuon.setD0Error ( sqrt(pow(muon->muonBestTrack()->dxyError(),2)+pow(vtx->xError(),2)+ pow(vtx->yError(),2)) );
 
 
-          localMuon.setDz ( muon->innerTrack()->dz(vtx->position()) );
-          localMuon.setDzError ( sqrt(pow(muon->innerTrack()->dzError(),2)+pow(vtx->zError(),2)) );
+          localMuon.setDz ( muon->muonBestTrack()->dz(vtx->position()) );
+          localMuon.setDzError ( sqrt(pow(muon->muonBestTrack()->dzError(),2)+pow(vtx->zError(),2)) );
         }
         else{
           localMuon.setD0 ( muon->innerTrack()->dxy() );
           localMuon.setD0Error ( muon->innerTrack()->dxyError() );
           localMuon.setDz ( muon->innerTrack()->dz() );
           localMuon.setDzError ( muon->innerTrack()->dzError() );
-          
+
         }
         localMuon.setNofValidHits ( muon->innerTrack()->numberOfValidHits() );
         localMuon.setNofValidPixelHits( muon->innerTrack()->hitPattern().numberOfValidPixelHits() );
@@ -130,7 +130,7 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
        }*/
 
       try {
-        localMuon.setChi2 (patMuon->normChi2 ());
+        localMuon.setChi2 (patMuon->globalTrack()->normalizedChi2());
       }
       catch (cms::Exception &lce) {
         if (verbosity_ > 2)cout  << "MuonAnalyzer:: WARNING, unable to access muon normChi2 value!!!! (label: " << muonProducer_.label () << ")" << endl;
@@ -153,7 +153,7 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
           localMuon.setGenParticleIndex (-1);
         }
       }
-      
+
       //set pf-isolation
       //default cone size from PAT setup : currently r=0.4
       if(patMuon->chargedHadronIso() != -1)   localMuon.setIsoR04_ChargedHadronIso(patMuon->chargedHadronIso());
@@ -176,7 +176,7 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
        veto_ph.push_back(new reco::isodeposit::ThresholdVeto( 0.5 ));
 
        //the code below is for re-calulaing the iso for non-standard conesizes
-       // not sure if it is really needed and would need to be be adapted for 
+       // not sure if it is really needed and would need to be be adapted for
        // miniAOD
 
 //cout<<"in top tree producer...muonanalyzer process...6.1"<<endl;

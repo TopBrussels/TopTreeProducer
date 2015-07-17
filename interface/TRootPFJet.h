@@ -24,12 +24,13 @@ namespace TopTree
 			,neutralHadronEnergyFraction_(-9999.)
 			,chargedEmEnergyFraction_(-9999.)
 			,chargedMuEnergyFraction_(-9999.)
-			,neutralEmEnergyFraction_(-9999.)			
+			,muonEnergyFraction_(-9999.)
+			,neutralEmEnergyFraction_(-9999.)
 			,HFHadronEnergyFraction_(-9999.)
-			,HFEMEnergyFraction_(-9999.)			
+			,HFEMEnergyFraction_(-9999.)
 			,chargedMultiplicity_(-9999.)
 			,neutralMultiplicity_(-9999.)
-			,muonMultiplicity_(-9999.)			
+			,muonMultiplicity_(-9999.)
 			,HFHadronMultiplicity_(-9999.)
 			,HFEMMultiplicity_(-9999.)
 			{;}
@@ -40,7 +41,8 @@ namespace TopTree
 			,neutralHadronEnergyFraction_(jet.neutralHadronEnergyFraction_)
 			,chargedEmEnergyFraction_(jet.chargedEmEnergyFraction_)
 			,chargedMuEnergyFraction_(jet.chargedMuEnergyFraction_)
-			,neutralEmEnergyFraction_(jet.neutralEmEnergyFraction_)			
+			,muonEnergyFraction_(jet.muonEnergyFraction_)
+			,neutralEmEnergyFraction_(jet.neutralEmEnergyFraction_)
 			,HFHadronEnergyFraction_(jet.HFHadronEnergyFraction_)
 			,HFEMEnergyFraction_(jet.HFEMEnergyFraction_)
 			,chargedMultiplicity_(jet.chargedMultiplicity_)
@@ -51,17 +53,18 @@ namespace TopTree
 			{;}
 
 		TRootPFJet(const TRootJet& jet) :
-			TRootJet(jet)		        
+			TRootJet(jet)
 			,chargedHadronEnergyFraction_(-9999.)
 			,neutralHadronEnergyFraction_(-9999.)
 			,chargedEmEnergyFraction_(-9999.)
 			,chargedMuEnergyFraction_(-9999.)
-			,neutralEmEnergyFraction_(-9999.)			
+			,muonEnergyFraction_(-9999.)
+			,neutralEmEnergyFraction_(-9999.)
 			,HFHadronEnergyFraction_(-9999.)
-			,HFEMEnergyFraction_(-9999.)			
+			,HFEMEnergyFraction_(-9999.)
 			,chargedMultiplicity_(-9999.)
 			,neutralMultiplicity_(-9999.)
-			,muonMultiplicity_(-9999.)			
+			,muonMultiplicity_(-9999.)
 			,HFHadronMultiplicity_(-9999.)
 			,HFEMMultiplicity_(-9999.)
 			{;}
@@ -72,12 +75,13 @@ namespace TopTree
 			,neutralHadronEnergyFraction_(-9999.)
 			,chargedEmEnergyFraction_(-9999.)
 			,chargedMuEnergyFraction_(-9999.)
-			,neutralEmEnergyFraction_(-9999.)			
+			,muonEnergyFraction_(-9999.)
+			,neutralEmEnergyFraction_(-9999.)
 			,HFHadronEnergyFraction_(-9999.)
-			,HFEMEnergyFraction_(-9999.)			
+			,HFEMEnergyFraction_(-9999.)
 			,chargedMultiplicity_(-9999.)
 			,neutralMultiplicity_(-9999.)
-			,muonMultiplicity_(-9999.)			
+			,muonMultiplicity_(-9999.)
 			,HFHadronMultiplicity_(-9999.)
 			,HFEMMultiplicity_(-9999.)
 			{;}
@@ -88,12 +92,13 @@ namespace TopTree
 			,neutralHadronEnergyFraction_(-9999.)
 			,chargedEmEnergyFraction_(-9999.)
 			,chargedMuEnergyFraction_(-9999.)
-			,neutralEmEnergyFraction_(-9999.)			
+			,muonEnergyFraction_(-9999.)
+			,neutralEmEnergyFraction_(-9999.)
 			,HFHadronEnergyFraction_(-9999.)
-			,HFEMEnergyFraction_(-9999.)			
+			,HFEMEnergyFraction_(-9999.)
 			,chargedMultiplicity_(-9999.)
 			,neutralMultiplicity_(-9999.)
-			,muonMultiplicity_(-9999.)			
+			,muonMultiplicity_(-9999.)
 			,HFHadronMultiplicity_(-9999.)
 			,HFEMMultiplicity_(-9999.)
 			{;}
@@ -104,12 +109,13 @@ namespace TopTree
 			,neutralHadronEnergyFraction_(-9999.)
 			,chargedEmEnergyFraction_(-9999.)
 			,chargedMuEnergyFraction_(-9999.)
-			,neutralEmEnergyFraction_(-9999.)			
+			,muonEnergyFraction_(-9999.)
+			,neutralEmEnergyFraction_(-9999.)
 			,HFHadronEnergyFraction_(-9999.)
-			,HFEMEnergyFraction_(-9999.)			
+			,HFEMEnergyFraction_(-9999.)
 			,chargedMultiplicity_(-9999.)
 			,neutralMultiplicity_(-9999.)
-			,muonMultiplicity_(-9999.)			
+			,muonMultiplicity_(-9999.)
 			,HFHadronMultiplicity_(-9999.)
 			,HFEMMultiplicity_(-9999.)
 			{;}
@@ -120,12 +126,13 @@ namespace TopTree
 			,neutralHadronEnergyFraction_(-9999.)
 			,chargedEmEnergyFraction_(-9999.)
 			,chargedMuEnergyFraction_(-9999.)
-			,neutralEmEnergyFraction_(-9999.)			
+			,muonEnergyFraction_(-9999.)
+			,neutralEmEnergyFraction_(-9999.)
 			,HFHadronEnergyFraction_(-9999.)
-			,HFEMEnergyFraction_(-9999.)			
+			,HFEMEnergyFraction_(-9999.)
 			,chargedMultiplicity_(-9999.)
 			,neutralMultiplicity_(-9999.)
-			,muonMultiplicity_(-9999.)			
+			,muonMultiplicity_(-9999.)
 			,HFHadronMultiplicity_(-9999.)
 			,HFEMMultiplicity_(-9999.)
 			{;}
@@ -136,12 +143,13 @@ namespace TopTree
 			,neutralHadronEnergyFraction_(-9999.)
 			,chargedEmEnergyFraction_(-9999.)
 			,chargedMuEnergyFraction_(-9999.)
-			,neutralEmEnergyFraction_(-9999.)			
+			,muonEnergyFraction_(-9999.)
+			,neutralEmEnergyFraction_(-9999.)
 			,HFHadronEnergyFraction_(-9999.)
-			,HFEMEnergyFraction_(-9999.)			
+			,HFEMEnergyFraction_(-9999.)
 			,chargedMultiplicity_(-9999.)
 			,neutralMultiplicity_(-9999.)
-			,muonMultiplicity_(-9999.)			
+			,muonMultiplicity_(-9999.)
 			,HFHadronMultiplicity_(-9999.)
 			,HFEMMultiplicity_(-9999.)
 			{;}
@@ -152,12 +160,13 @@ namespace TopTree
 		Float_t neutralHadronEnergyFraction() const { return neutralHadronEnergyFraction_; }
 		Float_t chargedEmEnergyFraction() const { return chargedEmEnergyFraction_; }
 		Float_t chargedMuEnergyFraction() const { return chargedMuEnergyFraction_; }
-		Float_t neutralEmEnergyFraction() const { return neutralEmEnergyFraction_; }		
+		Float_t muonEnergyFraction() const { return muonEnergyFraction_; }
+		Float_t neutralEmEnergyFraction() const { return neutralEmEnergyFraction_; }
 		Float_t HFHadronEnergyFraction() const { return HFHadronEnergyFraction_; }
-		Float_t HFEMEnergyFraction() const { return HFEMEnergyFraction_; }		
+		Float_t HFEMEnergyFraction() const { return HFEMEnergyFraction_; }
 		Float_t chargedMultiplicity() const { return chargedMultiplicity_; }
 		Float_t neutralMultiplicity() const { return neutralMultiplicity_; }
-		Float_t muonMultiplicity() const { return muonMultiplicity_; }	  
+		Float_t muonMultiplicity() const { return muonMultiplicity_; }
 		Float_t HFHadronMultiplicity() const { return HFHadronMultiplicity_; }
 		Float_t HFEMMultiplicity() const { return HFEMMultiplicity_; }
 
@@ -168,12 +177,13 @@ namespace TopTree
 		void setNeutralHadronEnergyFraction(Float_t neutralHadronEnergyFraction) { neutralHadronEnergyFraction_ = neutralHadronEnergyFraction; }
 		void setChargedEmEnergyFraction(Float_t chargedEmEnergyFraction) { chargedEmEnergyFraction_ = chargedEmEnergyFraction; }
 		void setChargedMuEnergyFraction(Float_t chargedMuEnergyFraction) { chargedMuEnergyFraction_ = chargedMuEnergyFraction; }
-		void setNeutralEmEnergyFraction(Float_t neutralEmEnergyFraction) { neutralEmEnergyFraction_ = neutralEmEnergyFraction; }		
+		void setMuonEnergyFraction(Float_t muonEnergyFraction) { muonEnergyFraction_ = muonEnergyFraction; }
+		void setNeutralEmEnergyFraction(Float_t neutralEmEnergyFraction) { neutralEmEnergyFraction_ = neutralEmEnergyFraction; }
 		void setHFHadronEnergyFraction(Float_t HFHadronEnergyFraction) { HFHadronEnergyFraction_ = HFHadronEnergyFraction; }
-		void setHFEMEnergyFraction(Float_t HFEMEnergyFraction) { HFEMEnergyFraction_ = HFEMEnergyFraction; }		
+		void setHFEMEnergyFraction(Float_t HFEMEnergyFraction) { HFEMEnergyFraction_ = HFEMEnergyFraction; }
 		void setChargedMultiplicity(Float_t chargedMultiplicity) { chargedMultiplicity_ = chargedMultiplicity; }
 		void setNeutralMultiplicity(Float_t neutralMultiplicity) { neutralMultiplicity_ = neutralMultiplicity; }
-		void setMuonMultiplicity(Float_t muonMultiplicity) { muonMultiplicity_ = muonMultiplicity; }		
+		void setMuonMultiplicity(Float_t muonMultiplicity) { muonMultiplicity_ = muonMultiplicity; }
 		void setHFHadronMultiplicity(Float_t HFHadronMultiplicity) { HFHadronMultiplicity_ = HFHadronMultiplicity; }
 		void setHFEMMultiplicity(Float_t HFEMMultiplicity) { HFEMMultiplicity_ = HFEMMultiplicity; }
 
@@ -192,6 +202,7 @@ namespace TopTree
 		Float_t neutralHadronEnergyFraction_;
 		Float_t chargedEmEnergyFraction_;
 		Float_t chargedMuEnergyFraction_;
+		Float_t muonEnergyFraction_;
 		Float_t neutralEmEnergyFraction_;
 		Float_t HFHadronEnergyFraction_;
 		Float_t HFEMEnergyFraction_;
