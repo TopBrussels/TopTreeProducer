@@ -21,7 +21,7 @@ inputfile=$1
 mkdir auto-cmsswconfig
 mkdir auto-crabconfig
 while IFS=" "  read samplename version globaltag  ; do
-    echo $samplename "  --- " $version " --- " $globaltag
+#    echo $samplename "  --- " $version " --- " $globaltag
     totalworkname=$samplename"--"$version"--"$globaltag
     cleanedtotalworkname="TOPTREE"`echo $totalworkname | sed -e s%"/"%"-"%g -e s%"::"%"-"%g `
 #    echo $cleanedtotalworkname
@@ -39,7 +39,18 @@ while IFS=" "  read samplename version globaltag  ; do
     grep -v "config.Data.inputDataset" bla > bla2; mv bla2 bla
     echo "config.Data.inputDataset = '"$samplename"'" >> bla 
     echo "config.Data.outLFNDirBase = '/store/user/"`whoami`"/TopTree/"$version"'" >> bla
- 
+    if [[ $samplename == *"Run2015"* ]] 
+    then
+	grep -v "config.Data.splitting = 'FileBased'" bla > bla2; mv bla2 bla
+	echo "config.Data.splitting = 'LumiBased'" >> bla
+	echo "config.Data.unitsPerJob = 20" >> bla
+
+	echo "#config.Data.lumiMask = 'https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions15/13TeV/Cert_246908-251642_13TeV_PromptReco_Collisions15_JSON.txt'">> bla
+	echo "config.Data.lumiMask = 'myJSONFILE.txt" >> bla
+
+    fi
+
+
     echo $samplename >> endprintout.txt  #" config files "$cmsswfilename" "$crabfilename >> endprintout.txt
 
 #    move the resulting file to the right location
