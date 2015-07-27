@@ -42,6 +42,7 @@ class TRootElectron : public TRootLepton {
             superClusterEta_(-9999.),
             preshowerEnergy_(-9999.),
             sigmaIetaIeta_(-9999.),
+	    sigmaIetaIeta_full5x5_(-9999.),
             sigmaIphiIphi_(-9999.),
             sigmaIetaIphi_(-9999.),
             e1x5_(-9999.),
@@ -88,6 +89,7 @@ class TRootElectron : public TRootLepton {
             superClusterEta_(-9999.),
             preshowerEnergy_(-9999.),
             sigmaIetaIeta_(-9999.),
+            sigmaIetaIeta_full5x5_(-9999.),
             sigmaIphiIphi_(-9999.),
             sigmaIetaIphi_(-9999.),
             e1x5_(-9999.),
@@ -134,6 +136,7 @@ class TRootElectron : public TRootLepton {
             superClusterEta_(e.superClusterEta_),
             preshowerEnergy_(e.preshowerEnergy_),
             sigmaIetaIeta_(e.sigmaIetaIeta_),
+            sigmaIetaIeta_full5x5_(e.sigmaIetaIeta_full5x5_),
             sigmaIphiIphi_(e.sigmaIphiIphi_),
             sigmaIetaIphi_(e.sigmaIetaIphi_),
             e1x5_(e.e1x5_),
@@ -181,6 +184,7 @@ class TRootElectron : public TRootLepton {
             superClusterEta_(-9999.),
             preshowerEnergy_(-9999.),
             sigmaIetaIeta_(-9999.),
+            sigmaIetaIeta_full5x5_(-9999.),
             sigmaIphiIphi_(-9999.),
             sigmaIetaIphi_(-9999.),
             e1x5_(-9999.),
@@ -228,6 +232,7 @@ class TRootElectron : public TRootLepton {
             superClusterEta_(-9999.),
             preshowerEnergy_(-9999.),
             sigmaIetaIeta_(-9999.),
+            sigmaIetaIeta_full5x5_(-9999.),
             sigmaIphiIphi_(-9999.),
             sigmaIetaIphi_(-9999.),
             e1x5_(-9999.),
@@ -275,6 +280,7 @@ class TRootElectron : public TRootLepton {
             superClusterEta_(-9999.),
             preshowerEnergy_(-9999.),
             sigmaIetaIeta_(-9999.),
+            sigmaIetaIeta_full5x5_(-9999.),
             sigmaIphiIphi_(-9999.),
             sigmaIetaIphi_(-9999.),
             e1x5_(-9999.),
@@ -322,6 +328,7 @@ class TRootElectron : public TRootLepton {
             superClusterEta_(-9999.),
             preshowerEnergy_(-9999.),
             sigmaIetaIeta_(-9999.),
+            sigmaIetaIeta_full5x5_(-9999.),
             sigmaIphiIphi_(-9999.),
             sigmaIetaIphi_(-9999.),
             e1x5_(-9999.),
@@ -368,7 +375,8 @@ class TRootElectron : public TRootLepton {
             superClusterRawEnergy_(-9999.),
             superClusterEta_(-9999.),
             preshowerEnergy_(-9999.),
-            sigmaIetaIeta_(-9999.),
+            sigmaIetaIeta_(-9999.),            
+	    sigmaIetaIeta_full5x5_(-9999.),
             sigmaIphiIphi_(-9999.),
             sigmaIetaIphi_(-9999.),
             e1x5_(-9999.),
@@ -481,6 +489,9 @@ class TRootElectron : public TRootLepton {
             }
         Float_t sigmaIEtaIEta() const {
             return sigmaIetaIeta_;
+            }
+        Float_t sigmaIEtaIEta_full5x5() const {
+            return sigmaIetaIeta_full5x5_;
             }
         Float_t sigmaIPhiIPhi() const {
             return sigmaIphiIphi_;
@@ -629,6 +640,9 @@ class TRootElectron : public TRootLepton {
         void setSigmaIetaIeta(Float_t sieie) {
             sigmaIetaIeta_ = sieie;
             }
+        void setSigmaIetaIeta_full5x5(Float_t sieie) {
+            sigmaIetaIeta_full5x5_ = sieie;
+            }
         void setSigmaIphiIphi(Float_t sipip) {
             sigmaIphiIphi_ = sipip;
             }
@@ -666,7 +680,6 @@ class TRootElectron : public TRootLepton {
         void setMvaNonTrigId(Float_t id) {
             mvaNonTrigId_ = id;
             }
-
         friend std::ostream& operator<< (std::ostream& stream, const TRootElectron& electron) {
             stream << "TRootElectron - Charge=" << electron.charge() << " (Et,eta,phi)=("<< electron.Et() <<","<< electron.Eta() <<","<< electron.Phi() << ")"
             << " vertex(x,y,z)=("<< electron.vx() <<","<< electron.vy() <<","<< electron.vz() << ")";
@@ -711,7 +724,8 @@ class TRootElectron : public TRootLepton {
         Float_t preshowerEnergy_;
 
         //ShowerShape===========================================
-        Float_t sigmaIetaIeta_;                    // weighted cluster rms along eta and inside 5x5 (new, Xtal eta)
+        Float_t sigmaIetaIeta_;                    // weighted cluster rms along eta 
+        Float_t sigmaIetaIeta_full5x5_;                    // weighted cluster rms along eta and inside 5x5 
         Float_t sigmaIphiIphi_;
         Float_t sigmaIetaIphi_;
         Float_t e1x5_;                             // energy inside 1x5 in etaxphi around the seed Xtal
@@ -728,10 +742,12 @@ class TRootElectron : public TRootLepton {
         Float_t Dist_;                             // distance to the conversion partner
         Float_t DCot_;                             // difference of cot(angle) with the conversion partner track
         Bool_t  passConversion_;                   // boolean to flag converted candidates
-        Float_t mvaTrigId_;                        // MVA value
+        
+	Float_t mvaTrigId_;                        // MVA value
         Float_t mvaNonTrigId_;                     // MVA value
 
-        ClassDef (TRootElectron,13);
+
+        ClassDef (TRootElectron,14);
     };
 }
 

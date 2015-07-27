@@ -108,6 +108,7 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
     localElectron.setE5x5( electron->e5x5() );
     localElectron.setHoverEDepth1( electron->hcalDepth1OverEcal() );
     localElectron.setHoverEDepth2( electron->hcalDepth2OverEcal() );
+    localElectron.setSigmaIetaIeta_full5x5( electron->full5x5_sigmaIetaIeta() );
     localElectron.setSigmaIetaIeta( electron->sigmaIetaIeta() );
 
     // switching to gsf track for miniAOD, seems this is the correct thing for
@@ -274,7 +275,14 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
     localElectron.setSigmaIetaIphi( patElectron->sigmaIetaIphi() );
     localElectron.setR9( patElectron->r9() );
 
-    //have to change "mvaTrigV0", "mvaNonTrigV0"  to updated names for 70_X
+    // verbose printout of electron IDs available:
+    if(verbosity_>2){
+      std::vector<std::pair<std::string, float> > eleIds = patElectron->electronIDs();
+      std::cout << "electron ID summary: " << std::endl;
+      for(UInt_t ii=0; ii<eleIds.size(); ii++){
+	std::cout << eleIds[ii].first << " " << eleIds[ii].second << std::endl;
+      }
+    }
     localElectron.setMvaTrigId( patElectron->electronID("eidRobustLoose") );
     localElectron.setMvaNonTrigId( patElectron->electronID("eidRobustTight") );
 
