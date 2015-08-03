@@ -294,7 +294,7 @@ namespace TopTree
 			if(cone == 3) return puChargedHadronIso03_;
 			else if(cone == 4) return puChargedHadronIso04_;
 			else cout <<"Bad Cone Size! It returns 9999."<<endl;
-			return 9999;
+			return 9999;
 		}
 		Float_t photonIso(unsigned int cone) const
 		{
