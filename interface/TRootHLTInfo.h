@@ -92,6 +92,17 @@ public:
         hltErrors_[trigId]++;
     };
 
+    void gethltNameList()
+    {
+        cout<<"Size of hltNames list = "<<hltNames_.size()<<endl; 
+        cout<<"*******************************************"<<endl;
+        for (UInt_t ipath=0; ipath < hltNames_.size(); ipath++)
+        {
+            cout << "No. "<<ipath<<" path :"<< hltNames_.at(ipath) << endl;
+        }
+        cout<<"*******************************************"<<endl;
+    };
+
 private:
     UInt_t RunID_;
     vector<std::string> hltNames_;
