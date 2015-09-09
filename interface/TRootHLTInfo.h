@@ -98,7 +98,7 @@ public:
         cout<<"*******************************************"<<endl;
         for (UInt_t ipath=0; ipath < hltNames_.size(); ipath++)
         {
-            cout << "No. "<<ipath<<" path :"<< hltNames_.at(ipath) << endl;
+            cout << "No. "<<ipath<<" name :"<< hltNames_.at(ipath) << endl;
         }
         cout<<"*******************************************"<<endl;
     };
