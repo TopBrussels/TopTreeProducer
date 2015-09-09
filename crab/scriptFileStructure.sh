@@ -20,18 +20,23 @@ rm -rf endprintout.txt
 inputfile=$1
 mkdir auto-cmsswconfig
 mkdir auto-crabconfig
-while IFS=" "  read samplename version globaltag  ; do
-#    echo $samplename "  --- " $version " --- " $globaltag
+while IFS=" "  read samplename version globaltag jsonfile ; do
+#    echo $samplename "  --- " $version " --- " $globaltag --- $jsonfile
+    cleanedsamplename=`echo $samplename | awk -F"/" '{print $2"-"$3}'`
     totalworkname=$samplename"--"$version"--"$globaltag
-    cleanedtotalworkname="TOPTREE"`echo $totalworkname | sed -e s%"/"%"-"%g -e s%"::"%"-"%g `
-#    echo $cleanedtotalworkname
+    worknamerequest=$cleanedsamplename"-"$version"-"$globaltag
+    cleanedtotalworkname=`echo $totalworkname | sed -e s%"/"%"-"%g -e s%"::"%"-"%g `
+    cleanedrequestname=`echo $worknamerequest | sed -e s%"/"%"-"%g -e s%"::"%"-"%g `
+
+#    echo $cleanedtotalworkname " ---- " $cleanedrequestname
+
     cmsswfilename="auto-cmsswconfig/TOPTREE_fromminiAOD-"$cleanedtotalworkname".py"
     crabfilename="auto-crabconfig/crabConfigTOPTREE-"$cleanedtotalworkname".py"
 
 #   create crab config file:
 #   some file manipulations, replace the request name by new name, change datasets, first for the crab config:
     grep -v "config.General.requestName" crabConfigTOPTREE.py > bla
-    echo "config.General.requestName = '"$cleanedtotalworkname"'" >> bla
+    echo "config.General.requestName = '"$cleanedrequestname"'" >> bla
     grep -v "config.JobType.psetName" bla > bla2; mv bla2 bla
     echo "config.JobType.psetName = '"$cmsswfilename"'" >> bla
     echo "config.section_(\"User\")" >> bla
@@ -44,9 +49,11 @@ while IFS=" "  read samplename version globaltag  ; do
 	grep -v "config.Data.splitting = 'FileBased'" bla > bla2; mv bla2 bla
 	echo "config.Data.splitting = 'LumiBased'" >> bla
 	echo "config.Data.unitsPerJob = 20" >> bla
-
-	echo "#config.Data.lumiMask = 'https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions15/13TeV/Cert_246908-251642_13TeV_PromptReco_Collisions15_JSON.txt'">> bla
-	echo "config.Data.lumiMask = 'myJSONFILE.txt" >> bla
+	if [[ $jsonfile == *"13TeV"* ]]
+	then
+	    echo "config.Data.lumiMask = '"$jsonfile"'">> bla
+#	echo "config.Data.lumiMask = 'myJSONFILE.txt" >> bla
+	fi
 
     fi
 
