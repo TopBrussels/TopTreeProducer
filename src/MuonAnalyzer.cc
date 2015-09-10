@@ -109,12 +109,16 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
         localMuon.setNofValidHits ( muon->innerTrack()->numberOfValidHits() );
         localMuon.setNofValidPixelHits( muon->innerTrack()->hitPattern().numberOfValidPixelHits() );
         localMuon.setNofTrackerLayersWithMeasurement( muon->innerTrack()->hitPattern().trackerLayersWithMeasurement() );
+        localMuon.setValidFraction( muon->innerTrack()->validFraction());
       }
 
       if(muon->isGlobalMuon ())
       {
         localMuon.setNofValidMuHits(muon->globalTrack()->hitPattern().numberOfValidMuonHits());
         localMuon.setNofMatchedStations(muon->numberOfMatchedStations());
+        localMuon.setChi2LocalPosition(muon->combinedQuality().chi2LocalPosition);
+        localMuon.setTrkKink(muon->combinedQuality().trkKink);
+        localMuon.setSegmentCompatibility( muon::segmentCompatibility(*patMuon) );
       }
 
       // Some specific methods to pat::Muon

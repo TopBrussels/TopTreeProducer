@@ -26,6 +26,10 @@ namespace TopTree
 			,isPFMuon_(false)
 			,id_(-9999)
 	                ,PID_(-9999)
+			,trkKink_(9999.)
+			,chi2LocalPosition_(9999.)
+			,segmentCompatibility_(-9999.)
+			,validFraction_(-9999.)
 			{;}
 
                 TRootMuon(const TRootLepton& l) :
@@ -42,6 +46,10 @@ namespace TopTree
                         ,isPFMuon_(false)
                         ,id_(-9999)
                         ,PID_(-9999)
+			,trkKink_(9999.)
+			,chi2LocalPosition_(9999.)
+			,segmentCompatibility_(-9999.)
+			,validFraction_(-9999.)
                         {;}
 
 		TRootMuon(const TRootMuon& muon) :
@@ -58,6 +66,10 @@ namespace TopTree
 			,isPFMuon_(muon.isPFMuon_)
 			,id_(muon.id_)
 			,PID_(-9999)
+			,trkKink_(muon.trkKink_)
+			,chi2LocalPosition_(muon.chi2LocalPosition_)
+			,segmentCompatibility_(muon.segmentCompatibility_)
+			,validFraction_(muon.validFraction_)
 			{;}
 
 		TRootMuon(Double_t px, Double_t py, Double_t pz, Double_t e) :
@@ -74,6 +86,10 @@ namespace TopTree
 			,isPFMuon_(false)
 			,id_(-9999)
                         ,PID_(-9999)
+			,trkKink_(9999.)
+			,chi2LocalPosition_(9999.)
+			,segmentCompatibility_(-9999.)
+			,validFraction_(-9999.)
 			{;}
 
 		TRootMuon(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z) :
@@ -90,6 +106,10 @@ namespace TopTree
 			,isPFMuon_(false)
 			,id_(-9999)
                         ,PID_(-9999)
+			,trkKink_(9999.)
+			,chi2LocalPosition_(9999.)
+			,segmentCompatibility_(-9999.)
+			,validFraction_(-9999.)
 			{;}
 
 		TRootMuon(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z, Int_t type, Int_t charge) :
@@ -106,6 +126,10 @@ namespace TopTree
 			,isPFMuon_(false)
 			,id_(-9999)
                         ,PID_(-9999)
+			,trkKink_(9999.)
+			,chi2LocalPosition_(9999.)
+			,segmentCompatibility_(-9999.)
+			,validFraction_(-9999.)
 			{;}
 
 		TRootMuon(const TLorentzVector &momentum) :
@@ -122,6 +146,10 @@ namespace TopTree
 			,isPFMuon_(false)
 			,id_(-9999)
                         ,PID_(-9999)
+			,trkKink_(9999.)
+			,chi2LocalPosition_(9999.)
+			,segmentCompatibility_(-9999.)
+			,validFraction_(-9999.)
 			{;}
 
 		TRootMuon(const TLorentzVector &momentum, const TVector3 &vertex, Int_t type, Int_t charge) :
@@ -138,6 +166,10 @@ namespace TopTree
 			,isPFMuon_(false)
 			,id_(-9999)
                         ,PID_(-9999)
+			,trkKink_(9999.)
+			,chi2LocalPosition_(9999.)
+			,segmentCompatibility_(-9999.)
+			,validFraction_(-9999.)
 			{;}
 
 		~TRootMuon() {;}
@@ -164,14 +196,18 @@ namespace TopTree
 		Bool_t idTMLastStationOptimizedLowPtTight() const { return id_ & 4096; }
 		Bool_t idTM2DCompatibilityLoose() const { return id_ & 8192; }
 		Bool_t idTM2DCompatibilityTight() const { return id_ & 16384; }
-		Float_t vetoEm() const { return vetoEm_;} 
-		Float_t vetoHad() const { return vetoHad_;} 
+		Float_t vetoEm() const { return vetoEm_;}
+		Float_t vetoHad() const { return vetoHad_;}
 		Float_t chi2() const { return chi2_;}
-		Int_t nofValidHits() const { return nofValidHits_;} 
+		Int_t nofValidHits() const { return nofValidHits_;}
 		Int_t nofValidMuHits() const { return nofValidMuHits_;}
 		Int_t nofValidPixelHits() const { return nofValidPixelHits_;}
 		Int_t nofMatchedStations() const { return nofMatchedStations_;}
 		Int_t nofTrackerLayersWithMeasurement() const { return nofTrackerLayersWithMeasurement_;}
+		Float_t chi2LocalPosition(){return chi2LocalPosition_;}
+		Float_t segmentCompatibility(){return segmentCompatibility_;}
+		Int_t trkKink(){return trkKink_;}
+		Float_t validFraction(){return validFraction_;}
 //		Float_t dB() const { return dB_; }
 //		Float_t dBError() const { return dBError_; }
 		virtual TString typeName() const { return "TRootMuon"; }
@@ -199,7 +235,7 @@ namespace TopTree
 			Int_t TM2DCompatibilityTight)
 		{
 			id_ = AllGlobalMuons*1 + AllTrackerMuons*2 + AllStandAloneMuons*4 + TrackerMuonArbitrated*8 + AllArbitrated*16 + GlobalMuonPromptTight*32
-				+ TMLastStationLoose*64 + TMLastStationTight*128 + TMLastStationAngTight*256 + TMOneStationLoose*512 + TMOneStationTight*1024 + TMLastStationOptimizedLowPtLoose*2048 
+				+ TMLastStationLoose*64 + TMLastStationTight*128 + TMLastStationAngTight*256 + TMOneStationLoose*512 + TMOneStationTight*1024 + TMLastStationOptimizedLowPtLoose*2048
 				+ TMLastStationOptimizedLowPtTight*4096 + TM2DCompatibilityLoose*8192 + TM2DCompatibilityTight*16384;
 		}
 		void setVetoEm(Float_t vetoEm) { vetoEm_ = vetoEm;}
@@ -210,7 +246,11 @@ namespace TopTree
 		void setNofValidPixelHits(Int_t x){ nofValidPixelHits_ = x;}
 		void setNofMatchedStations(Int_t x){ nofMatchedStations_ = x;}
 		void setNofTrackerLayersWithMeasurement(Int_t x){ nofTrackerLayersWithMeasurement_ = x;}
-               
+		void setChi2LocalPosition(Float_t x){chi2LocalPosition_ = x;}
+		void setSegmentCompatibility(Float_t x){segmentCompatibility_ = x;}
+		void setTrkKink(Int_t x){trkKink_ = x;}
+		void setValidFraction(Float_t x){validFraction_ = x;}
+
 
 		friend std::ostream& operator<< (std::ostream& stream, const TRootMuon& muon)
 		{
@@ -221,7 +261,7 @@ namespace TopTree
 			return stream;
 		};
 
-	
+
 	private:
 		// Variables from reco::Muon
 		Float_t vetoEm_;            // veto conesize is 0.07  in the ecal
@@ -231,13 +271,19 @@ namespace TopTree
 		Int_t nofValidMuHits_;      // nof hits on the global fit
 		Int_t nofValidPixelHits_;   // nof pixel hits of inner track
 		Int_t nofMatchedStations_;  // number of stations with matched segments
-		Int_t nofTrackerLayersWithMeasurement_; 
-
+		Int_t nofTrackerLayersWithMeasurement_;
 		Int_t algo_; // binary => GlobalMuon=00010 , TrackerMuon=00100 , StandAloneMuon=01000 , CaloMuon=10000
 		Bool_t isPFMuon_;
 		Int_t id_; 		// MuonId coded in binary word id_ ==> TrackerMuonArbitrated=0000001 , AllArbitrated=0000010 , GlobalMuonPromptTight=0000100 ,
 		// TMLastStationLoose=0001000 , TMLastStationTight=0010000 , TM2DCompatibilityLoose=0100000 , TM2DCompatibilityTight=1000000
 		Int_t PID_;
+		Float_t trkKink_;
+		Float_t chi2LocalPosition_; // recoMu.combinedQuality().chi2LocalPosition
+		Float_t segmentCompatibility_; //
+		Float_t validFraction_;     // innerTrack()->validFraction()
+		
+
+		
 
 
 		ClassDef (TRootMuon,4);
