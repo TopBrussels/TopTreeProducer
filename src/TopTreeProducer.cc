@@ -450,90 +450,90 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 
 
     // we need to store some triggerFilter info to be able to emulate triggers on older data
-    if (doHLT)
-    {
-        if (verbosity > 1) cout << "should do HLT now..." << endl;
-
-        // get Trigger summary from Event
-        edm::Handle<trigger::TriggerEvent> summary, summary1st, summary2nd, summary3rd, summary4th;
-        edm::InputTag summaryTag1st_("hltTriggerSummaryAOD","",(producersNames_.getParameter < edm::InputTag > ("hltProducer1st")).process());
-        edm::InputTag summaryTag2nd_("hltTriggerSummaryAOD","",(producersNames_.getParameter < edm::InputTag > ("hltProducer2nd")).process());
-        edm::InputTag summaryTag3rd_("hltTriggerSummaryAOD","",(producersNames_.getParameter < edm::InputTag > ("hltProducer3rd")).process());
-        edm::InputTag summaryTag4th_("hltTriggerSummaryAOD","",(producersNames_.getParameter < edm::InputTag > ("hltProducer4th")).process());
-
-        try
-        {
-            iEvent.getByLabel(summaryTag1st_,summary1st);
-        }
-        catch (...)
-        {
-            ;
-        }
-        try
-        {
-            iEvent.getByLabel(summaryTag2nd_,summary2nd);
-        }
-        catch (...)
-        {
-            ;
-        }
-        try
-        {
-            iEvent.getByLabel(summaryTag3rd_,summary3rd);
-        }
-        catch (...)
-        {
-            ;
-        }
-        try
-        {
-            iEvent.getByLabel(summaryTag4th_,summary4th);
-        }
-        catch (...)
-        {
-            ;
-        }
-
-        //cout << summaryTag1st_ << " " << summaryTag2nd_  << " " << summaryTag3rd_  << " " << summaryTag4th_ << endl;
-        //cout << summaryTag1st_.process() << " " << summaryTag2nd_.process()<< " " << summaryTag3rd_.process()<< " " << summaryTag4th_.process() << endl;
-        //cout << summary1st.isValid() << " " << summary2nd.isValid() << " " << summary3rd.isValid() << " " << summary4th.isValid()<< endl;
-
-        if (summary1st.isValid())
-            summary = summary1st;
-        else if (summary2nd.isValid())
-            summary = summary2nd;
-        else if (summary3rd.isValid())
-            summary = summary3rd;
-        else if (summary4th.isValid())
-            summary = summary4th;
-        else
-            cout << "TopTreeProducer::Analyze ERROR: Could not store info for trigger emulation: provided HLTproducerNames are null" << endl;
-
-        //cout << "summary " << summary << endl;
-
-        if (summary.isValid())
-        {
-            for (unsigned int i=0; i<summary->sizeFilters(); i++)
-            {
-                if (verbosity > 1) cout << i << " -> " << summary->filterTag(i).label() << endl;
-
-                // get all trigger objects corresponding to this module.
-                // loop through them and see how many objects match the selection
-                const trigger::Keys& KEYS (summary->filterKeys(i));
-                const int n1(KEYS.size());
-
-                for (int j=0; j!=n1; ++j)
-                {
-                    const trigger::TriggerObject& triggerObject( summary-> getObjects().at(KEYS[j]) );
-                    //cout << "j: " << j << " -> id " << triggerObject.id() << endl;
-                    //cout << "j: " << j << " -> pt " << triggerObject.pt() << endl;
-                    //cout << "j: " << j << " -> eta " << triggerObject.eta() << endl;
-                    //cout << "j: " << j << " -> phi " << triggerObject.phi() << endl;
-                    rootEvent->AddTriggerObject(string(summary->filterTag(i).label()), triggerObject.id(),triggerObject.pt(),triggerObject.eta(),triggerObject.phi());
-                }
-            }
-        }
-    }
+//    if (doHLT)
+//    {
+//        if (verbosity > 1) cout << "should do HLT now..." << endl;
+//
+//        // get Trigger summary from Event
+//        edm::Handle<trigger::TriggerEvent> summary, summary1st, summary2nd, summary3rd, summary4th;
+//        edm::InputTag summaryTag1st_("hltTriggerSummaryAOD","",(producersNames_.getParameter < edm::InputTag > ("hltProducer1st")).process());
+//        edm::InputTag summaryTag2nd_("hltTriggerSummaryAOD","",(producersNames_.getParameter < edm::InputTag > ("hltProducer2nd")).process());
+//        edm::InputTag summaryTag3rd_("hltTriggerSummaryAOD","",(producersNames_.getParameter < edm::InputTag > ("hltProducer3rd")).process());
+//        edm::InputTag summaryTag4th_("hltTriggerSummaryAOD","",(producersNames_.getParameter < edm::InputTag > ("hltProducer4th")).process());
+//
+//        try
+//        {
+//            iEvent.getByLabel(summaryTag1st_,summary1st);
+//        }
+//        catch (...)
+//        {
+//            ;
+//        }
+//        try
+//        {
+//            iEvent.getByLabel(summaryTag2nd_,summary2nd);
+//        }
+//        catch (...)
+//        {
+//            ;
+//        }
+//        try
+//        {
+//            iEvent.getByLabel(summaryTag3rd_,summary3rd);
+//        }
+//        catch (...)
+//        {
+//            ;
+//        }
+//        try
+//        {
+//            iEvent.getByLabel(summaryTag4th_,summary4th);
+//        }
+//        catch (...)
+//        {
+//            ;
+//        }
+//
+//        //cout << summaryTag1st_ << " " << summaryTag2nd_  << " " << summaryTag3rd_  << " " << summaryTag4th_ << endl;
+//        //cout << summaryTag1st_.process() << " " << summaryTag2nd_.process()<< " " << summaryTag3rd_.process()<< " " << summaryTag4th_.process() << endl;
+//        //cout << summary1st.isValid() << " " << summary2nd.isValid() << " " << summary3rd.isValid() << " " << summary4th.isValid()<< endl;
+//
+//        if (summary1st.isValid())
+//            summary = summary1st;
+//        else if (summary2nd.isValid())
+//            summary = summary2nd;
+//        else if (summary3rd.isValid())
+//            summary = summary3rd;
+//        else if (summary4th.isValid())
+//            summary = summary4th;
+//        else
+//            cout << "TopTreeProducer::Analyze ERROR: Could not store info for trigger emulation: provided HLTproducerNames are null" << endl;
+//
+//        //cout << "summary " << summary << endl;
+//
+//        if (summary.isValid())
+//        {
+//            for (unsigned int i=0; i<summary->sizeFilters(); i++)
+//            {
+//                if (verbosity > 1) cout << i << " -> " << summary->filterTag(i).label() << endl;
+//
+//                // get all trigger objects corresponding to this module.
+//                // loop through them and see how many objects match the selection
+//                const trigger::Keys& KEYS (summary->filterKeys(i));
+//                const int n1(KEYS.size());
+//
+//                for (int j=0; j!=n1; ++j)
+//                {
+//                    const trigger::TriggerObject& triggerObject( summary-> getObjects().at(KEYS[j]) );
+//                    //cout << "j: " << j << " -> id " << triggerObject.id() << endl;
+//                    //cout << "j: " << j << " -> pt " << triggerObject.pt() << endl;
+//                    //cout << "j: " << j << " -> eta " << triggerObject.eta() << endl;
+//                    //cout << "j: " << j << " -> phi " << triggerObject.phi() << endl;
+//                    rootEvent->AddTriggerObject(string(summary->filterTag(i).label()), triggerObject.id(),triggerObject.pt(),triggerObject.eta(),triggerObject.phi());
+//                }
+//            }
+//        }
+//    }
 
     //fastjet density rho
     //commenting out this rho for 7_0_X as it seems to be missing from miniAOD
