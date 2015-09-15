@@ -36,13 +36,11 @@ public:
 	~LHEEventProductAnalyzer();
 	//	void SetVerbosity(int verbosity) { verbosity_ = verbosity; };
 	void Process(const edm::Event& iEvent, TRootEvent* rootEvent);
-
+	void PrintWeightsList(const edm::Event& iEvent, TRootEvent* rootEvent);
 private:
 	int verbosity_;
 	edm::InputTag lheEventProductProducer_;
-	edm::InputTag mcProducer_;
 	std::vector<std::string> vLHEEventProductProducer;
-
 };
 
 #endif

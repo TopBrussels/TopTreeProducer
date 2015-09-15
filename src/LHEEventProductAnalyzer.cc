@@ -8,25 +8,28 @@ using namespace TopTree;
 
 typedef gen::WeightsInfo WGT;
 
-LHEEventProductAnalyzer::LHEEventProductAnalyzer(const edm::ParameterSet& producersNames):verbosity_(0)
+LHEEventProductAnalyzer::LHEEventProductAnalyzer(const edm::ParameterSet& producersNames):
+verbosity_(0), lheEventProductProducer_(producersNames.getParameter<edm::InputTag>("lheEventProductProducer"))
 {
-    lheEventProductProducer_ = producersNames.getParameter<edm::InputTag>("lheEventProductProducer");
 }
 
-LHEEventProductAnalyzer::LHEEventProductAnalyzer(const edm::ParameterSet& producersNames, int verbosity):verbosity_(verbosity)
+LHEEventProductAnalyzer::LHEEventProductAnalyzer(const edm::ParameterSet& producersNames, int verbosity):
+verbosity_(verbosity), 
+lheEventProductProducer_(producersNames.getParameter <edm::InputTag>("lheEventProductProducer"))
 {
-    lheEventProductProducer_ = producersNames.getParameter<edm::InputTag>("lheEventProductProducer");
 }
 
-LHEEventProductAnalyzer::LHEEventProductAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
+LHEEventProductAnalyzer::LHEEventProductAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity):
+verbosity_(verbosity), 
+lheEventProductProducer_(producersNames.getParameter <edm::InputTag>("lheEventProductProducer"))
 {
-    lheEventProductProducer_ = producersNames.getParameter<edm::InputTag>("lheEventProductProducer");
 }
 
-LHEEventProductAnalyzer::LHEEventProductAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
+LHEEventProductAnalyzer::LHEEventProductAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity):
+verbosity_(verbosity), 
+vLHEEventProductProducer(producersNames.getUntrackedParameter <std::vector<std::string> >("vlheEventProductProducer")),
+lheEventProductProducer_(edm::InputTag(vLHEEventProductProducer[iter]))
 {
-    vLHEEventProductProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("vlheEventProductProducer");
-    lheEventProductProducer_ = edm::InputTag(vLHEEventProductProducer[iter]);
 }
 
 
@@ -40,34 +43,48 @@ void LHEEventProductAnalyzer::Process(const edm::Event& iEvent, TRootEvent* root
 {
 
 
-      if(verbosity_ > 1) cout << "Analysing LHEEventProduct collection ... = "<<  lheEventProductProducer_.label()  << endl;
+	if(verbosity_ > 1) cout << "Analysing LHEEventProduct collection ... = "<<  lheEventProductProducer_.label()  << endl;
 
-    edm::Handle<LHEEventProduct> lheEventProduct;
-    if(verbosity_ > 1) cout << "Analysing LHEEventProduct collection ..1. = "<<endl;
+	edm::Handle<LHEEventProduct> lheEventProduct;
 
-    if(    iEvent.getByLabel( lheEventProductProducer_ ,lheEventProduct ) ){
+	if(    iEvent.getByLabel( lheEventProductProducer_ ,lheEventProduct ) ){
 
-    if(verbosity_ > 1) cout << "Analysing LHEEventProduct, collection present "<<endl;
- 
-    const std::vector<WGT>& weights  = lheEventProduct->weights();
- 
-    std::vector<Float_t> weights_d;
+		if(verbosity_ > 1) cout << "Analysing LHEEventProduct, collection present "<<endl;
 
-    for (int w = 0; w < 9; w++)
-    {
-        std::string weight_id = weights[w].id;
-        double weight_val = weights[w].wgt;
-        weights_d.push_back(weight_val);
+		const std::vector<WGT>& weights  = lheEventProduct->weights();
 
-	        if(verbosity_ > 1) cout <<"id  "<< weight_id  <<"  weight = " << weight_val << endl;
+		std::vector<Float_t> weights_d;
 
-    }
+		for (int w = 0; w < 9; w++)
+		{
+			std::string weight_id = weights[w].id;
+			double weight_val = weights[w].wgt;
+			weights_d.push_back(weight_val);
 
-    rootEvent->setWeights(weights_d);
+			if(verbosity_ > 1) cout <<"id  "<< weight_id  <<"  weight = " << weight_val << endl;
 
-    if(verbosity_ > 1) cout << "Weights succesfully extracted  "<<   endl;
+		}
 
-    } 
+		rootEvent->setWeights(weights_d);
 
+		if(verbosity_ > 1) cout << "Weights succesfully extracted  "<<   endl;
 
+	} 
+}
+
+void LHEEventProductAnalyzer::PrintWeightNamesList(const edm::Event& iEvent, TRootEvent* rootEvent) //To know which integer XXX corresponds to which weight
+{
+	edm::Handle<LHERunInfoProduct> run; 
+	typedef std::vector<LHERunInfoProduct::Header>::const_iterator headers_const_iterator;
+
+	iRun.getByLabel( "externalLHEProducer", run );
+	LHERunInfoProduct myLHERunInfoProduct = *(run.product());
+
+	for (headers_const_iterator iter=myLHERunInfoProduct.headers_begin(); iter!=myLHERunInfoProduct.headers_end(); iter++){
+		std::cout << iter->tag() << std::endl;
+		std::vector<std::string> lines = iter->lines();
+		for (unsigned int iLine = 0; iLine<lines.size(); iLine++) {
+			std::cout << lines.at(iLine);
+		}
+	}
 }
