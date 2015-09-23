@@ -22,11 +22,25 @@ mkdir auto-cmsswconfig
 mkdir auto-crabconfig
 while IFS=" "  read samplename version globaltag jsonfile ; do
 #    echo $samplename "  --- " $version " --- " $globaltag --- $jsonfile
+    if [ -z `echo $samplename | grep AOD `  ] ; then 
+	continue
+    fi
     cleanedsamplename=`echo $samplename | awk -F"/" '{print $2"-"$3}'`
     totalworkname=$samplename"--"$version"--"$globaltag
     worknamerequest=$cleanedsamplename"-"$version"-"$globaltag
     cleanedtotalworkname=`echo $totalworkname | sed -e s%"/"%"-"%g -e s%"::"%"-"%g `
-    cleanedrequestname=`echo $worknamerequest | sed -e s%"/"%"-"%g -e s%"::"%"-"%g `
+    cleanedrequestname=`echo $worknamerequest | sed -e s%"/"%"-"%g -e s%"::All"%""%g `
+    dummyname=`echo $cleanedrequestname | sed -e s%"--"%"-"%g `
+    cleanedrequestname=$dummyname
+    reqlength=${#cleanedrequestname}
+
+    # the following code strips the start of the requestname if it is longer than 140 characters. There is a maximum size of request names so this is done to protect against strings that are too long
+    if [ $reqlength -ge 140 ]; then
+	echo "!!!!!!!!!!!!!! requestname larger than 140: "  $reqlength " "$cleanedrequestname " so shortening by stripping start of name as already present in directory structure! "
+	dummyname=${cleanedrequestname:$reclength-140}
+	cleanedrequestname=$dummyname
+	echo "!!!!!!!!!!!!!! new name: "$cleanedrequestname
+    fi
 
 #    echo $cleanedtotalworkname " ---- " $cleanedrequestname
 
