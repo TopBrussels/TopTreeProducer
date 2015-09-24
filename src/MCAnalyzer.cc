@@ -230,15 +230,16 @@ void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootM
         
         // add information on primary unstable particles: keep quarks, taus, Z, W, Higgs, susy and vlq particles, with status 3
         if ( doUnstablePartsMC_ && (abs(p.pdgId()) < 38 || (abs(p.pdgId()) > 1000000 && abs(p.pdgId()) < 3000000)  || (abs(p.pdgId()) > 4000000 && abs(p.pdgId()) < 6000000)) ) {
-            iUnstableParticle++;
             
             // Avoid double counting
             if ( addedParticle) {
-                if(verbosity_>2) cout << "   ["<< setw(3) << iPartSel-1 << "] unstable particle : already added" << endl; 
+                if(verbosity_>2) cout << "   ["<< setw(3) << iPartSel-1 << "] unstable particle : already added" << endl;
+                iUnstableParticle++;
                 continue;
             }
             
             if ( abs(p.eta())>1000 || p.pt()<0.0001 ) continue;
+            iUnstableParticle++;
             
             TRootMCParticle   localMCUnstable( p.px(), p.py(), p.pz(), p.energy(), p.vx(), p.vy(),p.vz(), p.pdgId(), p.charge(), p.status(), p.numberOfDaughters(), motherID, grannyID, daug0Id, daug1Id, daug2Id, daug3Id, j );
             localMCUnstable.setStateFlags(p.isPromptFinalState(), p.isPromptDecayed(), p.fromHardProcessBeforeFSR(), p.isHardProcess(), p.fromHardProcessFinalState(), p.fromHardProcessDecayed());
