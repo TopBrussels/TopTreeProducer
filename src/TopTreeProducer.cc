@@ -169,9 +169,7 @@ void TopTreeProducer::beginJob()
     //		if(!isRealData_)
     //	{
     if(verbosity>0) cout << "MC Particles info will be added to rootuple" << endl;
-    cout << "MC Particles info will be added to rootuple" << endl;
     mcParticles = new TClonesArray("TopTree::TRootMCParticle", 1000);
-    cout << "MC Particles info will be added to rootuple" << endl;
     eventTree_->Branch ("MCParticles", "TClonesArray", &mcParticles);
     //     	}
 
@@ -610,16 +608,13 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
     // MC Info
     if(!isRealData_)
     {
-        // cout<<"in top tree producer...MCINFO1"<<endl;
         if(verbosity>1) cout << endl << "Analysing MC info..." << endl;
         MCAnalyzer* myMCAnalyzer = new MCAnalyzer(myConfig_, producersNames_);
         myMCAnalyzer->SetVerbosity(verbosity);
         if (drawMCTree) myMCAnalyzer->DrawMCTree(iEvent, iSetup, myConfig_, producersNames_);
         if (doPDFInfo ) myMCAnalyzer->PDFInfo(iEvent, rootEvent);
         myMCAnalyzer->ProcessMCParticle(iEvent, mcParticles);
-        delete myMCAnalyzer;
-        //cout<<"in top tree producer...MCINFO2"<<endl;
-
+        delete myMCAnalyzer; 
     }
 
 
