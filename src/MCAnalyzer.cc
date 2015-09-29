@@ -81,8 +81,6 @@ void MCAnalyzer::PDFInfo(const edm::Event& iEvent, TRootEvent* rootEvent)
 
 void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootMCParticles)
 {
-    // Clear content TClonesArray (such that size = 0)
-    rootMCParticles->Clear();
     // Fill TClonesArray with preselected MC Electrons, Muons  and with the primary decaying particles
     if(verbosity_>1) cout << endl << "   Process MC Particles..." << endl;
     edm::Handle <reco::GenParticleCollection> genParticles;
