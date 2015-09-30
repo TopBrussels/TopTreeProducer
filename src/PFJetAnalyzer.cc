@@ -86,6 +86,7 @@ void PFJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets, co
 		localJet.setMuonMultiplicity(patJet->muonMultiplicity());
 		localJet.setHFHadronMultiplicity(patJet->HFHadronMultiplicity());
 		localJet.setHFEMMultiplicity(patJet->HFEMMultiplicity());
+		localJet.setHadronFlavour(patJet->hadronFlavour());
 
 		new( (*rootJets)[j] ) TRootPFJet(localJet);
 		if(verbosity_>2) cout << "   ["<< setw(3) << j << "] " << localJet << endl;

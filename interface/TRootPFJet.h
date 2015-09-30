@@ -33,6 +33,7 @@ namespace TopTree
 			,muonMultiplicity_(-9999.)
 			,HFHadronMultiplicity_(-9999.)
 			,HFEMMultiplicity_(-9999.)
+			,hadronFlavour_(-9999.)
 			{;}
 
 		TRootPFJet(const TRootPFJet& jet) :
@@ -50,6 +51,7 @@ namespace TopTree
 			,muonMultiplicity_(jet.muonMultiplicity_)
 			,HFHadronMultiplicity_(jet.HFHadronMultiplicity_)
 			,HFEMMultiplicity_(jet.HFEMMultiplicity_)
+			,hadronFlavour_(jet.hadronFlavour_)
 			{;}
 
 		TRootPFJet(const TRootJet& jet) :
@@ -67,6 +69,7 @@ namespace TopTree
 			,muonMultiplicity_(-9999.)
 			,HFHadronMultiplicity_(-9999.)
 			,HFEMMultiplicity_(-9999.)
+			,hadronFlavour_(-9999.)
 			{;}
 
 		TRootPFJet(Double_t px, Double_t py, Double_t pz, Double_t e) :
@@ -84,6 +87,7 @@ namespace TopTree
 			,muonMultiplicity_(-9999.)
 			,HFHadronMultiplicity_(-9999.)
 			,HFEMMultiplicity_(-9999.)
+			,hadronFlavour_(-9999.)
 			{;}
 
 		TRootPFJet(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z) :
@@ -101,6 +105,7 @@ namespace TopTree
 			,muonMultiplicity_(-9999.)
 			,HFHadronMultiplicity_(-9999.)
 			,HFEMMultiplicity_(-9999.)
+			,hadronFlavour_(-9999.)
 			{;}
 
 		TRootPFJet(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z, Int_t type, Float_t charge) :
@@ -118,6 +123,7 @@ namespace TopTree
 			,muonMultiplicity_(-9999.)
 			,HFHadronMultiplicity_(-9999.)
 			,HFEMMultiplicity_(-9999.)
+			,hadronFlavour_(-9999.)
 			{;}
 
 		TRootPFJet(const TLorentzVector &momentum) :
@@ -135,6 +141,7 @@ namespace TopTree
 			,muonMultiplicity_(-9999.)
 			,HFHadronMultiplicity_(-9999.)
 			,HFEMMultiplicity_(-9999.)
+			,hadronFlavour_(-9999.)
 			{;}
 
 		TRootPFJet(const TLorentzVector &momentum, const TVector3 &vertex, Int_t type, Float_t charge) :
@@ -152,6 +159,7 @@ namespace TopTree
 			,muonMultiplicity_(-9999.)
 			,HFHadronMultiplicity_(-9999.)
 			,HFEMMultiplicity_(-9999.)
+			,hadronFlavour_(-9999.)
 			{;}
 
 		~TRootPFJet() {;}
@@ -169,6 +177,7 @@ namespace TopTree
 		Float_t muonMultiplicity() const { return muonMultiplicity_; }
 		Float_t HFHadronMultiplicity() const { return HFHadronMultiplicity_; }
 		Float_t HFEMMultiplicity() const { return HFEMMultiplicity_; }
+		Float_t hadronFlavour() const { return hadronFlavour_; }
 
 
 		virtual TString typeName() const { return "TRootPFJet"; }
@@ -186,6 +195,7 @@ namespace TopTree
 		void setMuonMultiplicity(Float_t muonMultiplicity) { muonMultiplicity_ = muonMultiplicity; }
 		void setHFHadronMultiplicity(Float_t HFHadronMultiplicity) { HFHadronMultiplicity_ = HFHadronMultiplicity; }
 		void setHFEMMultiplicity(Float_t HFEMMultiplicity) { HFEMMultiplicity_ = HFEMMultiplicity; }
+		void setHadronFlavour(Float_t hadronFlavour) { hadronFlavour_ = hadronFlavour; }
 
 
 		friend std::ostream& operator<< (std::ostream& stream, const TRootPFJet& jet)
@@ -211,6 +221,7 @@ namespace TopTree
 		Float_t muonMultiplicity_;
 		Float_t HFHadronMultiplicity_;
 		Float_t HFEMMultiplicity_;
+		Float_t hadronFlavour_;
 
 		ClassDef (TRootPFJet,2);
 	};
