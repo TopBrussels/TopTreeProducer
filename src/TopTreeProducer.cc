@@ -836,8 +836,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
     if(verbosity>1) cout << endl << "Deleting objects..." << endl;
     //delete rootEvent;
 
-//need to turn off delection of mcParticles for the moment.
-// if(!isRealData_) (*mcParticles).Delete();
+    if(!isRealData_) (*mcParticles).Delete();
 
     if(doCaloJet)
     {
