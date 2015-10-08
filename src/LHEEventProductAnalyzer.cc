@@ -76,14 +76,15 @@ void LHEEventProductAnalyzer::PrintWeightNamesList(edm::Run const& iRun, edm::Ev
 	edm::Handle< LHERunInfoProduct > run; 
 	typedef std::vector<LHERunInfoProduct::Header>::const_iterator headers_const_iterator;
 
-	// iRun.getByLabel( "externalLHEProducer", run );
-	// LHERunInfoProduct myLHERunInfoProduct = *(run.product());
+	iRun.getByLabel( "externalLHEProducer", run );
+	LHERunInfoProduct myLHERunInfoProduct = *(run.product());
 
-	// for (headers_const_iterator iter=myLHERunInfoProduct.headers_begin(); iter!=myLHERunInfoProduct.headers_end(); iter++){
-	// 	std::cout << iter->tag() << std::endl;
-	// 	std::vector<std::string> lines = iter->lines();
-	// 	for (unsigned int iLine = 0; iLine<lines.size(); iLine++) {
-	// 		std::cout << lines.at(iLine);
-	// 	}
-	// }
+	for (headers_const_iterator iter=myLHERunInfoProduct.headers_begin(); iter!=myLHERunInfoProduct.headers_end(); iter++){
+		std::cout << iter->tag() << std::endl;
+		std::vector<std::string> lines = iter->lines();
+		for (unsigned int iLine = 0; iLine<lines.size(); iLine++) {
+			std::cout << lines.at(iLine);
+		}
+	}
 }
+

@@ -10,12 +10,14 @@
 #include "FWCore/Framework/interface/ESHandle.h"
 //#include "FWCore/Framework/interface/EDProducer.h"
 //#include "FWCore/Utilities/interface/InputTag.h"
+#include "FWCore/Framework/interface/Run.h"
+
 
 #include "SimDataFormats/GeneratorProducts/interface/WeightsInfo.h"
 #include "SimDataFormats/GeneratorProducts/interface/LHERunInfoProduct.h"
-#include "SimDataFormats/GeneratorProducts/interface/GenRunInfoProduct.h"
+//#include "SimDataFormats/GeneratorProducts/interface/GenRunInfoProduct.h"
 
-#include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
+//#include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
 //#include "../interface/TRootLHEEventProduct.h"
 #include "TClonesArray.h"
 
