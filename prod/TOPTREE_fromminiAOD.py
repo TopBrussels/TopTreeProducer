@@ -34,15 +34,18 @@ process.GlobalTag.globaltag = cms.string('MCRUN2_74_V9')
 #process.load("RecoEcal.EgammaClusterProducers.piZeroDiscriminators_cfi")
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(10000)
+    input = cms.untracked.int32(1000)
 )
 
 process.options = cms.untracked.PSet(
      SkipEvent = cms.untracked.vstring('ProductNotFound')
 )
 
-
+#Default Test sample
 process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/mc/RunIISpring15DR74/TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v2/00000/18E6854B-1809-E511-A405-0025905B8590.root'))
+
+#TTTT Test file for testing LHE weights
+#process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/mc/RunIISpring15DR74/TTTT_TuneCUETP8M1_13TeV-amcatnlo-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9_ext1-v1/00000/0C216A04-5C5D-E511-AD98-D4AE529D9537.root'))
 
 # data test file from 2015D:
 #process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/data/Run2015D/SingleMuon/MINIAOD/PromptReco-v3/000/256/629/00000/8EA4C10E-F35E-E511-ABF9-02163E014108.root'))
@@ -154,7 +157,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		hltProducer4th = cms.InputTag("TriggerResults","","REDIGI311X"),
 		pileUpProducer = cms.InputTag("addPileupInfo"),
 		genParticlesProducer = cms.InputTag("prunedGenParticles"),
-                lheEventProductProducer = cms.InputTag("source"),
+                lheEventProductProducer = cms.InputTag("externalLHEProducer"),
 		primaryVertexProducer = cms.InputTag("offlineSlimmedPrimaryVertices"),
 		vcaloJetProducer = cms.untracked.vstring("selectedPatJetsAK5Calo"),
 		vgenJetProducer = cms.untracked.vstring("slimmedGenJets"),

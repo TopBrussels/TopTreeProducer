@@ -105,10 +105,10 @@ public:
 
     TopTree::TRootHLTInfo getHLTinfo(UInt_t RunID)
     {
-        cout << "Number of HLTInfos : " << hltInfos_.size() << endl;
+        //cout << "Number of HLTInfos : " << hltInfos_.size() << endl;
         for (UInt_t i=0; i<hltInfos_.size(); i++)
         {
-            cout << "HLTInfo RunID: " << hltInfos_[i].RunID() << endl;
+            //cout << "HLTInfo RunID: " << hltInfos_[i].RunID() << endl;
 
             if (hltInfos_[i].RunID() == RunID)
             {
