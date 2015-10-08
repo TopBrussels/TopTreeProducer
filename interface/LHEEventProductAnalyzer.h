@@ -8,8 +8,14 @@
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/Framework/interface/ESHandle.h"
-#include "SimDataFormats/GeneratorProducts/interface/WeightsInfo.h"
+//#include "FWCore/Framework/interface/EDProducer.h"
+//#include "FWCore/Utilities/interface/InputTag.h"
 
+#include "SimDataFormats/GeneratorProducts/interface/WeightsInfo.h"
+#include "SimDataFormats/GeneratorProducts/interface/LHERunInfoProduct.h"
+#include "SimDataFormats/GeneratorProducts/interface/GenRunInfoProduct.h"
+
+#include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
 //#include "../interface/TRootLHEEventProduct.h"
 #include "TClonesArray.h"
 
@@ -36,7 +42,7 @@ public:
 	~LHEEventProductAnalyzer();
 	//	void SetVerbosity(int verbosity) { verbosity_ = verbosity; };
 	void Process(const edm::Event& iEvent, TRootEvent* rootEvent);
-	void PrintWeightNamesList(const edm::Event& iEvent, TRootEvent* rootEvent);
+	void PrintWeightNamesList(edm::Run const& iRun, edm::EventSetup const& iSetup);
 private:
 	int verbosity_;
 	edm::InputTag lheEventProductProducer_;
