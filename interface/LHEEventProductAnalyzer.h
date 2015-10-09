@@ -6,9 +6,12 @@
 
 // user include files
 #include "FWCore/Framework/interface/Event.h"
+#include "FWCore/Framework/interface/Run.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/Framework/interface/ESHandle.h"
 #include "SimDataFormats/GeneratorProducts/interface/WeightsInfo.h"
+#include "SimDataFormats/GeneratorProducts/interface/LHEEventProduct.h"
+#include "SimDataFormats/GeneratorProducts/interface/LHERunInfoProduct.h"
 
 //#include "../interface/TRootLHEEventProduct.h"
 #include "TClonesArray.h"
@@ -36,7 +39,7 @@ public:
 	~LHEEventProductAnalyzer();
 	//	void SetVerbosity(int verbosity) { verbosity_ = verbosity; };
 	void Process(const edm::Event& iEvent, TRootEvent* rootEvent);
-	void PrintWeightNamesList(const edm::Event& iEvent, TRootEvent* rootEvent);
+	void PrintWeightNamesList(const edm::Run& iRun);
 private:
 	int verbosity_;
 	edm::InputTag lheEventProductProducer_;

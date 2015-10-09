@@ -386,6 +386,12 @@ void TopTreeProducer::endLuminosityBlock(const edm::LuminosityBlock & lumi, cons
     }
 }
 
+//------------- method called for each run -------------
+void TopTreeProducer::beginRun(const edm::Run& iRun, const edm::EventSetup& iSetup)
+{
+    RunlheEventProductAnalyzer_ = new LHEEventProductAnalyzer(producersNames_,verbosity);
+    RunlheEventProductAnalyzer_->PrintWeightNamesList(iRun);
+}
 // ------------ method called to for each event  ------------
 void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
@@ -614,12 +620,13 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
         if (drawMCTree) myMCAnalyzer->DrawMCTree(iEvent, iSetup, myConfig_, producersNames_);
         if (doPDFInfo ) myMCAnalyzer->PDFInfo(iEvent, rootEvent);
         myMCAnalyzer->ProcessMCParticle(iEvent, mcParticles);
-        delete myMCAnalyzer; 
+        delete myMCAnalyzer;
     }
 
 
     if(doLHEEventProd)
     {
+
         lheEventProductAnalyzer_->Process(iEvent,  rootEvent);
 
     }

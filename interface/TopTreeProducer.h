@@ -11,6 +11,7 @@
 #include "FWCore/Framework/interface/MakerMacros.h"
 #include "FWCore/Framework/interface/EDAnalyzer.h"
 #include "FWCore/Framework/interface/Event.h"
+#include "FWCore/Framework/interface/Run.h"
 #include "DataFormats/Provenance/interface/EventID.h"
 #include "FWCore/Framework/interface/EventSetup.h"
 #include "FWCore/Framework/interface/ESHandle.h"
@@ -88,6 +89,7 @@ public:
 
 private:
 	virtual void beginJob() ;
+	virtual void beginRun(const edm::Run&, const edm::EventSetup&) ;
 	virtual void analyze(const edm::Event&, const edm::EventSetup&);
         virtual void endLuminosityBlock(const edm::LuminosityBlock&, const EventSetup&);
 	virtual void endJob() ;
@@ -138,7 +140,8 @@ private:
         std::vector<std::string> vTrackmetProducer;
 	int nTotEvt_;
 	HLTAnalyzer* hltAnalyzer_;
-        LHEEventProductAnalyzer* lheEventProductAnalyzer_;
+    LHEEventProductAnalyzer* lheEventProductAnalyzer_;
+    LHEEventProductAnalyzer* RunlheEventProductAnalyzer_;
 	TRootRun* runInfos_;
 	TRootEvent* rootEvent;
 	TClonesArray* mcParticles;
