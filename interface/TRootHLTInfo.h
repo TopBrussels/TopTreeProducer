@@ -8,6 +8,7 @@
 #include "Rtypes.h"
 #include "TObject.h"
 #include "TVector3.h"
+#include <cassert> // for assert()
 
 using namespace std;
 
@@ -68,16 +69,40 @@ public:
 
     UInt_t hltPath(std::string hltName)
     {
-        for (UInt_t ipath=0; ipath < hltNames_.size(); ipath++)
-        {
-//            cout << hltNames_.at(ipath)<< " <-> " <<  hltName << endl;
-            if (hltNames_.at(ipath) == hltName)
+        // wildcards at the end of trigger string currently only supported
+        size_t wildcardPos = hltName.find("*");
+        if (wildcardPos != string::npos)  //if using wildcards
+        { 
+            //if there is a char after * exit saying it only supports wildcards at end of HLT name with v*
+            cout<<"Checking trigger string 2"<<endl;
+            cout<<"-1 at:"<<hltName.at(wildcardPos-1)<<endl;
+            cout<<"wildcard pos: "<<wildcardPos<<"  hltname size: "<<hltName.size()<<endl;
+            assert(wildcardPos != hltName.size() || hltName.at(wildcardPos-1) != 'v');
+
+            // cout<<"using wildcards!!!"<<endl;
+            string subHLTname = hltName.substr(0,wildcardPos);        
+            for (UInt_t ipath=0; ipath < hltNames_.size(); ipath++)
             {
-                return ipath;
-            }
+                if (hltNames_.at(ipath).find(subHLTname) != string::npos){
+                    return ipath;
+                }
+            }   
+            return 9999;
         }
-        return 9999;
-    }
+
+        else
+        {
+            for (UInt_t ipath=0; ipath < hltNames_.size(); ipath++)
+            {
+                // cout << hltNames_.at(ipath)<< " <-> " <<  hltName << endl;
+                if (hltNames_.at(ipath) == hltName)
+                {
+                    return ipath;
+                }
+            }
+            return 9999;
+        }
+    }    
 
     void sethltWasRun (UInt_t trigId)
     {
