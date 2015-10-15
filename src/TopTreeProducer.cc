@@ -138,7 +138,7 @@ void TopTreeProducer::beginJob()
     runTree_->Branch ("runInfos", "TopTree::TRootRun", &runInfos_);
     if(verbosity>0) cout << "RunTree is created" << endl;
 
-    //rootEvent = new TRootEvent();
+    rootEvent = new TRootEvent();
     eventTree_ = new TTree("eventTree", "Event Infos");
     eventTree_->Branch ("Event", "TopTree::TRootEvent", &rootEvent);
     if(verbosity>0) cout << "EventTree is created" << endl;
