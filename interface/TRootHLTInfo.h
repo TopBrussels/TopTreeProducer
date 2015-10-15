@@ -8,6 +8,7 @@
 #include "Rtypes.h"
 #include "TObject.h"
 #include "TVector3.h"
+#include <cassert> // for assert()
 
 using namespace std;
 
@@ -19,25 +20,8 @@ class TRootHLTInfo : public TObject
 
 public:
 
-    TRootHLTInfo() :
-        RunID_(0)
-        ,hltNames_()
-        ,hltWasRun_()
-        ,hltErrors_()
-        ,hltAccept_()
-    {
-        ;
-    }
-
-    TRootHLTInfo(UInt_t RunID, vector<std::string> hltNames,  vector<UInt_t> hltWasRun, vector<UInt_t> hltErrors, vector<UInt_t> hltAccept) :
-        RunID_(RunID)
-        ,hltNames_(hltNames)
-        ,hltWasRun_(hltWasRun)
-        ,hltErrors_(hltErrors)
-        ,hltAccept_(hltAccept)
-    {
-        ;
-    }
+    TRootHLTInfo();
+    TRootHLTInfo(UInt_t RunID, vector<std::string> hltNames,  vector<UInt_t> hltWasRun, vector<UInt_t> hltErrors, vector<UInt_t> hltAccept);
 
     std::string hltNames (UInt_t trigId) const
     {
@@ -66,19 +50,8 @@ public:
         return hltNames_.size();
     };
 
-    UInt_t hltPath(std::string hltName)
-    {
-        for (UInt_t ipath=0; ipath < hltNames_.size(); ipath++)
-        {
-//            cout << hltNames_.at(ipath)<< " <-> " <<  hltName << endl;
-            if (hltNames_.at(ipath) == hltName)
-            {
-                return ipath;
-            }
-        }
-        return 9999;
-    }
-
+    UInt_t hltPath(std::string hltName);
+   
     void sethltWasRun (UInt_t trigId)
     {
         hltWasRun_[trigId]++;
@@ -92,16 +65,7 @@ public:
         hltErrors_[trigId]++;
     };
 
-    void gethltNameList()
-    {
-        cout<<"Size of hltNames list = "<<hltNames_.size()<<endl; 
-        cout<<"*******************************************"<<endl;
-        for (UInt_t ipath=0; ipath < hltNames_.size(); ipath++)
-        {
-            cout << "No. "<<ipath<<" name :"<< hltNames_.at(ipath) << endl;
-        }
-        cout<<"*******************************************"<<endl;
-    };
+    void gethltNameList();
 
 private:
     UInt_t RunID_;
