@@ -138,7 +138,7 @@ void TopTreeProducer::beginJob()
     runTree_->Branch ("runInfos", "TopTree::TRootRun", &runInfos_);
     if(verbosity>0) cout << "RunTree is created" << endl;
 
-    rootEvent = new TRootEvent();
+    //rootEvent = new TRootEvent();
     eventTree_ = new TTree("eventTree", "Event Infos");
     eventTree_->Branch ("Event", "TopTree::TRootEvent", &rootEvent);
     if(verbosity>0) cout << "EventTree is created" << endl;
@@ -354,6 +354,8 @@ void TopTreeProducer::endJob()
     }
 
 
+
+
     runInfos_->setPrePathCounter(tmp_->GetBinContent(1));
     runInfos_->setPostPathCounter(tmp_->GetBinContent(2));
 
@@ -386,6 +388,18 @@ void TopTreeProducer::endLuminosityBlock(const edm::LuminosityBlock & lumi, cons
     }
 }
 
+//------------- method called for each run -------------
+void TopTreeProducer::beginRun(const edm::Run& iRun, const edm::EventSetup& iSetup)
+{
+//    RunlheEventProductAnalyzer_ = new LHEEventProductAnalyzer(producersNames_,verbosity);
+//    RunlheEventProductAnalyzer_->PrintWeightNamesList(iRun);
+}
+void TopTreeProducer::endRun(const edm::Run& iRun, const edm::EventSetup& iSetup)
+{
+    RunlheEventProductAnalyzer_ = new LHEEventProductAnalyzer(producersNames_,verbosity);
+    RunlheEventProductAnalyzer_->CopyWeightNames(iRun, runInfos_);
+    //RunlheEventProductAnalyzer_->PrintWeightNamesList(iRun);
+}
 // ------------ method called to for each event  ------------
 void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
@@ -402,6 +416,8 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 
 
     // Global Event Infos
+
+    rootEvent = new TRootEvent();
 
     rootEvent->setNb(nTotEvt_);
     rootEvent->setEventId(iEvent.id().event());
@@ -614,12 +630,13 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
         if (drawMCTree) myMCAnalyzer->DrawMCTree(iEvent, iSetup, myConfig_, producersNames_);
         if (doPDFInfo ) myMCAnalyzer->PDFInfo(iEvent, rootEvent);
         myMCAnalyzer->ProcessMCParticle(iEvent, mcParticles);
-        delete myMCAnalyzer; 
+        delete myMCAnalyzer;
     }
 
 
     if(doLHEEventProd)
     {
+
         lheEventProductAnalyzer_->Process(iEvent,  rootEvent);
 
     }
@@ -834,7 +851,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 
 
     if(verbosity>1) cout << endl << "Deleting objects..." << endl;
-    //delete rootEvent;
+    delete rootEvent;
 
     if(!isRealData_) (*mcParticles).Delete();
 

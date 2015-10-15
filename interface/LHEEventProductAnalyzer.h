@@ -3,9 +3,11 @@
 
 // system include files
 #include <iostream>
+#include <map>
 
 // user include files
 #include "FWCore/Framework/interface/Event.h"
+#include "FWCore/Framework/interface/Run.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/Framework/interface/ESHandle.h"
 //#include "FWCore/Framework/interface/EDProducer.h"
@@ -14,8 +16,9 @@
 
 
 #include "SimDataFormats/GeneratorProducts/interface/WeightsInfo.h"
+#include "SimDataFormats/GeneratorProducts/interface/LHEEventProduct.h"
 #include "SimDataFormats/GeneratorProducts/interface/LHERunInfoProduct.h"
-//#include "SimDataFormats/GeneratorProducts/interface/GenRunInfoProduct.h"
+
 
 //#include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
 //#include "../interface/TRootLHEEventProduct.h"
@@ -44,7 +47,9 @@ public:
 	~LHEEventProductAnalyzer();
 	//	void SetVerbosity(int verbosity) { verbosity_ = verbosity; };
 	void Process(const edm::Event& iEvent, TRootEvent* rootEvent);
-	void PrintWeightNamesList(edm::Run const& iRun, edm::EventSetup const& iSetup);
+	void PrintWeightNamesList(const edm::Run& iRun);
+	void CopyWeightNames(const edm::Run& iRun, TRootRun* runInfos);
+
 private:
 	int verbosity_;
 	edm::InputTag lheEventProductProducer_;

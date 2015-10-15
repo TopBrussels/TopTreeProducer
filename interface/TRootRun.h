@@ -4,11 +4,13 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <map>
 
 #include "Rtypes.h"
 #include "TObject.h"
 #include "TVector3.h"
 #include "TRootHLTInfo.h"
+#include "TRootWeightInfo.h"
 
 using namespace std;
 
@@ -125,10 +127,52 @@ public:
         return hltInfos_;
     }; // for the skimmer
 
+    // Methods for Gen Weights
+
+    void setWeights(std::map<std::string,int> weights_, unsigned int runNumber)
+    {
+        bool exists = false;
+        for (UInt_t i=0; i<weightInfos_.size(); i++)
+        {
+            if (weightInfos_[i].RunID() == runNumber)
+            {
+                exists = true;
+            }
+        }
+        if(!exists)
+        {
+            cout << "Creating new TWeightInfo for run " << runNumber << endl;
+            TRootWeightInfo theInfo(runNumber, weights_);
+            weightInfos_.push_back(theInfo);
+        }
+        else
+        {
+            cout << "Weight Information for run " << runNumber << " already exists." << endl;
+        }
+    };
+
+    TopTree::TRootWeightInfo getWeightInfo(UInt_t RunID)
+    {
+        //cout << "Number of HLTInfos : " << hltInfos_.size() << endl;
+        for (UInt_t i=0; i<weightInfos_.size(); i++)
+        {
+            //cout << "HLTInfo RunID: " << hltInfos_[i].RunID() << endl;
+
+            if (weightInfos_[i].RunID() == RunID)
+            {
+                return weightInfos_[i];
+            }
+        }
+
+        return TopTree::TRootWeightInfo();
+
+    }
+
 private:
 
     // new HLT method
     vector<TopTree::TRootHLTInfo> hltInfos_;
+    vector<TopTree::TRootWeightInfo> weightInfos_;
 
     int prePathCounter_;                        // number of events before PAT sequence
     int postPathCounter_;                       // number of events after PAT sequence

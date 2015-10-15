@@ -51,7 +51,7 @@ public:
     };
 
     UInt_t hltPath(std::string hltName);
-   
+
     void sethltWasRun (UInt_t trigId)
     {
         hltWasRun_[trigId]++;
@@ -66,6 +66,7 @@ public:
     };
 
     void gethltNameList();
+
 
 private:
     UInt_t RunID_;
