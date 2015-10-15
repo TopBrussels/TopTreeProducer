@@ -70,7 +70,7 @@ public:
     {
         for (UInt_t ipath=0; ipath < hltNames_.size(); ipath++)
         {
-//            cout << hltNames_.at(ipath)<< " <-> " <<  hltName << endl;
+            //cout << hltNames_.at(ipath)<< " <-> " <<  hltName << endl;
             if (hltNames_.at(ipath) == hltName)
             {
                 return ipath;
@@ -94,7 +94,7 @@ public:
 
     void gethltNameList()
     {
-        cout<<"Size of hltNames list = "<<hltNames_.size()<<endl; 
+        cout<<"Size of hltNames list = "<<hltNames_.size()<<endl;
         cout<<"*******************************************"<<endl;
         for (UInt_t ipath=0; ipath < hltNames_.size(); ipath++)
         {

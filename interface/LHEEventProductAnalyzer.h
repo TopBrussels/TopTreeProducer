@@ -3,6 +3,7 @@
 
 // system include files
 #include <iostream>
+#include <map>
 
 // user include files
 #include "FWCore/Framework/interface/Event.h"
@@ -40,6 +41,7 @@ public:
 	//	void SetVerbosity(int verbosity) { verbosity_ = verbosity; };
 	void Process(const edm::Event& iEvent, TRootEvent* rootEvent);
 	void PrintWeightNamesList(const edm::Run& iRun);
+	void CopyWeightNames(const edm::Run& iRun, TRootRun* runInfos);
 private:
 	int verbosity_;
 	edm::InputTag lheEventProductProducer_;
