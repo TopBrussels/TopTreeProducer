@@ -1,6 +1,7 @@
 #include "../interface/TopTreeProducer.h"
 #include "DataFormats/HLTReco/interface/TriggerEvent.h"
 #include "DataFormats/Common/interface/Handle.h"
+#include "DataFormats/METReco/interface/HcalNoiseSummary.h"
 
 using namespace std;
 using namespace TopTree;
@@ -48,7 +49,8 @@ void TopTreeProducer::beginJob()
     doGenEvent = myConfig_.getUntrackedParameter<bool>("doGenEvent",false);
     doNPGenEvent = myConfig_.getUntrackedParameter<bool>("doNPGenEvent",false);
     doSpinCorrGen = myConfig_.getUntrackedParameter<bool>("doSpinCorrGen",false);
-    doLHEEventProd  = myConfig_.getUntrackedParameter<bool>("doLHEEventProd",true);
+	doLHEEventProd  = myConfig_.getUntrackedParameter<bool>("doLHEEventProd",true);
+	doEventCleaningInfo  = myConfig_.getUntrackedParameter<bool>("doEventCleaningInfo",true);
     useEventCounter_ = myConfig_.getUntrackedParameter<bool>("useEventCounter",true);
 
     vector<string> defaultVec;
@@ -337,6 +339,13 @@ void TopTreeProducer::beginJob()
         primaryVertex = new TClonesArray("TopTree::TRootVertex", 1000);
         eventTree_->Branch ("PrimaryVertex", "TClonesArray", &primaryVertex);
     }
+	if (doEventCleaningInfo){
+		if (verbosity > 0 ) cout << "Event cleaning information will be added to roottuple" << endl;
+		
+		
+	}
+	
+	
 
 }
 
@@ -423,6 +432,36 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
     rootEvent->setEventId(iEvent.id().event());
     rootEvent->setRunId(iEvent.id().run());
     rootEvent->setLumiBlockId(iEvent.luminosityBlock());
+	
+	/// event cleaning. Particularly important for analyses using MET! Information is stored in TRootEvent as bool flags. false = bad events.
+	if (doEventCleaningInfo){
+		edm::Handle<HcalNoiseSummary> hSummary;
+		iEvent.getByLabel("hcalnoise", hSummary);
+		Bool_t theresult=true;
+		if( hSummary.isValid()){
+			if( hSummary->numIsolatedNoiseChannels() >=10 )  theresult = false;
+			if( hSummary->isolatedNoiseSumE() >=50        )  theresult = false;
+			if( hSummary->isolatedNoiseSumEt() >=25       )  theresult = false;
+		}
+		rootEvent->setHCalIsoNoise(theresult);
+		
+		edm::Handle<bool> hNoiseResult;
+		iEvent.getByLabel("HBHENoiseFilterResultProducer", "HBHENoiseFilterResult", hNoiseResult);
+		theresult= true;
+		if(hNoiseResult.isValid())
+			theresult = *hNoiseResult;
+		rootEvent->setHBHENoise(theresult);
+		
+		if (verbosity > 2){
+			cout << "************************************" << endl;
+			cout << "Filling event cleaning information: " << endl;
+
+			cout << " HCAL Isolation noise filter value: " << rootEvent->getHCalIsoNoise() << endl;
+			cout << " HBHE noise filter value: " << rootEvent->getHBHENoise() << endl;
+			cout << "************************************" << endl;
+
+		}
+	}
 
     if(verbosity>4)
     {
