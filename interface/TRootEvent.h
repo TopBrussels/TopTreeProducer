@@ -57,6 +57,8 @@ public:
         ,weights_()
 		,hbheNoiseResult_(true)
 		,hcalIsoNoiseResult_(true)
+		,eeBadScFilter_(true)
+		,CSCTightHaloFilter_(true)
     {
         ;
     }
@@ -340,6 +342,11 @@ public:
 	Bool_t getHBHENoise(void) const {return hbheNoiseResult_;} // false = reject event
 	void setHCalIsoNoise(Bool_t res){hcalIsoNoiseResult_=res;}// false = reject event
 	Bool_t getHCalIsoNoise(void) const { return hcalIsoNoiseResult_;}// false = reject event
+	void setEEBadScFilter(Bool_t res) { eeBadScFilter_ = res;} // false = reject event
+	Bool_t getEEBadScFilter(void) const { return eeBadScFilter_; } // false = reject event
+	void setCSCTightHaloFilter(Bool_t res) { CSCTightHaloFilter_ = res;} // false = reject event
+	Bool_t getCSCTightHaloFilter(void) const { return CSCTightHaloFilter_; } // false = reject event
+	
 
 private:
 
@@ -383,6 +390,8 @@ private:
 	// event cleaning bools. True = good, false=bad
 	Bool_t hbheNoiseResult_;
 	Bool_t hcalIsoNoiseResult_;
+	Bool_t eeBadScFilter_;
+	Bool_t CSCTightHaloFilter_;
 
     ClassDef (TRootEvent,5);
 };

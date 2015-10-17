@@ -433,12 +433,33 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
     rootEvent->setRunId(iEvent.id().run());
     rootEvent->setLumiBlockId(iEvent.luminosityBlock());
 	
-	/// event cleaning. Particularly important for analyses using MET! Information is stored in TRootEvent as bool flags. false = bad events.
+	// event cleaning. Particularly important for analyses using MET!
+	// Information is stored in TRootEvent as bool flags. false = bad events.
 	if (doEventCleaningInfo){
-		edm::Handle<HcalNoiseSummary> hSummary;
-		iEvent.getByLabel("hcalnoise", hSummary);
+		
+		
+		// get TriggerResults information for the csc and ee bad supercluster filters. In principle the same thing could be done for the HBHE and HBHEIso filters but those currently need to be re-run
+		
+		edm::Handle<edm::TriggerResults> trigResults; //our trigger result object
+		edm::InputTag trigResultsTagMiniAOD("TriggerResults","","PAT"); //make sure have correct process, can be RECO or PAT, never HLT
+		iEvent.getByLabel(trigResultsTagMiniAOD,trigResults);
+		if(!trigResults.isValid()){
+			edm::InputTag trigResultsTagMiniAOD("TriggerResults","","RECO"); //make sure have correct process, can be RECO or PAT, never HLT
+
+			iEvent.getByLabel(trigResultsTagMiniAOD,trigResults);
+		}
 		Bool_t theresult=true;
-		if( hSummary.isValid()){
+		if(trigResults.isValid()){
+			const edm::TriggerNames& trigNames = iEvent.triggerNames(*trigResults);
+			theresult=trigResults->accept(trigNames.triggerIndex("Flag_CSCTightHaloFilter"));
+			rootEvent->setCSCTightHaloFilter(theresult);
+			theresult=true;
+			theresult=trigResults->accept(trigNames.triggerIndex("Flag_eeBadScFilter"));
+			rootEvent->setEEBadScFilter(theresult);
+		}
+		theresult=true;
+		edm::Handle<HcalNoiseSummary> hSummary;
+		iEvent.getByLabel("hcalnoise", hSummary);		if( hSummary.isValid()){
 			if( hSummary->numIsolatedNoiseChannels() >=10 )  theresult = false;
 			if( hSummary->isolatedNoiseSumE() >=50        )  theresult = false;
 			if( hSummary->isolatedNoiseSumEt() >=25       )  theresult = false;
@@ -458,10 +479,14 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 
 			cout << " HCAL Isolation noise filter value: " << rootEvent->getHCalIsoNoise() << endl;
 			cout << " HBHE noise filter value: " << rootEvent->getHBHENoise() << endl;
+			cout << " CSS halo filter value: " << rootEvent->getCSCTightHaloFilter() << endl;
+			cout << " EE bad SuperCluster filter value: " << rootEvent->getEEBadScFilter() << endl;
 			cout << "************************************" << endl;
 
 		}
+		
 	}
+	// end of event cleaning code
 
     if(verbosity>4)
     {
