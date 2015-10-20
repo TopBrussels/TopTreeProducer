@@ -1,6 +1,7 @@
 #include "../interface/TopTreeProducer.h"
 #include "DataFormats/HLTReco/interface/TriggerEvent.h"
 #include "DataFormats/Common/interface/Handle.h"
+#include "DataFormats/METReco/interface/HcalNoiseSummary.h"
 
 using namespace std;
 using namespace TopTree;
@@ -48,7 +49,8 @@ void TopTreeProducer::beginJob()
     doGenEvent = myConfig_.getUntrackedParameter<bool>("doGenEvent",false);
     doNPGenEvent = myConfig_.getUntrackedParameter<bool>("doNPGenEvent",false);
     doSpinCorrGen = myConfig_.getUntrackedParameter<bool>("doSpinCorrGen",false);
-    doLHEEventProd  = myConfig_.getUntrackedParameter<bool>("doLHEEventProd",true);
+	doLHEEventProd  = myConfig_.getUntrackedParameter<bool>("doLHEEventProd",true);
+	doEventCleaningInfo  = myConfig_.getUntrackedParameter<bool>("doEventCleaningInfo",true);
     useEventCounter_ = myConfig_.getUntrackedParameter<bool>("useEventCounter",true);
 
     vector<string> defaultVec;
@@ -337,6 +339,13 @@ void TopTreeProducer::beginJob()
         primaryVertex = new TClonesArray("TopTree::TRootVertex", 1000);
         eventTree_->Branch ("PrimaryVertex", "TClonesArray", &primaryVertex);
     }
+	if (doEventCleaningInfo){
+		if (verbosity > 0 ) cout << "Event cleaning information will be added to roottuple" << endl;
+		
+		
+	}
+	
+	
 
 }
 
@@ -423,6 +432,61 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
     rootEvent->setEventId(iEvent.id().event());
     rootEvent->setRunId(iEvent.id().run());
     rootEvent->setLumiBlockId(iEvent.luminosityBlock());
+	
+	// event cleaning. Particularly important for analyses using MET!
+	// Information is stored in TRootEvent as bool flags. false = bad events.
+	if (doEventCleaningInfo){
+		
+		
+		// get TriggerResults information for the csc and ee bad supercluster filters. In principle the same thing could be done for the HBHE and HBHEIso filters but those currently need to be re-run
+		
+		edm::Handle<edm::TriggerResults> trigResults; //our trigger result object
+		edm::InputTag trigResultsTagMiniAOD("TriggerResults","","PAT"); //make sure have correct process, can be RECO or PAT, never HLT
+		iEvent.getByLabel(trigResultsTagMiniAOD,trigResults);
+		if(!trigResults.isValid()){
+			edm::InputTag trigResultsTagMiniAOD("TriggerResults","","RECO"); //make sure have correct process, can be RECO or PAT, never HLT
+
+			iEvent.getByLabel(trigResultsTagMiniAOD,trigResults);
+		}
+		Bool_t theresult=true;
+		if(trigResults.isValid()){
+			const edm::TriggerNames& trigNames = iEvent.triggerNames(*trigResults);
+			theresult=trigResults->accept(trigNames.triggerIndex("Flag_CSCTightHaloFilter"));
+			rootEvent->setCSCTightHaloFilter(theresult);
+			theresult=true;
+			theresult=trigResults->accept(trigNames.triggerIndex("Flag_eeBadScFilter"));
+			rootEvent->setEEBadScFilter(theresult);
+		}
+		theresult=true;
+		edm::Handle<HcalNoiseSummary> hSummary;
+		iEvent.getByLabel("hcalnoise", hSummary);		if( hSummary.isValid()){
+			if( hSummary->numIsolatedNoiseChannels() >=10 )  theresult = false;
+			if( hSummary->isolatedNoiseSumE() >=50        )  theresult = false;
+			if( hSummary->isolatedNoiseSumEt() >=25       )  theresult = false;
+		}
+		rootEvent->setHCalIsoNoise(theresult);
+		
+		edm::Handle<bool> hNoiseResult;
+		iEvent.getByLabel("HBHENoiseFilterResultProducer", "HBHENoiseFilterResult", hNoiseResult);
+		theresult= true;
+		if(hNoiseResult.isValid())
+			theresult = *hNoiseResult;
+		rootEvent->setHBHENoise(theresult);
+		
+		if (verbosity > 2){
+			cout << "************************************" << endl;
+			cout << "Filling event cleaning information: " << endl;
+
+			cout << " HCAL Isolation noise filter value: " << rootEvent->getHCalIsoNoise() << endl;
+			cout << " HBHE noise filter value: " << rootEvent->getHBHENoise() << endl;
+			cout << " CSS halo filter value: " << rootEvent->getCSCTightHaloFilter() << endl;
+			cout << " EE bad SuperCluster filter value: " << rootEvent->getEEBadScFilter() << endl;
+			cout << "************************************" << endl;
+
+		}
+		
+	}
+	// end of event cleaning code
 
     if(verbosity>4)
     {

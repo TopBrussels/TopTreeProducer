@@ -55,6 +55,10 @@ public:
         ,factorizationScale_(-1.)
         ,originalXWGTUP_(0)
         ,weights_()
+		,hbheNoiseResult_(true)
+		,hcalIsoNoiseResult_(true)
+		,eeBadScFilter_(true)
+		,CSCTightHaloFilter_(true)
     {
         ;
     }
@@ -332,6 +336,17 @@ public:
     	return stream;
     };
     */
+	
+	// accessors noise results:
+	void setHBHENoise(Bool_t res) {hbheNoiseResult_=res;} // false = reject event
+	Bool_t getHBHENoise(void) const {return hbheNoiseResult_;} // false = reject event
+	void setHCalIsoNoise(Bool_t res){hcalIsoNoiseResult_=res;}// false = reject event
+	Bool_t getHCalIsoNoise(void) const { return hcalIsoNoiseResult_;}// false = reject event
+	void setEEBadScFilter(Bool_t res) { eeBadScFilter_ = res;} // false = reject event
+	Bool_t getEEBadScFilter(void) const { return eeBadScFilter_; } // false = reject event
+	void setCSCTightHaloFilter(Bool_t res) { CSCTightHaloFilter_ = res;} // false = reject event
+	Bool_t getCSCTightHaloFilter(void) const { return CSCTightHaloFilter_; } // false = reject event
+	
 
 private:
 
@@ -348,6 +363,8 @@ private:
     // generalTracks infos (for cleaning of the scraping events)
     Int_t nTracks_;
     Int_t nHighPurityTracks_;
+	
+
 
     // PileUp info
     std::map<Int_t,Int_t> nPu_;
@@ -355,8 +372,8 @@ private:
     // Trigger Infos
     Bool_t passGlobalHLT_;
     std::vector<Bool_t> trigHLT_;
-
-    // PDF infos
+	
+	// PDF infos
     Int_t idParton1_;
     Float_t xParton1_;
     Int_t idParton2_;
@@ -366,12 +383,17 @@ private:
     Float_t originalXWGTUP_;
 
     std::map<int,float> weights_;
-
-
-
+	
     std::map<std::string, std::vector<TopTree::triggeredObject> > triggerFilters_;
+	
+	
+	// event cleaning bools. True = good, false=bad
+	Bool_t hbheNoiseResult_;
+	Bool_t hcalIsoNoiseResult_;
+	Bool_t eeBadScFilter_;
+	Bool_t CSCTightHaloFilter_;
 
-    ClassDef (TRootEvent,4);
+    ClassDef (TRootEvent,5);
 };
 }
 

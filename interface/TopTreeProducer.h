@@ -129,6 +129,7 @@ private:
 	bool doSpinCorrGen;
 	bool doLHEEventProd;
 	bool drawMCTree;
+	bool doEventCleaningInfo;
 	std::vector<std::string> vGenJetProducer;
 	std::vector<std::string> vCaloJetProducer;
 	std::vector<std::string> vPFJetProducer;

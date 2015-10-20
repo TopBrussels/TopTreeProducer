@@ -20,18 +20,20 @@ process.load("RecoBTag.PerformanceDB.PoolBTagPerformanceDB1107")
 # good global tags can be found here. Beware that the default is MC which has to be updated for data!
 # https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideFrontierConditions
 process.GlobalTag.globaltag = cms.string('MCRUN2_74_V9')
-# geometry needed for clustering and calo shapes variables
-# process.load("RecoEcal.EgammaClusterProducers.geometryForClustering_cff")
-# 3 folllowing config files included in RecoEcal.EgammaClusterProducers.geometryForClustering_cff
-#process.load("Geometry.CMSCommonData.cmsIdealGeometryXML_cfi")
-#process.load("Geometry.CaloEventSetup.CaloGeometry_cfi")
-#process.load("Geometry.CaloEventSetup.CaloTopology_cfi")
 
-# ES cluster for pi0 discrimination variables
-#process.load("RecoEcal.EgammaClusterProducers.preshowerClusterShape_cfi")
+# various cleaning filters. More information:
+# https://twiki.cern.ch/twiki/bin/view/CMS/MissingETOptionalFiltersRun2
 
-# pi0 discrimination variables
-#process.load("RecoEcal.EgammaClusterProducers.piZeroDiscriminators_cfi")
+process.load('CommonTools.RecoAlgos.HBHENoiseFilterResultProducer_cfi')
+
+process.HBHENoiseFilterResultProducer.minZeros = cms.int32(99999)
+process.HBHENoiseFilterResultProducer.IgnoreTS4TS5ifJetInLowBVRegion=cms.bool(False)
+# for 50 ns data:
+#process.HBHENoiseFilterResultProducer.defaultDecision = cms.string("HBHENoiseFilterResultRun1")
+# for 25 ns data:
+process.HBHENoiseFilterResultProducer.defaultDecision = cms.string("HBHENoiseFilterResultRun2Loose")
+#end of cmssw code for cleaning filters...
+
 
 process.maxEvents = cms.untracked.PSet(
     input = cms.untracked.int32(1000)
@@ -126,6 +128,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		doSpinCorrGen = cms.untracked.bool(False),#put on True only if you need SpinCorrelation Variables
         	doLHEEventProd = cms.untracked.bool(True),#put on True only if you need SpinCorrelation Variables
 		doSemiLepEvent = cms.untracked.bool(False),#put on True only if you need TtSemiLeptonicEvent Collection exist in PAT-uples (L2)
+		doEventCleaningInfo = cms.untracked.bool(True), # only useful for data but protected for MC. Stores HBHE, HCalIso etc filter outputs as bools in TRootEvent
 
 		conversionLikelihoodWeightsFile = cms.untracked.string('RecoEgamma/EgammaTools/data/TMVAnalysis_Likelihood.weights.txt'),
 
@@ -153,8 +156,8 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 	producersNames = cms.PSet(
 		hltProducer1st = cms.InputTag("TriggerResults","","HLT"),
 		hltProducer2nd = cms.InputTag("TriggerResults","","RECO"),
-		hltProducer3rd = cms.InputTag("TriggerResults","","REDIGI"),
-		hltProducer4th = cms.InputTag("TriggerResults","","REDIGI311X"),
+		hltProducer3rd = cms.InputTag("TriggerResults","","MINIAOD"),
+		hltProducer4th = cms.InputTag("TriggerResults","","PAT"),
 		pileUpProducer = cms.InputTag("addPileupInfo"),
 		genParticlesProducer = cms.InputTag("prunedGenParticles"),
                 lheEventProductProducer = cms.InputTag("externalLHEProducer"),
@@ -177,7 +180,9 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 
 #process.TFileService = cms.Service("TFileService", fileName = cms.string('TFileTOPTREE.root') )
 
-process.p = cms.Path(process.analysis)
+process.p = cms.Path(
+					 process.HBHENoiseFilterResultProducer*  # needs to be re-run (is fast)
+					 process.analysis)
 temp = process.dumpPython()
 outputfile = file("expanded.py",'w')
 outputfile.write(temp)
