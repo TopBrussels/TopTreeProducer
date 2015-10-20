@@ -398,7 +398,7 @@ void TopTreeProducer::endRun(const edm::Run& iRun, const edm::EventSetup& iSetup
 {
     RunlheEventProductAnalyzer_ = new LHEEventProductAnalyzer(producersNames_,verbosity);
     RunlheEventProductAnalyzer_->CopyWeightNames(iRun, runInfos_);
-    //RunlheEventProductAnalyzer_->PrintWeightNamesList(iRun);
+    if(verbosity > 1 ) RunlheEventProductAnalyzer_->PrintWeightNamesList(iRun);
 }
 // ------------ method called to for each event  ------------
 void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
