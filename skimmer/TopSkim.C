@@ -409,6 +409,7 @@ int main()
 
 		vector<TopTree::TRootHLTInfo> tmpRunInfos = outRunInfos->copyHLTinfos();
 
+
 		//loop over events
 	     	for(unsigned int ievt=0; ievt<nTempEvents; ievt++)
 		  //	for(unsigned int ievt=0; ievt<10000; ievt++)
@@ -471,6 +472,19 @@ int main()
 			///////  HLT INFO... CAUSES MAJOR MEMORY LEAK in 74     ////////////////
 			///////////////////////////////////////////////////////////////////////
 
+            ////////////////////////////////////////////////////////////////////////
+            ///////  Weight Info Propogation ///////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////
+
+            if (outRunInfos->getWeightInfo(inEvent->runId()).RunID() == 0){ // if this run is not yet in the WeightInfos, add it.
+                outRunInfos->setWeights(inRunInfos->getWeightInfo(inEvent->runId()), inEvent->runId()); // add WeightInfo to the TRootRun
+            }
+
+
+			if( verbosity > 1 )
+				cout << "outRunInfos->copyHLTinfos().size(): " << outRunInfos->copyHLTinfos().size() << endl;
+
+            //////////////////////////////////////////////////////////////////////////
 
 			bool keepEvent = true;
 

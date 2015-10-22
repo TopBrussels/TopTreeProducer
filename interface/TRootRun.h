@@ -22,10 +22,10 @@ class TRootRun : public TObject
 
 public:
     TRootRun() :
-        nHLTEvents_(0)
-        ,nHLTWasRun_(0)
-        ,nHLTAccept_(0)
-        ,nHLTErrors_(0)
+        nHLTEvents_(-9999)
+        ,nHLTWasRun_(-9999)
+        ,nHLTAccept_(-9999)
+        ,nHLTErrors_(-9999)
         ,hltInputTag_("")
     {
         ;
@@ -107,10 +107,10 @@ public:
 
     TopTree::TRootHLTInfo getHLTinfo(UInt_t RunID)
     {
-        //cout << "Number of HLTInfos : " << hltInfos_.size() << endl;
+//        cout << "Number of HLTInfos : " << hltInfos_.size() << endl;
         for (UInt_t i=0; i<hltInfos_.size(); i++)
         {
-            //cout << "HLTInfo RunID: " << hltInfos_[i].RunID() << endl;
+//            cout << "HLTInfo RunID: " << hltInfos_[i].RunID() << " - RunID passed to function: " << RunID << endl;
 
             if (hltInfos_[i].RunID() == RunID)
             {
