@@ -477,7 +477,7 @@ int main()
             ////////////////////////////////////////////////////////////////////////
 
             if (outRunInfos->getWeightInfo(inEvent->runId()).RunID() == 0){ // if this run is not yet in the WeightInfos, add it.
-                outRunInfos->setWeights(inRunInfos->getWeightInfo(inEvent->runId()), inEvent->runId()); // add WeightInfo to the TRootRun
+                outRunInfos->setWeights(inRunInfos->getWeightInfo(inEvent->runId())); // add WeightInfo to the TRootRun
             }
 
 

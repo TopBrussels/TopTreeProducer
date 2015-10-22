@@ -151,6 +151,28 @@ public:
         }
     };
 
+    void setWeights(TopTree::TRootWeightInfo weightInfo)
+    {
+        bool exists = false;
+        for (UInt_t i=0; i<weightInfos_.size(); i++)
+        {
+            if (weightInfos_[i].RunID() == weightInfo.RunID())
+            {
+                exists = true;
+            }
+        }
+        if(!exists)
+        {
+            cout << "Creating new TWeightInfo for run " << weightInfo.RunID() << endl;
+            TRootWeightInfo theInfo(weightInfo);
+            weightInfos_.push_back(theInfo);
+        }
+        else
+        {
+            cout << "Weight Information for run " << weightInfo.RunID() << " already exists." << endl;
+        }
+    };
+
     TopTree::TRootWeightInfo getWeightInfo(UInt_t RunID)
     {
         //cout << "Number of HLTInfos : " << hltInfos_.size() << endl;
