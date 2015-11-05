@@ -7,6 +7,9 @@
 #include <iostream>
 
 // user include files
+
+#include "FWCore/ParameterSet/interface/ParameterSet.h"
+#include "FWCore/Utilities/interface/InputTag.h"
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
 #include "FWCore/Framework/interface/EDAnalyzer.h"
@@ -25,6 +28,7 @@
 #include "FWCore/Common/interface/TriggerNames.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
 #include "DataFormats/Common/interface/MergeableCounter.h"
+#include "DataFormats/METReco/interface/HcalNoiseSummary.h"
 
 #include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h"
 
@@ -166,10 +170,43 @@ private:
 	TClonesArray* spinCorrGen;
 	TClonesArray* primaryVertex;
 
-        bool useEventCounter_;
-        std::vector<std::string> filters_;
+    bool useEventCounter_;
+    std::vector<std::string> filters_;
+    bool isRealData_;
 
-        bool isRealData_;
+
+	// handles necessary for accessing objects in 76X or higher:
+
+      // ---------- tokens to CMSSW member classes to be accessed in analysis ------------------
+    // good practice is to use these instead of getbylabel. However getbylabel is still supported...
+    edm::EDGetTokenT<reco::VertexCollection> vtxToken_;
+    edm::EDGetTokenT<pat::MuonCollection> muonToken_;
+    edm::EDGetTokenT<pat::ElectronCollection> electronToken_;
+    edm::EDGetTokenT<pat::PhotonCollection> photonToken_;
+    edm::EDGetTokenT<pat::JetCollection> jetToken_;
+    edm::EDGetTokenT<pat::JetCollection> fatjetToken_;
+    edm::EDGetTokenT<pat::METCollection> metToken_;
+    edm::EDGetTokenT<std::vector<reco::GenJet> > genJetToken_;
+    edm::EDGetTokenT<edm::TriggerResults> triggerToken1_;
+    edm::EDGetTokenT<edm::TriggerResults> triggerToken2_;
+    edm::EDGetTokenT<edm::TriggerResults> triggerToken3_;
+    edm::EDGetTokenT<edm::TriggerResults> triggerToken4_;
+    edm::EDGetTokenT<edm::TriggerResults> metfilterToken_;
+    edm::EDGetTokenT<HcalNoiseSummary> hcalNoiseSummaryToken_;
+    edm::EDGetTokenT<std::vector< PileupSummaryInfo > > pileUpProducerToken_;
+    edm::EDGetTokenT<double> fixedGridRhoAllToken_;
+    edm::EDGetTokenT<double> fixedGridRhoFastjetAllToken_;
+    edm::EDGetTokenT<double> fixedGridRhoFastjetAllCaloToken_;
+    edm::EDGetTokenT<double> fixedGridRhoFastjetCentralCaloToken_;
+    edm::EDGetTokenT<double> fixedGridRhoFastjetCentralChargedPileUpToken_;
+    edm::EDGetTokenT<double> fixedGridRhoFastjetCentralNeutralToken_;
+    edm::EDGetTokenT<GenEventInfoProduct> genEventInfoProductToken_;
+    edm::EDGetTokenT<std::vector<reco::GenParticle> > genParticlesToken_;
+    edm::EDGetTokenT<LHEEventProduct> lheproductToken_;
+
+
+    
 };
+
 
 #endif

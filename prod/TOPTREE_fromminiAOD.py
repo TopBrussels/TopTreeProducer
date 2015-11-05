@@ -13,13 +13,9 @@ process.load("Configuration.Geometry.GeometryIdeal_cff")
 process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff")
 
-#Data measurements from Summer11
-process.load("RecoBTag.PerformanceDB.BTagPerformanceDB1107")
-process.load("RecoBTag.PerformanceDB.PoolBTagPerformanceDB1107")
-
 # good global tags can be found here. Beware that the default is MC which has to be updated for data!
 # https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideFrontierConditions
-process.GlobalTag.globaltag = cms.string('MCRUN2_74_V9')
+process.GlobalTag.globaltag = cms.string('74X_mcRun2_asymptotic_realisticBS_v0')
 
 # various cleaning filters. More information:
 # https://twiki.cern.ch/twiki/bin/view/CMS/MissingETOptionalFiltersRun2
@@ -113,7 +109,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		doGenJet = cms.untracked.bool(True),
 		doCaloJetId = cms.untracked.bool(False),
 		doPFJet = cms.untracked.bool(True),
-         	doFatJet = cms.untracked.bool(True),
+        doFatJet = cms.untracked.bool(True),
 		doJPTJet = cms.untracked.bool(False),
 		doJPTJetId = cms.untracked.bool(False),
 		doMuon = cms.untracked.bool(True),
@@ -158,24 +154,52 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		hltProducer2nd = cms.InputTag("TriggerResults","","RECO"),
 		hltProducer3rd = cms.InputTag("TriggerResults","","MINIAOD"),
 		hltProducer4th = cms.InputTag("TriggerResults","","PAT"),
-		pileUpProducer = cms.InputTag("addPileupInfo"),
+		pileUpProducer = cms.InputTag("addPileupInfo","","HLT"),
 		genParticlesProducer = cms.InputTag("prunedGenParticles"),
-                lheEventProductProducer = cms.InputTag("externalLHEProducer"),
+        lheEventProductProducer = cms.InputTag("externalLHEProducer"),
 		primaryVertexProducer = cms.InputTag("offlineSlimmedPrimaryVertices"),
 		vcaloJetProducer = cms.untracked.vstring("selectedPatJetsAK5Calo"),
-		vgenJetProducer = cms.untracked.vstring("slimmedGenJets"),
-		vpfJetProducer = cms.untracked.vstring("slimmedJets"),#,"selectedPatJetsPF2PATNoPFnoPU"),
-		vfatJetProducer = cms.untracked.vstring("slimmedJetsAK8"),#,"selectedPatJetsPF2PATNoPFnoPU"),
-		vJPTJetProducer = cms.untracked.vstring(""),
-		vmuonProducer = cms.untracked.vstring("slimmedMuons"),#,"selectedPatMuonsPF2PATNoPFnoPU"),
-		velectronProducer = cms.untracked.vstring("slimmedElectrons"),#,"selectedPatElectronsPF2PATNoPFnoPU"),
-         	vphotonProducer = cms.untracked.vstring("slimmedPhotons"),
-		CalometProducer = cms.InputTag("patMETs"),
-		vpfmetProducer = cms.untracked.vstring("slimmedMETs"),#,"patType1CorrectedPFMetPF2PATNoPFnoPU"),
-		TCmetProducer = cms.InputTag("patMETsTC"),
-		genEventProducer = cms.InputTag("genEvt"),
-		generalTrackLabel = cms.InputTag("generalTracks")
-	)
+        vgenJetProducer = cms.untracked.vstring("slimmedGenJets"),
+		vpfJetProducer = cms.untracked.vstring("slimmedJets"),
+		vfatJetProducer = cms.untracked.vstring("slimmedJetsAK8"),
+        vmuonProducer = cms.untracked.vstring("slimmedMuons"),
+        velectronProducer = cms.untracked.vstring("slimmedElectrons"),
+        vphotonProducer = cms.untracked.vstring("slimmedPhotons"),
+		CalometProducer = cms.untracked.vstring("patMETs"),
+		vpfmetProducer = cms.untracked.vstring("slimmedMETs"),
+		TCmetProducer = cms.untracked.InputTag("patMETsTC"),
+		genEventProducer = cms.untracked.InputTag("genEvt"),
+		generalTrackLabel = cms.untracked.InputTag("generalTracks")
+    ),
+                                  
+    #new for CMSSW76X and higher: all classes that are read from the event need to be registered in the constructor!
+    #supposedly this is necessary in the case that the code is run on machines that use multi-threading.
+    #It also allows the CMSSW compiler to optimise/speed up the code (or so the documentation says), by accessing collections that are used a lot or rarely with the consumesOften() and mayConsume() fuctions but consumes() will always work.
+    #in the TopTreeProducer .py file these are all stored in the producersNames parameter set, so please add new objects there if you need them.
+    producerNamesBookkeepingTreads = cms.PSet(
+        pfJetProducer = cms.untracked.InputTag("slimmedJets"),
+        pfmetProducer = cms.untracked.InputTag("slimmedMETs"),
+        muonProducer = cms.untracked.InputTag("slimmedMuons"),
+        electronProducer = cms.untracked.InputTag("slimmedElectrons"),
+        photonProducer = cms.untracked.InputTag("slimmedPhotons"),
+        fatJetProducer = cms.untracked.InputTag("slimmedJetsAK8"),
+        genJetProducer = cms.untracked.InputTag("slimmedGenJets"),
+        metfilterProducer = cms.untracked.InputTag("TriggerResults","","PAT"), # can also be RECO, depends on MiniAOD version!
+        summaryHBHENoise = cms.untracked.InputTag("hcalnoise"),
+        pileUpProducer = cms.untracked.InputTag("pileUpProducer"),
+        fixedGridRhoAll = cms.untracked.InputTag("fixedGridRhoAll"),
+        fixedGridRhoFastjetAll = cms.untracked.InputTag("fixedGridRhoFastjetAll"),
+        fixedGridRhoFastjetAllCalo = cms.untracked.InputTag("fixedGridRhoFastjetAllCalo"),
+        fixedGridRhoFastjetCentralCalo = cms.untracked.InputTag("fixedGridRhoFastjetCentralCalo"),
+        fixedGridRhoFastjetCentralChargedPileUp = cms.untracked.InputTag("fixedGridRhoFastjetCentralChargedPileUp"),
+        fixedGridRhoFastjetCentralNeutral = cms.untracked.InputTag("fixedGridRhoFastjetCentralNeutral"),
+        genEventInfoProduct = cms.untracked.InputTag("generator"),
+        prunedGenParticles = cms.untracked.InputTag("prunedGenParticles"),
+        lheproduct = cms.untracked.InputTag("externalLHEProducer")
+
+
+    )
+                                  
 )
 
 #process.TFileService = cms.Service("TFileService", fileName = cms.string('TFileTOPTREE.root') )

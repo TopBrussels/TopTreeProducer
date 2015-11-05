@@ -9,10 +9,42 @@ using namespace reco;
 using namespace edm;
 
 
+
 TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
 {
     myConfig_ = iConfig.getParameter<ParameterSet>("myConfig");
     producersNames_ = iConfig.getParameter<ParameterSet>("producersNames");
+    edm::ParameterSet valuesForConsumeCommand = iConfig.getParameter<ParameterSet>("producerNamesBookkeepingTreads");
+    
+    // new for CMSSW76X and higher: all classes that are read from the event need to be registered in the constructor!
+    // supposedly this is necessary in the case that the code is run on machines that use multi-threading.
+    // It also allows the CMSSW compiler to optimise/speed up the code (or so the documentation says), by accessing collections that are used a lot or rarely with the consumesOften() and mayConsume() fuctions but consumes() will always work.
+    // in the TopTreeProducer .py file these are stored in either the producerNamesBookkeepingTreads parameter set or the producersNames parameter set (which contains vstrings used by the various analysers, so please add new objects there if you need them.
+    vtxToken_ = consumes<reco::VertexCollection>(producersNames_.getParameter<edm::InputTag>("primaryVertexProducer"));
+    muonToken_ = consumes<pat::MuonCollection>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("muonProducer"));
+    electronToken_ = consumes<pat::ElectronCollection>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("electronProducer"));
+    photonToken_ = consumes<pat::PhotonCollection>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("photonProducer"));
+    jetToken_ = consumes<pat::JetCollection>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("pfJetProducer"));
+    genJetToken_ = consumes<std::vector<reco::GenJet> >(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("genJetProducer"));
+    fatjetToken_ = consumes<pat::JetCollection>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("fatJetProducer"));
+    metToken_ = consumes<pat::METCollection>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("pfmetProducer"));
+    triggerToken1_ = consumes<edm::TriggerResults>(producersNames_.getParameter<edm::InputTag>("hltProducer1st"));
+    triggerToken2_ = consumes<edm::TriggerResults>(producersNames_.getParameter<edm::InputTag>("hltProducer2nd"));
+    triggerToken3_ = consumes<edm::TriggerResults>(producersNames_.getParameter<edm::InputTag>("hltProducer3rd"));
+    triggerToken4_ = consumes<edm::TriggerResults>(producersNames_.getParameter<edm::InputTag>("hltProducer4th"));
+    pileUpProducerToken_ = consumes<std::vector< PileupSummaryInfo > >(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("pileUpProducer"));
+    metfilterToken_ = consumes<edm::TriggerResults>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("metfilterProducer"));
+    hcalNoiseSummaryToken_ = consumes<HcalNoiseSummary>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("summaryHBHENoise"));
+    fixedGridRhoAllToken_ = consumes<double>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("fixedGridRhoAll"));
+    fixedGridRhoFastjetAllToken_ = consumes<double>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("fixedGridRhoFastjetAll"));
+    fixedGridRhoFastjetAllCaloToken_ = consumes<double>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("fixedGridRhoFastjetAllCalo"));
+    fixedGridRhoFastjetCentralCaloToken_ = consumes<double>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("fixedGridRhoFastjetCentralCalo"));
+    fixedGridRhoFastjetCentralChargedPileUpToken_ = consumes<double>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("fixedGridRhoFastjetCentralChargedPileUp"));
+    fixedGridRhoFastjetCentralNeutralToken_ = consumes<double>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("fixedGridRhoFastjetCentralNeutral"));
+    genEventInfoProductToken_ = consumes<GenEventInfoProduct>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("genEventInfoProduct"));
+    genParticlesToken_ = consumes<std::vector<reco::GenParticle> >(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("prunedGenParticles"));
+    lheproductToken_  = consumes<LHEEventProduct>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("lheproduct"));
+    
 }
 
 
@@ -437,29 +469,23 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	// Information is stored in TRootEvent as bool flags. false = bad events.
 	if (doEventCleaningInfo){
 		
-		
 		// get TriggerResults information for the csc and ee bad supercluster filters. In principle the same thing could be done for the HBHE and HBHEIso filters but those currently need to be re-run
-		
-		edm::Handle<edm::TriggerResults> trigResults; //our trigger result object
-		edm::InputTag trigResultsTagMiniAOD("TriggerResults","","PAT"); //make sure have correct process, can be RECO or PAT, never HLT
-		iEvent.getByLabel(trigResultsTagMiniAOD,trigResults);
-		if(!trigResults.isValid()){
-			edm::InputTag trigResultsTagMiniAOD("TriggerResults","","RECO"); //make sure have correct process, can be RECO or PAT, never HLT
-
-			iEvent.getByLabel(trigResultsTagMiniAOD,trigResults);
-		}
+	  try{
+		edm::Handle<edm::TriggerResults> metTrigResults; //our trigger result object
+		iEvent.getByToken(metfilterToken_,metTrigResults);
 		Bool_t theresult=true;
-		if(trigResults.isValid()){
-			const edm::TriggerNames& trigNames = iEvent.triggerNames(*trigResults);
-			theresult=trigResults->accept(trigNames.triggerIndex("Flag_CSCTightHaloFilter"));
+		if(metTrigResults.isValid()){
+			const edm::TriggerNames& metTrigNames = iEvent.triggerNames(*metTrigResults);
+			theresult=metTrigResults->accept(metTrigNames.triggerIndex("Flag_CSCTightHaloFilter"));
 			rootEvent->setCSCTightHaloFilter(theresult);
 			theresult=true;
-			theresult=trigResults->accept(trigNames.triggerIndex("Flag_eeBadScFilter"));
+			theresult=metTrigResults->accept(metTrigNames.triggerIndex("Flag_eeBadScFilter"));
 			rootEvent->setEEBadScFilter(theresult);
 		}
 		theresult=true;
 		edm::Handle<HcalNoiseSummary> hSummary;
-		iEvent.getByLabel("hcalnoise", hSummary);		if( hSummary.isValid()){
+		iEvent.getByLabel("hcalnoise", hSummary);
+        if( hSummary.isValid()){
 			if( hSummary->numIsolatedNoiseChannels() >=10 )  theresult = false;
 			if( hSummary->isolatedNoiseSumE() >=50        )  theresult = false;
 			if( hSummary->isolatedNoiseSumEt() >=25       )  theresult = false;
@@ -467,8 +493,9 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		rootEvent->setHCalIsoNoise(theresult);
 		
 		edm::Handle<bool> hNoiseResult;
-		iEvent.getByLabel("HBHENoiseFilterResultProducer", "HBHENoiseFilterResult", hNoiseResult);
-		theresult= true;
+          
+        iEvent.getByLabel("HBHENoiseFilterResultProducer", "HBHENoiseFilterResult", hNoiseResult);
+        theresult= true;
 		if(hNoiseResult.isValid())
 			theresult = *hNoiseResult;
 		rootEvent->setHBHENoise(theresult);
@@ -484,7 +511,10 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 			cout << "************************************" << endl;
 
 		}
-		
+	  }  
+	  catch (...){
+	    std::cerr << "tried to retrieve MET noise filter information and failed! " << std::endl;
+	  }
 	}
 	// end of event cleaning code
 
@@ -495,9 +525,8 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 
     // do PileUp info
 
-    edm::InputTag PileupSrc_(producersNames_.getParameter<edm::InputTag>("pileUpProducer"));
     Handle<std::vector< PileupSummaryInfo > >  PupInfo;
-    iEvent.getByLabel(PileupSrc_, PupInfo);
+    iEvent.getByToken(pileUpProducerToken_, PupInfo);
 
     if (PupInfo.isValid())
     {
