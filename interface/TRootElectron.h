@@ -28,6 +28,7 @@ class TRootElectron : public TRootLepton {
             deltaPhiOut_(-9999.),
             deltaPhiSuperClusterTrackAtCalo_(-9999.),
             deltaEtaSuperClusterTrackAtCalo_(-9999.),
+	    isEBEEGap_(false),
             ioEmIoP_(-9999.),
             ioEmIoPgsf_(-9999.),
             pixelLayersWithMeasurement_(-9999),
@@ -75,6 +76,7 @@ class TRootElectron : public TRootLepton {
             deltaPhiOut_(-9999.),
             deltaPhiSuperClusterTrackAtCalo_(-9999.),
             deltaEtaSuperClusterTrackAtCalo_(-9999.),
+	    isEBEEGap_(false),
             ioEmIoP_(-9999.),
             ioEmIoPgsf_(-9999.),
             pixelLayersWithMeasurement_(-9999),
@@ -122,6 +124,7 @@ class TRootElectron : public TRootLepton {
             deltaPhiOut_(e.deltaPhiOut_),
             deltaPhiSuperClusterTrackAtCalo_(e.deltaPhiSuperClusterTrackAtCalo_),
             deltaEtaSuperClusterTrackAtCalo_(e.deltaEtaSuperClusterTrackAtCalo_),
+	    isEBEEGap_(e.isEBEEGap_),
             ioEmIoP_(e.ioEmIoP_),
             ioEmIoPgsf_(e.ioEmIoPgsf_),
             pixelLayersWithMeasurement_(e.pixelLayersWithMeasurement_),
@@ -170,6 +173,7 @@ class TRootElectron : public TRootLepton {
             deltaPhiOut_(-9999.),
             deltaPhiSuperClusterTrackAtCalo_(-9999.),
             deltaEtaSuperClusterTrackAtCalo_(-9999.),
+	    isEBEEGap_(false),
             ioEmIoP_(-9999.),
             ioEmIoPgsf_(-9999.),
             pixelLayersWithMeasurement_(-9999),
@@ -218,6 +222,7 @@ class TRootElectron : public TRootLepton {
             deltaPhiOut_(-9999.),
             deltaPhiSuperClusterTrackAtCalo_(-9999.),
             deltaEtaSuperClusterTrackAtCalo_(-9999.),
+	    isEBEEGap_(false),
             ioEmIoP_(-9999.),
             ioEmIoPgsf_(-9999.),
             pixelLayersWithMeasurement_(-9999),
@@ -266,6 +271,7 @@ class TRootElectron : public TRootLepton {
             deltaPhiOut_(-9999.),
             deltaPhiSuperClusterTrackAtCalo_(-9999.),
             deltaEtaSuperClusterTrackAtCalo_(-9999.),
+	    isEBEEGap_(false),
             ioEmIoP_(-9999.),
             ioEmIoPgsf_(-9999.),
             pixelLayersWithMeasurement_(-9999),
@@ -314,6 +320,7 @@ class TRootElectron : public TRootLepton {
             deltaPhiOut_(-9999.),
             deltaPhiSuperClusterTrackAtCalo_(-9999.),
             deltaEtaSuperClusterTrackAtCalo_(-9999.),
+	    isEBEEGap_(false),
             ioEmIoP_(-9999.),
             ioEmIoPgsf_(-9999.),
             pixelLayersWithMeasurement_(-9999),
@@ -362,6 +369,7 @@ class TRootElectron : public TRootLepton {
             deltaPhiOut_(-9999.),
             deltaPhiSuperClusterTrackAtCalo_(-9999.),
             deltaEtaSuperClusterTrackAtCalo_(-9999.),
+	    isEBEEGap_(false),
             ioEmIoP_(-9999.),
             ioEmIoPgsf_(-9999.),
             pixelLayersWithMeasurement_(-9999),
@@ -443,6 +451,9 @@ class TRootElectron : public TRootLepton {
             }
         Float_t deltaEtaScTrkOut() const {
             return deltaEtaSuperClusterTrackAtCalo_;
+            }
+        Float_t isEBEEGap() const {
+	    return isEBEEGap_;
             }
         Float_t ioEmIoP() const {
             return ioEmIoP_;
@@ -564,6 +575,9 @@ class TRootElectron : public TRootLepton {
             }
         void setDeltaEtaSuperClusterTrackAtCalo(Float_t x) {
             deltaEtaSuperClusterTrackAtCalo_ = x;
+            }
+        void setIsEBEEGap (Bool_t x) {
+            isEBEEGap_ = x;
             }
         void setDeltaPhiIn(Float_t deltaPhiIn) {
             deltaPhiIn_ = deltaPhiIn;
@@ -700,6 +714,7 @@ class TRootElectron : public TRootLepton {
         Float_t deltaPhiOut_;                      // the seed cluster phi - track phi position at calo extrapolated from the outermost track state
         Float_t deltaPhiSuperClusterTrackAtCalo_;  // the electron cluster phi - track phi position at calo extrapolated from the outermost track state
         Float_t deltaEtaSuperClusterTrackAtCalo_;  // the electron cluster eta - t
+        Bool_t isEBEEGap_;                         // electron in ecal crack region
         Float_t ioEmIoP_;                          // (1.0/(ele.superCluster()->energy())) - (1.0 / ele.p())
         Float_t ioEmIoPgsf_;                       // (1.0/(ele.superCluster()->energy())) - (1.0 / ele.gsfTrack()->p())
 
