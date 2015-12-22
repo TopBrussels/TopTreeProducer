@@ -856,7 +856,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
         for(unsigned int s=0; s<vElectronProducer.size(); s++)
         {
             ElectronAnalyzer* myElectronAnalyzer = new ElectronAnalyzer(producersNames_, s, myConfig_, verbosity);
-            myElectronAnalyzer->Process(iEvent, velectrons[s], iSetup);
+            myElectronAnalyzer->Process(iEvent, velectrons[s], iSetup, offlineBSToken_);
             delete myElectronAnalyzer;
         }
     }

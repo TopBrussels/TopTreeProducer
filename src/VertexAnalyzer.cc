@@ -5,10 +5,6 @@ using namespace TopTree;
 using namespace reco;
 using namespace edm;
 
-VertexAnalyzer::VertexAnalyzer(const edm::ParameterSet& producersNames):verbosity_(0)
-{
-	primaryVertexProducer_ = producersNames.getParameter<edm::InputTag>("primaryVertexProducer");
-}
 
 VertexAnalyzer::VertexAnalyzer(const edm::ParameterSet& producersNames, int verbosity):verbosity_(verbosity)
 {
@@ -29,8 +25,6 @@ void VertexAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootVertex)
 	for (unsigned int j=0; j<recoVertex->size(); j++)
 	{
 		if(verbosity_>2) cout << "   ["<< setw(3) << j << "] Vertex  -  (vx,vy,vz)=(" << setw(12) << (*recoVertex)[j].x() << ", " << setw(12) <<  (*recoVertex)[j].y() << ", " << setw(12) << (*recoVertex)[j].z() << ")" << endl;
-
-//		rootEvent->addPrimaryVertex( TVector3( (*recoVertex)[j].x(), (*recoVertex)[j].y(), (*recoVertex)[j].z() ) );
 
 		const reco::Vertex * vertex = 0;
 		vertex = &((*recoVertex)[j]);

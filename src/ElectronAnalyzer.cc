@@ -6,27 +6,6 @@ using namespace reco;
 using namespace edm;
 using namespace isodeposit;
 
-ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& producersNames):verbosity_(0),useMC_(false),runSuperCluster_(false),doPrimaryVertex_(false),isData_(false)
-
-{
-  electronProducer_ = producersNames.getParameter<edm::InputTag>("electronProducer");
-  primaryVertexProducer_ = producersNames.getParameter<edm::InputTag>("primaryVertexProducer");
-  TrackLabel_ = producersNames.getParameter<edm::InputTag>("generalTrackLabel");
-  newId_ = producersNames.getUntrackedParameter<bool>("electronNewId",false);
-}
-
-ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
-{
-  electronProducer_ = producersNames.getParameter<edm::InputTag>("electronProducer");
-  useMC_ = myConfig.getUntrackedParameter<bool>("doElectronMC");
-  isData_ = myConfig.getUntrackedParameter<bool>("isData");
-  runSuperCluster_ = myConfig.getUntrackedParameter<bool>("runSuperCluster",false);
-  primaryVertexProducer_ = producersNames.getParameter<edm::InputTag>("primaryVertexProducer");
-  doPrimaryVertex_ = myConfig.getUntrackedParameter<bool>("doPrimaryVertex");
-  TrackLabel_ = producersNames.getParameter<edm::InputTag>("generalTrackLabel");
-  newId_ = producersNames.getUntrackedParameter<bool>("electronNewId",false);
-}
-
 ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
 {
   vElectronProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("velectronProducer");
@@ -36,7 +15,6 @@ ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& producersNames, int 
   runSuperCluster_ = myConfig.getUntrackedParameter<bool>("runSuperCluster",false);
   primaryVertexProducer_ = producersNames.getParameter<edm::InputTag>("primaryVertexProducer");
   doPrimaryVertex_ = myConfig.getUntrackedParameter<bool>("doPrimaryVertex");
-  TrackLabel_ = producersNames.getParameter<edm::InputTag>("generalTrackLabel");
   newId_ = producersNames.getUntrackedParameter<bool>("electronNewId",false);
 }
 
@@ -44,7 +22,7 @@ ElectronAnalyzer::~ElectronAnalyzer()
 {
 }
 
-void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElectrons, const edm::EventSetup& iSetup )
+void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElectrons, const edm::EventSetup& iSetup, edm::EDGetTokenT<reco::BeamSpot> offlineBSToken)
 {
   unsigned int nElectrons=0;
 
@@ -56,15 +34,7 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
   iEvent.getByLabel(primaryVertexProducer_, pvHandle);
 
   edm::Handle<reco::BeamSpot> beamSpotHandle;
-  iEvent.getByLabel("offlineBeamSpot", beamSpotHandle);
-
-  //edm::ESHandle<TransientTrackBuilder> builder;
-  //iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder", builder);
-  //TransientTrackBuilder thebuilder = *(builder.product());
-
-  //edm::Handle<reco::BeamSpot> beamSpotHandle;
-  //iEvent.getByLabel("offlineBeamSpot", beamSpotHandle);
-  //const reco::TrackBase::Point & beamSpot = reco::TrackBase::Point(beamSpotHandle->x0(), beamSpotHandle->y0(), beamSpotHandle->z0());
+  iEvent.getByToken(offlineBSToken, beamSpotHandle);
 
   if(verbosity_>1) std::cout << "   Number of electrons = " << nElectrons << "   Label: " << electronProducer_.label() << "   Instance: " << electronProducer_.instance() << std::endl;
 
@@ -114,7 +84,6 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 
     // switching to gsf track for miniAOD, seems this is the correct thing for
     //now
-    //    reco::TrackRef myTrackRef = electron->closestCtfTrackRef();
     reco::GsfTrackRef myTrackRef = electron->gsfTrack();
 
    if ( myTrackRef.isNonnull() )
@@ -122,8 +91,8 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 	    const reco::HitPattern& hit = myTrackRef->hitPattern();
 	    localElectron.setPixelLayersWithMeasurement(hit.pixelLayersWithMeasurement());
 	    localElectron.setStripLayersWithMeasurement(hit.stripLayersWithMeasurement());
-      localElectron.setTrackNormalizedChi2(myTrackRef->normalizedChi2());
-      localElectron.setNValidHits(myTrackRef->numberOfValidHits());
+        localElectron.setTrackNormalizedChi2(myTrackRef->normalizedChi2());
+        localElectron.setNValidHits(myTrackRef->numberOfValidHits());
     }
 
     reco::GsfTrackRef gsfTrack = electron->gsfTrack();
@@ -150,18 +119,7 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 	localElectron.setDzBeamSpot(patElectron->gsfTrack()->dz(mybeamspot.position()));
 	localElectron.setDzBeamSpotError( sqrt( pow(patElectron->gsfTrack()->dzError(),2) + pow(mybeamspot.x0Error(),2) + pow(mybeamspot.y0Error(),2) ) );
 
-
-
-        //do we really need to ip3d? we can use PAT member function instead of getting it from RECO (taejeong)
-        //const double gsfsign   = ( (-gsfTrack->dxy(vtx->position()))   >=0 ) ? 1. : -1.;
-        //const reco::TransientTrack &tt = thebuilder.build(gsfTrack);
-        //const std::pair<bool,Measurement1D> &ip3dpv =  IPTools::absoluteImpactParameter3D(tt,((*pvHandle)[j]));
-        //if (ip3dpv.first)
-        //{
-	//        localElectron.setIp3d(gsfsign*ip3dpv.second.value());
-	//        localElectron.setIp3dError(ip3dpv.second.error());
-  	//}
-        localElectron.setIp3d( patElectron->ip3d() );
+	localElectron.setIp3d( patElectron->ip3d() );
 
       }
     }
@@ -189,52 +147,10 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
       localElectron.setPhiWidth( superCluster->phiWidth() );
 	  }
 
-    //Isolation
-    //  localElectron.setIsoR03_hcalIso(electron->dr03HcalTowerSumEt());
-    // localElectron.setIsoR03_ecalIso(electron->dr03EcalRecHitSumEt());
-    //localElectron.setIsoR03_trackIso(electron->dr03TkSumPt());
-
-    //localElectron.setIsoR04_hcalIso(electron->dr04HcalTowerSumEt());
-    // localElectron.setIsoR04_ecalIso(electron->dr04EcalRecHitSumEt());
-    //    localElectron.setIsoR04_trackIso(electron->dr04TkSumPt());
-
-
-    // Conversion:
-    // we don't use this coversion anymore (taejeong)
-    /*
-    double evt_bField = 0; // need the magnetic field
-    // if isData_ then derive bfield using the magnet current from DcsStatus otherwise take it from the IdealMagneticFieldRecord
-
-    if (!isData_)
-    {
-    	ESHandle<MagneticField> magneticField;
-	    iSetup.get<IdealMagneticFieldRecord>().get(magneticField);
-	    evt_bField = magneticField->inTesla(GlobalPoint(0.,0.,0.)).z();
-    }
-    else
-    {
-	    edm::Handle<DcsStatusCollection> dcsHandle;
-	    iEvent.getByLabel("scalersRawToDigi", dcsHandle);
-	    // scale factor = 3.801/18166.0 which are average values taken over a stable two week period
-    	float currentToBFieldScaleFactor = 2.09237036221512717e-04;
-	    float current = (*dcsHandle)[0].magnetCurrent();
-	    evt_bField = current*currentToBFieldScaleFactor;
-    }
-    edm::Handle<reco::TrackCollection> tracks_h;
-    iEvent.getByLabel(TrackLabel_, tracks_h);
-
-    ConversionFinder convFinder;
-    const ConversionInfo convInfo = convFinder.getConversionInfo(*electron, tracks_h, evt_bField, 0.45);
-    localElectron.setDist(convInfo.dist());
-    localElectron.setDCot(convInfo.dcot());
-    */
 
     // Some specific methods to pat::Electron
     TLorentzVector ecalDrivenMomentum(patElectron->ecalDrivenMomentum().px(),patElectron->ecalDrivenMomentum().py(),patElectron->ecalDrivenMomentum().pz(),patElectron->ecalDrivenMomentum().energy());
     localElectron.setEcalDrivenMomentum(ecalDrivenMomentum);
-
-    //    localElectron.setdB(patElectron->dB());
-    //localElectron.setdBError(patElectron->edB());
 
     // Matched genParticle
     if(useMC_)
@@ -261,17 +177,6 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
       veto_ph.push_back(new reco::isodeposit::ConeVeto( Dir, 0.08 ));
     }
 
-    //turning off access to remade isodeposits as it's not working for miniAOD
-    //    const double chIso04 = patElectron->isoDeposit(pat::PfChargedHadronIso)->depositAndCountWithin(0.4, veto_ch).first;
-    //const double nhIso04 = patElectron->isoDeposit(pat::PfNeutralHadronIso)->depositAndCountWithin(0.4, veto_nh).first;
-    //const double phIso04 = patElectron->isoDeposit(pat::PfGammaIso)->depositAndCountWithin(0.4, veto_ph).first;
-    //const double puChIso04 = patElectron->isoDeposit(pat::PfPUChargedHadronIso)->depositAndCountWithin(0.4, veto_ch).first;
-
-    //localElectron.setIsoR04_ChargedHadronIso( chIso04 );
-    //localElectron.setIsoR04_PuChargedHadronIso( puChIso04 );
-    //localElectron.setIsoR04_PhotonIso( phIso04 );
-    //localElectron.setIsoR04_NeutralHadronIso( nhIso04 );
-
     localElectron.setPassConversion(patElectron->passConversionVeto());
     localElectron.setSigmaIphiIphi( patElectron->sigmaIphiIphi() );
     localElectron.setSigmaIetaIphi( patElectron->sigmaIetaIphi() );
@@ -282,7 +187,7 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
       std::vector<std::pair<std::string, float> > eleIds = patElectron->electronIDs();
       std::cout << "electron ID summary: " << std::endl;
       for(UInt_t ii=0; ii<eleIds.size(); ii++){
-	std::cout << eleIds[ii].first << " " << eleIds[ii].second << std::endl;
+	  std::cout << eleIds[ii].first << " " << eleIds[ii].second << std::endl;
       }
     }
     localElectron.setMvaTrigId( patElectron->electronID("eidRobustLoose") );
@@ -290,12 +195,6 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 
     new( (*rootElectrons)[j] ) TRootElectron(localElectron);
     if(verbosity_>2) cout << "   ["<< setw(3) << j << "] " << localElectron << endl;
-    //    cout <<"size of array "<< sizeof(rootElectrons)/sizeof(*rootElectrons)  <<  " j  =  "<< j << endl;
-
 }
-
-
-
-
 
 }

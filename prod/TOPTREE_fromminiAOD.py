@@ -42,6 +42,9 @@ process.options = cms.untracked.PSet(
 #Default Test sample
 #process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/mc/RunIISpring15DR74/TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v2/00000/18E6854B-1809-E511-A405-0025905B8590.root'))
 process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/relval/CMSSW_7_6_0/RelValTTbarLepton_13/MINIAODSIM/76X_mcRun2_asymptotic_v11-v1/00000/4A44647C-A77F-E511-A26B-002618943960.root'))
+
+#process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/mc/RunIISpring15DR74/TTJets_DiLept_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v2/20000/5E2A0DB9-E52F-E511-A294-782BCB407B74.root'))
+
 #TTTT Test file for testing LHE weights
 #process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/mc/RunIISpring15DR74/TTTT_TuneCUETP8M1_13TeV-amcatnlo-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9_ext1-v1/00000/0C216A04-5C5D-E511-AD98-D4AE529D9537.root'))
 
@@ -103,17 +106,17 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		doMETMC = cms.untracked.bool(False),
 		doPhotonMC = cms.untracked.bool(False),
 		doUnstablePartsMC = cms.untracked.bool(False),
-		doPrimaryVertex = cms.untracked.bool(False),
+		doPrimaryVertex = cms.untracked.bool(True),
 		runGeneralTracks = cms.untracked.bool(False),#False only if generalTracks are stored.
 		doCaloJet = cms.untracked.bool(False),
 		doGenJet = cms.untracked.bool(False),
 		doCaloJetId = cms.untracked.bool(False),
 		doPFJet = cms.untracked.bool(False),
-        doFatJet = cms.untracked.bool(False),
+        	doFatJet = cms.untracked.bool(False),
 		doJPTJet = cms.untracked.bool(False),
 		doJPTJetId = cms.untracked.bool(False),
 		doMuon = cms.untracked.bool(True),
-		doElectron = cms.untracked.bool(False),
+		doElectron = cms.untracked.bool(True),
          	doPhoton = cms.untracked.bool(False),
 		runSuperCluster = cms.untracked.bool(False),#False only if SuperCluster are stored
 		doCaloMET = cms.untracked.bool(False),
@@ -169,7 +172,6 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		vpfmetProducer = cms.untracked.vstring("slimmedMETs"),
 		TCmetProducer = cms.untracked.InputTag("patMETsTC"),
 		genEventProducer = cms.untracked.InputTag("genEvt"),
-		generalTrackLabel = cms.untracked.InputTag("generalTracks"),
 		offlineBeamSpot = cms.InputTag("offlineBeamSpot"),
     ),
                                   
