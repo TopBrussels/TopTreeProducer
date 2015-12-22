@@ -203,6 +203,8 @@ private:
     edm::EDGetTokenT<GenEventInfoProduct> genEventInfoProductToken_;
     edm::EDGetTokenT<std::vector<reco::GenParticle> > genParticlesToken_;
     edm::EDGetTokenT<LHEEventProduct> lheproductToken_;
+    
+    edm::EDGetTokenT<reco::BeamSpot> offlineBSToken_;
 
 
     

@@ -44,6 +44,7 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
     genEventInfoProductToken_ = consumes<GenEventInfoProduct>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("genEventInfoProduct"));
     genParticlesToken_ = consumes<std::vector<reco::GenParticle> >(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("prunedGenParticles"));
     lheproductToken_  = consumes<LHEEventProduct>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("lheproduct"));
+    offlineBSToken_ = consumes<reco::BeamSpot>(producersNames_.getParameter<edm::InputTag>("offlineBeamSpot"));
     
 }
 
@@ -841,8 +842,8 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
         if(verbosity>1) cout << endl << "Analysing muon collection..." << endl;
         for(unsigned int s=0; s<vMuonProducer.size(); s++)
         {
-            MuonAnalyzer* myMuonAnalyzer = new MuonAnalyzer(producersNames_, s, myConfig_, verbosity);
-            myMuonAnalyzer->Process(iEvent, vmuons[s]);
+            MuonAnalyzer* myMuonAnalyzer = new MuonAnalyzer(producersNames_, s, myConfig_,verbosity);
+            myMuonAnalyzer->Process(iEvent, vmuons[s], offlineBSToken_);
             delete myMuonAnalyzer;
 
         }

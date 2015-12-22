@@ -40,8 +40,8 @@ process.options = cms.untracked.PSet(
 )
 
 #Default Test sample
-process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/mc/RunIISpring15DR74/TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v2/00000/18E6854B-1809-E511-A405-0025905B8590.root'))
-
+#process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/mc/RunIISpring15DR74/TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v2/00000/18E6854B-1809-E511-A405-0025905B8590.root'))
+process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/relval/CMSSW_7_6_0/RelValTTbarLepton_13/MINIAODSIM/76X_mcRun2_asymptotic_v11-v1/00000/4A44647C-A77F-E511-A26B-002618943960.root'))
 #TTTT Test file for testing LHE weights
 #process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/mc/RunIISpring15DR74/TTTT_TuneCUETP8M1_13TeV-amcatnlo-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9_ext1-v1/00000/0C216A04-5C5D-E511-AD98-D4AE529D9537.root'))
 
@@ -97,34 +97,34 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 #		signalGenerator = cms.untracked.string('ALPGEN'),
 #		signalGenerator = cms.untracked.string('MADGRAPH'),
 
-		doElectronMC = cms.untracked.bool(True),
-		doMuonMC = cms.untracked.bool(True),
-		doJetMC = cms.untracked.bool(True),
+		doElectronMC = cms.untracked.bool(False),
+		doMuonMC = cms.untracked.bool(False),
+		doJetMC = cms.untracked.bool(False),
 		doMETMC = cms.untracked.bool(False),
 		doPhotonMC = cms.untracked.bool(False),
-		doUnstablePartsMC = cms.untracked.bool(True),
-		doPrimaryVertex = cms.untracked.bool(True),
-		runGeneralTracks = cms.untracked.bool(True),#true only if generalTracks are stored.
+		doUnstablePartsMC = cms.untracked.bool(False),
+		doPrimaryVertex = cms.untracked.bool(False),
+		runGeneralTracks = cms.untracked.bool(False),#False only if generalTracks are stored.
 		doCaloJet = cms.untracked.bool(False),
-		doGenJet = cms.untracked.bool(True),
+		doGenJet = cms.untracked.bool(False),
 		doCaloJetId = cms.untracked.bool(False),
-		doPFJet = cms.untracked.bool(True),
-        doFatJet = cms.untracked.bool(True),
+		doPFJet = cms.untracked.bool(False),
+        doFatJet = cms.untracked.bool(False),
 		doJPTJet = cms.untracked.bool(False),
 		doJPTJetId = cms.untracked.bool(False),
 		doMuon = cms.untracked.bool(True),
-		doElectron = cms.untracked.bool(True),
+		doElectron = cms.untracked.bool(False),
          	doPhoton = cms.untracked.bool(False),
-		runSuperCluster = cms.untracked.bool(True),#true only if SuperCluster are stored
+		runSuperCluster = cms.untracked.bool(False),#False only if SuperCluster are stored
 		doCaloMET = cms.untracked.bool(False),
-		doPFMET = cms.untracked.bool(True),
+		doPFMET = cms.untracked.bool(False),
 		doTCMET = cms.untracked.bool(False),
 		doGenEvent = cms.untracked.bool(False),#put on False when running non-ttbar or when running toptree from reco
-		doNPGenEvent = cms.untracked.bool(False),#put on True when running New Physics sample
-		doSpinCorrGen = cms.untracked.bool(False),#put on True only if you need SpinCorrelation Variables
-        	doLHEEventProd = cms.untracked.bool(True),#put on True only if you need SpinCorrelation Variables
-		doSemiLepEvent = cms.untracked.bool(False),#put on True only if you need TtSemiLeptonicEvent Collection exist in PAT-uples (L2)
-		doEventCleaningInfo = cms.untracked.bool(True), # only useful for data but protected for MC. Stores HBHE, HCalIso etc filter outputs as bools in TRootEvent
+		doNPGenEvent = cms.untracked.bool(False),#put on False when running New Physics sample
+		doSpinCorrGen = cms.untracked.bool(False),#put on False only if you need SpinCorrelation Variables
+        	doLHEEventProd = cms.untracked.bool(False),#put on False only if you need SpinCorrelation Variables
+		doSemiLepEvent = cms.untracked.bool(False),#put on False only if you need TtSemiLeptonicEvent Collection exist in PAT-uples (L2)
+		doEventCleaningInfo = cms.untracked.bool(False), # only useful for data but protected for MC. Stores HBHE, HCalIso etc filter outputs as bools in TRootEvent
 
 		conversionLikelihoodWeightsFile = cms.untracked.string('RecoEgamma/EgammaTools/data/TMVAnalysis_Likelihood.weights.txt'),
 
@@ -169,7 +169,8 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		vpfmetProducer = cms.untracked.vstring("slimmedMETs"),
 		TCmetProducer = cms.untracked.InputTag("patMETsTC"),
 		genEventProducer = cms.untracked.InputTag("genEvt"),
-		generalTrackLabel = cms.untracked.InputTag("generalTracks")
+		generalTrackLabel = cms.untracked.InputTag("generalTracks"),
+		offlineBeamSpot = cms.InputTag("offlineBeamSpot"),
     ),
                                   
     #new for CMSSW76X and higher: all classes that are read from the event need to be registered in the constructor!

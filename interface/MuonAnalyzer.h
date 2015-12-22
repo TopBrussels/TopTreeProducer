@@ -30,12 +30,9 @@ class MuonAnalyzer
 {
 	
 public:
-	MuonAnalyzer(const edm::ParameterSet& producersNames);
-	MuonAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity);
 	MuonAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity);
 	~MuonAnalyzer();
-	void SetVerbosity(int verbosity) { verbosity_ = verbosity; };
-	void Process(const edm::Event& iEvent, TClonesArray* rootMuons);
+	void Process(const edm::Event& iEvent, TClonesArray* rootMuons, edm::EDGetTokenT<reco::BeamSpot> offlineBSToken);
 
 private:
 	int verbosity_;
