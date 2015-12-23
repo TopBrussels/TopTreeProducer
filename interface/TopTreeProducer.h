@@ -38,7 +38,6 @@
 #include "../interface/VertexAnalyzer.h"
 #include "../interface/JetAnalyzer.h"
 #include "../interface/JPTJetAnalyzer.h"
-#include "../interface/CaloJetAnalyzer.h"
 #include "../interface/GenJetAnalyzer.h"
 #include "../interface/PFJetAnalyzer.h"
 #include "../interface/FatJetAnalyzer.h"
@@ -62,7 +61,6 @@
 #include "../interface/TRootParticle.h"
 #include "../interface/TRootMCParticle.h"
 #include "../interface/TRootJet.h"
-#include "../interface/TRootCaloJet.h"
 #include "../interface/TRootGenJet.h"
 #include "../interface/TRootPFJet.h"
 #include "../interface/TRootSubstructureJet.h"
@@ -114,8 +112,6 @@ private:
 	bool doSignalMuMuGamma;
 	bool doSignalTopTop;
 	bool doPrimaryVertex;
-	bool runGeneralTracks;
-	bool doCaloJet;
 	bool doGenJet;
 	bool doPFJet;
 	bool doFatJet;
@@ -135,7 +131,6 @@ private:
 	bool drawMCTree;
 	bool doEventCleaningInfo;
 	std::vector<std::string> vGenJetProducer;
-	std::vector<std::string> vCaloJetProducer;
 	std::vector<std::string> vPFJetProducer;
 	std::vector<std::string> vFatJetProducer;
 	std::vector<std::string> vJPTJetProducer;
@@ -152,7 +147,6 @@ private:
 	TRootEvent* rootEvent;
 	TClonesArray* mcParticles;
 	TClonesArray* tracks;
-	std::vector<TClonesArray*> vcaloJets;
 	std::vector<TClonesArray*> vgenJets;
 	std::vector<TClonesArray*> vpfJets;
 	std::vector<TClonesArray*> vfatJets;

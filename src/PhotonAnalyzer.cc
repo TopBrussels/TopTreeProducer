@@ -9,19 +9,6 @@ using namespace reco;
 using namespace edm;
 using namespace isodeposit;
 
-PhotonAnalyzer::PhotonAnalyzer (const edm::ParameterSet & producersNames):
-verbosity_(0),
-useMC_(false)
-{
-  photonProducer_ = producersNames.getParameter < edm::InputTag > ("photonProducer");
-}
-
-PhotonAnalyzer::PhotonAnalyzer (const edm::ParameterSet & producersNames, const edm::ParameterSet & myConfig, int verbosity):
-verbosity_ (verbosity)
-{
-  photonProducer_ = producersNames.getParameter < edm::InputTag > ("photonProducer");
-  useMC_ = myConfig.getUntrackedParameter < bool > ("doPhotonMC");
-}
 PhotonAnalyzer::PhotonAnalyzer (const edm::ParameterSet & producersNames, int iter, const edm::ParameterSet & myConfig, int verbosity):
 verbosity_ (verbosity)
 {
@@ -43,11 +30,6 @@ PhotonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootPhotons, 
   ///currently these are hardcoded
   ///we need to create corresponding member function in PAT photon object
   ///otherwise, we need to keep these collections in our PAT output collections in order to produce TOPTREE from PAT (Taejeong)  
-  edm::Handle<reco::BeamSpot> bsHandle;
-
-  //commenting out retrieval of beamspot for now, see **** below
-  //  iEvent.getByLabel("offlineBeamSpot", bsHandle);
-  //const reco::BeamSpot &beamspot = *bsHandle.product();
 
   edm::Handle<reco::ConversionCollection> hConversions;
   iEvent.getByLabel("allConversions", hConversions);
@@ -57,10 +39,6 @@ PhotonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootPhotons, 
   //I will not try to access them, and the conversion info will not
   // be available in the TOPTREE. This should be fixable with an offical
   // recommendation in 7_1_X
-
-
-  //  edm::Handle<reco::GsfElectronCollection> hElectrons;
-  //iEvent.getByLabel("gsfElectrons", hElectrons);
 
   
   // get the iso deposits. 4 (charged hadrons, pileup charged hadrons, photons, neutral hadrons)
