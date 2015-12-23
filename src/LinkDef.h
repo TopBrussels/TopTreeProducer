@@ -4,7 +4,6 @@
 #include "../interface/TRootParticle.h"
 #include "../interface/TRootMCParticle.h"
 #include "../interface/TRootJet.h"
-#include "../interface/TRootJPTJet.h"
 #include "../interface/TRootGenJet.h"
 #include "../interface/TRootPFJet.h"
 #include "../interface/TRootMuon.h"
@@ -29,7 +28,6 @@
 #include "../interface/TRootParticle.h"
 #include "../interface/TRootMCParticle.h"
 #include "../interface/TRootJet.h"
-#include "../interface/TRootJPTJet.h"
 #include "../interface/TRootGenJet.h"
 #include "../interface/TRootPFJet.h"
 #include "../interface/TRootMuon.h"
@@ -60,7 +58,6 @@
 #pragma link C++ class TopTree::TRootParticle+;
 #pragma link C++ class TopTree::TRootMCParticle+;
 #pragma link C++ class TopTree::TRootJet+;
-#pragma link C++ class TopTree::TRootJPTJet+;
 #pragma link C++ class TopTree::TRootGenJet+;
 #pragma link C++ class TopTree::TRootPFJet+;
 #pragma link C++ class TopTree::TRootMuon+;

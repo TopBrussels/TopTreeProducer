@@ -67,7 +67,6 @@ void TopTreeProducer::beginJob()
     doGenJet = myConfig_.getUntrackedParameter<bool>("doGenJet",false);
     doPFJet = myConfig_.getUntrackedParameter<bool>("doPFJet",false);
     doFatJet = myConfig_.getUntrackedParameter<bool>("doFatJet",false);
-    doJPTJet = myConfig_.getUntrackedParameter<bool>("doJPTJet",false);
     doMuon = myConfig_.getUntrackedParameter<bool>("doMuon",false);
     doElectron = myConfig_.getUntrackedParameter<bool>("doElectron",false);
     doPhoton = myConfig_.getUntrackedParameter<bool>("doPhoton",false);
@@ -89,7 +88,6 @@ void TopTreeProducer::beginJob()
     vGenJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vgenJetProducer",defaultVec);
     vPFJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vpfJetProducer",defaultVec);
     vFatJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vfatJetProducer",defaultVec);
-    vJPTJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vJPTJetProducer",defaultVec);
     vMuonProducer = producersNames_.getUntrackedParameter<vector<string> >("vmuonProducer",defaultVec);
     vElectronProducer = producersNames_.getUntrackedParameter<vector<string> >("velectronProducer",defaultVec);
     vPhotonProducer = producersNames_.getUntrackedParameter<vector<string> >("vphotonProducer",defaultVec);
@@ -112,12 +110,6 @@ void TopTreeProducer::beginJob()
     {
         TClonesArray* a;
         vfatJets.push_back(a);
-    }
-
-    for(unsigned int s=0; s<vJPTJetProducer.size(); s++)
-    {
-        TClonesArray* a;
-        vjptJets.push_back(a);
     }
 
     for(unsigned int s=0; s<vMuonProducer.size(); s++)
@@ -233,19 +225,6 @@ void TopTreeProducer::beginJob()
             char name[100];
             sprintf(name,"FatJets_%s",vFatJetProducer[s].c_str());
             eventTree_->Branch (name, "TClonesArray", &vfatJets[s]);
-        }
-    }
-
-
-    if(doJPTJet)
-    {
-        if(verbosity>0) cout << "JPT Jets info will be added to rootuple" << endl;
-        for(unsigned int s=0; s<vJPTJetProducer.size(); s++)
-        {
-            vjptJets[s] = new TClonesArray("TopTree::TRootJPTJet", 1000);
-            char name[100];
-            sprintf(name,"JPTJets_%s",vJPTJetProducer[s].c_str());
-            eventTree_->Branch (name, "TClonesArray", &vjptJets[s]);
         }
     }
 
@@ -737,19 +716,6 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
         }
     }
 
-
-    // JPT Jets
-    if(doJPTJet)
-    {
-        if(verbosity>1) cout << endl << "Analysing JPT jets collection..." << endl;
-        for(unsigned int s=0; s<vJPTJetProducer.size(); s++)
-        {
-            JPTJetAnalyzer* myJPTJetAnalyzer = new JPTJetAnalyzer(producersNames_, s,  myConfig_, verbosity);
-            myJPTJetAnalyzer->Process(iEvent, vjptJets[s], iSetup);
-            delete myJPTJetAnalyzer;
-        }
-    }
-
     // GenEvent
     if(doGenEvent)
     {
@@ -915,14 +881,6 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
         }
     }
 
-
-    if(doJPTJet)
-    {
-        for(unsigned int s=0; s<vJPTJetProducer.size(); s++)
-        {
-            (*vjptJets[s]).Delete();
-        }
-    }
     if(doMuon)
     {
         for(unsigned int s=0; s<vMuonProducer.size(); s++)
