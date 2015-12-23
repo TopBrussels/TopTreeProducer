@@ -22,12 +22,8 @@
 class PFJetAnalyzer : JetAnalyzer {
 
 public:
-	PFJetAnalyzer(const edm::ParameterSet& producersNames);
-	PFJetAnalyzer(const edm::ParameterSet& producersNames, int verbosity);
-	PFJetAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity);
 	PFJetAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity);
 	~PFJetAnalyzer();
-	void SetVerbosity(int verbosity) {verbosity_ = verbosity; };
 	void Process(const edm::Event& iEvent, TClonesArray* rootPFJets, const edm::EventSetup& iSetup);
 
 private:
@@ -35,8 +31,7 @@ private:
 	edm::InputTag pfJetProducer_;
 	edm::InputTag mcProducer_;
 	std::vector<std::string> vPFJetProducer;
-	JetAnalyzer* myJetAnalyzer; // FIXME: Handle the deletion of the JetAnalyzer
-
+	JetAnalyzer* myJetAnalyzer; 
 };
 
 #endif

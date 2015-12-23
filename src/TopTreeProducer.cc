@@ -213,7 +213,7 @@ void TopTreeProducer::beginJob()
 
     if(doPFJet)
     {
-        if(verbosity>0) cout << "Test PFJets info will be added to rootuple" << endl;
+        if(verbosity>0) cout << "PFJets info will be added to rootuple" << endl;
         for(unsigned int s=0; s<vPFJetProducer.size(); s++)
         {
             vpfJets[s] = new TClonesArray("TopTree::TRootPFJet", 1000);

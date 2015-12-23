@@ -5,20 +5,6 @@ using namespace TopTree;
 using namespace reco;
 using namespace edm;
 
-GenJetAnalyzer::GenJetAnalyzer(const edm::ParameterSet& producersNames):verbosity_(0)
-{
-    genJetProducer_ = producersNames.getParameter<edm::InputTag>("genJetProducer");
-}
-
-GenJetAnalyzer::GenJetAnalyzer(const edm::ParameterSet& producersNames, int verbosity):verbosity_(verbosity)
-{
-    genJetProducer_ = producersNames.getParameter<edm::InputTag>("genJetProducer");
-}
-
-GenJetAnalyzer::GenJetAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
-{
-    genJetProducer_ = producersNames.getParameter<edm::InputTag>("genJetProducer");
-}
 
 GenJetAnalyzer::GenJetAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
 {
@@ -33,18 +19,15 @@ GenJetAnalyzer::~GenJetAnalyzer()
 void GenJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenJets)
 {
 
-    // cout << "Analysing GenJets collection ...GJA 1 " << endl;
     // check if the genJet is of the good type
     std::string jetType = "BASIC";
     if( genJetProducer_.label()=="kt4GenJets" || genJetProducer_.label()=="kt6GenJets" || genJetProducer_.label()=="ak5GenJets"
             || genJetProducer_.label()=="ak7GenJets" || genJetProducer_.label()=="ak5GenJetsNoE" || genJetProducer_.label()=="ak5GenJetsNoNu" || genJetProducer_.label()=="ak5GenJetsNoMuNoNu" || genJetProducer_.label()== "slimmedGenJets") jetType="GOOD";
 
     edm::Handle < std::vector <reco::GenJet> > recoGenJets;
-//	edm::Handle < edm::View <reco::GenJet> > recoGenJets;
     iEvent.getByLabel(genJetProducer_, recoGenJets);
 
     unsigned int nJets = recoGenJets->size();
-    //	cout << "Analysing GenJets collection ...GJ size = " << nJets  <<endl;
 
     if(verbosity_>1) std::cout << "   Number of jets = " << nJets << "   Label: " << genJetProducer_.label() << "   Instance: " << genJetProducer_.instance() << std::endl;
 
@@ -54,10 +37,6 @@ void GenJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenJets
         if(verbosity_>4)	cout << "Analysing GenJets collection ...looping = " << j  <<endl;
         const reco::GenJet* genJet = 0;
         if( jetType=="GOOD" ) genJet = (const reco::GenJet*) ( & ((*recoGenJets)[j]) );
-
-
-        // Call JetAnalyzer to fill the basic Jet Properties
-//		TRootJet tempJet = (TRootJet) myJetAnalyzer->Process( &( *(genJet) ));
 
         TRootGenJet localGenJet(
             genJet->px()
@@ -88,12 +67,9 @@ void GenJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenJets
         TRootMCParticle CHad;
 
 
-//        std::vector <const reco::GenParticle*> mcparts = genJet->getGenConstituents();
         std::vector <const reco::Candidate*> mcparts;
-//        const reco::Candidate*  p;
         for(unsigned genidx = 0; genidx < genJet->numberOfDaughters(); genidx++)
         {
-//            p = genJet->daughter(genidx);
             if(!(genJet->sourceCandidatePtr(genidx).isNonnull() && genJet->sourceCandidatePtr(genidx).isAvailable()))
             {
                 edm::LogInfo("JetConstituentPointer") << "Bad pointer to jet constituent found.  Check for possible dropped particle.";
@@ -137,10 +113,6 @@ void GenJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenJets
         if( isCHadron ) localGenJet.setCHadron(CHad); //if only no B-Hadron matched, assign C-Hadron
         else localGenJet.setCHadron(TRootMCParticle());
 
-        if(verbosity_>4)	cout << "Analysing GenJets collection ...set hadrons"  <<endl;
-
-        //	cout << "Analysing GenJets collection ...checked hadrons. " << j  <<endl;
-
         if(verbosity_>4)	cout << "Analysing GenJets collection ...checked hadrons. " << localGenJet.Px()  <<" "<< localGenJet.Py()  <<"  "  << localGenJet.Pt() <<" size GJ : "<<  (sizeof(rootGenJets))  << endl;
         if(verbosity_>4)
         {
@@ -151,12 +123,6 @@ void GenJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenJets
 
         if(verbosity_>4)	cout << "Analysing GenJets colloction wrote genjet"  <<endl;
 
-
-
-
-        //	new( (*rootGenJets)[j] ) TRootGenJet(localGenJet);
-
-        //	cout << "Analysing GenJets collection ..made new genjet " << j  <<endl;
         if(verbosity_>2) cout << "   ["<< setw(3) << j << "] " << localGenJet << endl;
     }
 }

@@ -70,7 +70,11 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet, const edm::EventSetup& iSetu
 	localJet.setBtag_combinedCSVSLBJetTags(patJet->bDiscriminator("combinedCSVSLBJetTags"));
 	localJet.setBtag_softPFElectronRetrainedBJetsTags(patJet->bDiscriminator("softPFElectronBJetTags"));
 	localJet.setBtag_softPFMuonRetrainedBJetsTags(patJet->bDiscriminator("softPFMuonBJetTags"));
-        localJet.setpuID(patJet->userFloat("pileupJetId:fullDiscriminant"));
+	localJet.setpuID(-9999);
+    //localJet.setpuID(patJet->userFloat("pileupJetId:fullDiscriminant")); 
+	// in 76X the FatJets don't have the 'fullDiscriminator' --> setpuID is initialized in
+	//PFJetAnalyzer.cc/FatJetAnalyzer.cc/JPTJetAnalyzer.cc and set to a default value here!! (By Seth and Kevin on 23 december 2015)
+	// TO BO FIXED IN THE FUTURE????????!!!!!!!??????!!!!
 	if(verbosity_ > 2) cout << "CSV old, new: " << patJet->bDiscriminator("combinedSecondaryVertexBJetTags") << ", " << patJet->bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags") << endl;
 
 // comment out the whole b-tag scale factor setup from DB below for now
