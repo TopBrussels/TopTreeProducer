@@ -41,7 +41,8 @@ process.options = cms.untracked.PSet(
 
 #Default Test sample
 #process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/mc/RunIISpring15DR74/TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v2/00000/18E6854B-1809-E511-A405-0025905B8590.root'))
-process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/relval/CMSSW_7_6_0/RelValTTbarLepton_13/MINIAODSIM/76X_mcRun2_asymptotic_v11-v1/00000/4A44647C-A77F-E511-A26B-002618943960.root'))
+#process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/relval/CMSSW_7_6_0/RelValTTbarLepton_13/MINIAODSIM/76X_mcRun2_asymptotic_v11-v1/00000/4A44647C-A77F-E511-A26B-002618943960.root'))
+process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://xrootd-cms.infn.it///store/mc/RunIIFall15MiniAODv1/QCD_Pt-15to20_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/MINIAODSIM/PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1/00000/04C4FE54-95A8-E511-AD4D-0CC47A4D7686.root'))
 
 #process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/mc/RunIISpring15DR74/TTJets_DiLept_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v2/20000/5E2A0DB9-E52F-E511-A294-782BCB407B74.root'))
 
@@ -114,7 +115,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		doMuon = cms.untracked.bool(True),
 		doElectron = cms.untracked.bool(True),
         doPhoton = cms.untracked.bool(True),
-		doPFMET = cms.untracked.bool(False),
+		doPFMET = cms.untracked.bool(True),
 		doGenEvent = cms.untracked.bool(False),#put on True when running non-ttbar or when running toptree from reco
 		runSuperCluster = cms.untracked.bool(False),#True only if SuperCluster are stored
 		doNPGenEvent = cms.untracked.bool(False),#put on True when running New Physics sample

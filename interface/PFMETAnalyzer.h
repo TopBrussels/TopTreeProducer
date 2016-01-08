@@ -9,8 +9,6 @@
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/Framework/interface/ESHandle.h"
 
-//#include "DataFormats/METReco/interface/MET.h"
-//#include "DataFormats/METReco/interface/METFwd.h"
 #include "DataFormats/METReco/interface/PFMET.h"
 #include "DataFormats/METReco/interface/PFMETCollection.h"
 #include "DataFormats/PatCandidates/interface/MET.h"
@@ -26,18 +24,15 @@
 class PFMETAnalyzer{
 	
 public:
-	PFMETAnalyzer(const edm::ParameterSet& producersNames);
-	PFMETAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity);
 	PFMETAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity);
 	~PFMETAnalyzer();
-	void SetVerbosity(int verbosity) {verbosity_ = verbosity; };
 	void Process(const edm::Event& iEvent, TClonesArray* rootMET);
 
 private:
 	int verbosity_;
 	edm::InputTag metProducer_;
 	bool useMC_;
-  std::vector<std::string> vPFmetProducer;
+    std::vector<std::string> vPFmetProducer;
 	METAnalyzer* myMETAnalyzer;
 };
 
