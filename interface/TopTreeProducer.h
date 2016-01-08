@@ -170,6 +170,7 @@ private:
     edm::EDGetTokenT<double> fixedGridRhoFastjetCentralCaloToken_;
     edm::EDGetTokenT<double> fixedGridRhoFastjetCentralChargedPileUpToken_;
     edm::EDGetTokenT<double> fixedGridRhoFastjetCentralNeutralToken_;
+	edm::EDGetTokenT<GenEventInfoProduct> genEventInfoProductToken_;
     edm::EDGetTokenT<std::vector<reco::GenParticle> > genParticlesToken_;
     edm::EDGetTokenT<LHEEventProduct> lheproductToken_;
     

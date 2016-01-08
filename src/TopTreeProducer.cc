@@ -41,6 +41,7 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
     fixedGridRhoFastjetCentralCaloToken_ = consumes<double>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("fixedGridRhoFastjetCentralCalo"));
     fixedGridRhoFastjetCentralChargedPileUpToken_ = consumes<double>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("fixedGridRhoFastjetCentralChargedPileUp"));
     fixedGridRhoFastjetCentralNeutralToken_ = consumes<double>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("fixedGridRhoFastjetCentralNeutral"));
+	genEventInfoProductToken_ = consumes<GenEventInfoProduct>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("genEventInfoProduct"));
     genParticlesToken_ = consumes<std::vector<reco::GenParticle> >(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("prunedGenParticles"));
     lheproductToken_  = consumes<LHEEventProduct>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("lheproduct"));
     offlineBSToken_ = consumes<reco::BeamSpot>(producersNames_.getParameter<edm::InputTag>("offlineBeamSpot"));
