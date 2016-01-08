@@ -44,7 +44,6 @@
 #include "../interface/ElectronAnalyzer.h"
 #include "../interface/PhotonAnalyzer.h"
 #include "../interface/METAnalyzer.h"
-#include "../interface/CaloMETAnalyzer.h"
 #include "../interface/PFMETAnalyzer.h"
 #include "../interface/TrackMETAnalyzer.h"
 #include "../interface/TCMETAnalyzer.h"
@@ -67,7 +66,6 @@
 #include "../interface/TRootMuon.h"
 #include "../interface/TRootElectron.h"
 #include "../interface/TRootMET.h"
-#include "../interface/TRootCaloMET.h"
 #include "../interface/TRootPFMET.h"
 #include "../interface/TRootTrackMET.h"
 #include "../interface/TRootGenEvent.h"
@@ -118,7 +116,6 @@ private:
 	bool doElectron;
 	bool doPhoton;
 	bool doPhotonMC;
-	bool doCaloMET;
 	bool doPFMET;
 	bool doTrackMET;
 	bool doTCMET;
@@ -150,7 +147,6 @@ private:
 	std::vector<TClonesArray*> vmuons;
 	std::vector<TClonesArray*> velectrons;
 	std::vector<TClonesArray*> vphotons;
-	TClonesArray* CALOmet;
 	std::vector<TClonesArray*> vPFmets;
 	std::vector<TClonesArray*> vTrackmets;
 	TClonesArray* TCmet;

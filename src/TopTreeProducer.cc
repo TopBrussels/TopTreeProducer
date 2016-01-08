@@ -71,7 +71,6 @@ void TopTreeProducer::beginJob()
     doElectron = myConfig_.getUntrackedParameter<bool>("doElectron",false);
     doPhoton = myConfig_.getUntrackedParameter<bool>("doPhoton",false);
     doPhotonMC = myConfig_.getUntrackedParameter<bool>("doPhotonMC",false);
-    doCaloMET = myConfig_.getUntrackedParameter<bool>("doCaloMET",false);
     doPFMET = myConfig_.getUntrackedParameter<bool>("doPFMET",false);
     doTrackMET = myConfig_.getUntrackedParameter<bool>("doTrackMET",false);
     doTCMET = myConfig_.getUntrackedParameter<bool>("doTCMET",false);
@@ -283,13 +282,6 @@ void TopTreeProducer::beginJob()
             sprintf(name,"Photons_%s",vPhotonProducer[s].c_str());
             eventTree_->Branch (name, "TClonesArray", &vphotons[s]);
         }
-    }
-
-    if(doCaloMET)
-    {
-        if(verbosity>0) cout << "CaloMET info will be added to rootuple" << endl;
-        CALOmet = new TClonesArray("TopTree::TRootCaloMET", 1000);
-        eventTree_->Branch ("CaloMET", "TClonesArray", &CALOmet);
     }
 
     if(doPFMET)
@@ -785,14 +777,6 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 
 
     // MET
-    if(doCaloMET)
-    {
-
-        if(verbosity>1) cout << endl << "Analysing Calorimeter Missing Et..." << endl;
-        CaloMETAnalyzer* myMETAnalyzer = new CaloMETAnalyzer(producersNames_, myConfig_, verbosity);
-        myMETAnalyzer->Process(iEvent, CALOmet);
-        delete myMETAnalyzer;
-    }
 
     if(doPFMET)
     {
@@ -838,11 +822,9 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
         //		if(doPFJet && vpfJets.size() > 0) myMCAssociator->process(vpfJets[0]);
         //		if(doMuon && vmuons.size() > 0) myMCAssociator->process(vmuons[0]);
         //		if(doElectron && velectrons.size() > 0) myMCAssociator->process(velectrons[0]);
-        //		if(doCaloMET) myMCAssociator->process(CALOmet);
         //		//if(verbosity>2 && doMuon && vmuons.size() > 0) myMCAssociator->printParticleAssociation(vmuons[0]);
         //		//if(verbosity>2 && doElectron && velectrons.size() > 0) myMCAssociator->printParticleAssociation(velectrons[0]);
         //		//if(verbosity>2 && doPhoton) myMCAssociator->printParticleAssociation(photons);
-        //		//if(verbosity>2 && doCaloMET) myMCAssociator->printParticleAssociation(CALOmet);
         //		delete myMCAssociator;
         //cout<<"in top tree producer...MC Association 1"<<endl;
 
@@ -902,7 +884,6 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
             (*vphotons[s]).Delete();
         }
     }
-    if(doCaloMET) (*CALOmet).Delete();
     if(doPFMET)
     {
         for(unsigned int s=0; s<vPFmetProducer.size(); s++)
