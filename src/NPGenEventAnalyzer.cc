@@ -5,22 +5,9 @@ using namespace TopTree;
 using namespace reco;
 using namespace edm;
 
-NPGenEventAnalyzer::NPGenEventAnalyzer (const edm::ParameterSet & producersNames):
-verbosity_ (0)
-{
-  genParticlesProducer_ = producersNames.getParameter < edm::InputTag > ("genParticlesProducer");
-}
-
-NPGenEventAnalyzer::NPGenEventAnalyzer (const edm::ParameterSet & producersNames, int verbosity):
+NPGenEventAnalyzer::NPGenEventAnalyzer (int verbosity):
 verbosity_ (verbosity)
 {
-  genParticlesProducer_ = producersNames.getParameter < edm::InputTag > ("genParticlesProducer");
-}
-
-NPGenEventAnalyzer::NPGenEventAnalyzer (const edm::ParameterSet & producersNames, const edm::ParameterSet & myConfig, int verbosity):
-verbosity_ (verbosity)
-{
-  genParticlesProducer_ = producersNames.getParameter < edm::InputTag > ("genParticlesProducer");
 }
 
 NPGenEventAnalyzer::~NPGenEventAnalyzer ()
@@ -78,19 +65,15 @@ TRootMCParticle NPGenEventAnalyzer::ConvertMCPart(reco::GenParticle::const_itera
   return part;
 }
 void
-NPGenEventAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootGenEvent)
+NPGenEventAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootGenEvent, edm::EDGetTokenT<std::vector<reco::GenParticle> > genParticlesToken)
 {
 
-  //cout<<"Handle"<<endl;
   edm::Handle < reco::GenParticleCollection > hsrc;
-  //cout<<"Handle"<<endl;
-  iEvent.getByLabel (genParticlesProducer_, hsrc);
-  //cout<<"Handle"<<endl;
+  iEvent.getByToken(genParticlesToken, hsrc);
   reco::GenParticleCollection src = * hsrc;
-  //cout<<"Handle"<<endl;
 
   if (verbosity_ > 1)
-    std::cout << "   NPGenEventAnalyzer  " << "   Label: " << genParticlesProducer_.label () << "   Instance: " << genParticlesProducer_.instance () << std::endl;
+    std::cout << "   NPGenEventAnalyzer  " << "   genParticlesToken used" << std::endl;
 
   bool isNewPhysics_ = false;
   vector < TRootGenTop > tops_;

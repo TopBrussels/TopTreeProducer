@@ -101,12 +101,12 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 #		signalGenerator = cms.untracked.string('ALPGEN'),
 #		signalGenerator = cms.untracked.string('MADGRAPH'),
 
-		doElectronMC = cms.untracked.bool(False),
-		doMuonMC = cms.untracked.bool(False),
-		doJetMC = cms.untracked.bool(False),
-		doMETMC = cms.untracked.bool(False),
-		doPhotonMC = cms.untracked.bool(False),
-		doUnstablePartsMC = cms.untracked.bool(False),
+		doElectronMC = cms.untracked.bool(True),
+		doMuonMC = cms.untracked.bool(True),
+		doJetMC = cms.untracked.bool(True),
+		doMETMC = cms.untracked.bool(True),
+		doPhotonMC = cms.untracked.bool(True),
+		doUnstablePartsMC = cms.untracked.bool(True),
 		
 		doPrimaryVertex = cms.untracked.bool(True),
 		doGenJet = cms.untracked.bool(True),
@@ -170,7 +170,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
     #supposedly this is necessary in the case that the code is run on machines that use multi-threading.
     #It also allows the CMSSW compiler to optimise/speed up the code (or so the documentation says), by accessing collections that are used a lot or rarely with the consumesOften() and mayConsume() fuctions but consumes() will always work.
     #in the TopTreeProducer .py file these are all stored in the producersNames parameter set, so please add new objects there if you need them.
-    producerNamesBookkeepingTreads = cms.PSet(
+    producerNamesBookkeepingThreads = cms.PSet(
         pfJetProducer = cms.untracked.InputTag("slimmedJets"),
         pfmetProducer = cms.untracked.InputTag("slimmedMETs"),
         muonProducer = cms.untracked.InputTag("slimmedMuons"),

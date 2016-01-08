@@ -14,12 +14,12 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
 {
     myConfig_ = iConfig.getParameter<ParameterSet>("myConfig");
     producersNames_ = iConfig.getParameter<ParameterSet>("producersNames");
-    edm::ParameterSet valuesForConsumeCommand = iConfig.getParameter<ParameterSet>("producerNamesBookkeepingTreads");
+    edm::ParameterSet valuesForConsumeCommand = iConfig.getParameter<ParameterSet>("producerNamesBookkeepingThreads");
     
     // new for CMSSW76X and higher: all classes that are read from the event need to be registered in the constructor!
     // supposedly this is necessary in the case that the code is run on machines that use multi-threading.
     // It also allows the CMSSW compiler to optimise/speed up the code (or so the documentation says), by accessing collections that are used a lot or rarely with the consumesOften() and mayConsume() fuctions but consumes() will always work.
-    // in the TopTreeProducer .py file these are stored in either the producerNamesBookkeepingTreads parameter set or the producersNames parameter set (which contains vstrings used by the various analysers, so please add new objects there if you need them.
+    // in the TopTreeProducer .py file these are stored in either the producerNamesBookkeepingThreads parameter set or the producersNames parameter set (which contains vstrings used by the various analysers, so please add new objects there if you need them.
     vtxToken_ = consumes<reco::VertexCollection>(producersNames_.getParameter<edm::InputTag>("primaryVertexProducer"));
     muonToken_ = consumes<pat::MuonCollection>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("muonProducer"));
     electronToken_ = consumes<pat::ElectronCollection>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("electronProducer"));
@@ -669,10 +669,8 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
     if(doNPGenEvent)
     {
         if(verbosity>1) cout << endl << "Analysing NPGenEvent collection..." << endl;
-        NPGenEventAnalyzer* myNPGenEventAnalyzer = new NPGenEventAnalyzer(producersNames_, myConfig_, verbosity);
-        if(verbosity>1) cout << endl << "Analysing NPGenEvent collection..." << endl;
-        myNPGenEventAnalyzer->Process(iEvent, NPgenEvent);
-        if(verbosity>1) cout << endl << "Analysing NPGenEvent collection..." << endl;
+        NPGenEventAnalyzer* myNPGenEventAnalyzer = new NPGenEventAnalyzer(verbosity);
+        myNPGenEventAnalyzer->Process(iEvent, NPgenEvent, genParticlesToken_);
         delete myNPGenEventAnalyzer;
     }
 

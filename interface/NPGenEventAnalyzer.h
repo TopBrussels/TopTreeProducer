@@ -21,19 +21,15 @@ using namespace TopTree;
 class NPGenEventAnalyzer{
 	
 public:
-	NPGenEventAnalyzer(const edm::ParameterSet& producersNames);
-	NPGenEventAnalyzer(const edm::ParameterSet& producersNames, int verbosity);
-	NPGenEventAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity);
+	NPGenEventAnalyzer(int verbosity);
 	~NPGenEventAnalyzer();
-	void SetVerbosity(int verbosity) {verbosity_ = verbosity; };
-	void Process(const edm::Event& iEvent, TClonesArray* rootGenEvent);
+	void Process(const edm::Event& iEvent, TClonesArray* rootGenEvent, edm::EDGetTokenT<std::vector<reco::GenParticle> > genParticlesToken);
     TLorentzVector P4toTLV (reco::Particle::LorentzVector a);
     TRootMCParticle ConvertMCPart(reco::GenParticleCollection::const_iterator t);
     TRootMCParticle ConvertMCPart(reco::GenParticle::const_iterator t);
   
 private:
 	int verbosity_;
-	edm::InputTag genParticlesProducer_;
  ///
 };
 
