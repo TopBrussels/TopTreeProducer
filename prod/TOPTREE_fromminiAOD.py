@@ -115,7 +115,6 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		doElectron = cms.untracked.bool(True),
         doPhoton = cms.untracked.bool(True),
 		doPFMET = cms.untracked.bool(False),
-		doTCMET = cms.untracked.bool(False),
 		doGenEvent = cms.untracked.bool(False),#put on True when running non-ttbar or when running toptree from reco
 		runSuperCluster = cms.untracked.bool(False),#True only if SuperCluster are stored
 		doNPGenEvent = cms.untracked.bool(False),#put on True when running New Physics sample

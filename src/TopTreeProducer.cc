@@ -72,8 +72,6 @@ void TopTreeProducer::beginJob()
     doPhoton = myConfig_.getUntrackedParameter<bool>("doPhoton",false);
     doPhotonMC = myConfig_.getUntrackedParameter<bool>("doPhotonMC",false);
     doPFMET = myConfig_.getUntrackedParameter<bool>("doPFMET",false);
-    doTrackMET = myConfig_.getUntrackedParameter<bool>("doTrackMET",false);
-    doTCMET = myConfig_.getUntrackedParameter<bool>("doTCMET",false);
     drawMCTree = myConfig_.getUntrackedParameter<bool>("drawMCTree",false);
     doGenEvent = myConfig_.getUntrackedParameter<bool>("doGenEvent",false);
     doNPGenEvent = myConfig_.getUntrackedParameter<bool>("doNPGenEvent",false);
@@ -91,7 +89,6 @@ void TopTreeProducer::beginJob()
     vElectronProducer = producersNames_.getUntrackedParameter<vector<string> >("velectronProducer",defaultVec);
     vPhotonProducer = producersNames_.getUntrackedParameter<vector<string> >("vphotonProducer",defaultVec);
     vPFmetProducer = producersNames_.getUntrackedParameter<vector<string> >("vpfmetProducer",defaultVec);
-    vTrackmetProducer = producersNames_.getUntrackedParameter<vector<string> >("vtrackmetProducer",defaultVec);
 
     for(unsigned int s=0; s<vGenJetProducer.size(); s++)
     {
@@ -135,11 +132,6 @@ void TopTreeProducer::beginJob()
         vPFmets.push_back(a);
     }
 
-    for(unsigned int s=0; s<vTrackmetProducer.size(); s++)
-    {
-        TClonesArray* a;
-        vTrackmets.push_back(a);
-    }
 
     nTotEvt_ = 0;
 
@@ -296,25 +288,6 @@ void TopTreeProducer::beginJob()
         }
     }
 
-
-    if(doTrackMET)
-    {
-        if(verbosity>0) cout << "Track MET info will be added to rootuple" << endl;
-        for(unsigned int s=0; s<vTrackmetProducer.size(); s++)
-        {
-            vTrackmets[s] = new TClonesArray("TopTree::TRootTrackMET", 1000);
-            char name[100];
-            sprintf(name,"TrackMET_%s",vTrackmetProducer[s].c_str());
-            eventTree_->Branch (name, "TClonesArray", &vTrackmets[s]);
-        }
-    }
-
-    if(doTCMET)
-    {
-        if(verbosity>0) cout << "Track Corrected MET info will be added to rootuple" << endl;
-        TCmet = new TClonesArray("TopTree::TRootMET", 1000);
-        eventTree_->Branch ("TCMET", "TClonesArray", &TCmet);
-    }
 
     if(doPrimaryVertex)
     {
@@ -791,27 +764,8 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
         }
     }
 
-    if(doTrackMET)
-    {
-
-        if(verbosity>1) cout << endl << "Analysing Track Missing Et..." << endl;
-        for(unsigned int s=0; s<vTrackmetProducer.size(); s++)
-        {
-            TrackMETAnalyzer* myTrackMETAnalyzer = new TrackMETAnalyzer(producersNames_, s, myConfig_, verbosity);
-            myTrackMETAnalyzer->Process(iEvent, vTrackmets[s]);
-            delete myTrackMETAnalyzer;
-        }
-    }
 
 
-
-    if(doTCMET)
-    {
-        if(verbosity>1) cout << endl << "Analysing Track Corrected Missing Et..." << endl;
-        TCMETAnalyzer* myMETAnalyzer = new TCMETAnalyzer(producersNames_, myConfig_, verbosity);
-        myMETAnalyzer->Process(iEvent, TCmet);
-        delete myMETAnalyzer;
-    }
 
     // Associate recoParticles to mcParticles
     if(!isRealData_)
@@ -893,18 +847,9 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
     }
 
 
-    if(doTrackMET)
-    {
-        for(unsigned int s=0; s<vTrackmetProducer.size(); s++)
-        {
-            (*vTrackmets[s]).Delete();
-        }
-    }
-
 
 // cout<<"in top tree producer.. end of method"<<endl;
 
-    if(doTCMET) (*TCmet).Delete();
     if(doGenEvent) (*genEvent).Delete();
     if(doNPGenEvent) (*NPgenEvent).Delete();
     if(doSpinCorrGen) (*spinCorrGen).Delete();
