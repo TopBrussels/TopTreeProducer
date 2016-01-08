@@ -160,11 +160,11 @@ void TopTreeProducer::beginJob()
 
     if(doLHEEventProd)
     {
-        if(verbosity>0) cout << "HLT info will be added to rootuple" << endl;
+        if(verbosity>0) cout << "LHE info will be added to rootuple" << endl;
         lheEventProductAnalyzer_ = new LHEEventProductAnalyzer(producersNames_,verbosity);
-        //	lheEventProduct = new TClonesArray("LHEEventProduct", 1000);
+        //lheEventProduct = new TClonesArray("LHEEventProduct", 1000);
 
-        //         	eventTree_->Branch ("LHEEventProd", "LHEEventProduct",&lheEventProduct);
+        //eventTree_->Branch ("LHEEventProd", "LHEEventProduct",&lheEventProduct);
         //lheEventProductAnalyzer_->setVerbosity(verbosity);
 
 

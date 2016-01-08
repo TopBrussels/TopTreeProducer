@@ -117,10 +117,9 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
         doPhoton = cms.untracked.bool(True),
 		doPFMET = cms.untracked.bool(True),
 		runSuperCluster = cms.untracked.bool(True),#True only if SuperCluster are stored
-		doNPGenEvent = cms.untracked.bool(False),#put on True when running New Physics sample
-        doLHEEventProd = cms.untracked.bool(False),#put on True only if you need SpinCorrelation Variables
-		doSemiLepEvent = cms.untracked.bool(False),#put on True only if you need TtSemiLeptonicEvent Collection exist in PAT-uples (L2)
-		doEventCleaningInfo = cms.untracked.bool(False), # only useful for data but protected for MC. Stores HBHE, HCalIso etc filter outputs as bools in TRootEvent
+		doNPGenEvent = cms.untracked.bool(True),#put on True when running New Physics sample
+        doLHEEventProd = cms.untracked.bool(True),
+		doEventCleaningInfo = cms.untracked.bool(True), # only useful for data but protected for MC. Stores HBHE, HCalIso etc filter outputs as bools in TRootEvent
 
 		conversionLikelihoodWeightsFile = cms.untracked.string('RecoEgamma/EgammaTools/data/TMVAnalysis_Likelihood.weights.txt'),
 
