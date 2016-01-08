@@ -45,9 +45,7 @@
 #include "../interface/PhotonAnalyzer.h"
 #include "../interface/METAnalyzer.h"
 #include "../interface/PFMETAnalyzer.h"
-#include "../interface/GenEventAnalyzer.h"
 #include "../interface/NPGenEventAnalyzer.h"
-#include "../interface/SpinCorrGenAnalyzer.h"
 #include "../interface/LHEEventProductAnalyzer.h"
 
 
@@ -65,9 +63,7 @@
 #include "../interface/TRootElectron.h"
 #include "../interface/TRootMET.h"
 #include "../interface/TRootPFMET.h"
-#include "../interface/TRootGenEvent.h"
 #include "../interface/TRootNPGenEvent.h"
-#include "../interface/TRootSpinCorrGen.h"
 #include "../interface/TRootVertex.h"
 
 #include "TFile.h"
@@ -114,9 +110,7 @@ private:
 	bool doPhoton;
 	bool doPhotonMC;
 	bool doPFMET;
-	bool doGenEvent;
 	bool doNPGenEvent;
-	bool doSpinCorrGen;
 	bool doLHEEventProd;
 	bool drawMCTree;
 	bool doEventCleaningInfo;
@@ -142,10 +136,8 @@ private:
 	std::vector<TClonesArray*> velectrons;
 	std::vector<TClonesArray*> vphotons;
 	std::vector<TClonesArray*> vPFmets;
-	TClonesArray* genEvent;
 	//	TClonesArray* lheEventProduct;
 	TClonesArray* NPgenEvent;
-	TClonesArray* spinCorrGen;
 	TClonesArray* primaryVertex;
 
     bool useEventCounter_;
@@ -178,7 +170,6 @@ private:
     edm::EDGetTokenT<double> fixedGridRhoFastjetCentralCaloToken_;
     edm::EDGetTokenT<double> fixedGridRhoFastjetCentralChargedPileUpToken_;
     edm::EDGetTokenT<double> fixedGridRhoFastjetCentralNeutralToken_;
-    edm::EDGetTokenT<GenEventInfoProduct> genEventInfoProductToken_;
     edm::EDGetTokenT<std::vector<reco::GenParticle> > genParticlesToken_;
     edm::EDGetTokenT<LHEEventProduct> lheproductToken_;
     

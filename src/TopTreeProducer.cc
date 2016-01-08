@@ -41,7 +41,6 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
     fixedGridRhoFastjetCentralCaloToken_ = consumes<double>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("fixedGridRhoFastjetCentralCalo"));
     fixedGridRhoFastjetCentralChargedPileUpToken_ = consumes<double>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("fixedGridRhoFastjetCentralChargedPileUp"));
     fixedGridRhoFastjetCentralNeutralToken_ = consumes<double>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("fixedGridRhoFastjetCentralNeutral"));
-    genEventInfoProductToken_ = consumes<GenEventInfoProduct>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("genEventInfoProduct"));
     genParticlesToken_ = consumes<std::vector<reco::GenParticle> >(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("prunedGenParticles"));
     lheproductToken_  = consumes<LHEEventProduct>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("lheproduct"));
     offlineBSToken_ = consumes<reco::BeamSpot>(producersNames_.getParameter<edm::InputTag>("offlineBeamSpot"));
@@ -73,9 +72,7 @@ void TopTreeProducer::beginJob()
     doPhotonMC = myConfig_.getUntrackedParameter<bool>("doPhotonMC",false);
     doPFMET = myConfig_.getUntrackedParameter<bool>("doPFMET",false);
     drawMCTree = myConfig_.getUntrackedParameter<bool>("drawMCTree",false);
-    doGenEvent = myConfig_.getUntrackedParameter<bool>("doGenEvent",false);
     doNPGenEvent = myConfig_.getUntrackedParameter<bool>("doNPGenEvent",false);
-    doSpinCorrGen = myConfig_.getUntrackedParameter<bool>("doSpinCorrGen",false);
 	doLHEEventProd  = myConfig_.getUntrackedParameter<bool>("doLHEEventProd",true);
 	doEventCleaningInfo  = myConfig_.getUntrackedParameter<bool>("doEventCleaningInfo",true);
     useEventCounter_ = myConfig_.getUntrackedParameter<bool>("useEventCounter",true);
@@ -219,25 +216,11 @@ void TopTreeProducer::beginJob()
         }
     }
 
-    if(doGenEvent)
-    {
-        if(verbosity>0) cout << "GenEvent info will be added to rootuple" << endl;
-        genEvent = new TClonesArray("TopTree::TRootGenEvent", 1000);
-        eventTree_->Branch ("GenEvent", "TClonesArray", &genEvent);
-    }
-
     if(doNPGenEvent)
     {
         if(verbosity>0) cout << "NPGenEvent info will be added to rootuple" << endl;
         NPgenEvent = new TClonesArray("TopTree::TRootNPGenEvent", 1000);
         eventTree_->Branch ("NPGenEvent", "TClonesArray", &NPgenEvent);
-    }
-
-    if(doSpinCorrGen)
-    {
-        if(verbosity>0) cout << "SpinCorrelation Gen info will be added to rootuple" << endl;
-        spinCorrGen = new TClonesArray("TopTree::TRootSpinCorrGen", 1000);
-        eventTree_->Branch ("SpinCorrGen", "TClonesArray", &spinCorrGen);
     }
 
     if(doMuon)
@@ -681,16 +664,6 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
         }
     }
 
-    // GenEvent
-    if(doGenEvent)
-    {
-        if(verbosity>1) cout << endl << "Analysing GenEvent collection..." << endl;
-        GenEventAnalyzer* myGenEventAnalyzer = new GenEventAnalyzer(producersNames_, myConfig_, verbosity);
-        myGenEventAnalyzer->Process(iEvent, genEvent);
-        delete myGenEventAnalyzer;
-    }
-
-
     // NPGenEvent
     if(doNPGenEvent)
     {
@@ -700,15 +673,6 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
         myNPGenEventAnalyzer->Process(iEvent, NPgenEvent);
         if(verbosity>1) cout << endl << "Analysing NPGenEvent collection..." << endl;
         delete myNPGenEventAnalyzer;
-    }
-
-    // SpinCorrelation Gen
-    if(doSpinCorrGen)
-    {
-        if(verbosity>1) cout << endl << "Analysing SpinCorrGen collection..." << endl;
-        SpinCorrGenAnalyzer* mySpinCorrGenAnalyzer = new SpinCorrGenAnalyzer(producersNames_, myConfig_, verbosity);
-        mySpinCorrGenAnalyzer->Process(iEvent, spinCorrGen);
-        delete mySpinCorrGenAnalyzer;
     }
 
     // Muons
@@ -850,9 +814,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 
 // cout<<"in top tree producer.. end of method"<<endl;
 
-    if(doGenEvent) (*genEvent).Delete();
     if(doNPGenEvent) (*NPgenEvent).Delete();
-    if(doSpinCorrGen) (*spinCorrGen).Delete();
     if(doPrimaryVertex) (*primaryVertex).Delete();
 //    if(verbosity>0) cout << endl;
 }

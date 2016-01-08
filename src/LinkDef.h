@@ -12,10 +12,8 @@
 #include "../interface/TRootPhoton.h"
 #include "../interface/TRootMET.h"
 #include "../interface/TRootPFMET.h"
-#include "../interface/TRootGenEvent.h"
 #include "../interface/TRootGenTop.h"
 #include "../interface/TRootNPGenEvent.h"
-#include "../interface/TRootSpinCorrGen.h"
 #include "../interface/TRootVertex.h"
 #include "../interface/TRootHLTInfo.h"
 #include "../interface/TRootWeightInfo.h"
@@ -34,10 +32,8 @@
 #include "../interface/TRootPhoton.h"
 #include "../interface/TRootMET.h"
 #include "../interface/TRootPFMET.h"
-#include "../interface/TRootGenEvent.h"
 #include "../interface/TRootGenTop.h"
 #include "../interface/TRootNPGenEvent.h"
-#include "../interface/TRootSpinCorrGen.h"
 #include "../interface/TRootVertex.h"
 #include "../interface/TRootHLTInfo.h"
 #include "../interface/TRootWeightInfo.h"
@@ -62,10 +58,8 @@
 #pragma link C++ class TopTree::TRootPhoton+;
 #pragma link C++ class TopTree::TRootMET+;
 #pragma link C++ class TopTree::TRootPFMET+;
-#pragma link C++ class TopTree::TRootGenEvent+;
 #pragma link C++ class TopTree::TRootGenTop+;
 #pragma link C++ class TopTree::TRootNPGenEvent+;
-#pragma link C++ class TopTree::TRootSpinCorrGen+;
 #pragma link C++ class TopTree::TRootVertex+;
 #pragma link C++ class TopTree::TRootHLTInfo+;
 #pragma link C++ class TopTree::TRootWeightInfo+;
