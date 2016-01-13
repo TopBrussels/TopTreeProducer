@@ -82,7 +82,7 @@ public:
 private:
 	virtual void beginJob() ;
 	virtual void beginRun(const edm::Run&, const edm::EventSetup&) ;
-	virtual void endRun(const edm::Run&, const edm::EventSetup&) ;
+	virtual void endRun(const edm::Run&, const edm::EventSetup&, const edm::ParameterSet&) ;
 	virtual void analyze(const edm::Event&, const edm::EventSetup&);
         virtual void endLuminosityBlock(const edm::LuminosityBlock&, const EventSetup&);
 	virtual void endJob() ;
@@ -173,6 +173,7 @@ private:
 	edm::EDGetTokenT<GenEventInfoProduct> genEventInfoProductToken_;
     edm::EDGetTokenT<std::vector<reco::GenParticle> > genParticlesToken_;
     edm::EDGetTokenT<LHEEventProduct> lheproductToken_;
+	edm::EDGetTokenT<LHERunInfoProduct> lheRunInfoproductToken_;
     
     edm::EDGetTokenT<reco::BeamSpot> offlineBSToken_;
 

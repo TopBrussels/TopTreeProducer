@@ -40,15 +40,11 @@ using namespace TopTree;
 class LHEEventProductAnalyzer {
 
 public:
-  LHEEventProductAnalyzer(const edm::ParameterSet& producersNames);
-  LHEEventProductAnalyzer(const edm::ParameterSet& producersNames, int verbosity);
-  LHEEventProductAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity);
-	LHEEventProductAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity);
+  LHEEventProductAnalyzer(int verbosity);
 	~LHEEventProductAnalyzer();
-	//	void SetVerbosity(int verbosity) { verbosity_ = verbosity; };
-	void Process(const edm::Event& iEvent, TRootEvent* rootEvent);
-	void PrintWeightNamesList(const edm::Run& iRun);
-	void CopyWeightNames(const edm::Run& iRun, TRootRun* runInfos);
+	void Process(const edm::Event& iEvent, TRootEvent* rootEvent,edm::EDGetTokenT<LHEEventProduct> lheproductToken);
+	void PrintWeightNamesList(const edm::Run& iRun,edm::EDGetTokenT<LHERunInfoProduct> lheRunInfoproductToken);
+	void CopyWeightNames(const edm::Run& iRun, TRootRun* runInfos, edm::EDGetTokenT<LHERunInfoProduct> lheRunInfoproductToken);
 
 private:
 	int verbosity_;

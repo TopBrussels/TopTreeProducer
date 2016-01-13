@@ -161,7 +161,7 @@ void TopTreeProducer::beginJob()
     if(doLHEEventProd)
     {
         if(verbosity>0) cout << "LHE info will be added to rootuple" << endl;
-        lheEventProductAnalyzer_ = new LHEEventProductAnalyzer(producersNames_,verbosity);
+        lheEventProductAnalyzer_ = new LHEEventProductAnalyzer(verbosity);
         //lheEventProduct = new TClonesArray("LHEEventProduct", 1000);
 
         //eventTree_->Branch ("LHEEventProd", "LHEEventProduct",&lheEventProduct);
@@ -340,14 +340,18 @@ void TopTreeProducer::endLuminosityBlock(const edm::LuminosityBlock & lumi, cons
 //------------- method called for each run -------------
 void TopTreeProducer::beginRun(const edm::Run& iRun, const edm::EventSetup& iSetup)
 {
-//    RunlheEventProductAnalyzer_ = new LHEEventProductAnalyzer(producersNames_,verbosity);
-//    RunlheEventProductAnalyzer_->PrintWeightNamesList(iRun);
+	//edm::ParameterSet valuesForConsumeCommand = iConfig.getParameter<ParameterSet>("producerNamesBookkeepingThreads");
+	//lheRunInfoproductToken_  = consumes<LHERunInfoProduct>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("lheproduct"));
+    //RunlheEventProductAnalyzer_ = new LHEEventProductAnalyzer(verbosity);
+    //RunlheEventProductAnalyzer_->PrintWeightNamesList(iRun,lheRunInfoproductToken_);
 }
-void TopTreeProducer::endRun(const edm::Run& iRun, const edm::EventSetup& iSetup)
+void TopTreeProducer::endRun(const edm::Run& iRun, const edm::EventSetup& iSetup,const edm::ParameterSet& iConfig)
 {
-    RunlheEventProductAnalyzer_ = new LHEEventProductAnalyzer(producersNames_,verbosity);
-    RunlheEventProductAnalyzer_->CopyWeightNames(iRun, runInfos_);
-    if(verbosity > 1 ) RunlheEventProductAnalyzer_->PrintWeightNamesList(iRun);
+    edm::ParameterSet valuesForConsumeCommand = iConfig.getParameter<ParameterSet>("producerNamesBookkeepingThreads");
+	lheRunInfoproductToken_  = consumes<LHERunInfoProduct>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("lheproduct"));
+	RunlheEventProductAnalyzer_ = new LHEEventProductAnalyzer(verbosity);
+    RunlheEventProductAnalyzer_->CopyWeightNames(iRun, runInfos_,lheRunInfoproductToken_);
+    if(verbosity > 1 ) RunlheEventProductAnalyzer_->PrintWeightNamesList(iRun,lheRunInfoproductToken_);
 }
 // ------------ method called to for each event  ------------
 void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
@@ -604,11 +608,10 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
     if(!isRealData_)
     {
         if(verbosity>1) cout << endl << "Analysing MC info..." << endl;
-        MCAnalyzer* myMCAnalyzer = new MCAnalyzer(myConfig_, producersNames_);
-        myMCAnalyzer->SetVerbosity(verbosity);
+        MCAnalyzer* myMCAnalyzer = new MCAnalyzer(myConfig_,verbosity);
         if (drawMCTree) myMCAnalyzer->DrawMCTree(iEvent, iSetup, myConfig_, producersNames_);
         if (doPDFInfo ) myMCAnalyzer->PDFInfo(iEvent, rootEvent);
-        myMCAnalyzer->ProcessMCParticle(iEvent, mcParticles);
+        myMCAnalyzer->ProcessMCParticle(iEvent, mcParticles,genParticlesToken_);
         delete myMCAnalyzer;
     }
 
@@ -616,7 +619,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
     if(doLHEEventProd)
     {
 
-        lheEventProductAnalyzer_->Process(iEvent,  rootEvent);
+        lheEventProductAnalyzer_->Process(iEvent,  rootEvent, lheproductToken_);
 
     }
 
@@ -731,21 +734,21 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 
 
     // Associate recoParticles to mcParticles
-    if(!isRealData_)
+    /*if(!isRealData_)
     {
-        //         cout<<"in top tree producer...MC Association 0"<<endl;
-        //	        	MCAssociator* myMCAssociator = new MCAssociator(producersNames_, verbosity);
-        //      	myMCAssociator->init(iEvent, mcParticles);
-        //		if(doPFJet && vpfJets.size() > 0) myMCAssociator->process(vpfJets[0]);
-        //		if(doMuon && vmuons.size() > 0) myMCAssociator->process(vmuons[0]);
-        //		if(doElectron && velectrons.size() > 0) myMCAssociator->process(velectrons[0]);
-        //		//if(verbosity>2 && doMuon && vmuons.size() > 0) myMCAssociator->printParticleAssociation(vmuons[0]);
-        //		//if(verbosity>2 && doElectron && velectrons.size() > 0) myMCAssociator->printParticleAssociation(velectrons[0]);
-        //		//if(verbosity>2 && doPhoton) myMCAssociator->printParticleAssociation(photons);
-        //		delete myMCAssociator;
-        //cout<<"in top tree producer...MC Association 1"<<endl;
+            cout<<"in top tree producer...MC Association 0"<<endl;
+      	    MCAssociator* myMCAssociator = new MCAssociator(producersNames_, verbosity);
+            myMCAssociator->init(iEvent, mcParticles);
+        	if(doPFJet && vpfJets.size() > 0) myMCAssociator->process(vpfJets[0]);
+        	if(doMuon && vmuons.size() > 0) myMCAssociator->process(vmuons[0]);
+        	if(doElectron && velectrons.size() > 0) myMCAssociator->process(velectrons[0]);
+        	if(verbosity>2 && doMuon && vmuons.size() > 0) myMCAssociator->printParticleAssociation(vmuons[0]);
+        	if(verbosity>2 && doElectron && velectrons.size() > 0) myMCAssociator->printParticleAssociation(velectrons[0]);
+        	if(verbosity>2 && doPhoton) myMCAssociator->printParticleAssociation(photons);
+        	delete myMCAssociator;
+        	cout<<"in top tree producer...MC Association 1"<<endl;
 
-    }
+    }*/
 
 
     if(verbosity>1) cout << endl << "Filling rootuple..." << endl;

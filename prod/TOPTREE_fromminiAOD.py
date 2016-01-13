@@ -124,7 +124,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		conversionLikelihoodWeightsFile = cms.untracked.string('RecoEgamma/EgammaTools/data/TMVAnalysis_Likelihood.weights.txt'),
 
 
-
+		# The PaticleTreeDrawer is not yet adapted to 76X TTP. Not sure if we still need this (Kevin and Seth, 13th jan 2016)
 		# Draw MC particle tree
 		drawMCTree = cms.untracked.bool(False),
 		mcTreePrintP4 = cms.untracked.bool(False),
@@ -150,7 +150,6 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		hltProducer3rd = cms.InputTag("TriggerResults","","MINIAOD"),
 		hltProducer4th = cms.InputTag("TriggerResults","","PAT"),
 		pileUpProducer = cms.InputTag("addPileupInfo","","HLT"),
-		genParticlesProducer = cms.InputTag("prunedGenParticles"),
         lheEventProductProducer = cms.InputTag("externalLHEProducer"),
 		primaryVertexProducer = cms.InputTag("offlineSlimmedPrimaryVertices"),
         vgenJetProducer = cms.untracked.vstring("slimmedGenJets"),
