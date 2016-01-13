@@ -20,8 +20,16 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
     // supposedly this is necessary in the case that the code is run on machines that use multi-threading.
     // It also allows the CMSSW compiler to optimise/speed up the code (or so the documentation says), by accessing collections that are used a lot or rarely with the consumesOften() and mayConsume() fuctions but consumes() will always work.
     // in the TopTreeProducer .py file these are stored in either the producerNamesBookkeepingThreads parameter set or the producersNames parameter set (which contains vstrings used by the various analysers, so please add new objects there if you need them.
+    
+	vector<string> defaultVec;
+	vMuonProducer = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("vmuonProducer",defaultVec);
+	
+	for(unsigned int s=0; s<vMuonProducer.size(); s++)
+    {
+		vmuonToken_.push_back(consumes<pat::MuonCollection>(edm::InputTag(vMuonProducer[s])));
+    }
+
     vtxToken_ = consumes<reco::VertexCollection>(producersNames_.getParameter<edm::InputTag>("primaryVertexProducer"));
-    muonToken_ = consumes<pat::MuonCollection>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("muonProducer"));
     electronToken_ = consumes<pat::ElectronCollection>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("electronProducer"));
     photonToken_ = consumes<pat::PhotonCollection>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("photonProducer"));
     jetToken_ = consumes<pat::JetCollection>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("pfJetProducer"));
@@ -83,7 +91,6 @@ void TopTreeProducer::beginJob()
     vGenJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vgenJetProducer",defaultVec);
     vPFJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vpfJetProducer",defaultVec);
     vFatJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vfatJetProducer",defaultVec);
-    vMuonProducer = producersNames_.getUntrackedParameter<vector<string> >("vmuonProducer",defaultVec);
     vElectronProducer = producersNames_.getUntrackedParameter<vector<string> >("velectronProducer",defaultVec);
     vPhotonProducer = producersNames_.getUntrackedParameter<vector<string> >("vphotonProducer",defaultVec);
     vPFmetProducer = producersNames_.getUntrackedParameter<vector<string> >("vpfmetProducer",defaultVec);
@@ -684,8 +691,8 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
         if(verbosity>1) cout << endl << "Analysing muon collection..." << endl;
         for(unsigned int s=0; s<vMuonProducer.size(); s++)
         {
-            MuonAnalyzer* myMuonAnalyzer = new MuonAnalyzer(producersNames_, s, myConfig_,verbosity);
-            myMuonAnalyzer->Process(iEvent, vmuons[s], offlineBSToken_);
+            MuonAnalyzer* myMuonAnalyzer = new MuonAnalyzer(myConfig_,verbosity);
+            myMuonAnalyzer->Process(iEvent, vmuons[s], offlineBSToken_, vmuonToken_[s], vtxToken_);
             delete myMuonAnalyzer;
 
         }

@@ -6,12 +6,9 @@ using namespace reco;
 using namespace edm;
 using namespace isodeposit;
 
-MuonAnalyzer::MuonAnalyzer (const edm::ParameterSet & producersNames, int iter, const edm::ParameterSet & myConfig, int verbosity):
+MuonAnalyzer::MuonAnalyzer (const edm::ParameterSet & myConfig, int verbosity):
 verbosity_ (verbosity)
 {
-	vMuonProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("vmuonProducer");
-	muonProducer_ =	edm::InputTag(vMuonProducer[iter]);
-    primaryVertexProducer_ = producersNames.getParameter<edm::InputTag>("primaryVertexProducer");
 	useMC_ = myConfig.getUntrackedParameter < bool > ("doMuonMC");
 }
 
@@ -21,22 +18,22 @@ MuonAnalyzer::~MuonAnalyzer ()
 }
 
 void
-MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons,edm::EDGetTokenT<reco::BeamSpot> offlineBSToken)
+MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons,edm::EDGetTokenT<reco::BeamSpot> offlineBSToken, edm::EDGetTokenT<pat::MuonCollection> muonToken, edm::EDGetTokenT<reco::VertexCollection> vtxToken)
 {
 unsigned int nMuons = 0;
 
 	edm::Handle < std::vector < pat::Muon > >patMuons;
-	iEvent.getByLabel (muonProducer_, patMuons);
+	iEvent.getByToken (muonToken, patMuons);
 	nMuons = patMuons->size ();
 
   	edm::Handle< reco::VertexCollection > pvHandle;
-  	iEvent.getByLabel(primaryVertexProducer_, pvHandle);
+  	iEvent.getByToken(vtxToken, pvHandle);
 
   	edm::Handle<reco::BeamSpot> beamSpotHandle;
   	iEvent.getByToken(offlineBSToken, beamSpotHandle);
 
 	if (verbosity_ > 1)
-		std::cout << "   Number of muons = " << nMuons << "   Label: " << muonProducer_.label () << "   Instance: " << muonProducer_.instance () << std::endl;
+		std::cout << "   Number of muons = " << nMuons << std::endl;
 
     for (unsigned int j = 0; j < nMuons; j++)
     {
@@ -101,7 +98,7 @@ unsigned int nMuons = 0;
         localMuon.setChi2 (patMuon->globalTrack()->normalizedChi2());
       }
       catch (cms::Exception &lce) {
-        if (verbosity_ > 2)cout  << "MuonAnalyzer:: WARNING, unable to access muon normChi2 value!!!! (label: " << muonProducer_.label () << ")" << endl;
+        if (verbosity_ > 2)cout  << "MuonAnalyzer:: WARNING, unable to access muon normChi2 value!!!!" << endl;
         localMuon.setChi2 (+99999.);
       }
 

@@ -30,15 +30,12 @@ class MuonAnalyzer
 {
 	
 public:
-	MuonAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity);
+	MuonAnalyzer(const edm::ParameterSet& myConfig, int verbosity);
 	~MuonAnalyzer();
-	void Process(const edm::Event& iEvent, TClonesArray* rootMuons, edm::EDGetTokenT<reco::BeamSpot> offlineBSToken);
+	void Process(const edm::Event& iEvent, TClonesArray* rootMuons, edm::EDGetTokenT<reco::BeamSpot> offlineBSToken,edm::EDGetTokenT<pat::MuonCollection> muonToken, edm::EDGetTokenT<reco::VertexCollection> vtxToken);
 
 private:
 	int verbosity_;
-	edm::InputTag muonProducer_;
-	edm::InputTag primaryVertexProducer_;
-	std::vector<std::string> vMuonProducer;
 	bool useMC_;
 };
 

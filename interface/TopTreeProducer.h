@@ -150,7 +150,7 @@ private:
       // ---------- tokens to CMSSW member classes to be accessed in analysis ------------------
     // good practice is to use these instead of getbylabel. However getbylabel is still supported...
     edm::EDGetTokenT<reco::VertexCollection> vtxToken_;
-    edm::EDGetTokenT<pat::MuonCollection> muonToken_;
+    std::vector<edm::EDGetTokenT<pat::MuonCollection> > vmuonToken_;
     edm::EDGetTokenT<pat::ElectronCollection> electronToken_;
     edm::EDGetTokenT<pat::PhotonCollection> photonToken_;
     edm::EDGetTokenT<pat::JetCollection> jetToken_;
