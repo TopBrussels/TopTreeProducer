@@ -94,6 +94,7 @@ void TopTreeProducer::beginJob()
     verbosity = myConfig_.getUntrackedParameter<int>("verbosity", 0);
     rootFileName_ = myConfig_.getUntrackedParameter<string>("RootFileName","noname.root");
     doHLT = myConfig_.getUntrackedParameter<bool>("doHLT",false);
+	doMCAssociation = myConfig_.getUntrackedParameter<bool>("doMCAssociation",false);
     doPDFInfo = myConfig_.getUntrackedParameter<bool>("doPDFInfo",false);
     doPrimaryVertex = myConfig_.getUntrackedParameter<bool>("doPrimaryVertex",false);
     doGenJet = myConfig_.getUntrackedParameter<bool>("doGenJet",false);
@@ -759,21 +760,19 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 
 
     // Associate recoParticles to mcParticles
-    /*if(!isRealData_)
+    if(!isRealData_ && doMCAssociation)
     {
-            cout<<"in top tree producer...MC Association 0"<<endl;
-      	    MCAssociator* myMCAssociator = new MCAssociator(producersNames_, verbosity);
-            myMCAssociator->init(iEvent, mcParticles);
+      	    MCAssociator* myMCAssociator = new MCAssociator(verbosity);
+            myMCAssociator->init(iEvent, mcParticles, genParticlesToken_);
         	if(doPFJet && vpfJets.size() > 0) myMCAssociator->process(vpfJets[0]);
         	if(doMuon && vmuons.size() > 0) myMCAssociator->process(vmuons[0]);
         	if(doElectron && velectrons.size() > 0) myMCAssociator->process(velectrons[0]);
-        	if(verbosity>2 && doMuon && vmuons.size() > 0) myMCAssociator->printParticleAssociation(vmuons[0]);
-        	if(verbosity>2 && doElectron && velectrons.size() > 0) myMCAssociator->printParticleAssociation(velectrons[0]);
-        	if(verbosity>2 && doPhoton) myMCAssociator->printParticleAssociation(photons);
+        	//if(verbosity>2 && doMuon && vmuons.size() > 0) myMCAssociator->printParticleAssociation(vmuons[0]);
+        	//if(verbosity>2 && doElectron && velectrons.size() > 0) myMCAssociator->printParticleAssociation(velectrons[0]);
+        	//if(verbosity>2 && doPhoton) myMCAssociator->printParticleAssociation(photons);
         	delete myMCAssociator;
-        	cout<<"in top tree producer...MC Association 1"<<endl;
 
-    }*/
+    }
 
 
     if(verbosity>1) cout << endl << "Filling rootuple..." << endl;

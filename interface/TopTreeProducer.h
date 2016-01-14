@@ -98,6 +98,7 @@ private:
   TH1F* tmp_;
 	bool doHLT;
 	bool doMC;
+	bool doMCAssociation;
 	bool doPDFInfo;
 	bool doSignalMuMuGamma;
 	bool doSignalTopTop;

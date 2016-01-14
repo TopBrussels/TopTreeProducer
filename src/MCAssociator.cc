@@ -7,19 +7,18 @@ MCAssociator::MCAssociator(): verbosity_(0), nMC_(0), mcParticles_(0), genPartic
 }
 
 
-MCAssociator::MCAssociator(const edm::ParameterSet& producersNames, int verbosity) : verbosity_(verbosity), nMC_(0), mcParticles_(0), genParticles_(), mcParticlesMap_()
+MCAssociator::MCAssociator(int verbosity) : verbosity_(verbosity), nMC_(0), mcParticles_(0), genParticles_(), mcParticlesMap_()
 {
-	genParticlesProducer_ = producersNames.getParameter<edm::InputTag>("genParticlesProducer");
 }
 
 
 
-void MCAssociator::init(const edm::Event& iEvent, TClonesArray* mcParticles)
+void MCAssociator::init(const edm::Event& iEvent, TClonesArray* mcParticles, edm::EDGetTokenT<std::vector<reco::GenParticle> > genParticlesToken)
 {
 
 
 	// FIXME - Protect against no genParticles collection in PoolSource
-	iEvent.getByLabel( genParticlesProducer_, genParticles_ );
+	iEvent.getByToken( genParticlesToken, genParticles_ );
 
 	// fill map<igen,imc> where igen=index in genParticle collection and imc=index in mcParticles TClonesArray
 	if(verbosity_>1) cout << endl << "Matching recoParticles to mcParticles... " << endl;
