@@ -6,21 +6,20 @@ using namespace reco;
 using namespace edm;
 
 
-VertexAnalyzer::VertexAnalyzer(const edm::ParameterSet& producersNames, int verbosity):verbosity_(verbosity)
+VertexAnalyzer::VertexAnalyzer(int verbosity):verbosity_(verbosity)
 {
-	primaryVertexProducer_ = producersNames.getParameter<edm::InputTag>("primaryVertexProducer");
 }
 
 VertexAnalyzer::~VertexAnalyzer()
 {
 }
 
-void VertexAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootVertex)
+void VertexAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootVertex, edm::EDGetTokenT<reco::VertexCollection> vtxToken)
 {
 
 	edm::Handle< reco::VertexCollection > recoVertex;
-	iEvent.getByLabel(primaryVertexProducer_, recoVertex);
-	if(verbosity_>1) std::cout  << "   Number of primary vertices = " << recoVertex->size() << "   Label: " << primaryVertexProducer_.label() << "   Instance: " << primaryVertexProducer_.instance() << std::endl;
+	iEvent.getByToken(vtxToken, recoVertex);
+	if(verbosity_>1) std::cout  << "   Number of primary vertices = " << recoVertex->size() << std::endl;
 
 	for (unsigned int j=0; j<recoVertex->size(); j++)
 	{

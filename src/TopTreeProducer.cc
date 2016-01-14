@@ -652,8 +652,8 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
     if(doPrimaryVertex)
     {
         if(verbosity>1) cout << endl << "Analysing primary vertices collection..." << endl;
-        VertexAnalyzer* myVertexAnalyzer = new VertexAnalyzer(producersNames_, verbosity);
-        myVertexAnalyzer->Process(iEvent, primaryVertex);
+        VertexAnalyzer* myVertexAnalyzer = new VertexAnalyzer(verbosity);
+        myVertexAnalyzer->Process(iEvent, primaryVertex, vtxToken_);
         delete myVertexAnalyzer;
     }
 
