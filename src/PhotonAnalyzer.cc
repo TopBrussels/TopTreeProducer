@@ -9,11 +9,9 @@ using namespace reco;
 using namespace edm;
 using namespace isodeposit;
 
-PhotonAnalyzer::PhotonAnalyzer (const edm::ParameterSet & producersNames, int iter, const edm::ParameterSet & myConfig, int verbosity):
+PhotonAnalyzer::PhotonAnalyzer (const edm::ParameterSet & myConfig, int verbosity):
 verbosity_ (verbosity)
 {
-  vPhotonProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("vphotonProducer");
-  photonProducer_ =	edm::InputTag(vPhotonProducer[iter]);
   useMC_ = myConfig.getUntrackedParameter < bool > ("doPhotonMC");
 }
 
@@ -22,7 +20,7 @@ PhotonAnalyzer::~PhotonAnalyzer ()
 }
 
 void
-PhotonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootPhotons, const edm::EventSetup& iSetup)
+PhotonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootPhotons, const edm::EventSetup& iSetup, edm::EDGetTokenT<pat::PhotonCollection> photonToken)
 {
   unsigned int nPhotons = 0;
 
@@ -72,7 +70,7 @@ PhotonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootPhotons, 
   //  const IsoDepositVals * photonIsoVals = &photonIsoValPFId;
 
   edm::Handle < std::vector < pat::Photon > >patPhotons;
-  iEvent.getByLabel (photonProducer_, patPhotons);
+  iEvent.getByToken (photonToken, patPhotons);
   nPhotons = patPhotons->size ();
 
   if (verbosity_ > 1)

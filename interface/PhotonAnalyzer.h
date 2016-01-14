@@ -23,9 +23,9 @@ class PhotonAnalyzer
 {
 	
 public:
-	PhotonAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity);
+	PhotonAnalyzer(const edm::ParameterSet& myConfig, int verbosity);
 	~PhotonAnalyzer();
-	void Process(const edm::Event& iEvent, TClonesArray* rootPhotons, const edm::EventSetup& iSetup);
+	void Process(const edm::Event& iEvent, TClonesArray* rootPhotons, const edm::EventSetup& iSetup, edm::EDGetTokenT<pat::PhotonCollection> photonToken);
 
     typedef std::vector< edm::Handle< edm::ValueMap<reco::IsoDeposit> > > IsoDepositMaps;
     typedef std::vector< edm::Handle< edm::ValueMap<double> > > IsoDepositVals;

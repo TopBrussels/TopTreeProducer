@@ -24,6 +24,7 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
 	  vector<string> defaultVec;
     vMuonProducer = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("vmuonProducer",defaultVec);
     vElectronProducer = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("velectronProducer",defaultVec);
+    vPhotonProducer = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("vphotonProducer",defaultVec);
 	
     for(unsigned int s=0; s<vMuonProducer.size(); s++)
     {
@@ -33,9 +34,12 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
     {
 		  velectronToken_.push_back(consumes<pat::ElectronCollection>(edm::InputTag(vElectronProducer[s])));
     }
+    for(unsigned int s=0; s<vPhotonProducer.size(); s++)
+    {
+		  vphotonToken_.push_back(consumes<pat::PhotonCollection>(edm::InputTag(vPhotonProducer[s])));
+    }
 
     vtxToken_ = consumes<reco::VertexCollection>(producersNames_.getParameter<edm::InputTag>("primaryVertexProducer"));
-    photonToken_ = consumes<pat::PhotonCollection>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("photonProducer"));
     jetToken_ = consumes<pat::JetCollection>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("pfJetProducer"));
     genJetToken_ = consumes<std::vector<reco::GenJet> >(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("genJetProducer"));
     fatjetToken_ = consumes<pat::JetCollection>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("fatJetProducer"));
@@ -95,7 +99,6 @@ void TopTreeProducer::beginJob()
     vGenJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vgenJetProducer",defaultVec);
     vPFJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vpfJetProducer",defaultVec);
     vFatJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vfatJetProducer",defaultVec);
-    vPhotonProducer = producersNames_.getUntrackedParameter<vector<string> >("vphotonProducer",defaultVec);
     vPFmetProducer = producersNames_.getUntrackedParameter<vector<string> >("vpfmetProducer",defaultVec);
 
     for(unsigned int s=0; s<vGenJetProducer.size(); s++)
@@ -718,8 +721,8 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
     {
         for(unsigned int s=0; s<vPhotonProducer.size(); s++)
         {
-            PhotonAnalyzer* myPhotonAnalyzer = new PhotonAnalyzer(producersNames_, s, myConfig_, verbosity);
-            myPhotonAnalyzer->Process(iEvent, vphotons[s], iSetup);
+            PhotonAnalyzer* myPhotonAnalyzer = new PhotonAnalyzer(myConfig_, verbosity);
+            myPhotonAnalyzer->Process(iEvent, vphotons[s], iSetup, vphotonToken_[s]);
             delete myPhotonAnalyzer;
         }
     }

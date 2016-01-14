@@ -152,7 +152,7 @@ private:
     edm::EDGetTokenT<reco::VertexCollection> vtxToken_;
     std::vector<edm::EDGetTokenT<pat::MuonCollection> > vmuonToken_;
     std::vector<edm::EDGetTokenT<pat::ElectronCollection> > velectronToken_;
-    edm::EDGetTokenT<pat::PhotonCollection> photonToken_;
+    std::vector<edm::EDGetTokenT<pat::PhotonCollection> > vphotonToken_;
     edm::EDGetTokenT<pat::JetCollection> jetToken_;
     edm::EDGetTokenT<pat::JetCollection> fatjetToken_;
     edm::EDGetTokenT<pat::METCollection> metToken_;
