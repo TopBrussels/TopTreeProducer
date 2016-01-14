@@ -28,6 +28,7 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
     vPFJetProducer = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("vpfJetProducer",defaultVec);
     vPFmetProducer = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("vpfmetProducer",defaultVec);
     vFatJetProducer = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("vfatJetProducer",defaultVec);
+    vGenJetProducer = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("vgenJetProducer",defaultVec);
 	
     for(unsigned int s=0; s<vMuonProducer.size(); s++)
     {
@@ -53,9 +54,12 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
     {
 		  vfatjetToken_.push_back(consumes<pat::JetCollection>(edm::InputTag(vFatJetProducer[s])));
     }
+    for(unsigned int s=0; s<vGenJetProducer.size(); s++)
+    {
+		  vgenjetToken_.push_back(consumes<std::vector<reco::GenJet>>(edm::InputTag(vGenJetProducer[s])));
+    }
 
     vtxToken_ = consumes<reco::VertexCollection>(producersNames_.getParameter<edm::InputTag>("primaryVertexProducer"));
-    genJetToken_ = consumes<std::vector<reco::GenJet> >(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("genJetProducer"));
     triggerToken1_ = consumes<edm::TriggerResults>(producersNames_.getParameter<edm::InputTag>("hltProducer1st"));
     triggerToken2_ = consumes<edm::TriggerResults>(producersNames_.getParameter<edm::InputTag>("hltProducer2nd"));
     triggerToken3_ = consumes<edm::TriggerResults>(producersNames_.getParameter<edm::InputTag>("hltProducer3rd"));
@@ -108,7 +112,6 @@ void TopTreeProducer::beginJob()
 
     vector<string> defaultVec;
     filters_ = myConfig_.getUntrackedParameter<std::vector<std::string> >("filters",defaultVec);
-    vGenJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vgenJetProducer",defaultVec);
 
     for(unsigned int s=0; s<vGenJetProducer.size(); s++)
     {
@@ -660,8 +663,8 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
         if(verbosity>1) cout << endl << "Analysing GenJets collection ..." << endl;
         for(unsigned int s=0; s<vGenJetProducer.size(); s++)
         {
-            GenJetAnalyzer* myGenJetAnalyzer = new GenJetAnalyzer(producersNames_, s, myConfig_, verbosity);
-            myGenJetAnalyzer->Process(iEvent, vgenJets[s]);
+            GenJetAnalyzer* myGenJetAnalyzer = new GenJetAnalyzer(vGenJetProducer[s], myConfig_, verbosity);
+            myGenJetAnalyzer->Process(iEvent, vgenJets[s], vgenjetToken_[s]);
             delete myGenJetAnalyzer;
         }
     }

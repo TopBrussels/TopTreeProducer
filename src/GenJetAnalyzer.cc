@@ -6,17 +6,16 @@ using namespace reco;
 using namespace edm;
 
 
-GenJetAnalyzer::GenJetAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
+GenJetAnalyzer::GenJetAnalyzer(std::string genJetProducerStr, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
 {
-    vGenJetProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("vgenJetProducer");
-    genJetProducer_ = edm::InputTag(vGenJetProducer[iter]);
+    genJetProducer_ = edm::InputTag(genJetProducerStr);
 }
 
 GenJetAnalyzer::~GenJetAnalyzer()
 {
 }
 
-void GenJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenJets)
+void GenJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenJets, edm::EDGetTokenT<std::vector<reco::GenJet> > genJetToken)
 {
 
     // check if the genJet is of the good type
@@ -25,11 +24,11 @@ void GenJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootGenJets
             || genJetProducer_.label()=="ak7GenJets" || genJetProducer_.label()=="ak5GenJetsNoE" || genJetProducer_.label()=="ak5GenJetsNoNu" || genJetProducer_.label()=="ak5GenJetsNoMuNoNu" || genJetProducer_.label()== "slimmedGenJets") jetType="GOOD";
 
     edm::Handle < std::vector <reco::GenJet> > recoGenJets;
-    iEvent.getByLabel(genJetProducer_, recoGenJets);
+    iEvent.getByToken(genJetToken, recoGenJets);
 
     unsigned int nJets = recoGenJets->size();
 
-    if(verbosity_>1) std::cout << "   Number of jets = " << nJets << "   Label: " << genJetProducer_.label() << "   Instance: " << genJetProducer_.instance() << std::endl;
+    if(verbosity_>1) std::cout << "   Number of jets = " << nJets << std::endl;
 
     for (unsigned int j=0; j<nJets; j++)
     {
