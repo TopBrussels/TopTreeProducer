@@ -59,7 +59,7 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
 		  vgenjetToken_.push_back(consumes<std::vector<reco::GenJet>>(edm::InputTag(vGenJetProducer[s])));
     }
 
-    vtxToken_ = consumes<reco::VertexCollection>(producersNames_.getParameter<edm::InputTag>("primaryVertexProducer"));
+    vtxToken_ = consumes<reco::VertexCollection>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("primaryVertexProducer"));
     triggerToken1_ = consumes<edm::TriggerResults>(producersNames_.getParameter<edm::InputTag>("hltProducer1st"));
     triggerToken2_ = consumes<edm::TriggerResults>(producersNames_.getParameter<edm::InputTag>("hltProducer2nd"));
     triggerToken3_ = consumes<edm::TriggerResults>(producersNames_.getParameter<edm::InputTag>("hltProducer3rd"));
