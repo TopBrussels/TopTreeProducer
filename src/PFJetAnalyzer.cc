@@ -5,10 +5,8 @@ using namespace TopTree;
 using namespace reco;
 using namespace edm;
 
-PFJetAnalyzer::PFJetAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
+PFJetAnalyzer::PFJetAnalyzer(const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
 {
-	vPFJetProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("vpfJetProducer");
-	pfJetProducer_ = edm::InputTag(vPFJetProducer[iter]);
 	myJetAnalyzer = new JetAnalyzer(myConfig, verbosity);
 }
 
@@ -17,17 +15,17 @@ PFJetAnalyzer::~PFJetAnalyzer()
 	delete myJetAnalyzer;
 }
 
-void PFJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets, const edm::EventSetup& iSetup)
+void PFJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets, const edm::EventSetup& iSetup, edm::EDGetTokenT<pat::JetCollection> jetToken)
 {
 
 	unsigned int nJets=0;
 
 	edm::Handle < std::vector <pat::Jet> > patJets;
-	iEvent.getByLabel(pfJetProducer_, patJets);
+	iEvent.getByToken(jetToken, patJets);
 	nJets = patJets->size();
 
 
-	if(verbosity_>1) std::cout << "   Number of jets = " << nJets << "   Label: " << pfJetProducer_.label() << "   Instance: " << pfJetProducer_.instance() << std::endl;
+	if(verbosity_>1) std::cout << "   Number of jets = " << nJets << std::endl;
 
 	for (unsigned int j=0; j<nJets; j++)
 	{

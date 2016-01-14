@@ -153,7 +153,7 @@ private:
     std::vector<edm::EDGetTokenT<pat::MuonCollection> > vmuonToken_;
     std::vector<edm::EDGetTokenT<pat::ElectronCollection> > velectronToken_;
     std::vector<edm::EDGetTokenT<pat::PhotonCollection> > vphotonToken_;
-    edm::EDGetTokenT<pat::JetCollection> jetToken_;
+    std::vector<edm::EDGetTokenT<pat::JetCollection> > vjetToken_;
     edm::EDGetTokenT<pat::JetCollection> fatjetToken_;
     edm::EDGetTokenT<pat::METCollection> metToken_;
     edm::EDGetTokenT<std::vector<reco::GenJet> > genJetToken_;

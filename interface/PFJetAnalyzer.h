@@ -22,15 +22,12 @@
 class PFJetAnalyzer : JetAnalyzer {
 
 public:
-	PFJetAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity);
+	PFJetAnalyzer(const edm::ParameterSet& myConfig, int verbosity);
 	~PFJetAnalyzer();
-	void Process(const edm::Event& iEvent, TClonesArray* rootPFJets, const edm::EventSetup& iSetup);
+	void Process(const edm::Event& iEvent, TClonesArray* rootPFJets, const edm::EventSetup& iSetup, edm::EDGetTokenT<pat::JetCollection> jetToken);
 
 private:
 	int verbosity_;
-	edm::InputTag pfJetProducer_;
-	edm::InputTag mcProducer_;
-	std::vector<std::string> vPFJetProducer;
 	JetAnalyzer* myJetAnalyzer; 
 };
 

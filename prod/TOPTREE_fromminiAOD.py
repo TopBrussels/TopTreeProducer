@@ -152,7 +152,6 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		pileUpProducer = cms.InputTag("addPileupInfo","","HLT"),
 		primaryVertexProducer = cms.InputTag("offlineSlimmedPrimaryVertices"),
         vgenJetProducer = cms.untracked.vstring("slimmedGenJets"),
-		vpfJetProducer = cms.untracked.vstring("slimmedJets"),
 		vfatJetProducer = cms.untracked.vstring("slimmedJetsAK8"),
 		CalometProducer = cms.untracked.vstring("patMETs"),
 		vpfmetProducer = cms.untracked.vstring("slimmedMETs"),
@@ -166,7 +165,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
     #It also allows the CMSSW compiler to optimise/speed up the code (or so the documentation says), by accessing collections that are used a lot or rarely with the consumesOften() and mayConsume() fuctions but consumes() will always work.
     #in the TopTreeProducer .py file these are all stored in the producersNames parameter set, so please add new objects there if you need them.
     producerNamesBookkeepingThreads = cms.PSet(
-        pfJetProducer = cms.untracked.InputTag("slimmedJets"),
+        vpfJetProducer = cms.untracked.vstring("slimmedJets"),
         pfmetProducer = cms.untracked.InputTag("slimmedMETs"),
         vmuonProducer = cms.untracked.vstring("slimmedMuons"),
         velectronProducer = cms.untracked.vstring("slimmedElectrons"),
