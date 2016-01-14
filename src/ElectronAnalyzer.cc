@@ -6,37 +6,33 @@ using namespace reco;
 using namespace edm;
 using namespace isodeposit;
 
-ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
+ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
 {
-  vElectronProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("velectronProducer");
-  electronProducer_ =	edm::InputTag(vElectronProducer[iter]);
   useMC_ = myConfig.getUntrackedParameter<bool>("doElectronMC");
   isData_ = myConfig.getUntrackedParameter<bool>("isData");
   runSuperCluster_ = myConfig.getUntrackedParameter<bool>("runSuperCluster",false);
-  primaryVertexProducer_ = producersNames.getParameter<edm::InputTag>("primaryVertexProducer");
   doPrimaryVertex_ = myConfig.getUntrackedParameter<bool>("doPrimaryVertex");
-  newId_ = producersNames.getUntrackedParameter<bool>("electronNewId",false);
 }
 
 ElectronAnalyzer::~ElectronAnalyzer()
 {
 }
 
-void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElectrons, const edm::EventSetup& iSetup, edm::EDGetTokenT<reco::BeamSpot> offlineBSToken)
+void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElectrons, const edm::EventSetup& iSetup, edm::EDGetTokenT<reco::BeamSpot> offlineBSToken, edm::EDGetTokenT<pat::ElectronCollection> electronToken, edm::EDGetTokenT<reco::VertexCollection> vtxToken)
 {
   unsigned int nElectrons=0;
 
   edm::Handle < std::vector <pat::Electron> > patElectrons;
-  iEvent.getByLabel(electronProducer_, patElectrons);
+  iEvent.getByToken(electronToken, patElectrons);
   nElectrons = patElectrons->size();
 
   edm::Handle< reco::VertexCollection > pvHandle;
-  iEvent.getByLabel(primaryVertexProducer_, pvHandle);
+  iEvent.getByToken(vtxToken, pvHandle);
 
   edm::Handle<reco::BeamSpot> beamSpotHandle;
   iEvent.getByToken(offlineBSToken, beamSpotHandle);
 
-  if(verbosity_>1) std::cout << "   Number of electrons = " << nElectrons << "   Label: " << electronProducer_.label() << "   Instance: " << electronProducer_.instance() << std::endl;
+  if(verbosity_>1) std::cout << "   Number of electrons = " << nElectrons << std::endl;
 
   for (unsigned int j=0; j<nElectrons; j++)
   {

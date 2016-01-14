@@ -34,19 +34,15 @@ using namespace reco;
 class ElectronAnalyzer{
 	
 public:
-	ElectronAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity);
+	ElectronAnalyzer(const edm::ParameterSet& myConfig, int verbosity);
 	~ElectronAnalyzer();
-	void Process(const edm::Event& iEvent, TClonesArray* rootElectrons, const edm::EventSetup& iSetup, edm::EDGetTokenT<reco::BeamSpot> offlineBSToken);
-    typedef std::vector< edm::Handle< edm::ValueMap<double> > > IsoDepositVals;
+	void Process(const edm::Event& iEvent, TClonesArray* rootElectrons, const edm::EventSetup& iSetup, edm::EDGetTokenT<reco::BeamSpot> offlineBSToken, edm::EDGetTokenT<pat::ElectronCollection> electronToken, edm::EDGetTokenT<reco::VertexCollection> vtxToken);
+  typedef std::vector< edm::Handle< edm::ValueMap<double> > > IsoDepositVals;
 
 private:
 	int verbosity_;
-	edm::InputTag electronProducer_;
-	std::vector<std::string> vElectronProducer;	
-	edm::InputTag primaryVertexProducer_;
 	bool useMC_;
 	bool runSuperCluster_;
-	bool newId_;
 	bool doPrimaryVertex_;
 	bool isData_;
 

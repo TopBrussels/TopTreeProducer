@@ -84,7 +84,7 @@ private:
 	virtual void beginRun(const edm::Run&, const edm::EventSetup&) ;
 	virtual void endRun(const edm::Run&, const edm::EventSetup&, const edm::ParameterSet&) ;
 	virtual void analyze(const edm::Event&, const edm::EventSetup&);
-        virtual void endLuminosityBlock(const edm::LuminosityBlock&, const EventSetup&);
+  virtual void endLuminosityBlock(const edm::LuminosityBlock&, const EventSetup&);
 	virtual void endJob() ;
 
 	edm::ParameterSet myConfig_;
@@ -95,7 +95,7 @@ private:
 	TFile* rootFile_ ;
 	TTree* eventTree_;
 	TTree* runTree_;
-        TH1F* tmp_;
+  TH1F* tmp_;
 	bool doHLT;
 	bool doMC;
 	bool doPDFInfo;
@@ -151,7 +151,7 @@ private:
     // good practice is to use these instead of getbylabel. However getbylabel is still supported...
     edm::EDGetTokenT<reco::VertexCollection> vtxToken_;
     std::vector<edm::EDGetTokenT<pat::MuonCollection> > vmuonToken_;
-    edm::EDGetTokenT<pat::ElectronCollection> electronToken_;
+    std::vector<edm::EDGetTokenT<pat::ElectronCollection> > velectronToken_;
     edm::EDGetTokenT<pat::PhotonCollection> photonToken_;
     edm::EDGetTokenT<pat::JetCollection> jetToken_;
     edm::EDGetTokenT<pat::JetCollection> fatjetToken_;
@@ -170,10 +170,10 @@ private:
     edm::EDGetTokenT<double> fixedGridRhoFastjetCentralCaloToken_;
     edm::EDGetTokenT<double> fixedGridRhoFastjetCentralChargedPileUpToken_;
     edm::EDGetTokenT<double> fixedGridRhoFastjetCentralNeutralToken_;
-	edm::EDGetTokenT<GenEventInfoProduct> genEventInfoProductToken_;
+	  edm::EDGetTokenT<GenEventInfoProduct> genEventInfoProductToken_;
     edm::EDGetTokenT<std::vector<reco::GenParticle> > genParticlesToken_;
     edm::EDGetTokenT<LHEEventProduct> lheproductToken_;
-	edm::EDGetTokenT<LHERunInfoProduct> lheRunInfoproductToken_;
+	  edm::EDGetTokenT<LHERunInfoProduct> lheRunInfoproductToken_;
     
     edm::EDGetTokenT<reco::BeamSpot> offlineBSToken_;
 

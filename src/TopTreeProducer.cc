@@ -21,16 +21,20 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
     // It also allows the CMSSW compiler to optimise/speed up the code (or so the documentation says), by accessing collections that are used a lot or rarely with the consumesOften() and mayConsume() fuctions but consumes() will always work.
     // in the TopTreeProducer .py file these are stored in either the producerNamesBookkeepingThreads parameter set or the producersNames parameter set (which contains vstrings used by the various analysers, so please add new objects there if you need them.
     
-	vector<string> defaultVec;
-	vMuonProducer = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("vmuonProducer",defaultVec);
+	  vector<string> defaultVec;
+    vMuonProducer = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("vmuonProducer",defaultVec);
+    vElectronProducer = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("velectronProducer",defaultVec);
 	
-	for(unsigned int s=0; s<vMuonProducer.size(); s++)
+    for(unsigned int s=0; s<vMuonProducer.size(); s++)
     {
-		vmuonToken_.push_back(consumes<pat::MuonCollection>(edm::InputTag(vMuonProducer[s])));
+		  vmuonToken_.push_back(consumes<pat::MuonCollection>(edm::InputTag(vMuonProducer[s])));
+    }
+    for(unsigned int s=0; s<vElectronProducer.size(); s++)
+    {
+		  velectronToken_.push_back(consumes<pat::ElectronCollection>(edm::InputTag(vElectronProducer[s])));
     }
 
     vtxToken_ = consumes<reco::VertexCollection>(producersNames_.getParameter<edm::InputTag>("primaryVertexProducer"));
-    electronToken_ = consumes<pat::ElectronCollection>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("electronProducer"));
     photonToken_ = consumes<pat::PhotonCollection>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("photonProducer"));
     jetToken_ = consumes<pat::JetCollection>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("pfJetProducer"));
     genJetToken_ = consumes<std::vector<reco::GenJet> >(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("genJetProducer"));
@@ -91,7 +95,6 @@ void TopTreeProducer::beginJob()
     vGenJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vgenJetProducer",defaultVec);
     vPFJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vpfJetProducer",defaultVec);
     vFatJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vfatJetProducer",defaultVec);
-    vElectronProducer = producersNames_.getUntrackedParameter<vector<string> >("velectronProducer",defaultVec);
     vPhotonProducer = producersNames_.getUntrackedParameter<vector<string> >("vphotonProducer",defaultVec);
     vPFmetProducer = producersNames_.getUntrackedParameter<vector<string> >("vpfmetProducer",defaultVec);
 
@@ -704,8 +707,8 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
         if(verbosity>1) cout << endl << "Analysing electrons collection..." << endl;
         for(unsigned int s=0; s<vElectronProducer.size(); s++)
         {
-            ElectronAnalyzer* myElectronAnalyzer = new ElectronAnalyzer(producersNames_, s, myConfig_, verbosity);
-            myElectronAnalyzer->Process(iEvent, velectrons[s], iSetup, offlineBSToken_);
+            ElectronAnalyzer* myElectronAnalyzer = new ElectronAnalyzer(myConfig_, verbosity);
+            myElectronAnalyzer->Process(iEvent, velectrons[s], iSetup, offlineBSToken_, velectronToken_[s], vtxToken_);
             delete myElectronAnalyzer;
         }
     }

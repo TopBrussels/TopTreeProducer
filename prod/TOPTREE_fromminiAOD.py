@@ -154,8 +154,6 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
         vgenJetProducer = cms.untracked.vstring("slimmedGenJets"),
 		vpfJetProducer = cms.untracked.vstring("slimmedJets"),
 		vfatJetProducer = cms.untracked.vstring("slimmedJetsAK8"),
-        vmuonProducer = cms.untracked.vstring("slimmedMuons"),
-        velectronProducer = cms.untracked.vstring("slimmedElectrons"),
         vphotonProducer = cms.untracked.vstring("slimmedPhotons"),
 		CalometProducer = cms.untracked.vstring("patMETs"),
 		vpfmetProducer = cms.untracked.vstring("slimmedMETs"),
@@ -172,7 +170,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
         pfJetProducer = cms.untracked.InputTag("slimmedJets"),
         pfmetProducer = cms.untracked.InputTag("slimmedMETs"),
         vmuonProducer = cms.untracked.vstring("slimmedMuons"),
-        electronProducer = cms.untracked.InputTag("slimmedElectrons"),
+        velectronProducer = cms.untracked.vstring("slimmedElectrons"),
         photonProducer = cms.untracked.InputTag("slimmedPhotons"),
         fatJetProducer = cms.untracked.InputTag("slimmedJetsAK8"),
         genJetProducer = cms.untracked.InputTag("slimmedGenJets"),
@@ -188,7 +186,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
         genEventInfoProduct = cms.untracked.InputTag("generator"),
         prunedGenParticles = cms.untracked.InputTag("prunedGenParticles"),
         lheproduct = cms.untracked.InputTag("externalLHEProducer"),
-		primaryVertexProducer = cms.untracked.InputTag("offlineSlimmedPrimaryVertices")
+		    primaryVertexProducer = cms.untracked.InputTag("offlineSlimmedPrimaryVertices")
 
 
     )
