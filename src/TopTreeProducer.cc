@@ -73,7 +73,7 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
     fixedGridRhoFastjetCentralCaloToken_ = consumes<double>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("fixedGridRhoFastjetCentralCalo"));
     fixedGridRhoFastjetCentralChargedPileUpToken_ = consumes<double>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("fixedGridRhoFastjetCentralChargedPileUp"));
     fixedGridRhoFastjetCentralNeutralToken_ = consumes<double>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("fixedGridRhoFastjetCentralNeutral"));
-	  genEventInfoProductToken_ = consumes<GenEventInfoProduct>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("genEventInfoProduct"));
+	genEventInfoProductToken_ = consumes<GenEventInfoProduct>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("genEventInfoProduct"));
     genParticlesToken_ = consumes<std::vector<reco::GenParticle> >(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("prunedGenParticles"));
     lheproductToken_  = consumes<LHEEventProduct>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("lheproduct"));
     offlineBSToken_ = consumes<reco::BeamSpot>(valuesForConsumeCommand.getParameter<edm::InputTag>("offlineBeamSpot"));
@@ -636,7 +636,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
         if(verbosity>1) cout << endl << "Analysing MC info..." << endl;
         MCAnalyzer* myMCAnalyzer = new MCAnalyzer(myConfig_,verbosity);
         if (drawMCTree) myMCAnalyzer->DrawMCTree(iEvent, iSetup, myConfig_, producersNames_);
-        if (doPDFInfo ) myMCAnalyzer->PDFInfo(iEvent, rootEvent);
+        if (doPDFInfo ) myMCAnalyzer->PDFInfo(iEvent, rootEvent, genEventInfoProductToken_);
         myMCAnalyzer->ProcessMCParticle(iEvent, mcParticles,genParticlesToken_);
         delete myMCAnalyzer;
     }

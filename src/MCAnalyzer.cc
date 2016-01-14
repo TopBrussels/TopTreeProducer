@@ -15,7 +15,6 @@ MCAnalyzer::MCAnalyzer():
     ,muonMC_etaMax_(99999.)
     ,muonMC_ptMin_(99999.)
     ,doUnstablePartsMC_(false)
-    ,signalGenerator_("noname")
 {
     
 }
@@ -35,7 +34,6 @@ MCAnalyzer::MCAnalyzer(const edm::ParameterSet& config,bool verbosity) : verbosi
     jetMC_ptMin_ = config.getParameter<double>("jetMC_ptMin");
     doMETMC_ = config.getUntrackedParameter<bool>("doMETMC", false);
     doUnstablePartsMC_ = config.getUntrackedParameter<bool>("doUnstablePartsMC", false);
-    signalGenerator_ = config.getUntrackedParameter<string>("signalGenerator","noname");
 }
 
 
@@ -57,11 +55,11 @@ void MCAnalyzer::DrawMCTree(const edm::Event& iEvent, const edm::EventSetup& iSe
 
 
 
-void MCAnalyzer::PDFInfo(const edm::Event& iEvent, TRootEvent* rootEvent)
+void MCAnalyzer::PDFInfo(const edm::Event& iEvent, TRootEvent* rootEvent, edm::EDGetTokenT<GenEventInfoProduct> genEventInfoProductToken)
 {
     if(verbosity_>1) cout << endl << "   Process PDF Infos..." << endl;
     edm::Handle<GenEventInfoProduct> genEvtInfo;
-    iEvent.getByLabel( "generator", genEvtInfo );
+    iEvent.getByToken( genEventInfoProductToken, genEvtInfo );
     typedef gen::PdfInfo PDF;
     const PDF *pdfInfo = genEvtInfo->pdf();
     if (genEvtInfo->hasPDF() && verbosity_>1) {
