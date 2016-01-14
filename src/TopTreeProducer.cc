@@ -76,7 +76,7 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
 	  genEventInfoProductToken_ = consumes<GenEventInfoProduct>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("genEventInfoProduct"));
     genParticlesToken_ = consumes<std::vector<reco::GenParticle> >(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("prunedGenParticles"));
     lheproductToken_  = consumes<LHEEventProduct>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("lheproduct"));
-    offlineBSToken_ = consumes<reco::BeamSpot>(producersNames_.getParameter<edm::InputTag>("offlineBeamSpot"));
+    offlineBSToken_ = consumes<reco::BeamSpot>(valuesForConsumeCommand.getParameter<edm::InputTag>("offlineBeamSpot"));
     
 }
 

@@ -153,7 +153,6 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		CalometProducer = cms.untracked.vstring("patMETs"),
 		TCmetProducer = cms.untracked.InputTag("patMETsTC"),
 		genEventProducer = cms.untracked.InputTag("genEvt"),
-		offlineBeamSpot = cms.InputTag("offlineBeamSpot"),
     ),
                                   
     #new for CMSSW76X and higher: all classes that are read from the event need to be registered in the constructor!
@@ -180,7 +179,8 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
         genEventInfoProduct = cms.untracked.InputTag("generator"),
         prunedGenParticles = cms.untracked.InputTag("prunedGenParticles"),
         lheproduct = cms.untracked.InputTag("externalLHEProducer"),
-		    primaryVertexProducer = cms.untracked.InputTag("offlineSlimmedPrimaryVertices")
+		    primaryVertexProducer = cms.untracked.InputTag("offlineSlimmedPrimaryVertices"),
+		    offlineBeamSpot = cms.InputTag("offlineBeamSpot")
 
 
     )
