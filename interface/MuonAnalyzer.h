@@ -32,7 +32,7 @@ class MuonAnalyzer
 public:
 	MuonAnalyzer(const edm::ParameterSet& myConfig, int verbosity);
 	~MuonAnalyzer();
-	void Process(const edm::Event& iEvent, TClonesArray* rootMuons, edm::EDGetTokenT<reco::BeamSpot> offlineBSToken,edm::EDGetTokenT<pat::MuonCollection> muonToken, edm::EDGetTokenT<reco::VertexCollection> vtxToken);
+	void Process(const edm::Event& iEvent, TClonesArray* rootMuons, edm::EDGetTokenT<reco::BeamSpot> offlineBSToken, edm::EDGetTokenT<pat::MuonCollection> muonToken, edm::EDGetTokenT<reco::VertexCollection> vtxToken);
 
 private:
 	int verbosity_;

@@ -27,6 +27,7 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
     vPhotonProducer = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("vphotonProducer",defaultVec);
     vPFJetProducer = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("vpfJetProducer",defaultVec);
     vPFmetProducer = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("vpfmetProducer",defaultVec);
+    vFatJetProducer = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("vfatJetProducer",defaultVec);
 	
     for(unsigned int s=0; s<vMuonProducer.size(); s++)
     {
@@ -48,10 +49,13 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
     {
 		  vmetToken_.push_back(consumes<pat::METCollection>(edm::InputTag(vPFmetProducer[s])));
     }
+    for(unsigned int s=0; s<vFatJetProducer.size(); s++)
+    {
+		  vfatjetToken_.push_back(consumes<pat::JetCollection>(edm::InputTag(vFatJetProducer[s])));
+    }
 
     vtxToken_ = consumes<reco::VertexCollection>(producersNames_.getParameter<edm::InputTag>("primaryVertexProducer"));
     genJetToken_ = consumes<std::vector<reco::GenJet> >(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("genJetProducer"));
-    fatjetToken_ = consumes<pat::JetCollection>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("fatJetProducer"));
     triggerToken1_ = consumes<edm::TriggerResults>(producersNames_.getParameter<edm::InputTag>("hltProducer1st"));
     triggerToken2_ = consumes<edm::TriggerResults>(producersNames_.getParameter<edm::InputTag>("hltProducer2nd"));
     triggerToken3_ = consumes<edm::TriggerResults>(producersNames_.getParameter<edm::InputTag>("hltProducer3rd"));
@@ -65,7 +69,7 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
     fixedGridRhoFastjetCentralCaloToken_ = consumes<double>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("fixedGridRhoFastjetCentralCalo"));
     fixedGridRhoFastjetCentralChargedPileUpToken_ = consumes<double>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("fixedGridRhoFastjetCentralChargedPileUp"));
     fixedGridRhoFastjetCentralNeutralToken_ = consumes<double>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("fixedGridRhoFastjetCentralNeutral"));
-	genEventInfoProductToken_ = consumes<GenEventInfoProduct>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("genEventInfoProduct"));
+	  genEventInfoProductToken_ = consumes<GenEventInfoProduct>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("genEventInfoProduct"));
     genParticlesToken_ = consumes<std::vector<reco::GenParticle> >(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("prunedGenParticles"));
     lheproductToken_  = consumes<LHEEventProduct>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("lheproduct"));
     offlineBSToken_ = consumes<reco::BeamSpot>(producersNames_.getParameter<edm::InputTag>("offlineBeamSpot"));
@@ -105,7 +109,6 @@ void TopTreeProducer::beginJob()
     vector<string> defaultVec;
     filters_ = myConfig_.getUntrackedParameter<std::vector<std::string> >("filters",defaultVec);
     vGenJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vgenJetProducer",defaultVec);
-    vFatJetProducer = producersNames_.getUntrackedParameter<vector<string> >("vfatJetProducer",defaultVec);
 
     for(unsigned int s=0; s<vGenJetProducer.size(); s++)
     {
@@ -681,8 +684,8 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
         if(verbosity>1) cout << endl << "Analysing Fatjets collection..." << endl;
         for(unsigned int s=0; s<vFatJetProducer.size(); s++)
         {
-            FatJetAnalyzer* myFatJetAnalyzer = new FatJetAnalyzer(producersNames_, s,  myConfig_, verbosity);
-            myFatJetAnalyzer->Process(iEvent, vfatJets[s], iSetup);
+            FatJetAnalyzer* myFatJetAnalyzer = new FatJetAnalyzer(myConfig_, verbosity);
+            myFatJetAnalyzer->Process(iEvent, vfatJets[s], iSetup, vfatjetToken_[s]);
             delete myFatJetAnalyzer;
         }
     }
