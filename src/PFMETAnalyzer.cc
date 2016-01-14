@@ -5,27 +5,25 @@ using namespace TopTree;
 using namespace reco;
 using namespace edm;
 
-PFMETAnalyzer::PFMETAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
+PFMETAnalyzer::PFMETAnalyzer(const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
 {
-	vPFmetProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("vpfmetProducer");
-	metProducer_ = edm::InputTag(vPFmetProducer[iter]);
-	myMETAnalyzer = new METAnalyzer(producersNames, myConfig, verbosity);
+	myMETAnalyzer = new METAnalyzer(myConfig, verbosity);
 }
 
 PFMETAnalyzer::~PFMETAnalyzer()
 {
 }
 
-void PFMETAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootMET)
+void PFMETAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootMET, edm::EDGetTokenT<pat::METCollection> metToken)
 {
 
 	unsigned int nMETs=0;
 
 	edm::Handle < std::vector <pat::MET> > patMETs;
-	iEvent.getByLabel(metProducer_, patMETs);
+	iEvent.getByToken(metToken, patMETs);
 	nMETs = patMETs->size();
 
-	if(verbosity_>1) std::cout << "   Number of MET objects = " << nMETs << "   Label: " << metProducer_.label() << "   Instance: " << metProducer_.instance() << std::endl;
+	if(verbosity_>1) std::cout << "   Number of MET objects = " << nMETs << std::endl;
 
 	for (unsigned int j=0; j<nMETs; j++)
 	{

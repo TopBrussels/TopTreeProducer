@@ -166,7 +166,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
     #in the TopTreeProducer .py file these are all stored in the producersNames parameter set, so please add new objects there if you need them.
     producerNamesBookkeepingThreads = cms.PSet(
         vpfJetProducer = cms.untracked.vstring("slimmedJets"),
-        pfmetProducer = cms.untracked.InputTag("slimmedMETs"),
+        vpfmetProducer = cms.untracked.vstring("slimmedMETs"),
         vmuonProducer = cms.untracked.vstring("slimmedMuons"),
         velectronProducer = cms.untracked.vstring("slimmedElectrons"),
         vphotonProducer = cms.untracked.vstring("slimmedPhotons"),#PhotonAnalyzer still has some getByLabels... (Kevin 14/01/2015)

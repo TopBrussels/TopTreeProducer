@@ -24,15 +24,13 @@
 class PFMETAnalyzer{
 	
 public:
-	PFMETAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity);
+	PFMETAnalyzer(const edm::ParameterSet& myConfig, int verbosity);
 	~PFMETAnalyzer();
-	void Process(const edm::Event& iEvent, TClonesArray* rootMET);
+	void Process(const edm::Event& iEvent, TClonesArray* rootMET, edm::EDGetTokenT<pat::METCollection> metToken);
 
 private:
 	int verbosity_;
-	edm::InputTag metProducer_;
 	bool useMC_;
-    std::vector<std::string> vPFmetProducer;
 	METAnalyzer* myMETAnalyzer;
 };
 

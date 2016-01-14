@@ -155,7 +155,7 @@ private:
     std::vector<edm::EDGetTokenT<pat::PhotonCollection> > vphotonToken_;
     std::vector<edm::EDGetTokenT<pat::JetCollection> > vjetToken_;
     edm::EDGetTokenT<pat::JetCollection> fatjetToken_;
-    edm::EDGetTokenT<pat::METCollection> metToken_;
+    std::vector<edm::EDGetTokenT<pat::METCollection> > vmetToken_;
     edm::EDGetTokenT<std::vector<reco::GenJet> > genJetToken_;
     edm::EDGetTokenT<edm::TriggerResults> triggerToken1_;
     edm::EDGetTokenT<edm::TriggerResults> triggerToken2_;
