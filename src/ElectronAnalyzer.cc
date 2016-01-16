@@ -131,7 +131,7 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
     if ( gsfTrack.isNonnull() )
     {
       localElectron.setGsfTrackNormalizedChi2(gsfTrack->normalizedChi2());
-      localElectron.setTrackMissingHits(gsfTrack->numberOfLostHits());
+      localElectron.setTrackMissingHits(gsfTrack->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS));
       localElectron.setGsfTrackChi2(gsfTrack->chi2());
       localElectron.setGsfTrackNdof(gsfTrack->ndof());
 
@@ -183,11 +183,18 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 	    localElectron.setSuperClusterRawEnergy(superCluster->rawEnergy());
 	    localElectron.setSuperClusterEta(superCluster->eta());
 	    localElectron.setPreshowerEnergy(superCluster->preshowerEnergy());
-      localElectron.setIoEmIoP( (1./superCluster->energy()) - (1./electron->p()) );
       if ( gsfTrack.isNonnull() ) localElectron.setIoEmIoPgsf( (1./superCluster->energy()) - (1./gsfTrack->p()) );
       localElectron.setEtaWidth( superCluster->etaWidth() );
       localElectron.setPhiWidth( superCluster->phiWidth() );
 	  }
+
+      if( patElectron->ecalEnergy() > 0.0)  //electron cut based ID variable
+      {
+          float elESCP = patElectron->eSuperClusterOverP();
+          float elinv_ecal_e = 1.0/(patElectron->ecalEnergy());
+          float elIoEmIoP = abs(1.0 - elESCP)*elinv_ecal_e;
+          localElectron.setIoEmIoP(elIoEmIoP);
+      }
 
     //Isolation
     //  localElectron.setIsoR03_hcalIso(electron->dr03HcalTowerSumEt());
