@@ -29,17 +29,26 @@ while IFS=" "  read samplename version globaltag jsonfile ; do
     totalworkname=$samplename"--"$version"--"$globaltag
     worknamerequest=$cleanedsamplename"-"$version"-"$globaltag
     cleanedtotalworkname=`echo $totalworkname | sed -e s%"/"%"-"%g -e s%"::"%"-"%g `
-    cleanedrequestname=`echo $worknamerequest | sed -e s%"/"%"-"%g -e s%"::All"%""%g `
+    cleanedrequestname=`echo $worknamerequest | sed -e s%"/"%"-"%g -e s%"::All"%""%g -e s%"MINIAODSIM"%""%g -e s%"MINIAOD"%""%g -e s%"RunII"%""%g -e s%"DisplacedSUSY_StopToBL_"%""%g -e s%"ST_"%""%g -e s%"MiniAODv2"%""%g -e s%"QCD_"%""%g`
     dummyname=`echo $cleanedrequestname | sed -e s%"--"%"-"%g `
     cleanedrequestname=$dummyname
     reqlength=${#cleanedrequestname}
 
     # the following code strips the start of the requestname if it is longer than 140 characters. There is a maximum size of request names so this is done to protect against strings that are too long
-    if [ $reqlength -ge 140 ]; then
-	echo "!!!!!!!!!!!!!! requestname larger than 140: "  $reqlength " "$cleanedrequestname " so shortening by stripping start of name as already present in directory structure! "
-	dummyname=${cleanedrequestname:$reclength-140}
+    if [ $reqlength -ge 100 ]; then
+	dummyname=`echo $cleanedrequestname | sed -e s%"-"%""%g `
 	cleanedrequestname=$dummyname
-	echo "!!!!!!!!!!!!!! new name: "$cleanedrequestname
+	dummyname=`echo $cleanedrequestname | sed -e s%"_"%""%g `
+        cleanedrequestname=$dummyname
+	
+	reqlength=${#cleanedrequestname}
+	
+	echo "!!!!!!!!!!!!!! requestname larger than 100: "  $reqlength " "$cleanedrequestname " so shortening by stripping start of name as already present in directory structure! "
+	if [ $reqlength -ge 100 ]; then
+	    dummyname=${cleanedrequestname:$reclength-100}
+	    cleanedrequestname=$dummyname
+	    echo "!!!!!!!!!!!!!! new name: "$cleanedrequestname
+	fi
     fi
 
 #    echo $cleanedtotalworkname " ---- " $cleanedrequestname
