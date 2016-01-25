@@ -582,32 +582,32 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
     //fastjet density rho
     //commenting out this rho for 7_0_X as it seems to be missing from miniAOD
     edm::Handle<double> rhoAll;
-    iEvent.getByLabel("fixedGridRhoAll",rhoAll);
+    iEvent.getByToken(fixedGridRhoAllToken_,rhoAll);
     rootEvent->setfixedGridRhoAll(*rhoAll);
 
     edm::Handle<double> rhoFSAll;
-    iEvent.getByLabel("fixedGridRhoFastjetAll",rhoFSAll);
+    iEvent.getByToken(fixedGridRhoFastjetAllToken_,rhoFSAll);
     rootEvent->setfixedGridRhoFastjetAll(*rhoFSAll);
 
     edm::Handle<double> rhoFSAC;
-    iEvent.getByLabel("fixedGridRhoFastjetAllCalo",rhoFSAC);
+    iEvent.getByToken(fixedGridRhoFastjetAllCaloToken_,rhoFSAC);
     rootEvent->setfixedGridRhoFastjetAllCalo(*rhoFSAC);
 
     edm::Handle<double> rhoFJCC;
-    iEvent.getByLabel("fixedGridRhoFastjetCentralCalo",rhoFJCC);
+    iEvent.getByToken(fixedGridRhoFastjetCentralCaloToken_,rhoFJCC);
     rootEvent->setfixedGridRhoFastjetCentralCalo(*rhoFJCC);
 
     edm::Handle<double> rhoFJCCPU;
-    iEvent.getByLabel("fixedGridRhoFastjetCentralChargedPileUp",rhoFJCCPU);
+    iEvent.getByToken(fixedGridRhoFastjetCentralChargedPileUpToken_,rhoFJCCPU);
     rootEvent->setfixedGridRhoFastjetCentralChargedPileUp(*rhoFJCCPU);
 
     edm::Handle<double> rhoFJCN;
-    iEvent.getByLabel("fixedGridRhoFastjetCentralNeutral",rhoFJCN);
+    iEvent.getByToken(fixedGridRhoFastjetCentralNeutralToken_,rhoFJCN);
     rootEvent->setfixedGridRhoFastjetCentralNeutral(*rhoFJCN);
 
     //density rho for electron isolation (effective area stuff)
 //    edm::Handle<double> rhoIso;
-//    iEvent.getByLabel("fixedGridRhoFastjetAll",rhoIso);
+//    iEvent.getByToken(fixedGridRhoFastjetAllToken_,rhoIso);
 //    rootEvent->setKt6PFJetsForIsolation_rho(*rhoIso);
 
     if(!isRealData_)
