@@ -14,7 +14,7 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
 {
     myConfig_ = iConfig.getParameter<ParameterSet>("myConfig");
     producersNames_ = iConfig.getParameter<ParameterSet>("producersNames");
-    edm::ParameterSet valuesForConsumeCommand = iConfig.getParameter<ParameterSet>("producerNamesBookkeepingThreads");
+    valuesForConsumeCommand = iConfig.getParameter<ParameterSet>("producerNamesBookkeepingThreads");
     
     // new for CMSSW76X and higher: all classes that are read from the event need to be registered in the constructor!
     // supposedly this is necessary in the case that the code is run on machines that use multi-threading.
@@ -60,10 +60,10 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
     }
 
     vtxToken_ = consumes<reco::VertexCollection>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("primaryVertexProducer"));
-    triggerToken1_ = consumes<edm::TriggerResults>(producersNames_.getParameter<edm::InputTag>("hltProducer1st"));
-    triggerToken2_ = consumes<edm::TriggerResults>(producersNames_.getParameter<edm::InputTag>("hltProducer2nd"));
-    triggerToken3_ = consumes<edm::TriggerResults>(producersNames_.getParameter<edm::InputTag>("hltProducer3rd"));
-    triggerToken4_ = consumes<edm::TriggerResults>(producersNames_.getParameter<edm::InputTag>("hltProducer4th"));
+    triggerToken1_ = consumes<edm::TriggerResults>(valuesForConsumeCommand.getParameter<edm::InputTag>("hltProducer1st"));
+    triggerToken2_ = consumes<edm::TriggerResults>(valuesForConsumeCommand.getParameter<edm::InputTag>("hltProducer2nd"));
+    triggerToken3_ = consumes<edm::TriggerResults>(valuesForConsumeCommand.getParameter<edm::InputTag>("hltProducer3rd"));
+    triggerToken4_ = consumes<edm::TriggerResults>(valuesForConsumeCommand.getParameter<edm::InputTag>("hltProducer4th"));
     pileUpProducerToken_ = consumes<std::vector< PileupSummaryInfo > >(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("pileUpProducer"));
     metfilterToken_ = consumes<edm::TriggerResults>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("metfilterProducer"));
     hcalNoiseSummaryToken_ = consumes<HcalNoiseSummary>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("summaryHBHENoise"));
@@ -179,8 +179,7 @@ void TopTreeProducer::beginJob()
     if(doHLT)
     {
         if(verbosity>0) cout << "HLT info will be added to rootuple" << endl;
-        hltAnalyzer_ = new HLTAnalyzer(producersNames_, myConfig_);
-        hltAnalyzer_->setVerbosity(verbosity);
+        hltAnalyzer_ = new HLTAnalyzer(triggerToken1_, triggerToken2_, triggerToken3_, triggerToken4_, myConfig_, verbosity);
     }
 
 
@@ -626,8 +625,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
     if(doHLT)
     {
         if(verbosity>1) std::cout << endl << "Get TriggerResults..." << std::endl;
-        //if (nTotEvt_==1) hltAnalyzer_->init(iEvent, rootEvent);
-        hltAnalyzer_->process(iEvent, rootEvent);
+        hltAnalyzer_->process(iEvent, rootEvent, valuesForConsumeCommand);
     }
 
     // MC Info

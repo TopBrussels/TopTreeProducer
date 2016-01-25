@@ -179,8 +179,12 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
         genEventInfoProduct = cms.untracked.InputTag("generator"),
         prunedGenParticles = cms.untracked.InputTag("prunedGenParticles"),
         lheproduct = cms.untracked.InputTag("externalLHEProducer"),
-		    primaryVertexProducer = cms.untracked.InputTag("offlineSlimmedPrimaryVertices"),
-		    offlineBeamSpot = cms.InputTag("offlineBeamSpot")
+		primaryVertexProducer = cms.untracked.InputTag("offlineSlimmedPrimaryVertices"),
+		offlineBeamSpot = cms.InputTag("offlineBeamSpot"),
+		hltProducer1st = cms.InputTag("TriggerResults","","HLT"),
+		hltProducer2nd = cms.InputTag("TriggerResults","","RECO"),
+		hltProducer3rd = cms.InputTag("TriggerResults","","MINIAOD"),
+		hltProducer4th = cms.InputTag("TriggerResults","","PAT")
 
 
     )

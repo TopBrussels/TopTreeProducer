@@ -89,6 +89,7 @@ private:
 
 	edm::ParameterSet myConfig_;
 	edm::ParameterSet producersNames_;
+	edm::ParameterSet valuesForConsumeCommand;
 
 	int verbosity;
 	std::string rootFileName_ ;
