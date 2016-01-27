@@ -48,6 +48,8 @@ namespace TopTree
 			,btag_combinedCSVSLBJetTags_(-9999.)
 			,btag_softPFElectronRetrainedBJetsTags_(-9999.)
 			,btag_softPFMuonRetrainedBJetsTags_(-9999.)
+			,ctag_pfCombinedCvsLJetTags_(-9999.)
+			,ctag_pfCombinedCvsBJetTags_(-9999.)
 			,partonFlavour_(-999)
 			,isTopJet_(false)
                         ,puID_(-9999.)
@@ -79,6 +81,8 @@ namespace TopTree
 			,btag_combinedCSVSLBJetTags_(jet.btag_combinedCSVSLBJetTags_)
 			,btag_softPFElectronRetrainedBJetsTags_(jet.btag_softPFElectronRetrainedBJetsTags_)
 			,btag_softPFMuonRetrainedBJetsTags_(jet.btag_softPFMuonRetrainedBJetsTags_)
+			,ctag_pfCombinedCvsLJetTags_(jet.ctag_pfCombinedCvsLJetTags_)
+			,ctag_pfCombinedCvsBJetTags_(jet.ctag_pfCombinedCvsBJetTags_)
 			,partonFlavour_(jet.partonFlavour_)
 			,isTopJet_(jet.isTopJet_)
                         ,puID_(-9999.)
@@ -129,6 +133,8 @@ namespace TopTree
 			,btag_combinedCSVSLBJetTags_(-9999.)
 			,btag_softPFElectronRetrainedBJetsTags_(-9999.)
 			,btag_softPFMuonRetrainedBJetsTags_(-9999.)
+			,ctag_pfCombinedCvsLJetTags_(-9999.)
+			,ctag_pfCombinedCvsBJetTags_(-9999.)
 			,partonFlavour_(-9999)
 			,isTopJet_(false)
                         ,puID_(-9999.)
@@ -160,6 +166,8 @@ namespace TopTree
 			,btag_combinedCSVSLBJetTags_(-9999.)
 			,btag_softPFElectronRetrainedBJetsTags_(-9999.)
 			,btag_softPFMuonRetrainedBJetsTags_(-9999.)
+			,ctag_pfCombinedCvsLJetTags_(-9999.)
+			,ctag_pfCombinedCvsBJetTags_(-9999.)
 			,partonFlavour_(-9999)
 			,isTopJet_(false)
                         ,puID_(-9999.)
@@ -191,6 +199,8 @@ namespace TopTree
 			,btag_combinedCSVSLBJetTags_(-9999.)
 			,btag_softPFElectronRetrainedBJetsTags_(-9999.)
 			,btag_softPFMuonRetrainedBJetsTags_(-9999.)
+			,ctag_pfCombinedCvsLJetTags_(-9999.)
+			,ctag_pfCombinedCvsBJetTags_(-9999.)
 			,partonFlavour_(-9999)
 			,isTopJet_(false)
                         ,puID_(-9999.)
@@ -222,6 +232,8 @@ namespace TopTree
 			,btag_combinedCSVSLBJetTags_(-9999.)
 			,btag_softPFElectronRetrainedBJetsTags_(-9999.)
 			,btag_softPFMuonRetrainedBJetsTags_(-9999.)
+			,ctag_pfCombinedCvsLJetTags_(-9999.)
+			,ctag_pfCombinedCvsBJetTags_(-9999.)
 			,partonFlavour_(-9999)
 			,isTopJet_(false)
                         ,puID_(-9999.)
@@ -253,6 +265,8 @@ namespace TopTree
 			,btag_combinedCSVSLBJetTags_(-9999.)
 			,btag_softPFElectronRetrainedBJetsTags_(-9999.)
 			,btag_softPFMuonRetrainedBJetsTags_(-9999.)
+			,ctag_pfCombinedCvsLJetTags_(-9999.)
+			,ctag_pfCombinedCvsBJetTags_(-9999.)
 			,partonFlavour_(-9999)
 			,isTopJet_(false)
                         ,puID_(-9999.)
@@ -283,8 +297,10 @@ namespace TopTree
 		Float_t	btag_combinedCSVJPSLBJetTags() const { return btag_combinedCSVJPSLBJetTags_; }
 		Float_t	btag_combinedCSVSLBJetTags() const { return btag_combinedCSVSLBJetTags_; }
 		Float_t	btag_softPFElectronRetrainedBJetsTags() const { return btag_softPFElectronRetrainedBJetsTags_; }
-                Float_t	btag_softPFMuonRetrainedBJetsTags() const { return btag_softPFMuonRetrainedBJetsTags_; }
-                Float_t	puID() const { return puID_; }
+        Float_t	btag_softPFMuonRetrainedBJetsTags() const { return btag_softPFMuonRetrainedBJetsTags_; }
+		Float_t ctag_pfCombinedCvsLJetTags() const { return ctag_pfCombinedCvsLJetTags_; }
+		Float_t ctag_pfCombinedCvsBJetTags() const { return ctag_pfCombinedCvsBJetTags_; }
+        Float_t	puID() const { return puID_; }
 
 		std::map<std::string, float> getMistag_SF() const {
 			std::cout << mistag_SF_.size() << endl;
@@ -350,7 +366,8 @@ namespace TopTree
     void setBtag_combinedCSVSLBJetTags(Float_t btag_combinedCSVSLBJetTags) { btag_combinedCSVSLBJetTags_ = btag_combinedCSVSLBJetTags; }
     void setBtag_softPFElectronRetrainedBJetsTags(Float_t btag_softPFElectronRetrainedBJetsTags) { btag_softPFElectronRetrainedBJetsTags_ = btag_softPFElectronRetrainedBJetsTags; }
     void setBtag_softPFMuonRetrainedBJetsTags(Float_t btag_softPFMuonRetrainedBJetsTags) { btag_softPFMuonRetrainedBJetsTags_ = btag_softPFMuonRetrainedBJetsTags; }
-
+    void setCtag_pfCombinedCvsLJetTags(Float_t ctag_pfCombinedCvsLJetTags){ ctag_pfCombinedCvsLJetTags_ = ctag_pfCombinedCvsLJetTags; }
+	void setCtag_pfCombinedCvsBJetTags(Float_t ctag_pfCombinedCvsBJetTags){ ctag_pfCombinedCvsBJetTags_ = ctag_pfCombinedCvsBJetTags; }
 
 		void setPartonFlavour(Int_t partonFlavour) { partonFlavour_ = partonFlavour; }
 		void setIsTopJet(Bool_t isTopJet) { isTopJet_ = isTopJet; }
@@ -426,6 +443,8 @@ namespace TopTree
 		Float_t btag_combinedCSVSLBJetTags_;
 		Float_t btag_softPFElectronRetrainedBJetsTags_;
 		Float_t btag_softPFMuonRetrainedBJetsTags_;
+		Float_t ctag_pfCombinedCvsLJetTags_;
+		Float_t ctag_pfCombinedCvsBJetTags_;
 
 
 		//btag scalefactors

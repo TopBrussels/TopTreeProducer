@@ -66,6 +66,8 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet, const edm::EventSetup& iSetu
 	localJet.setBtag_combinedCSVSLBJetTags(patJet->bDiscriminator("combinedCSVSLBJetTags"));
 	localJet.setBtag_softPFElectronRetrainedBJetsTags(patJet->bDiscriminator("softPFElectronBJetTags"));
 	localJet.setBtag_softPFMuonRetrainedBJetsTags(patJet->bDiscriminator("softPFMuonBJetTags"));
+	localJet.setCtag_pfCombinedCvsLJetTags(patJet->bDiscriminator("pfCombinedCvsLJetTags"));
+	localJet.setCtag_pfCombinedCvsBJetTags(patJet->bDiscriminator("pfCombinedCvsBJetTags"));
 	localJet.setpuID(-9999);
     //localJet.setpuID(patJet->userFloat("pileupJetId:fullDiscriminant")); 
 	// in 76X the FatJets don't have the 'fullDiscriminator' --> setpuID is initialized in
