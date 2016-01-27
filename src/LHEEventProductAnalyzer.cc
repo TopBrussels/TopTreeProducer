@@ -7,27 +7,8 @@ using namespace TopTree;
 
 typedef gen::WeightsInfo WGT;
 
-LHEEventProductAnalyzer::LHEEventProductAnalyzer(const edm::ParameterSet& producersNames):
-verbosity_(0), lheEventProductProducer_(producersNames.getParameter<edm::InputTag>("lheEventProductProducer"))
-{
-}
-
-LHEEventProductAnalyzer::LHEEventProductAnalyzer(const edm::ParameterSet& producersNames, int verbosity):
-verbosity_(verbosity),
-lheEventProductProducer_(producersNames.getParameter <edm::InputTag>("lheEventProductProducer"))
-{
-}
-
-LHEEventProductAnalyzer::LHEEventProductAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity):
-verbosity_(verbosity),
-lheEventProductProducer_(producersNames.getParameter <edm::InputTag>("lheEventProductProducer"))
-{
-}
-
-LHEEventProductAnalyzer::LHEEventProductAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity):
-verbosity_(verbosity),
-lheEventProductProducer_(edm::InputTag(vLHEEventProductProducer[iter])),
-vLHEEventProductProducer(producersNames.getUntrackedParameter <std::vector<std::string> >("vlheEventProductProducer"))
+LHEEventProductAnalyzer::LHEEventProductAnalyzer(int verbosity):
+verbosity_(verbosity)
 {
 }
 
@@ -38,7 +19,7 @@ LHEEventProductAnalyzer::~LHEEventProductAnalyzer()
 
 
 
-void LHEEventProductAnalyzer::Process(const edm::Event& iEvent, TRootEvent* rootEvent)
+void LHEEventProductAnalyzer::Process(const edm::Event& iEvent, TRootEvent* rootEvent,edm::EDGetTokenT<LHEEventProduct> lheproductToken)
 {
 
 
@@ -46,7 +27,7 @@ void LHEEventProductAnalyzer::Process(const edm::Event& iEvent, TRootEvent* root
 
 	edm::Handle<LHEEventProduct> lheEventProduct;
 
-	if(    iEvent.getByLabel( lheEventProductProducer_ ,lheEventProduct ) ){
+	if(    iEvent.getByToken( lheproductToken ,lheEventProduct ) ){
 
 		if(verbosity_ > 2) cout << "Analysing LHEEventProduct, collection present "<<endl;
 
@@ -70,12 +51,12 @@ void LHEEventProductAnalyzer::Process(const edm::Event& iEvent, TRootEvent* root
 	}
 }
 
- void LHEEventProductAnalyzer::PrintWeightNamesList(const edm::Run& iRun) //To know which integer XXX corresponds to which weight
+ void LHEEventProductAnalyzer::PrintWeightNamesList(const edm::Run& iRun,edm::EDGetTokenT<LHERunInfoProduct> lheRunInfoproductToken) //To know which integer XXX corresponds to which weight
  {
  	edm::Handle<LHERunInfoProduct> run;
  	typedef std::vector<LHERunInfoProduct::Header>::const_iterator headers_const_iterator;
 
- 	if(iRun.getByLabel( "externalLHEProducer", run )){
+ 	if(iRun.getByToken( lheRunInfoproductToken, run )){
  	LHERunInfoProduct myLHERunInfoProduct = *(run.product());
 
  	for (headers_const_iterator iter=myLHERunInfoProduct.headers_begin(); iter!=myLHERunInfoProduct.headers_end(); iter++){
@@ -88,7 +69,7 @@ void LHEEventProductAnalyzer::Process(const edm::Event& iEvent, TRootEvent* root
  	}
  }
 
- void LHEEventProductAnalyzer::CopyWeightNames(const edm::Run& iRun, TRootRun* runInfos)
+ void LHEEventProductAnalyzer::CopyWeightNames(const edm::Run& iRun, TRootRun* runInfos,edm::EDGetTokenT<LHERunInfoProduct> lheRunInfoproductToken)
  {
      edm::Handle<LHERunInfoProduct> run;
  	typedef std::vector<LHERunInfoProduct::Header>::const_iterator headers_const_iterator;
@@ -103,7 +84,7 @@ void LHEEventProductAnalyzer::Process(const edm::Event& iEvent, TRootEvent* root
 
  	bool openGroup = false;
 
- 	if(iRun.getByLabel( "externalLHEProducer", run )){
+ 	if(iRun.getByToken( lheRunInfoproductToken, run )){
  	LHERunInfoProduct myLHERunInfoProduct = *(run.product());
  	if (verbosity_ > 1) cout << "LHEEventRunInfoProduct retreived." << endl;
 

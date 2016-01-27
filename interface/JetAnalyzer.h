@@ -26,10 +26,8 @@ class JetAnalyzer {
 	
 public:
 	JetAnalyzer();
-	JetAnalyzer(int verbosity);
 	JetAnalyzer(const edm::ParameterSet& myConfig, int verbosity);
 	~JetAnalyzer();
-	void SetVerbosity(int verbosity) {verbosity_ = verbosity; };
 	TRootJet Process(const reco::Jet* jet, const edm::EventSetup& iSetup);
 
 private:

@@ -6,11 +6,11 @@ using namespace TopTree;
 using namespace reco;
 using namespace edm;
 
-METAnalyzer::METAnalyzer(const edm::ParameterSet& producersNames):verbosity_(0), useMC_(false)
+METAnalyzer::METAnalyzer():verbosity_(0), useMC_(false)
 {
 }
 
-METAnalyzer::METAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
+METAnalyzer::METAnalyzer(const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
 {
 	useMC_ = myConfig.getUntrackedParameter<bool>("doMETMC");
 }

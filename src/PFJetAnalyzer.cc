@@ -5,63 +5,32 @@ using namespace TopTree;
 using namespace reco;
 using namespace edm;
 
-PFJetAnalyzer::PFJetAnalyzer(const edm::ParameterSet& producersNames):verbosity_(0)
+PFJetAnalyzer::PFJetAnalyzer(const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
 {
-	pfJetProducer_ = producersNames.getParameter<edm::InputTag>("pfJetProducer");
-	myJetAnalyzer = new JetAnalyzer();
-}
-
-PFJetAnalyzer::PFJetAnalyzer(const edm::ParameterSet& producersNames, int verbosity):verbosity_(verbosity)
-{
-	pfJetProducer_ = producersNames.getParameter<edm::InputTag>("pfJetProducer");
-	myJetAnalyzer = new JetAnalyzer(verbosity);
-}
-
-PFJetAnalyzer::PFJetAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
-{
-	pfJetProducer_ = producersNames.getParameter<edm::InputTag>("pfJetProducer");
-	myJetAnalyzer = new JetAnalyzer(myConfig, verbosity);
-}
-
-PFJetAnalyzer::PFJetAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity):verbosity_(verbosity)
-{
-	vPFJetProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("vpfJetProducer");
-	pfJetProducer_ = edm::InputTag(vPFJetProducer[iter]);
 	myJetAnalyzer = new JetAnalyzer(myConfig, verbosity);
 }
 
 PFJetAnalyzer::~PFJetAnalyzer()
 {
+	delete myJetAnalyzer;
 }
 
-void PFJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets, const edm::EventSetup& iSetup)
+void PFJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets, const edm::EventSetup& iSetup, edm::EDGetTokenT<pat::JetCollection> jetToken)
 {
 
 	unsigned int nJets=0;
 
-	// check if the jet is of the good type
-	std::string jetType = "BASIC";
-	if( pfJetProducer_.label()=="kt4PFJets"
-		|| pfJetProducer_.label()=="kt6PFJets"
-		|| pfJetProducer_.label()=="iterativeCone5PFJets"
-		|| pfJetProducer_.label()=="sisCone5PFJets"
-		|| pfJetProducer_.label()=="sisCone7PFJets"
-		|| pfJetProducer_.label()=="ak5PFJets"
-		|| pfJetProducer_.label()=="ak7PFJets"
-	) jetType="PF";
-
 	edm::Handle < std::vector <pat::Jet> > patJets;
-	iEvent.getByLabel(pfJetProducer_, patJets);
+	iEvent.getByToken(jetToken, patJets);
 	nJets = patJets->size();
 
 
-	if(verbosity_>1) std::cout << "   Number of jets = " << nJets << "   Label: " << pfJetProducer_.label() << "   Instance: " << pfJetProducer_.instance() << std::endl;
+	if(verbosity_>1) std::cout << "   Number of jets = " << nJets << std::endl;
 
 	for (unsigned int j=0; j<nJets; j++)
 	{
 		const reco::Jet* jet = 0;
 		jet = (const reco::Jet*) ( & ((*patJets)[j]) );
-		if( (*patJets)[j].isPFJet() ) jetType="PF";
 
 		// Call JetAnalyzer to fill the basic Jet Properties
 		TRootJet tempJet = myJetAnalyzer->Process( &( *(jet) ), iSetup);
@@ -87,6 +56,8 @@ void PFJetAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootJets, co
 		localJet.setHFHadronMultiplicity(patJet->HFHadronMultiplicity());
 		localJet.setHFEMMultiplicity(patJet->HFEMMultiplicity());
 		localJet.setHadronFlavour(patJet->hadronFlavour());
+		localJet.setpuID(patJet->userFloat("pileupJetId:fullDiscriminant")); // This was moved from JetAnalyzer.cc to PFJetAnalyzer.cc/FatJetAnalyzer.cc/JPTJetAnalyzer.cc (By Seth and Kevin on 23 december 2015)
+		// DOES NOT WORK FOR FATJETS in 76X --> TO BE FIXED , but seems to be no problem for PFJets...
 
 		new( (*rootJets)[j] ) TRootPFJet(localJet);
 		if(verbosity_>2) cout << "   ["<< setw(3) << j << "] " << localJet << endl;
