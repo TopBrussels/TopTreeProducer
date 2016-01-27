@@ -45,12 +45,11 @@ class MCAnalyzer{
 	
 public:
 	MCAnalyzer();
-	MCAnalyzer(const edm::ParameterSet& config, const edm::ParameterSet& producersNames);
+	MCAnalyzer(const edm::ParameterSet& config, bool verbosity);
 	~MCAnalyzer();
-	void SetVerbosity(int verbosity) {verbosity_ = verbosity; };
 	void DrawMCTree(const edm::Event& iEvent, const edm::EventSetup& iSetup, const edm::ParameterSet& config, const edm::ParameterSet& producersNames);
-	void PDFInfo(const edm::Event& iEvent, TRootEvent* rootEvent);
-        void ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootMCParticles);	
+	void PDFInfo(const edm::Event& iEvent, TRootEvent* rootEvent, edm::EDGetTokenT<GenEventInfoProduct> genEventInfoProductToken);
+    void ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootMCParticles,edm::EDGetTokenT<std::vector<reco::GenParticle> > genParticlesToken);	
 
 private:
 
@@ -68,8 +67,6 @@ private:
 	bool doUnstablePartsMC_;
 	bool doMETMC_;
 
-	std::string signalGenerator_;
-        edm::InputTag genParticlesProducer_;
 };
 
 #endif

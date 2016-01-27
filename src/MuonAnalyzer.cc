@@ -6,71 +6,41 @@ using namespace reco;
 using namespace edm;
 using namespace isodeposit;
 
-MuonAnalyzer::MuonAnalyzer (const edm::ParameterSet & producersNames):
-verbosity_(0),
-useMC_(false)
+MuonAnalyzer::MuonAnalyzer (const edm::ParameterSet & myConfig, int verbosity):
+verbosity_ (verbosity)
 {
-	muonProducer_ = producersNames.getParameter < edm::InputTag > ("muonProducer");
-  primaryVertexProducer_ = producersNames.getParameter<edm::InputTag>("primaryVertexProducer");
+	useMC_ = myConfig.getUntrackedParameter < bool > ("doMuonMC");
 }
 
-MuonAnalyzer::MuonAnalyzer (const edm::ParameterSet & producersNames, const edm::ParameterSet & myConfig, int verbosity):
-verbosity_ (verbosity)
-{
-	muonProducer_ = producersNames.getParameter < edm::InputTag > ("muonProducer");
-  primaryVertexProducer_ = producersNames.getParameter<edm::InputTag>("primaryVertexProducer");
-	useMC_ = myConfig.getUntrackedParameter < bool > ("doMuonMC");
-}
-MuonAnalyzer::MuonAnalyzer (const edm::ParameterSet & producersNames, int iter, const edm::ParameterSet & myConfig, int verbosity):
-verbosity_ (verbosity)
-{
-	vMuonProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("vmuonProducer");
-	muonProducer_ =	edm::InputTag(vMuonProducer[iter]);
-  primaryVertexProducer_ = producersNames.getParameter<edm::InputTag>("primaryVertexProducer");
-	useMC_ = myConfig.getUntrackedParameter < bool > ("doMuonMC");
-}
 
 MuonAnalyzer::~MuonAnalyzer ()
 {
 }
 
 void
-MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
+MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons,edm::EDGetTokenT<reco::BeamSpot> offlineBSToken, edm::EDGetTokenT<pat::MuonCollection> muonToken, edm::EDGetTokenT<reco::VertexCollection> vtxToken)
 {
-  //cout<<"in top tree producer...muonanalyzer process...1"<<endl;
-	unsigned int nMuons = 0;
+unsigned int nMuons = 0;
 
 	edm::Handle < std::vector < pat::Muon > >patMuons;
-	iEvent.getByLabel (muonProducer_, patMuons);
+	iEvent.getByToken (muonToken, patMuons);
 	nMuons = patMuons->size ();
 
-	//cout<<"in top tree producer...muonanalyzer process...2"<<endl;
-  edm::Handle< reco::VertexCollection > pvHandle;
-  iEvent.getByLabel(primaryVertexProducer_, pvHandle);
+  	edm::Handle< reco::VertexCollection > pvHandle;
+  	iEvent.getByToken(vtxToken, pvHandle);
 
-  edm::Handle<reco::BeamSpot> beamSpotHandle;
-  iEvent.getByLabel("offlineBeamSpot", beamSpotHandle);
-
-//	edm::Handle<reco::BeamSpot> beamSpotHandle;
-//	iEvent.getByLabel("offlineBeamSpot", beamSpotHandle);
-//	const reco::TrackBase::Point & beamSpot = reco::TrackBase::Point(beamSpotHandle->x0(), beamSpotHandle->y0(), beamSpotHandle->z0());
+  	edm::Handle<reco::BeamSpot> beamSpotHandle;
+  	iEvent.getByToken(offlineBSToken, beamSpotHandle);
 
 	if (verbosity_ > 1)
-		std::cout << "   Number of muons = " << nMuons << "   Label: " << muonProducer_.label () << "   Instance: " << muonProducer_.instance () << std::endl;
+		std::cout << "   Number of muons = " << nMuons << std::endl;
 
-	//cout<<"in top tree producer...muonanalyzer process...3"<<endl;
     for (unsigned int j = 0; j < nMuons; j++)
     {
-      //cout<<"in top tree producer...muonanalyzer process...loop"<<endl;
-      const pat::Muon*  patMuon = &((*patMuons)[j]);//dynamic_cast < const pat::Muon * >(&*muon);
-      const reco::Muon* muon = (const reco::Muon *) patMuon;//(&((*patMuons)[j]));
+      const pat::Muon*  patMuon = &((*patMuons)[j]);
+      const reco::Muon* muon = (const reco::Muon *) patMuon;
 
       TRootMuon localMuon (muon->px (), muon->py (), muon->pz (), muon->energy (), muon->vx (), muon->vy (), muon->vz (), muon->pdgId (), muon->charge ());
-
-      //set detector-based isolation
-      //      localMuon.setIsoR03_trackIso( muon->isolationR03().sumPt);
-      // localMuon.setIsoR03_ecalIso( muon->isolationR03().emEt);
-      //localMuon.setIsoR03_hcalIso( muon->isolationR03().hadEt);
 
       localMuon.setAlgo (muon->type ());
       localMuon.setID (int ( muon::isGoodMuon ( *muon, muon::AllGlobalMuons)), int ( muon::isGoodMuon ( *muon, muon::AllTrackerMuons)), int ( muon::isGoodMuon ( *muon, muon::AllStandAloneMuons)), int ( muon::isGoodMuon ( *muon, muon::TrackerMuonArbitrated)), int ( muon::isGoodMuon ( *muon, muon::AllArbitrated)), int ( muon::isGoodMuon ( *muon, muon::GlobalMuonPromptTight)), int ( muon::isGoodMuon (*muon, muon::TMLastStationLoose)), int ( muon::isGoodMuon ( *muon, muon::TMLastStationTight)),int ( muon::isGoodMuon ( *muon, muon::TMLastStationAngTight)) , int ( muon::isGoodMuon ( *muon, muon::TMOneStationLoose)), int ( muon::isGoodMuon ( *muon, muon::TMOneStationTight)), int ( muon::isGoodMuon ( *muon, muon::TMLastStationOptimizedLowPtLoose)), int ( muon::isGoodMuon ( *muon, muon::TMLastStationOptimizedLowPtTight)), int ( muon::isGoodMuon ( *muon, muon::TM2DCompatibilityLoose)), int ( muon::isGoodMuon ( *muon, muon::TM2DCompatibilityTight)));
@@ -123,26 +93,14 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
 
       // Some specific methods to pat::Muon
       localMuon.setIsPFMuon(patMuon->isPFMuon());
-      //cout<<"in top tree producer...muonanalyzer process...5"<<endl;
-
-      /*if(patMuon->innerTrack().isNonnull() && patMuon->innerTrack().isAvailable())
-       {
-       //cout << "Step: " << temp << endl; temp++; // 5
-
-       localMuon.setdB(patMuon->dB());
-       localMuon.setdBError(patMuon->edB());
-       }*/
 
       try {
         localMuon.setChi2 (patMuon->globalTrack()->normalizedChi2());
       }
       catch (cms::Exception &lce) {
-        if (verbosity_ > 2)cout  << "MuonAnalyzer:: WARNING, unable to access muon normChi2 value!!!! (label: " << muonProducer_.label () << ")" << endl;
+        if (verbosity_ > 2)cout  << "MuonAnalyzer:: WARNING, unable to access muon normChi2 value!!!!" << endl;
         localMuon.setChi2 (+99999.);
       }
-
-      //      if (patMuon->ecalIsoDeposit ()) localMuon.setVetoEm  (patMuon->ecalIsoDeposit ()->candEnergy ());
-      // if (patMuon->hcalIsoDeposit ()) localMuon.setVetoHad (patMuon->hcalIsoDeposit ()->candEnergy ());
 
       if (useMC_)
       {
@@ -165,7 +123,6 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
       if(patMuon->photonIso() != -1)          localMuon.setIsoR04_PhotonIso(patMuon->photonIso());
       if(patMuon->neutralHadronIso() != -1)   localMuon.setIsoR04_NeutralHadronIso(patMuon->neutralHadronIso());
 
-      //cout<<"in top tree producer...muonanalyzer process...6"<<endl;
 
        //this is for cone size r=0.3
        //following Muon POG isolation definition
@@ -179,28 +136,8 @@ MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons)
        veto_ph.push_back(new reco::isodeposit::ConeVeto( Dir, 0.01 ));
        veto_ph.push_back(new reco::isodeposit::ThresholdVeto( 0.5 ));
 
-       //the code below is for re-calulaing the iso for non-standard conesizes
-       // not sure if it is really needed and would need to be be adapted for
-       // miniAOD
-
-//cout<<"in top tree producer...muonanalyzer process...6.1"<<endl;
-
-//       const double chIso03 = patMuon->isoDeposit(pat::PfChargedHadronIso)->depositAndCountWithin(0.3, veto_ch).first;
-//       const double nhIso03 = patMuon->isoDeposit(pat::PfNeutralHadronIso)->depositAndCountWithin(0.3, veto_nh).first;
-//       const double phIso03 = patMuon->isoDeposit(pat::PfGammaIso)->depositAndCountWithin(0.3, veto_ph).first;
-//       const double puChIso03 = patMuon->isoDeposit(pat::PfPUChargedHadronIso)->depositAndCountWithin(0.3, veto_ch).first;
-
-//cout<<"in top tree producer...muonanalyzer process...6.2"<<endl;
-//       localMuon.setIsoR03_ChargedHadronIso( chIso03 );
-//       localMuon.setIsoR03_PuChargedHadronIso( puChIso03 );
-//       localMuon.setIsoR03_PhotonIso( phIso03 );
-//       localMuon.setIsoR03_NeutralHadronIso( nhIso03 );
-
-// cout<<"in top tree producer...muonanalyzer process...6. size Muons : "<<  (sizeof(rootMuons)/sizeof(*rootMuons))  <<endl;
       new ((*rootMuons)[j]) TRootMuon (localMuon);
       if (verbosity_ > 2)
         cout << "   [" << setw (3) << j << "] " << localMuon << endl;
 	}
-
-    //cout<<"in top tree producer...muonanalyzer process..end"<<endl;
 }

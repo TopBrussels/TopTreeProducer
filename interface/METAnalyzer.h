@@ -26,8 +26,8 @@
 class METAnalyzer{
 	
 public:
-	METAnalyzer(const edm::ParameterSet& producersNames);
-	METAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity);
+	METAnalyzer();
+	METAnalyzer(const edm::ParameterSet& myConfig, int verbosity);
 	~METAnalyzer();
 	void SetVerbosity(int verbosity) {verbosity_ = verbosity; };
 	TopTree::TRootMET Process(const reco::Candidate* met);

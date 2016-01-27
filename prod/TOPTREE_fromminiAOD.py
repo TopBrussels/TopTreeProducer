@@ -40,7 +40,11 @@ process.options = cms.untracked.PSet(
 )
 
 #Default Test sample
-process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/mc/RunIISpring15DR74/TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v2/00000/18E6854B-1809-E511-A405-0025905B8590.root'))
+#process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/mc/RunIISpring15DR74/TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v2/00000/18E6854B-1809-E511-A405-0025905B8590.root'))
+#process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/relval/CMSSW_7_6_0/RelValTTbarLepton_13/MINIAODSIM/76X_mcRun2_asymptotic_v11-v1/00000/4A44647C-A77F-E511-A26B-002618943960.root'))
+process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://xrootd-cms.infn.it///store/mc/RunIIFall15MiniAODv1/QCD_Pt-15to20_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/MINIAODSIM/PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1/00000/04C4FE54-95A8-E511-AD4D-0CC47A4D7686.root'))
+
+#process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/mc/RunIISpring15DR74/TTJets_DiLept_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v2/20000/5E2A0DB9-E52F-E511-A294-782BCB407B74.root'))
 
 #TTTT Test file for testing LHE weights
 #process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/mc/RunIISpring15DR74/TTTT_TuneCUETP8M1_13TeV-amcatnlo-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9_ext1-v1/00000/0C216A04-5C5D-E511-AD98-D4AE529D9537.root'))
@@ -100,36 +104,27 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		doElectronMC = cms.untracked.bool(True),
 		doMuonMC = cms.untracked.bool(True),
 		doJetMC = cms.untracked.bool(True),
-		doMETMC = cms.untracked.bool(False),
-		doPhotonMC = cms.untracked.bool(False),
-		doUnstablePartsMC = cms.untracked.bool(True),
+		doMETMC = cms.untracked.bool(True),
+		doPhotonMC = cms.untracked.bool(True),
+		doMCAssociation = cms.untracked.bool(True),
+		
 		doPrimaryVertex = cms.untracked.bool(True),
-		runGeneralTracks = cms.untracked.bool(True),#true only if generalTracks are stored.
-		doCaloJet = cms.untracked.bool(False),
 		doGenJet = cms.untracked.bool(True),
-		doCaloJetId = cms.untracked.bool(False),
 		doPFJet = cms.untracked.bool(True),
         doFatJet = cms.untracked.bool(True),
-		doJPTJet = cms.untracked.bool(False),
-		doJPTJetId = cms.untracked.bool(False),
 		doMuon = cms.untracked.bool(True),
 		doElectron = cms.untracked.bool(True),
-         	doPhoton = cms.untracked.bool(False),
-		runSuperCluster = cms.untracked.bool(True),#true only if SuperCluster are stored
-		doCaloMET = cms.untracked.bool(False),
+        doPhoton = cms.untracked.bool(True),
 		doPFMET = cms.untracked.bool(True),
-		doTCMET = cms.untracked.bool(False),
-		doGenEvent = cms.untracked.bool(False),#put on False when running non-ttbar or when running toptree from reco
-		doNPGenEvent = cms.untracked.bool(False),#put on True when running New Physics sample
-		doSpinCorrGen = cms.untracked.bool(False),#put on True only if you need SpinCorrelation Variables
-        	doLHEEventProd = cms.untracked.bool(True),#put on True only if you need SpinCorrelation Variables
-		doSemiLepEvent = cms.untracked.bool(False),#put on True only if you need TtSemiLeptonicEvent Collection exist in PAT-uples (L2)
+		runSuperCluster = cms.untracked.bool(True),#True only if SuperCluster are stored
+		doNPGenEvent = cms.untracked.bool(True),#put on True when running New Physics sample
+        doLHEEventProd = cms.untracked.bool(True),
 		doEventCleaningInfo = cms.untracked.bool(True), # only useful for data but protected for MC. Stores HBHE, HCalIso etc filter outputs as bools in TRootEvent
 
 		conversionLikelihoodWeightsFile = cms.untracked.string('RecoEgamma/EgammaTools/data/TMVAnalysis_Likelihood.weights.txt'),
 
 
-
+		# The PaticleTreeDrawer is not yet adapted to 76X TTP. Not sure if we still need this (Kevin and Seth, 13th jan 2016)
 		# Draw MC particle tree
 		drawMCTree = cms.untracked.bool(False),
 		mcTreePrintP4 = cms.untracked.bool(False),
@@ -155,35 +150,23 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		hltProducer3rd = cms.InputTag("TriggerResults","","MINIAOD"),
 		hltProducer4th = cms.InputTag("TriggerResults","","PAT"),
 		pileUpProducer = cms.InputTag("addPileupInfo","","HLT"),
-		genParticlesProducer = cms.InputTag("prunedGenParticles"),
-        lheEventProductProducer = cms.InputTag("externalLHEProducer"),
-		primaryVertexProducer = cms.InputTag("offlineSlimmedPrimaryVertices"),
-		vcaloJetProducer = cms.untracked.vstring("selectedPatJetsAK5Calo"),
-        vgenJetProducer = cms.untracked.vstring("slimmedGenJets"),
-		vpfJetProducer = cms.untracked.vstring("slimmedJets"),
-		vfatJetProducer = cms.untracked.vstring("slimmedJetsAK8"),
-        vmuonProducer = cms.untracked.vstring("slimmedMuons"),
-        velectronProducer = cms.untracked.vstring("slimmedElectrons"),
-        vphotonProducer = cms.untracked.vstring("slimmedPhotons"),
 		CalometProducer = cms.untracked.vstring("patMETs"),
-		vpfmetProducer = cms.untracked.vstring("slimmedMETs"),
 		TCmetProducer = cms.untracked.InputTag("patMETsTC"),
 		genEventProducer = cms.untracked.InputTag("genEvt"),
-		generalTrackLabel = cms.untracked.InputTag("generalTracks")
     ),
                                   
     #new for CMSSW76X and higher: all classes that are read from the event need to be registered in the constructor!
     #supposedly this is necessary in the case that the code is run on machines that use multi-threading.
     #It also allows the CMSSW compiler to optimise/speed up the code (or so the documentation says), by accessing collections that are used a lot or rarely with the consumesOften() and mayConsume() fuctions but consumes() will always work.
     #in the TopTreeProducer .py file these are all stored in the producersNames parameter set, so please add new objects there if you need them.
-    producerNamesBookkeepingTreads = cms.PSet(
-        pfJetProducer = cms.untracked.InputTag("slimmedJets"),
-        pfmetProducer = cms.untracked.InputTag("slimmedMETs"),
-        muonProducer = cms.untracked.InputTag("slimmedMuons"),
-        electronProducer = cms.untracked.InputTag("slimmedElectrons"),
-        photonProducer = cms.untracked.InputTag("slimmedPhotons"),
-        fatJetProducer = cms.untracked.InputTag("slimmedJetsAK8"),
-        genJetProducer = cms.untracked.InputTag("slimmedGenJets"),
+    producerNamesBookkeepingThreads = cms.PSet(
+        vpfJetProducer = cms.untracked.vstring("slimmedJets"),
+        vpfmetProducer = cms.untracked.vstring("slimmedMETs"),
+        vmuonProducer = cms.untracked.vstring("slimmedMuons"),
+        velectronProducer = cms.untracked.vstring("slimmedElectrons"),
+        vphotonProducer = cms.untracked.vstring("slimmedPhotons"),#PhotonAnalyzer still has some getByLabels... (Kevin 14/01/2015)
+        vfatJetProducer = cms.untracked.vstring("slimmedJetsAK8"),
+        vgenJetProducer = cms.untracked.vstring("slimmedGenJets"),
         metfilterProducer = cms.untracked.InputTag("TriggerResults","","PAT"), # can also be RECO, depends on MiniAOD version!
         summaryHBHENoise = cms.untracked.InputTag("hcalnoise"),
         pileUpProducer = cms.untracked.InputTag("pileUpProducer"),
@@ -195,7 +178,13 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
         fixedGridRhoFastjetCentralNeutral = cms.untracked.InputTag("fixedGridRhoFastjetCentralNeutral"),
         genEventInfoProduct = cms.untracked.InputTag("generator"),
         prunedGenParticles = cms.untracked.InputTag("prunedGenParticles"),
-        lheproduct = cms.untracked.InputTag("externalLHEProducer")
+        lheproduct = cms.untracked.InputTag("externalLHEProducer"),
+		primaryVertexProducer = cms.untracked.InputTag("offlineSlimmedPrimaryVertices"),
+		offlineBeamSpot = cms.InputTag("offlineBeamSpot"),
+		hltProducer1st = cms.InputTag("TriggerResults","","HLT"),
+		hltProducer2nd = cms.InputTag("TriggerResults","","RECO"),
+		hltProducer3rd = cms.InputTag("TriggerResults","","MINIAOD"),
+		hltProducer4th = cms.InputTag("TriggerResults","","PAT")
 
 
     )

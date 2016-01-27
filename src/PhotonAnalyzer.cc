@@ -9,24 +9,9 @@ using namespace reco;
 using namespace edm;
 using namespace isodeposit;
 
-PhotonAnalyzer::PhotonAnalyzer (const edm::ParameterSet & producersNames):
-verbosity_(0),
-useMC_(false)
-{
-  photonProducer_ = producersNames.getParameter < edm::InputTag > ("photonProducer");
-}
-
-PhotonAnalyzer::PhotonAnalyzer (const edm::ParameterSet & producersNames, const edm::ParameterSet & myConfig, int verbosity):
+PhotonAnalyzer::PhotonAnalyzer (const edm::ParameterSet & myConfig, int verbosity):
 verbosity_ (verbosity)
 {
-  photonProducer_ = producersNames.getParameter < edm::InputTag > ("photonProducer");
-  useMC_ = myConfig.getUntrackedParameter < bool > ("doPhotonMC");
-}
-PhotonAnalyzer::PhotonAnalyzer (const edm::ParameterSet & producersNames, int iter, const edm::ParameterSet & myConfig, int verbosity):
-verbosity_ (verbosity)
-{
-  vPhotonProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("vphotonProducer");
-  photonProducer_ =	edm::InputTag(vPhotonProducer[iter]);
   useMC_ = myConfig.getUntrackedParameter < bool > ("doPhotonMC");
 }
 
@@ -35,7 +20,7 @@ PhotonAnalyzer::~PhotonAnalyzer ()
 }
 
 void
-PhotonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootPhotons, const edm::EventSetup& iSetup)
+PhotonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootPhotons, const edm::EventSetup& iSetup, edm::EDGetTokenT<pat::PhotonCollection> photonToken)
 {
   unsigned int nPhotons = 0;
 
@@ -43,11 +28,6 @@ PhotonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootPhotons, 
   ///currently these are hardcoded
   ///we need to create corresponding member function in PAT photon object
   ///otherwise, we need to keep these collections in our PAT output collections in order to produce TOPTREE from PAT (Taejeong)  
-  edm::Handle<reco::BeamSpot> bsHandle;
-
-  //commenting out retrieval of beamspot for now, see **** below
-  //  iEvent.getByLabel("offlineBeamSpot", bsHandle);
-  //const reco::BeamSpot &beamspot = *bsHandle.product();
 
   edm::Handle<reco::ConversionCollection> hConversions;
   iEvent.getByLabel("allConversions", hConversions);
@@ -57,10 +37,6 @@ PhotonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootPhotons, 
   //I will not try to access them, and the conversion info will not
   // be available in the TOPTREE. This should be fixable with an offical
   // recommendation in 7_1_X
-
-
-  //  edm::Handle<reco::GsfElectronCollection> hElectrons;
-  //iEvent.getByLabel("gsfElectrons", hElectrons);
 
   
   // get the iso deposits. 4 (charged hadrons, pileup charged hadrons, photons, neutral hadrons)
@@ -94,7 +70,7 @@ PhotonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootPhotons, 
   //  const IsoDepositVals * photonIsoVals = &photonIsoValPFId;
 
   edm::Handle < std::vector < pat::Photon > >patPhotons;
-  iEvent.getByLabel (photonProducer_, patPhotons);
+  iEvent.getByToken (photonToken, patPhotons);
   nPhotons = patPhotons->size ();
 
   if (verbosity_ > 1)

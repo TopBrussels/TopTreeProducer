@@ -19,8 +19,6 @@
 #include "../interface/TRootJet.h"
 #include "../interface/TRootPFJet.h"
 #include "../interface/TRootSubstructureJet.h"
-#include "../interface/TRootCaloJet.h"
-#include "../interface/TRootJPTJet.h"
 #include "../interface/TRootGenJet.h"
 #include "../interface/TRootMET.h"
 #include "../interface/TRootCaloMET.h"
@@ -709,69 +707,7 @@ int main()
 
 
 
-				else if(objectsToKeep[j].type == "TopTree::TRootCaloJet")
-				{
-					TRootCaloJet* caloJet;
-					int caloJetsKept=0;
-					for(int i=0; i<(objectsToKeep[j].inArray)->GetEntriesFast(); i++)
-					{
-						caloJet = (TRootCaloJet*) (objectsToKeep[j].inArray)->At(i);
-						bool keepCaloJet = true;
-
-						if(caloJet->Pt() < objectsToKeep[j].minPt || fabs(caloJet->Eta()) > objectsToKeep[j].maxEta)
-						{
-							keepCaloJet = false;
-							if( verbosity > 1 ) cout << "skip CaloJet with pT = " << caloJet->Pt() << " and eta = " << caloJet->Eta() << endl;
-						}
-						else caloJetsKept++;
-
-						if( ! objectsToKeep[j].skipObjects )
-							new( (*(objectsToKeep[j].outArray))[i] ) TRootCaloJet(*caloJet);
-						else if(keepCaloJet)
-							new( (*(objectsToKeep[j].outArray))[caloJetsKept-1] ) TRootCaloJet(*caloJet);
-					}
-
-					if(caloJetsKept < objectsToKeep[j].minNObjects)
-					{
-						keepEvent = false;
-						if( verbosity > 1 ) cout << "Too small number of selected caloJets: caloJetsKept = " << caloJetsKept << endl;
-					}
-
-					if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
-					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
-				}
-
-				else if(objectsToKeep[j].type == "TopTree::TRootJPTJet")
-				{
-					TRootJPTJet* JPTJet;
-					int JPTJetsKept=0;
-					for(int i=0; i<(objectsToKeep[j].inArray)->GetEntriesFast(); i++)
-					{
-						JPTJet = (TRootJPTJet*) (objectsToKeep[j].inArray)->At(i);
-						bool keepJPTJet = true;
-
-						if(JPTJet->Pt() < objectsToKeep[j].minPt || fabs(JPTJet->Eta()) > objectsToKeep[j].maxEta)
-						{
-							keepJPTJet = false;
-							if( verbosity > 1 ) cout << "skip JPTJet with pT = " << JPTJet->Pt() << " and eta = " << JPTJet->Eta() << endl;
-						}
-						else JPTJetsKept++;
-
-						if( ! objectsToKeep[j].skipObjects )
-							new( (*(objectsToKeep[j].outArray))[i] ) TRootJPTJet(*JPTJet);
-						else if(keepJPTJet)
-							new( (*(objectsToKeep[j].outArray))[JPTJetsKept-1] ) TRootJPTJet(*JPTJet);
-					}
-
-					if(JPTJetsKept < objectsToKeep[j].minNObjects)
-					{
-						keepEvent = false;
-						if( verbosity > 1 ) cout << "Too small number of selected JPTJets: JPTJetsKept = " << JPTJetsKept << endl;
-					}
-
-					if( verbosity > 1 ) cout << "Processed " << objectsToKeep[j].name << endl;
-					if( verbosity > 1 ) cout << "input = " << (objectsToKeep[j].inArray)->GetEntriesFast() << " output = " << (objectsToKeep[j].outArray)->GetEntriesFast() << endl;
-				}
+				
 
 				else if(objectsToKeep[j].type == "TopTree::TRootMCParticle")
 				{

@@ -2,3 +2,5 @@ __init__.py
 *.pyc
 *.o
 *.so
+prod/expanded.py
+prod/nohup.out

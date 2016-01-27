@@ -15,14 +15,13 @@ MCAnalyzer::MCAnalyzer():
     ,muonMC_etaMax_(99999.)
     ,muonMC_ptMin_(99999.)
     ,doUnstablePartsMC_(false)
-    ,signalGenerator_("noname")
 {
     
 }
 
 
 
-MCAnalyzer::MCAnalyzer(const edm::ParameterSet& config, const edm::ParameterSet& producersNames) : verbosity_(0)
+MCAnalyzer::MCAnalyzer(const edm::ParameterSet& config,bool verbosity) : verbosity_(verbosity)
 {
     doElectronMC_ = config.getUntrackedParameter<bool>("doElectronMC", false);
     electronMC_etaMax_ = config.getParameter<double>("electronMC_etaMax");
@@ -35,8 +34,6 @@ MCAnalyzer::MCAnalyzer(const edm::ParameterSet& config, const edm::ParameterSet&
     jetMC_ptMin_ = config.getParameter<double>("jetMC_ptMin");
     doMETMC_ = config.getUntrackedParameter<bool>("doMETMC", false);
     doUnstablePartsMC_ = config.getUntrackedParameter<bool>("doUnstablePartsMC", false);
-    signalGenerator_ = config.getUntrackedParameter<string>("signalGenerator","noname");
-    genParticlesProducer_ = producersNames.getParameter<edm::InputTag>("genParticlesProducer");
 }
 
 
@@ -58,11 +55,11 @@ void MCAnalyzer::DrawMCTree(const edm::Event& iEvent, const edm::EventSetup& iSe
 
 
 
-void MCAnalyzer::PDFInfo(const edm::Event& iEvent, TRootEvent* rootEvent)
+void MCAnalyzer::PDFInfo(const edm::Event& iEvent, TRootEvent* rootEvent, edm::EDGetTokenT<GenEventInfoProduct> genEventInfoProductToken)
 {
     if(verbosity_>1) cout << endl << "   Process PDF Infos..." << endl;
     edm::Handle<GenEventInfoProduct> genEvtInfo;
-    iEvent.getByLabel( "generator", genEvtInfo );
+    iEvent.getByToken( genEventInfoProductToken, genEvtInfo );
     typedef gen::PdfInfo PDF;
     const PDF *pdfInfo = genEvtInfo->pdf();
     if (genEvtInfo->hasPDF() && verbosity_>1) {
@@ -79,13 +76,13 @@ void MCAnalyzer::PDFInfo(const edm::Event& iEvent, TRootEvent* rootEvent)
 
 
 
-void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootMCParticles)
+void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootMCParticles,edm::EDGetTokenT<std::vector<reco::GenParticle> > genParticlesToken)
 {
     // Fill TClonesArray with preselected MC Electrons, Muons  and with the primary decaying particles
     if(verbosity_>1) cout << endl << "   Process MC Particles..." << endl;
     edm::Handle <reco::GenParticleCollection> genParticles;
     
-    iEvent.getByLabel( genParticlesProducer_, genParticles );
+    iEvent.getByToken( genParticlesToken, genParticles );
     int iElectron=0;
     int iMuon=0;
     int iUnstableParticle=0;

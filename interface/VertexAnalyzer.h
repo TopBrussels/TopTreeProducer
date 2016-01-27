@@ -21,11 +21,9 @@ using namespace TopTree;
 class VertexAnalyzer {
 	
 public:
-	VertexAnalyzer(const edm::ParameterSet& producersNames);
-	VertexAnalyzer(const edm::ParameterSet& producersNames, int verbosity);
+	VertexAnalyzer(int verbosity);
 	~VertexAnalyzer();
-	void SetVerbosity(int verbosity) { verbosity_ = verbosity; };
-	void Process(const edm::Event& iEvent, TClonesArray* rootVertex);
+	void Process(const edm::Event& iEvent, TClonesArray* rootVertex, edm::EDGetTokenT<reco::VertexCollection> vtxToken);
 
 private:
 	int verbosity_;

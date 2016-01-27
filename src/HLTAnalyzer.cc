@@ -19,19 +19,26 @@ int getIndexForRun ( const edm::Event& iEvent, vector<TopTree::TRootHLTInfo> inf
 
 }
 
-/*void HLTAnalyzer::init(const edm::Event& iEvent, TRootEvent* rootEvent)
-{
+HLTAnalyzer::HLTAnalyzer(edm::EDGetTokenT<edm::TriggerResults> triggerToken1, edm::EDGetTokenT<edm::TriggerResults> triggerToken2, edm::EDGetTokenT<edm::TriggerResults> triggerToken3, edm::EDGetTokenT<edm::TriggerResults> triggerToken4, const edm::ParameterSet& myConfig, int verbosity) :
+		verbosity_(verbosity)
+  		,triggerNames_()
+		,doHLT_(myConfig.getUntrackedParameter<bool>("doHLT",false))
+  		,nEvents_(0)
+  		,nWasRun_(0)
+  		,nAccept_(0)
+  		,nErrors_(0)
+  		,hltWasRun_(0)
+  		,hltAccept_(0)
+  		,hltErrors_(0)
+  		,hltNames_(0)
+		{
+		triggerResultsToken1st_=triggerToken1;
+		triggerResultsToken2nd_=triggerToken2;
+		triggerResultsToken3rd_=triggerToken3;
+		triggerResultsToken4th_=triggerToken4;
+		}
 
-   edm::Handle<edm::TriggerResults> trigResults;
-   try {iEvent.getByLabel(triggerResultsTag1st_,trigResults);} catch (...) {;}
-   if (!trigResults.isValid())
-     doHLT_=false;
-   else
-     doHLT_=true;
-}
-*/
-
-void HLTAnalyzer::process(const edm::Event& iEvent, TRootEvent* rootEvent)
+void HLTAnalyzer::process(const edm::Event& iEvent, TRootEvent* rootEvent, edm::ParameterSet valuesForConsumeCommand)
 {
 	nEvents_++;
 
@@ -46,29 +53,33 @@ void HLTAnalyzer::process(const edm::Event& iEvent, TRootEvent* rootEvent)
 	  if ( index == -1 || index < (int)hltInfos_.size()-1 ) {// no info for this run yet -> create a new entry
 
 	    edm::Handle<edm::TriggerResults> trigResults, trigResults1st, trigResults2nd, trigResults3rd, trigResults4th;
-	    try {iEvent.getByLabel(triggerResultsTag1st_,trigResults1st);} catch (...) {;}
-	    try {iEvent.getByLabel(triggerResultsTag2nd_,trigResults2nd);} catch (...) {;}
-	    try {iEvent.getByLabel(triggerResultsTag3rd_,trigResults3rd);} catch (...) {;}
-	    try {iEvent.getByLabel(triggerResultsTag4th_,trigResults4th);} catch (...) {;}
+	    try {iEvent.getByToken(triggerResultsToken1st_,trigResults1st);} catch (...) {;}
+	    try {iEvent.getByToken(triggerResultsToken2nd_,trigResults2nd);} catch (...) {;}
+	    try {iEvent.getByToken(triggerResultsToken3rd_,trigResults3rd);} catch (...) {;}
+	    try {iEvent.getByToken(triggerResultsToken4th_,trigResults4th);} catch (...) {;}
 	    if(trigResults1st.isValid())
 	      {
 				trigResults = trigResults1st;
-				triggerResultsTag_ = triggerResultsTag1st_;
+				triggerResultsToken_ = triggerResultsToken1st_;
+				triggerResultsTag_ = valuesForConsumeCommand.getParameter<edm::InputTag>("hltProducer1st");
 	      }
 	    else if(trigResults2nd.isValid())
 	      {
 				trigResults = trigResults2nd;
-				triggerResultsTag_ = triggerResultsTag2nd_;
+				triggerResultsToken_ = triggerResultsToken2nd_;
+				triggerResultsTag_ = valuesForConsumeCommand.getParameter<edm::InputTag>("hltProducer2nd");
 	      }
 	    else if(trigResults3rd.isValid())
 	      {
 				trigResults = trigResults3rd;
-				triggerResultsTag_ = triggerResultsTag3rd_;
+				triggerResultsToken_ = triggerResultsToken3rd_;
+				triggerResultsTag_ = valuesForConsumeCommand.getParameter<edm::InputTag>("hltProducer3rd");
 	      }
 	    else if(trigResults4th.isValid())
 	    {
 	      trigResults = trigResults4th;
-	      triggerResultsTag_ = triggerResultsTag4th_;
+	      triggerResultsToken_ = triggerResultsToken4th_;
+		  triggerResultsTag_ = valuesForConsumeCommand.getParameter<edm::InputTag>("hltProducer4th");
 			}
 
 	    triggerNames_=iEvent.triggerNames(*trigResults);
@@ -91,15 +102,8 @@ void HLTAnalyzer::process(const edm::Event& iEvent, TRootEvent* rootEvent)
 
 	  }
 
-	  //cout << "hltInfos.size(): " << hltInfos_.size() << endl;
-
-	  //if (hltInfos_.size() > 0 && index != -1)
-	  //  cout << "hltNames.size(): " << hltInfos_[index].nHLTPaths() << endl;
-
-	  //cout << "Index: " << index << endl;
-
 	  edm::Handle<edm::TriggerResults> trigResults;
-	  try {iEvent.getByLabel(triggerResultsTag_,trigResults);} catch (...) {;}
+	  try {iEvent.getByToken(triggerResultsToken_,trigResults);} catch (...) {;}
 	  if (trigResults.isValid()) {
 	    if (trigResults->wasrun()) nWasRun_++;
 	    const bool accept(trigResults->accept());
