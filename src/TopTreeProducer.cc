@@ -693,7 +693,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
     }
 
     // NPGenEvent
-    if(doNPGenEvent)
+    if(doNPGenEvent && !isRealData_)
     {
         if(verbosity>1) cout << endl << "Analysing NPGenEvent collection..." << endl;
         NPGenEventAnalyzer* myNPGenEventAnalyzer = new NPGenEventAnalyzer(verbosity);
