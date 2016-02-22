@@ -19,7 +19,6 @@ namespace TopTree
 		TRootLepton() :
 		TRootParticle(),
 		ip3d_(-9999.),
-		ip3dErr_(-9999.),
 		d0_(-9999.),
 		d0Error_(-9999.),
 		d0BeamSpot_(-9999.),
@@ -49,7 +48,6 @@ namespace TopTree
 		TRootLepton(const TRootLepton& lepton) :
 		TRootParticle(lepton),
 		ip3d_(lepton.ip3d_),
-		ip3dErr_(lepton.ip3dErr_),
 		d0_(lepton.d0_),
 		d0Error_(lepton.d0Error_),
 		d0BeamSpot_(lepton.d0BeamSpot_),
@@ -79,7 +77,6 @@ namespace TopTree
 		TRootLepton(Double_t px, Double_t py, Double_t pz, Double_t e) :
 		TRootParticle(px,py,pz,e),
 		ip3d_(-9999.),
-		ip3dErr_(-9999.),
 		d0_(-9999.),
 		d0Error_(-9999.),
 		d0BeamSpot_(-9999.),
@@ -109,7 +106,6 @@ namespace TopTree
 		TRootLepton(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z) :
 		TRootParticle(px,py,pz,e,vtx_x,vtx_y,vtx_z),
 		ip3d_(-9999.),
-		ip3dErr_(-9999.),
 		d0_(-9999.),
 		d0Error_(-9999.),
 		d0BeamSpot_(-9999.),
@@ -139,7 +135,6 @@ namespace TopTree
 		TRootLepton(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z, Int_t type, Int_t charge) :
 		TRootParticle(px,py,pz,e,vtx_x,vtx_y,vtx_z,type,charge),
 		ip3d_(-9999.),
-		ip3dErr_(-9999.),
 		d0_(-9999.),
 		d0Error_(-9999.),
 		d0BeamSpot_(-9999.),
@@ -169,7 +164,6 @@ namespace TopTree
 		TRootLepton(const TLorentzVector &momentum) :
 		TRootParticle(momentum),
 		ip3d_(-9999.),
-		ip3dErr_(-9999.),
 		d0_(-9999.),
 		d0Error_(-9999.),
 		d0BeamSpot_(-9999.),
@@ -199,7 +193,6 @@ namespace TopTree
 		TRootLepton(const TLorentzVector &momentum, const TVector3 &vertex, Int_t type, Float_t charge) :
 		TRootParticle(momentum,vertex,type,charge),
 		ip3d_(-9999.),
-		ip3dErr_(-9999.),
 		d0_(-9999.),
 		d0Error_(-9999.),
 		d0BeamSpot_(-9999.),
@@ -233,7 +226,6 @@ namespace TopTree
 		virtual TString typeName() const { return "TRootLepton"; }
 		
 		Float_t ip3d() const { return ip3d_; }
-		Float_t ip3dError() const { return ip3dErr_; }
 		Float_t d0() const { return d0_; }
 		Float_t d0Error()const { return d0Error_; }
 		Float_t d0BeamSpot() const { return d0BeamSpot_; }
@@ -331,7 +323,6 @@ namespace TopTree
 		
 		//setters
 		void setIp3d(Float_t x) { ip3d_ = x; }
-		void setIp3dError(Float_t x) { ip3dErr_ = x; }
 		void setD0(Float_t x) { d0_ = x; }
 		void setD0Error(Float_t x) { d0Error_ = x; }
 		void setD0BeamSpot(Float_t x) { d0BeamSpot_ = x; }
@@ -365,7 +356,6 @@ namespace TopTree
 		
 		//TrackProperties=====================================
 		Float_t ip3d_;                             // 3D impact parameter
-		Float_t ip3dErr_;                          // error on ip3d_
 		Float_t d0_;                         	     // transverse impact parameter (wrt to PV)
 		Float_t d0Error_;                          // error on d0_
 		Float_t d0BeamSpot_;                         	     // transverse impact parameter (wrt to beam spot)
