@@ -27,14 +27,6 @@ namespace TopTree
 		dzError_(-9999.),
 		dzBeamSpot_(-9999.),
 		dzBeamSpotError_(-9999.),
-		//    dB_(-9999.),
-		//    dBError_(-9999.),
-		trackIso03_(-9999.),
-		ecalIso03_(-9999.),
-		hcalIso03_(-9999.),
-		trackIso04_(-9999.),
-		ecalIso04_(-9999.),
-		hcalIso04_(-9999.),
 		chargedHadronIso03_(-9999),
 		puChargedHadronIso03_(-9999.),
 		photonIso03_(-9999),
@@ -56,14 +48,6 @@ namespace TopTree
 		dzError_(lepton.dzError_),
 		dzBeamSpot_(lepton.dzBeamSpot_),
 		dzBeamSpotError_(lepton.dzBeamSpotError_),
-		//    dB_(lepton.dB_),
-		//    dBError_(lepton.dBError_),
-		trackIso03_(lepton.trackIso03_),
-		ecalIso03_(lepton.ecalIso03_),
-		hcalIso03_(lepton.hcalIso03_),
-		trackIso04_(lepton.trackIso04_),
-		ecalIso04_(lepton.ecalIso04_),
-		hcalIso04_(lepton.hcalIso04_),
 		chargedHadronIso03_(lepton.chargedHadronIso03_),
 		puChargedHadronIso03_(lepton.puChargedHadronIso03_),
 		photonIso03_(lepton.photonIso03_),
@@ -85,14 +69,6 @@ namespace TopTree
 		dzError_(-9999.),
 		dzBeamSpot_(-9999.),
 		dzBeamSpotError_(-9999.),
-		//    dB_(-9999.),
-		//    dBError_(-9999.),
-		trackIso03_(-9999.),
-		ecalIso03_(-9999.),
-		hcalIso03_(-9999.),
-		trackIso04_(-9999.),
-		ecalIso04_(-9999.),
-		hcalIso04_(-9999.),
 		chargedHadronIso03_(-9999),
 		puChargedHadronIso03_(-9999.),
 		photonIso03_(-9999),
@@ -114,14 +90,6 @@ namespace TopTree
 		dzError_(-9999.),
 		dzBeamSpot_(-9999.),
 		dzBeamSpotError_(-9999.),
-		//    dB_(-9999.),
-		//    dBError_(-9999.),
-		trackIso03_(-9999.),
-		ecalIso03_(-9999.),
-		hcalIso03_(-9999.),
-		trackIso04_(-9999.),
-		ecalIso04_(-9999.),
-		hcalIso04_(-9999.),
 		chargedHadronIso03_(-9999),
 		puChargedHadronIso03_(-9999.),
 		photonIso03_(-9999),
@@ -143,14 +111,6 @@ namespace TopTree
 		dzError_(-9999.),
 		dzBeamSpot_(-9999.),
 		dzBeamSpotError_(-9999.),
-		//    dB_(-9999.),
-		//    dBError_(-9999.),
-		trackIso03_(-9999.),
-		ecalIso03_(-9999.),
-		hcalIso03_(-9999.),
-		trackIso04_(-9999.),
-		ecalIso04_(-9999.),
-		hcalIso04_(-9999.),
 		chargedHadronIso03_(-9999),
 		puChargedHadronIso03_(-9999.),
 		photonIso03_(-9999),
@@ -172,14 +132,6 @@ namespace TopTree
 		dzError_(-9999.),
 		dzBeamSpot_(-9999.),
 		dzBeamSpotError_(-9999.),
-		//    dB_(-9999.),
-		//    dBError_(-9999.),
-		trackIso03_(-9999.),
-		ecalIso03_(-9999.),
-		hcalIso03_(-9999.),
-		trackIso04_(-9999.),
-		ecalIso04_(-9999.),
-		hcalIso04_(-9999.),
 		chargedHadronIso03_(-9999),
 		puChargedHadronIso03_(-9999.),
 		photonIso03_(-9999),
@@ -201,14 +153,6 @@ namespace TopTree
 		dzError_(-9999.),
 		dzBeamSpot_(-9999.),
 		dzBeamSpotError_(-9999.),
-		//    dB_(-9999.),
-		//    dBError_(-9999.),
-		trackIso03_(-9999.),
-		ecalIso03_(-9999.),
-		hcalIso03_(-9999.),
-		trackIso04_(-9999.),
-		ecalIso04_(-9999.),
-		hcalIso04_(-9999.),
 		chargedHadronIso03_(-9999),
 		puChargedHadronIso03_(-9999.),
 		photonIso03_(-9999),
@@ -234,44 +178,6 @@ namespace TopTree
 		Float_t dzError()const { return dzError_; }
 		Float_t dzBeamSpot() const { return dzBeamSpot_; }
 		Float_t dzBeamSpotError()const { return dzBeamSpotError_; }
-		//		Float_t dB() const { return dB_; }
-		//		Float_t dBError() const { return dBError_; }
-		
-		//detector based isolation
-		Float_t ecalIso(unsigned int cone) const
-		{
-			if(cone == 3) return ecalIso03_;
-			else if(cone == 4) return ecalIso04_;
-			else cout<<"Bad Cone Size! It returns 9999."<<endl;
-			return 9999.;
-		}
-		Float_t hcalIso(unsigned int cone) const
-		{
-			if(cone == 3) return hcalIso03_;
-			else if(cone == 4) return hcalIso04_;
-			else cout<<"Bad Cone Size! It returns 9999."<<endl;
-			return 9999.;
-		}
-		Float_t caloIso(unsigned int cone) const
-		{
-			return (ecalIso(cone) + hcalIso(cone));
-		}
-		Float_t trackIso(unsigned int cone) const
-		{
-			if(cone == 3) return trackIso03_;
-			else if(cone == 4) return trackIso04_;
-			else cout<<"Bad Cone Size! It returns 9999."<<endl;
-			return 9999.;
-		}
-		Float_t absDetIso(unsigned int cone) const
-		{
-			return (trackIso(cone) + hcalIso(cone) + ecalIso(cone));
-		}
-		Float_t relDetIso(unsigned int cone) const
-		{
-			double relIso = absDetIso(cone)/((TLorentzVector)(*this)).Pt();
-			return relIso;
-		}
 	
 		//particle based isolation
 		Float_t chargedHadronIso(unsigned int cone) const
@@ -331,16 +237,6 @@ namespace TopTree
 		void setDzError(Float_t x) { dzError_ = x; }
 		void setDzBeamSpot(Float_t x) { dzBeamSpot_ = x; }
 		void setDzBeamSpotError(Float_t x) { dzBeamSpotError_ = x; }
-		//void setDB(Float_t dB) { dB_ = dB; }
-		//void setDBError(Float_t dBError) { dBError_ = dBError; }
-		
-		//detector based isolation
-		void setIsoR03_trackIso(Float_t isoR03_trackIso) { trackIso03_ = isoR03_trackIso; }
-		void setIsoR03_ecalIso(Float_t isoR03_ecalIso)   { ecalIso03_ = isoR03_ecalIso; }
-		void setIsoR03_hcalIso(Float_t isoR03_hcalIso)   { hcalIso03_ = isoR03_hcalIso; }
-		void setIsoR04_trackIso(Float_t isoR04_trackIso) { trackIso04_ = isoR04_trackIso; }
-		void setIsoR04_ecalIso(Float_t isoR04_ecalIso)   { ecalIso04_ = isoR04_ecalIso; }
-		void setIsoR04_hcalIso(Float_t isoR04_hcalIso)   { hcalIso04_ = isoR04_hcalIso; }
 		
 		//particle based isolation
 		void setIsoR03_ChargedHadronIso(Float_t chargedHadronIso){ chargedHadronIso03_ = chargedHadronIso; }
@@ -364,19 +260,6 @@ namespace TopTree
 		Float_t dzError_;                          // error on dz_
 		Float_t dzBeamSpot_;                         	     // longitudinal impact parameter (wrt to beam spot)
 		Float_t dzBeamSpotError_;                          // error on dzBeamSpot_
-		
-		// If this was not the case, dB is calculated wrt the beamspot and edb = -1 all the time
-		//Float_t dB_;                             // dB from PAT muon
-		//Float_t dBError_;                        // dBError from PAT muon
-		
-		//Isolation ============================================
-		//detector based isolation
-		Float_t trackIso03_;                        // track iso deposit with electron footprint removed
-		Float_t ecalIso03_;                // ecal iso deposit with electron footprint removed
-		Float_t hcalIso03_;           // hcal depht 1 iso deposit with electron footprint removed
-		Float_t trackIso04_;                        // track iso deposit with electron footprint removed
-		Float_t ecalIso04_;                // ecal iso deposit with electron footprint removed
-		Float_t hcalIso04_;           // hcal depht 1 iso deposit with electron footprint removed
 		
 		//particle based isolation
 		Float_t chargedHadronIso03_;                 // isolation calculated with only the charged hadron candidates
