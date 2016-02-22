@@ -55,8 +55,6 @@ class TRootElectron : public TRootLepton {
             r9_(9999.),
             fBrem_(-9999.),
             nBrems_(-9999),
-            Dist_(9999.),
-            DCot_(9999.),
             passConversion_(false),
             mvaTrigId_(-9999.),
             mvaNonTrigId_(-9999.) {
@@ -103,8 +101,6 @@ class TRootElectron : public TRootLepton {
             r9_(9999.),
             fBrem_(-9999.),
             nBrems_(-9999),
-            Dist_(9999.),
-            DCot_(9999.),
             passConversion_(false),
             mvaTrigId_(-9999.),
             mvaNonTrigId_(-9999.) {
@@ -151,8 +147,6 @@ class TRootElectron : public TRootLepton {
             r9_(e.r9_),
             fBrem_(e.fBrem_),
             nBrems_(e.nBrems_),
-            Dist_(e.Dist_),
-            DCot_(e.DCot_),
             passConversion_(e.passConversion_),
             mvaTrigId_(e.mvaTrigId_),
             mvaNonTrigId_(e.mvaNonTrigId_) {
@@ -200,8 +194,6 @@ class TRootElectron : public TRootLepton {
             r9_(-9999.),
             fBrem_(-9999.),
             nBrems_(-9999),
-            Dist_(9999),
-            DCot_(9999),
             passConversion_(false),
             mvaTrigId_(-9999.),
             mvaNonTrigId_(-9999.) {
@@ -249,8 +241,6 @@ class TRootElectron : public TRootLepton {
             r9_(-9999.),
             fBrem_(-9999.),
             nBrems_(-9999),
-            Dist_(9999),
-            DCot_(9999),
             passConversion_(false),
             mvaTrigId_(-9999.),
             mvaNonTrigId_(-9999.) {
@@ -298,8 +288,6 @@ class TRootElectron : public TRootLepton {
             r9_(-9999.),
             fBrem_(-9999.),
             nBrems_(-9999),
-            Dist_(9999),
-            DCot_(9999),
             passConversion_(false),
             mvaTrigId_(-9999.),
             mvaNonTrigId_(-9999.) {
@@ -347,8 +335,6 @@ class TRootElectron : public TRootLepton {
             r9_(-9999.),
             fBrem_(-9999.),
             nBrems_(9999),
-            Dist_(9999),
-            DCot_(9999),
             passConversion_(false),
             mvaTrigId_(-9999.),
             mvaNonTrigId_(-9999.) {
@@ -396,8 +382,6 @@ class TRootElectron : public TRootLepton {
             r9_(-9999.),
             fBrem_(-9999.),
             nBrems_(9999),
-            Dist_(9999),
-            DCot_(9999),
             passConversion_(false),
             mvaTrigId_(-9999.),
             mvaNonTrigId_(-9999.) {
@@ -541,12 +525,6 @@ class TRootElectron : public TRootLepton {
         Int_t numberOfBrems() const {
             return nBrems_;
             }
-        Float_t Dist() const {
-            return Dist_;
-            }
-        Float_t DCot() const {
-            return DCot_;
-            }
         Bool_t passConversion() const {
             return passConversion_;
             }
@@ -679,12 +657,6 @@ class TRootElectron : public TRootLepton {
         void setNBrems(Int_t n) {
             nBrems_ = n;
             }
-        void setDist(Float_t dist) {
-            Dist_ = dist;
-            }
-        void setDCot(Float_t dcot) {
-            DCot_ = dcot;
-            }
         void setPassConversion(Bool_t pass) {
             passConversion_ = pass;
             }
@@ -754,8 +726,6 @@ class TRootElectron : public TRootLepton {
         // Electron classification && fBrem ====================
         Float_t fBrem_;                            // brem fraction from gsf fit: (track momentum in - track momentum out) / track momentum in
         Int_t   nBrems_;                           // number of basic clusters inside the supercluster - 1
-        Float_t Dist_;                             // distance to the conversion partner
-        Float_t DCot_;                             // difference of cot(angle) with the conversion partner track
         Bool_t  passConversion_;                   // boolean to flag converted candidates
         
 	Float_t mvaTrigId_;                        // MVA value
