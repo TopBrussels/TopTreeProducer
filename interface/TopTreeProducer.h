@@ -179,7 +179,7 @@ private:
     
     edm::EDGetTokenT<reco::BeamSpot> offlineBSToken_;
     // ID decisions objects
-    edm::EDGetTokenT<edm::ValueMap<bool> > eleLooseIdMapToken_;
+    //edm::EDGetTokenT<edm::ValueMap<bool> > eleLooseIdMapToken_;// From CMSSW_8_1_X onwards
     edm::EDGetTokenT<edm::ValueMap<bool> > eleMediumIdMapToken_;
     edm::EDGetTokenT<edm::ValueMap<bool> > eleTightIdMapToken_;
 

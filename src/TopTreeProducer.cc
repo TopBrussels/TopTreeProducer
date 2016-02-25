@@ -77,7 +77,7 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
     genParticlesToken_ = consumes<std::vector<reco::GenParticle> >(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("prunedGenParticles"));
     lheproductToken_  = consumes<LHEEventProduct>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("lheproduct"));
     offlineBSToken_ = consumes<reco::BeamSpot>(valuesForConsumeCommand.getParameter<edm::InputTag>("offlineBeamSpot"));
-    eleLooseIdMapToken_ = consumes<edm::ValueMap<bool> >(valuesForConsumeCommand.getParameter<edm::InputTag>("eleLooseIdMap"));
+    //eleLooseIdMapToken_ = consumes<edm::ValueMap<bool> >(valuesForConsumeCommand.getParameter<edm::InputTag>("eleLooseIdMap")); // From CMSSW_8_1_X onwards
     eleMediumIdMapToken_ = consumes<edm::ValueMap<bool> >(valuesForConsumeCommand.getParameter<edm::InputTag>("eleMediumIdMap"));
     eleTightIdMapToken_ = consumes<edm::ValueMap<bool> >(valuesForConsumeCommand.getParameter<edm::InputTag>("eleTightIdMap"));
     mvaValuesMapToken_ = consumes<edm::ValueMap<float> >(valuesForConsumeCommand.getParameter<edm::InputTag>("electronMVAvaluesMapNonTrig"));
@@ -727,7 +727,9 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
         for(unsigned int s=0; s<vElectronProducer.size(); s++)
         {
             ElectronAnalyzer* myElectronAnalyzer = new ElectronAnalyzer(myConfig_, verbosity);
-            myElectronAnalyzer->Process(iEvent, velectrons[s], iSetup, offlineBSToken_, velectronToken_[s], vtxToken_, eleLooseIdMapToken_, eleMediumIdMapToken_, eleTightIdMapToken_, mvaValuesMapToken_, mvaCategoriesMapToken_);
+            // From CMSSW_8_1_X onwards
+            //myElectronAnalyzer->Process(iEvent, velectrons[s], iSetup, offlineBSToken_, velectronToken_[s], vtxToken_, eleLooseIdMapToken_, eleMediumIdMapToken_, eleTightIdMapToken_, mvaValuesMapToken_, mvaCategoriesMapToken_);
+            myElectronAnalyzer->Process(iEvent, velectrons[s], iSetup, offlineBSToken_, velectronToken_[s], vtxToken_, eleMediumIdMapToken_, eleTightIdMapToken_, mvaValuesMapToken_, mvaCategoriesMapToken_);
             delete myElectronAnalyzer;
         }
     }

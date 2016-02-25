@@ -31,22 +31,6 @@ process.HBHENoiseFilterResultProducer.defaultDecision = cms.string("HBHENoiseFil
 #end of cmssw code for cleaning filters...
 
 
-## Setup VID for electrons (to have MVA value map)
-#process.load('RecoEgamma.ElectronIdentification.egmGsfElectronIDs_cff')
-#process.electronMVAValueMapProducer.srcMiniAOD = cms.InputTag('slimmedElectrons')
-#process.egmGsfElectronIDs.physicsObjectSrc = cms.InputTag('slimmedElectrons')
-#
-#elecID_mod_ls = [
-#  'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Spring15_25ns_V1_cff',
-#  'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV60_cff',
-#  'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Spring15_25ns_'+'nonTrig_V1_cff',
-#  'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Spring15_25ns_'+   'Trig_V1_cff',
-#]
-#
-#from PhysicsTools.SelectorUtils.tools.vid_id_tools import *
-#for mod in elecID_mod_ls: setupAllVIDIdsInModule(process, mod, setupVIDElectronSelection)
-
-
 #
 # Set up electron ID (VID framework)
 #
@@ -55,7 +39,6 @@ from PhysicsTools.SelectorUtils.tools.vid_id_tools import *
 # turn on VID producer, indicate data format  to be
 # DataFormat.AOD or DataFormat.MiniAOD, as appropriate 
 dataFormat = DataFormat.MiniAOD
-#process.load('RecoEgamma.ElectronIdentification.egmGsfElectronIDs_cff')
 
 switchOnVIDElectronIdProducer(process, dataFormat)
 
@@ -220,7 +203,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		hltProducer4th = cms.InputTag("TriggerResults","","PAT"),
 		electronMVAvaluesMapNonTrig = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Spring15NonTrig25nsV1Values"), #https://twiki.cern.ch/twiki/bin/view/CMS/MultivariateElectronIdentificationRun2
 		electronMVACategoriesNonTrig = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Spring15NonTrig25nsV1Categories"),
-		eleLooseIdMap = cms.InputTag("egmGsfElectronIDs:mvaEleID-Spring15-25ns-nonTrig-V1-wpLoose"),
+		#eleLooseIdMap = cms.InputTag("egmGsfElectronIDs:mvaEleID-Spring15-25ns-nonTrig-V1-wpLoose"), #Will only be available from CMSSW_8_1_X
 		eleMediumIdMap = cms.InputTag("egmGsfElectronIDs:mvaEleID-Spring15-25ns-nonTrig-V1-wp90"),
 		eleTightIdMap = cms.InputTag("egmGsfElectronIDs:mvaEleID-Spring15-25ns-nonTrig-V1-wp80")
 

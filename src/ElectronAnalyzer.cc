@@ -17,8 +17,9 @@ ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& myConfig, int verbos
 ElectronAnalyzer::~ElectronAnalyzer()
 {
 }
-
-void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElectrons, const edm::EventSetup& iSetup, edm::EDGetTokenT<reco::BeamSpot> offlineBSToken, edm::EDGetTokenT<edm::View<pat::Electron>> electronToken, edm::EDGetTokenT<reco::VertexCollection> vtxToken, edm::EDGetTokenT<edm::ValueMap<bool> > eleLooseIdMapToken, edm::EDGetTokenT<edm::ValueMap<bool> > eleMediumIdMapToken, edm::EDGetTokenT<edm::ValueMap<bool> > eleTightIdMapToken, edm::EDGetTokenT<edm::ValueMap<float> > EleMVAValuesMapToken, edm::EDGetTokenT<edm::ValueMap<int> > EleMVACategoriesMapToken)
+// From CMSSW_8_1_X onwards
+//void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElectrons, const edm::EventSetup& iSetup, edm::EDGetTokenT<reco::BeamSpot> offlineBSToken, edm::EDGetTokenT<edm::View<pat::Electron>> electronToken, edm::EDGetTokenT<reco::VertexCollection> vtxToken, edm::EDGetTokenT<edm::ValueMap<bool> > eleLooseIdMapToken, edm::EDGetTokenT<edm::ValueMap<bool> > eleMediumIdMapToken, edm::EDGetTokenT<edm::ValueMap<bool> > eleTightIdMapToken, edm::EDGetTokenT<edm::ValueMap<float> > EleMVAValuesMapToken, edm::EDGetTokenT<edm::ValueMap<int> > EleMVACategoriesMapToken)
+void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElectrons, const edm::EventSetup& iSetup, edm::EDGetTokenT<reco::BeamSpot> offlineBSToken, edm::EDGetTokenT<edm::View<pat::Electron>> electronToken, edm::EDGetTokenT<reco::VertexCollection> vtxToken, edm::EDGetTokenT<edm::ValueMap<bool> > eleMediumIdMapToken, edm::EDGetTokenT<edm::ValueMap<bool> > eleTightIdMapToken, edm::EDGetTokenT<edm::ValueMap<float> > EleMVAValuesMapToken, edm::EDGetTokenT<edm::ValueMap<int> > EleMVACategoriesMapToken)
 {
   unsigned int nElectrons=0;
 
@@ -35,10 +36,10 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
   // Get the electron ID data from the event stream.
   // Note: this implies that the VID ID modules have been run upstream.
   // If you need more info, check with the EGM group.
-  edm::Handle<edm::ValueMap<bool> > loose_id_decisions;
+  //edm::Handle<edm::ValueMap<bool> > loose_id_decisions;// From CMSSW_8_1_X onwards
   edm::Handle<edm::ValueMap<bool> > medium_id_decisions;
   edm::Handle<edm::ValueMap<bool> > tight_id_decisions; 
-  iEvent.getByToken(eleLooseIdMapToken,loose_id_decisions);
+  //iEvent.getByToken(eleLooseIdMapToken,loose_id_decisions);// From CMSSW_8_1_X onwards
   iEvent.getByToken(eleMediumIdMapToken,medium_id_decisions);
   iEvent.getByToken(eleTightIdMapToken,tight_id_decisions);
 
@@ -210,7 +211,7 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 	  std::cout << eleIds[ii].first << " " << eleIds[ii].second << std::endl;
       }
     }
-    bool isPassLoose = (*loose_id_decisions)[el];
+    //bool isPassLoose = (*loose_id_decisions)[el];  // From CMSSW_8_1_X onwards
     bool isPassMedium = (*medium_id_decisions)[el];
     bool isPassTight  = (*tight_id_decisions)[el];
     float mvaValue = (*mvaValues)[el];
@@ -218,7 +219,7 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 
     localElectron.setisMVA_TightID( isPassTight );// https://twiki.cern.ch/twiki/bin/view/CMS/MultivariateElectronIdentificationRun2
     localElectron.setisMVA_MediumID( isPassMedium );// https://twiki.cern.ch/twiki/bin/view/CMS/MultivariateElectronIdentificationRun2
-    localElectron.setisMVA_LooseID( isPassLoose );// https://twiki.cern.ch/twiki/bin/view/CMS/MultivariateElectronIdentificationRun2
+    //localElectron.setisMVA_LooseID( isPassLoose ); // From CMSSW_8_1_X onwards
     localElectron.setMVA_value( mvaValue );// https://twiki.cern.ch/twiki/bin/view/CMS/MultivariateElectronIdentificationRun2
     localElectron.setMVA_category( mvaCategory );// https://twiki.cern.ch/twiki/bin/view/CMS/MultivariateElectronIdentificationRun2
     
