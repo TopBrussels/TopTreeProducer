@@ -36,7 +36,7 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
     }
     for(unsigned int s=0; s<vElectronProducer.size(); s++)
     {
-		  velectronToken_.push_back(consumes<pat::ElectronCollection>(edm::InputTag(vElectronProducer[s])));
+		  velectronToken_.push_back(consumes<edm::View<pat::Electron>>(edm::InputTag(vElectronProducer[s])));
     }
     for(unsigned int s=0; s<vPhotonProducer.size(); s++)
     {
@@ -73,10 +73,15 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
     fixedGridRhoFastjetCentralCaloToken_ = consumes<double>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("fixedGridRhoFastjetCentralCalo"));
     fixedGridRhoFastjetCentralChargedPileUpToken_ = consumes<double>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("fixedGridRhoFastjetCentralChargedPileUp"));
     fixedGridRhoFastjetCentralNeutralToken_ = consumes<double>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("fixedGridRhoFastjetCentralNeutral"));
-	genEventInfoProductToken_ = consumes<GenEventInfoProduct>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("genEventInfoProduct"));
+	  genEventInfoProductToken_ = consumes<GenEventInfoProduct>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("genEventInfoProduct"));
     genParticlesToken_ = consumes<std::vector<reco::GenParticle> >(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("prunedGenParticles"));
     lheproductToken_  = consumes<LHEEventProduct>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("lheproduct"));
     offlineBSToken_ = consumes<reco::BeamSpot>(valuesForConsumeCommand.getParameter<edm::InputTag>("offlineBeamSpot"));
+    eleLooseIdMapToken_ = consumes<edm::ValueMap<bool> >(valuesForConsumeCommand.getParameter<edm::InputTag>("eleLooseIdMap"));
+    eleMediumIdMapToken_ = consumes<edm::ValueMap<bool> >(valuesForConsumeCommand.getParameter<edm::InputTag>("eleMediumIdMap"));
+    eleTightIdMapToken_ = consumes<edm::ValueMap<bool> >(valuesForConsumeCommand.getParameter<edm::InputTag>("eleTightIdMap"));
+    mvaValuesMapToken_ = consumes<edm::ValueMap<float> >(valuesForConsumeCommand.getParameter<edm::InputTag>("electronMVAvaluesMapNonTrig"));
+    mvaCategoriesMapToken_ = consumes<edm::ValueMap<int> >(valuesForConsumeCommand.getParameter<edm::InputTag>("electronMVACategoriesNonTrig"));
     
 }
 
@@ -722,10 +727,11 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
         for(unsigned int s=0; s<vElectronProducer.size(); s++)
         {
             ElectronAnalyzer* myElectronAnalyzer = new ElectronAnalyzer(myConfig_, verbosity);
-            myElectronAnalyzer->Process(iEvent, velectrons[s], iSetup, offlineBSToken_, velectronToken_[s], vtxToken_);
+            myElectronAnalyzer->Process(iEvent, velectrons[s], iSetup, offlineBSToken_, velectronToken_[s], vtxToken_, eleLooseIdMapToken_, eleMediumIdMapToken_, eleTightIdMapToken_, mvaValuesMapToken_, mvaCategoriesMapToken_);
             delete myElectronAnalyzer;
         }
     }
+
 
     // Photons
     if(doPhoton)

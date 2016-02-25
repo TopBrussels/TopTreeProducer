@@ -15,7 +15,7 @@ process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 
 # good global tags can be found here. Beware that the default is MC which has to be updated for data!
 # https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideFrontierConditions
-process.GlobalTag.globaltag = cms.string('74X_mcRun2_asymptotic_realisticBS_v0')
+process.GlobalTag.globaltag = cms.string('76X_mcRun2_asymptotic_v12')
 
 # various cleaning filters. More information:
 # https://twiki.cern.ch/twiki/bin/view/CMS/MissingETOptionalFiltersRun2
@@ -29,6 +29,42 @@ process.HBHENoiseFilterResultProducer.IgnoreTS4TS5ifJetInLowBVRegion=cms.bool(Fa
 # for 25 ns data:
 process.HBHENoiseFilterResultProducer.defaultDecision = cms.string("HBHENoiseFilterResultRun2Loose")
 #end of cmssw code for cleaning filters...
+
+
+## Setup VID for electrons (to have MVA value map)
+#process.load('RecoEgamma.ElectronIdentification.egmGsfElectronIDs_cff')
+#process.electronMVAValueMapProducer.srcMiniAOD = cms.InputTag('slimmedElectrons')
+#process.egmGsfElectronIDs.physicsObjectSrc = cms.InputTag('slimmedElectrons')
+#
+#elecID_mod_ls = [
+#  'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Spring15_25ns_V1_cff',
+#  'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV60_cff',
+#  'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Spring15_25ns_'+'nonTrig_V1_cff',
+#  'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Spring15_25ns_'+   'Trig_V1_cff',
+#]
+#
+#from PhysicsTools.SelectorUtils.tools.vid_id_tools import *
+#for mod in elecID_mod_ls: setupAllVIDIdsInModule(process, mod, setupVIDElectronSelection)
+
+
+#
+# Set up electron ID (VID framework)
+#
+
+from PhysicsTools.SelectorUtils.tools.vid_id_tools import *
+# turn on VID producer, indicate data format  to be
+# DataFormat.AOD or DataFormat.MiniAOD, as appropriate 
+dataFormat = DataFormat.MiniAOD
+#process.load('RecoEgamma.ElectronIdentification.egmGsfElectronIDs_cff')
+
+switchOnVIDElectronIdProducer(process, dataFormat)
+
+# define which IDs we want to produce
+my_id_modules = ['RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Spring15_25ns_nonTrig_V1_cff']
+
+#add them to the VID producer
+for idmod in my_id_modules:
+    setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
 
 
 process.maxEvents = cms.untracked.PSet(
@@ -117,7 +153,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
         doPhoton = cms.untracked.bool(True),
 		doPFMET = cms.untracked.bool(True),
 		runSuperCluster = cms.untracked.bool(True),#True only if SuperCluster are stored
-		doNPGenEvent = cms.untracked.bool(True),#put on True when running New Physics sample
+		doNPGenEvent = cms.untracked.bool(False),#put on True when running New Physics sample
         doLHEEventProd = cms.untracked.bool(True),
 		doEventCleaningInfo = cms.untracked.bool(True), # only useful for data but protected for MC. Stores HBHE, HCalIso etc filter outputs as bools in TRootEvent
 
@@ -150,9 +186,6 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		hltProducer3rd = cms.InputTag("TriggerResults","","MINIAOD"),
 		hltProducer4th = cms.InputTag("TriggerResults","","PAT"),
 		pileUpProducer = cms.InputTag("addPileupInfo","","HLT"),
-		CalometProducer = cms.untracked.vstring("patMETs"),
-		TCmetProducer = cms.untracked.InputTag("patMETsTC"),
-		genEventProducer = cms.untracked.InputTag("genEvt"),
     ),
                                   
     #new for CMSSW76X and higher: all classes that are read from the event need to be registered in the constructor!
@@ -184,7 +217,12 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		hltProducer1st = cms.InputTag("TriggerResults","","HLT"),
 		hltProducer2nd = cms.InputTag("TriggerResults","","RECO"),
 		hltProducer3rd = cms.InputTag("TriggerResults","","MINIAOD"),
-		hltProducer4th = cms.InputTag("TriggerResults","","PAT")
+		hltProducer4th = cms.InputTag("TriggerResults","","PAT"),
+		electronMVAvaluesMapNonTrig = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Spring15NonTrig25nsV1Values"), #https://twiki.cern.ch/twiki/bin/view/CMS/MultivariateElectronIdentificationRun2
+		electronMVACategoriesNonTrig = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Spring15NonTrig25nsV1Categories"),
+		eleLooseIdMap = cms.InputTag("egmGsfElectronIDs:mvaEleID-Spring15-25ns-nonTrig-V1-wpLoose"),
+		eleMediumIdMap = cms.InputTag("egmGsfElectronIDs:mvaEleID-Spring15-25ns-nonTrig-V1-wp90"),
+		eleTightIdMap = cms.InputTag("egmGsfElectronIDs:mvaEleID-Spring15-25ns-nonTrig-V1-wp80")
 
 
     )
@@ -195,6 +233,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 
 process.p = cms.Path(
 					 process.HBHENoiseFilterResultProducer*  # needs to be re-run (is fast)
+					 process.egmGsfElectronIDSequence*
 					 process.analysis)
 temp = process.dumpPython()
 outputfile = file("expanded.py",'w')
