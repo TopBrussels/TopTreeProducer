@@ -66,7 +66,7 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
     triggerToken4_ = consumes<edm::TriggerResults>(valuesForConsumeCommand.getParameter<edm::InputTag>("hltProducer4th"));
     pileUpProducerToken_ = consumes<std::vector< PileupSummaryInfo > >(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("pileUpProducer"));
     metfilterToken_ = consumes<edm::TriggerResults>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("metfilterProducer"));
-    hcalNoiseSummaryToken_ = consumes<HcalNoiseSummary>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("summaryHBHENoise"));
+//    hcalNoiseSummaryToken_ = consumes<HcalNoiseSummary>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("summaryHBHENoise"));
     fixedGridRhoAllToken_ = consumes<double>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("fixedGridRhoAll"));
     fixedGridRhoFastjetAllToken_ = consumes<double>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("fixedGridRhoFastjetAll"));
     fixedGridRhoFastjetAllCaloToken_ = consumes<double>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("fixedGridRhoFastjetAllCalo"));
@@ -411,44 +411,39 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	// Information is stored in TRootEvent as bool flags. false = bad events.
 	if (doEventCleaningInfo){
 		
-		// get TriggerResults information for the csc and ee bad supercluster filters. In principle the same thing could be done for the HBHE and HBHEIso filters but those currently need to be re-run
-	  try{
+		// get TriggerResults information for the csc and ee bad supercluster filters. In principle the same thing could be done for the HBHE and HBHEIso filters but those currently need to be re-run --> not anymore for 76X, corresponding code deleted
+	    try{
 		edm::Handle<edm::TriggerResults> metTrigResults; //our trigger result object
 		iEvent.getByToken(metfilterToken_,metTrigResults);
 		Bool_t theresult=true;
 		if(metTrigResults.isValid()){
+			//cout << "metTrigResults.isValid()" << endl; 
 			const edm::TriggerNames& metTrigNames = iEvent.triggerNames(*metTrigResults);
-			theresult=metTrigResults->accept(metTrigNames.triggerIndex("Flag_CSCTightHaloFilter"));
-			rootEvent->setCSCTightHaloFilter(theresult);
+			theresult=metTrigResults->accept(metTrigNames.triggerIndex("Flag_CSCTightHalo2015Filter")); // 29/2/2016 put 2015 in the name
+			rootEvent->setCSCTightHalo2015Filter(theresult);
 			theresult=true;
 			theresult=metTrigResults->accept(metTrigNames.triggerIndex("Flag_eeBadScFilter"));
 			rootEvent->setEEBadScFilter(theresult);
+                        // add EcalDeadCellTriggerPrimitive for 76X (29/2/2016)
+                        theresult=true; 
+                        theresult = metTrigResults->accept(metTrigNames.triggerIndex("Flag_EcalDeadCellTriggerPrimitiveFilter")); 
+			rootEvent->setEcalDeadCellTriggerPrimitiveFilter(theresult); 
+                        theresult = true; 
+			theresult = metTrigResults->accept(metTrigNames.triggerIndex("Flag_HBHENoiseFilter")); 
+			rootEvent->setHBHENoiseFilter(theresult); 
+			theresult = true; 
+			theresult = metTrigResults->accept(metTrigNames.triggerIndex("Flag_HBHENoiseIsoFilter"));
+			rootEvent->setHBHENoiseIsoFilter(theresult);
 		}
 		theresult=true;
-		edm::Handle<HcalNoiseSummary> hSummary;
-		iEvent.getByLabel("hcalnoise", hSummary);
-        if( hSummary.isValid()){
-			if( hSummary->numIsolatedNoiseChannels() >=10 )  theresult = false;
-			if( hSummary->isolatedNoiseSumE() >=50        )  theresult = false;
-			if( hSummary->isolatedNoiseSumEt() >=25       )  theresult = false;
-		}
-		rootEvent->setHCalIsoNoise(theresult);
-		
-		edm::Handle<bool> hNoiseResult;
-          
-        iEvent.getByLabel("HBHENoiseFilterResultProducer", "HBHENoiseFilterResult", hNoiseResult);
-        theresult= true;
-		if(hNoiseResult.isValid())
-			theresult = *hNoiseResult;
-		rootEvent->setHBHENoise(theresult);
-		
 		if (verbosity > 2){
 			cout << "************************************" << endl;
 			cout << "Filling event cleaning information: " << endl;
 
-			cout << " HCAL Isolation noise filter value: " << rootEvent->getHCalIsoNoise() << endl;
-			cout << " HBHE noise filter value: " << rootEvent->getHBHENoise() << endl;
-			cout << " CSS halo filter value: " << rootEvent->getCSCTightHaloFilter() << endl;
+			cout << " HCAL Isolation noise filter value: " << rootEvent->getHBHENoiseIsoFilter() << endl;
+			cout << " HBHE noise filter value: " << rootEvent->getHBHENoiseFilter() << endl;
+			cout << " CSC halo filter value: " << rootEvent->getCSCTightHalo2015Filter() << endl;
+                        cout << " EcalDeadCellTriggerPrimitive filter value: " << rootEvent->getEcalDeadCellTriggerPrimitiveFilter() << endl; 
 			cout << " EE bad SuperCluster filter value: " << rootEvent->getEEBadScFilter() << endl;
 			cout << "************************************" << endl;
 

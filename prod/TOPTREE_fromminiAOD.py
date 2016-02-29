@@ -17,18 +17,6 @@ process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 # https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideFrontierConditions
 process.GlobalTag.globaltag = cms.string('76X_mcRun2_asymptotic_v12')
 
-# various cleaning filters. More information:
-# https://twiki.cern.ch/twiki/bin/view/CMS/MissingETOptionalFiltersRun2
-
-process.load('CommonTools.RecoAlgos.HBHENoiseFilterResultProducer_cfi')
-
-process.HBHENoiseFilterResultProducer.minZeros = cms.int32(99999)
-process.HBHENoiseFilterResultProducer.IgnoreTS4TS5ifJetInLowBVRegion=cms.bool(False)
-# for 50 ns data:
-#process.HBHENoiseFilterResultProducer.defaultDecision = cms.string("HBHENoiseFilterResultRun1")
-# for 25 ns data:
-process.HBHENoiseFilterResultProducer.defaultDecision = cms.string("HBHENoiseFilterResultRun2Loose")
-#end of cmssw code for cleaning filters...
 
 
 #
@@ -51,7 +39,7 @@ for idmod in my_id_modules:
 
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(1000)
+    input = cms.untracked.int32(10000)
 )
 
 process.options = cms.untracked.PSet(
@@ -130,14 +118,14 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 		doPrimaryVertex = cms.untracked.bool(True),
 		doGenJet = cms.untracked.bool(True),
 		doPFJet = cms.untracked.bool(True),
-        doFatJet = cms.untracked.bool(True),
+        	doFatJet = cms.untracked.bool(True),
 		doMuon = cms.untracked.bool(True),
 		doElectron = cms.untracked.bool(True),
-        doPhoton = cms.untracked.bool(True),
+        	doPhoton = cms.untracked.bool(True),
 		doPFMET = cms.untracked.bool(True),
 		runSuperCluster = cms.untracked.bool(True),#True only if SuperCluster are stored
 		doNPGenEvent = cms.untracked.bool(False),#put on True when running New Physics sample
-        doLHEEventProd = cms.untracked.bool(True),
+        	doLHEEventProd = cms.untracked.bool(True),
 		doEventCleaningInfo = cms.untracked.bool(True), # only useful for data but protected for MC. Stores HBHE, HCalIso etc filter outputs as bools in TRootEvent
 
 		conversionLikelihoodWeightsFile = cms.untracked.string('RecoEgamma/EgammaTools/data/TMVAnalysis_Likelihood.weights.txt'),
@@ -184,7 +172,6 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
         vfatJetProducer = cms.untracked.vstring("slimmedJetsAK8"),
         vgenJetProducer = cms.untracked.vstring("slimmedGenJets"),
         metfilterProducer = cms.untracked.InputTag("TriggerResults","","PAT"), # can also be RECO, depends on MiniAOD version!
-        summaryHBHENoise = cms.untracked.InputTag("hcalnoise"),
         pileUpProducer = cms.untracked.InputTag("slimmedAddPileupInfo"),
         fixedGridRhoAll = cms.untracked.InputTag("fixedGridRhoAll"),
         fixedGridRhoFastjetAll = cms.untracked.InputTag("fixedGridRhoFastjetAll"),
@@ -215,7 +202,6 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 #process.TFileService = cms.Service("TFileService", fileName = cms.string('TFileTOPTREE.root') )
 
 process.p = cms.Path(
-					 process.HBHENoiseFilterResultProducer*  # needs to be re-run (is fast)
 					 process.egmGsfElectronIDSequence*
 					 process.analysis)
 temp = process.dumpPython()

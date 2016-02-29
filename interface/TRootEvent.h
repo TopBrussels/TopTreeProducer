@@ -55,10 +55,11 @@ public:
         ,factorizationScale_(-1.)
         ,originalXWGTUP_(0)
         ,weights_()
-		,hbheNoiseResult_(true)
-		,hcalIsoNoiseResult_(true)
+		,HBHENoiseFilter_(true)
+		,HBHENoiseIsoFilter_(true)
 		,eeBadScFilter_(true)
-		,CSCTightHaloFilter_(true)
+		,CSCTightHalo2015Filter_(true) // use 2015 for 76X
+  		,EcalDeadCellTriggerPrimitiveFilter_(true) // added for 76X
     {
         ;
     }
@@ -338,14 +339,17 @@ public:
     */
 	
 	// accessors noise results:
-	void setHBHENoise(Bool_t res) {hbheNoiseResult_=res;} // false = reject event
-	Bool_t getHBHENoise(void) const {return hbheNoiseResult_;} // false = reject event
-	void setHCalIsoNoise(Bool_t res){hcalIsoNoiseResult_=res;}// false = reject event
-	Bool_t getHCalIsoNoise(void) const { return hcalIsoNoiseResult_;}// false = reject event
+	void setHBHENoiseFilter(Bool_t res) {HBHENoiseFilter_=res;} // false = reject event
+	Bool_t getHBHENoiseFilter(void) const {return HBHENoiseFilter_;} // false = reject event
+	void setHBHENoiseIsoFilter(Bool_t res){HBHENoiseIsoFilter_=res;}// false = reject event
+	Bool_t getHBHENoiseIsoFilter(void) const { return HBHENoiseIsoFilter_;}// false = reject event
 	void setEEBadScFilter(Bool_t res) { eeBadScFilter_ = res;} // false = reject event
 	Bool_t getEEBadScFilter(void) const { return eeBadScFilter_; } // false = reject event
-	void setCSCTightHaloFilter(Bool_t res) { CSCTightHaloFilter_ = res;} // false = reject event
-	Bool_t getCSCTightHaloFilter(void) const { return CSCTightHaloFilter_; } // false = reject event
+	void setCSCTightHalo2015Filter(Bool_t res) { CSCTightHalo2015Filter_ = res;} // false = reject event
+	Bool_t getCSCTightHalo2015Filter(void) const { return CSCTightHalo2015Filter_; } // false = reject event
+        void setEcalDeadCellTriggerPrimitiveFilter(Bool_t res) { EcalDeadCellTriggerPrimitiveFilter_ = res;} // false = reject event
+	Bool_t getEcalDeadCellTriggerPrimitiveFilter(void) {return EcalDeadCellTriggerPrimitiveFilter_; } // false = reject event
+        
 	
 
 private:
@@ -388,12 +392,13 @@ private:
 	
 	
 	// event cleaning bools. True = good, false=bad
-	Bool_t hbheNoiseResult_;
-	Bool_t hcalIsoNoiseResult_;
+	Bool_t HBHENoiseFilter_;
+	Bool_t HBHENoiseIsoFilter_;
 	Bool_t eeBadScFilter_;
-	Bool_t CSCTightHaloFilter_;
+	Bool_t CSCTightHalo2015Filter_;
+        Bool_t EcalDeadCellTriggerPrimitiveFilter_; 
 
-    ClassDef (TRootEvent,5);
+    ClassDef (TRootEvent,6);
 };
 }
 

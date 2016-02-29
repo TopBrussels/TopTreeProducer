@@ -8,7 +8,7 @@ from TopBrussels.TopTreeProducer.eventCleaning.primaryVertexFilter_cfi import *
  
 # CSC Beam Halo Filter
 # Is this really required?
-# from RecoMET.METAnalyzers.CSCHaloFilter_cfi import *
+from RecoMET.METAnalyzers.CSCTightHalo2015Filter_cfi import *
 
 # HB + HE noise filter
 from CommonTools.RecoAlgos.HBHENoiseFilter_cfi import *
@@ -20,7 +20,7 @@ hcalLaserEventFilter.vetoByHBHEOccupancy=cms.untracked.bool(True)
 
 # ECAL dead cell filter
 from RecoMET.METFilters.EcalDeadCellTriggerPrimitiveFilter_cfi import *
-EcalDeadCellTriggerPrimitiveFilter.tpDigiCollection = cms.InputTag("ecalTPSkimNA")
+#EcalDeadCellTriggerPrimitiveFilter.tpDigiCollection = cms.InputTag("ecalTPSkimNA")
 
 # Tracking failure filter
 from RecoMET.METFilters.trackingFailureFilter_cfi import *
@@ -30,7 +30,7 @@ trackingFailureFilter.VertexSource = cms.InputTag("goodOfflinePrimaryVertices", 
 from RecoMET.METFilters.eeBadScFilter_cfi import *
 
 eventCleaning = cms.Sequence(
-#		CSCTightHaloFilter*
+		CSCTightHalo2015Filter* #29/2/2016
                 HBHENoiseFilter*
                 scrapingFilter*
                 hcalLaserEventFilter*
