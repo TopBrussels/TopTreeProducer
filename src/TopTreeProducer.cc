@@ -640,7 +640,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
         MCAnalyzer* myMCAnalyzer = new MCAnalyzer(myConfig_,verbosity);
         if (drawMCTree) myMCAnalyzer->DrawMCTree(iEvent, iSetup, myConfig_, producersNames_);
         if (doPDFInfo ) myMCAnalyzer->PDFInfo(iEvent, rootEvent, genEventInfoProductToken_);
-        myMCAnalyzer->ProcessMCParticle(iEvent, mcParticles,genParticlesToken_);
+        myMCAnalyzer->ProcessMCParticle(iEvent, mcParticles, genParticlesToken_);
         delete myMCAnalyzer;
     }
 
@@ -768,8 +768,8 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
     // Associate recoParticles to mcParticles
     if(!isRealData_ && doMCAssociation)
     {
-      	    MCAssociator* myMCAssociator = new MCAssociator(verbosity);
-            myMCAssociator->init(iEvent, mcParticles, genParticlesToken_);
+          MCAssociator* myMCAssociator = new MCAssociator(verbosity);
+          myMCAssociator->init(iEvent, mcParticles, genParticlesToken_);
         	if(doPFJet && vpfJets.size() > 0) myMCAssociator->process(vpfJets[0]);
         	if(doMuon && vmuons.size() > 0) myMCAssociator->process(vmuons[0]);
         	if(doElectron && velectrons.size() > 0) myMCAssociator->process(velectrons[0]);

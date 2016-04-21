@@ -43,6 +43,7 @@ namespace TopTree
 			,isHardProcess_(particle.isHardProcess_)
 			,fromHardProcessFinalState_(particle.fromHardProcessFinalState_)
 			,fromHardProcessDecayed_(particle.fromHardProcessDecayed_)
+      ,isLastCopy_(particle.isLastCopy_)
 			{;}
 
 		TRootMCParticle(Double_t px, Double_t py, Double_t pz, Double_t e) :
@@ -157,7 +158,8 @@ namespace TopTree
 		void setIsHardProcess (bool isHardProcess) { isHardProcess_ = isHardProcess; }
 		void setFromHardProcessFinalState (bool fromHardProcessFinalState) { fromHardProcessFinalState_ = fromHardProcessFinalState; }
 		void setFromHardProcessDecayed (bool fromHardProcessDecayed) { fromHardProcessDecayed_ = fromHardProcessDecayed; }
-		void setStateFlags (bool iPFS, bool iPD, bool iMLP6S3, bool iHP, bool fHPFS, bool fHPD)
+    void setIsLastCopy (bool isLastCopy) { isLastCopy_ = isLastCopy; }
+		void setStateFlags (bool iPFS, bool iPD, bool iMLP6S3, bool iHP, bool fHPFS, bool fHPD, bool iLC)
 		{
 		    isPromptFinalState_ = iPFS;
 		    isPromptDecayed_ = iPD;
@@ -165,6 +167,7 @@ namespace TopTree
 		    isHardProcess_ = iHP;
 		    fromHardProcessFinalState_ = fHPFS;
 		    fromHardProcessDecayed_ = fHPD;
+        isLastCopy_ = iLC;
 		}
 
 
@@ -191,6 +194,7 @@ namespace TopTree
 		bool isPromptFinalState_ = false, isPromptDecayed_ = false;
 		bool isMostlyLikePythia6Status3_ = false;
 		bool isHardProcess_ = false, fromHardProcessFinalState_ = false, fromHardProcessDecayed_ = false;
+    bool isLastCopy_ = false;
 
 		ClassDef (TRootMCParticle,3);
 	};

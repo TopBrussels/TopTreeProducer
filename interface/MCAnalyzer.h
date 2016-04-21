@@ -44,29 +44,29 @@ using namespace TopTree;
 class MCAnalyzer{
 	
 public:
-	MCAnalyzer();
-	MCAnalyzer(const edm::ParameterSet& config, bool verbosity);
-	~MCAnalyzer();
-	void DrawMCTree(const edm::Event& iEvent, const edm::EventSetup& iSetup, const edm::ParameterSet& config, const edm::ParameterSet& producersNames);
-	void PDFInfo(const edm::Event& iEvent, TRootEvent* rootEvent, edm::EDGetTokenT<GenEventInfoProduct> genEventInfoProductToken);
-    void ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootMCParticles,edm::EDGetTokenT<std::vector<reco::GenParticle> > genParticlesToken);	
+  MCAnalyzer();
+  MCAnalyzer(const edm::ParameterSet& config, int verbosity);
+  ~MCAnalyzer();
+  void DrawMCTree(const edm::Event& iEvent, const edm::EventSetup& iSetup, const edm::ParameterSet& config, const edm::ParameterSet& producersNames);
+  void PDFInfo(const edm::Event& iEvent, TRootEvent* rootEvent, edm::EDGetTokenT<GenEventInfoProduct> genEventInfoProductToken);
+  void ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootMCParticles,edm::EDGetTokenT<std::vector<reco::GenParticle> > genParticlesToken);	
 
 private:
-
-	int verbosity_;
-	
-	bool doElectronMC_;
-	double electronMC_etaMax_;
-	double electronMC_ptMin_;
-	bool doMuonMC_;
-	double muonMC_etaMax_;
-	double muonMC_ptMin_;
-	bool doJetMC_;
-	double jetMC_etaMax_;
-	double jetMC_ptMin_;
-	bool doUnstablePartsMC_;
-	bool doMETMC_;
-
+  
+  int verbosity_;
+  
+  bool doElectronMC_;
+  double electronMC_etaMax_;
+  double electronMC_ptMin_;
+  bool doMuonMC_;
+  double muonMC_etaMax_;
+  double muonMC_ptMin_;
+  bool doJetMC_;
+  double jetMC_etaMax_;
+  double jetMC_ptMin_;
+  bool doUnstablePartsMC_;
+  bool doMETMC_;
+  
 };
 
 #endif
