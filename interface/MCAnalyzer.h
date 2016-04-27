@@ -45,7 +45,7 @@ class MCAnalyzer{
 	
 public:
 	MCAnalyzer();
-	MCAnalyzer(const edm::ParameterSet& config, bool verbosity);
+	MCAnalyzer(const edm::ParameterSet& config, int verbosity);
 	~MCAnalyzer();
 	void DrawMCTree(const edm::Event& iEvent, const edm::EventSetup& iSetup, const edm::ParameterSet& config, const edm::ParameterSet& producersNames);
 	void PDFInfo(const edm::Event& iEvent, TRootEvent* rootEvent, edm::EDGetTokenT<GenEventInfoProduct> genEventInfoProductToken);

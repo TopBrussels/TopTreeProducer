@@ -21,8 +21,9 @@ MCAnalyzer::MCAnalyzer():
 
 
 
-MCAnalyzer::MCAnalyzer(const edm::ParameterSet& config,bool verbosity) : verbosity_(verbosity)
+MCAnalyzer::MCAnalyzer(const edm::ParameterSet& config, int verbosity)
 {
+    verbosity_ = verbosity;
     doElectronMC_ = config.getUntrackedParameter<bool>("doElectronMC", false);
     electronMC_etaMax_ = config.getParameter<double>("electronMC_etaMax");
     electronMC_ptMin_ = config.getParameter<double>("electronMC_ptMin");
@@ -34,6 +35,7 @@ MCAnalyzer::MCAnalyzer(const edm::ParameterSet& config,bool verbosity) : verbosi
     jetMC_ptMin_ = config.getParameter<double>("jetMC_ptMin");
     doMETMC_ = config.getUntrackedParameter<bool>("doMETMC", false);
     doUnstablePartsMC_ = config.getUntrackedParameter<bool>("doUnstablePartsMC", false);
+    if(verbosity_>2) cout << "MC Analyzer Instantiated." << endl;
 }
 
 

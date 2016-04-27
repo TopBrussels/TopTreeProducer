@@ -147,7 +147,7 @@ public:
         }
         else
         {
-            cout << "Weight Information for run " << runNumber << " already exists." << endl;
+           // cout << "Weight Information for run " << runNumber << " already exists." << endl;
         }
     };
 
@@ -169,7 +169,7 @@ public:
         }
         else
         {
-            cout << "Weight Information for run " << weightInfo.RunID() << " already exists." << endl;
+           // cout << "Weight Information for run " << weightInfo.RunID() << " already exists." << endl;
         }
     };
 
