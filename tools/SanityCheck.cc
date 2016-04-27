@@ -5,7 +5,6 @@
 
 #include <iomanip>
 
-#include "../interface/TRootGenEvent.h"
 #include "../interface/TRootEvent.h"
 #include "../interface/TRootRun.h"
 
@@ -15,12 +14,9 @@
 
 #include "../interface/TRootPhoton.h"
 #include "../interface/TRootJet.h"
-#include "../interface/TRootCaloJet.h"
-#include "../interface/TRootJPTJet.h"
 #include "../interface/TRootPFJet.h"
 
 #include "../interface/TRootMET.h"
-#include "../interface/TRootCaloMET.h"
 #include "../interface/TRootPFMET.h"
 
 #include "../interface/TRootParticle.h"
@@ -198,20 +194,14 @@ int main(int argc, char *argv[]){
     
     std::string className = "";
     
-    if (strstr(ObjName.c_str(),"CaloJet"))
-      className="TopTree::TRootCaloJet";
-    else if (strstr(ObjName.c_str(),"PFJet"))
+    if (strstr(ObjName.c_str(),"PFJet"))
       className="TopTree::TRootPFJet";
-    else if (strstr(ObjName.c_str(),"JPTJet"))
-      className="TopTree::TRootJPTJet";
     else if (strstr(ObjName.c_str(),"GenJet"))
       className="TopTree::TRootGenJet";
     else if (strstr(ObjName.c_str(),"MCParticles"))
       className="TopTree::TRootMCParticle";
     else if (strstr(ObjName.c_str(),"NPGenEvent"))
       className="TopTree::TRootNPGenEvent";
-    else if (strstr(ObjName.c_str(),"GenEvent"))
-      className="TopTree::TRootGenEvent";
     else if (strstr(ObjName.c_str(),"Muon"))
       className="TopTree::TRootMuon";
     else if (strstr(ObjName.c_str(),"Electron"))
@@ -220,8 +210,6 @@ int main(int argc, char *argv[]){
       className="TopTree::TRootPhoton";
     else if (strstr(ObjName.c_str(),"TCMET"))
       className="TopTree::TRootMET";
-    else if (strstr(ObjName.c_str(),"CaloMET"))
-	className="TopTree::TRootCaloMET";
     else if (strstr(ObjName.c_str(),"PFMET"))
       className="TopTree::TRootPFMET";
     else if (strstr(ObjName.c_str(),"MET"))
@@ -325,7 +313,7 @@ int main(int argc, char *argv[]){
 	// GenEvent
 	//
 	
-	else if (strstr(myArrayClass[p].c_str(),"TopTree::TRootGenEvent") || strstr(myArrayClass[p].c_str(),"TopTree::TRootNPGenEvent")) {
+	else if (strstr(myArrayClass[p].c_str(),"TopTree::TRootNPGenEvent")) {
 	  
 	  if(o==0) histos[myArrayName[p]+"_size"]->Fill(myArrays[p]->GetEntries());
 	  
@@ -346,7 +334,7 @@ int main(int argc, char *argv[]){
 	//
 	
 	// now putting all jet types together, these can be addressed seperately in the future if needed
-	else if (strstr(myArrayClass[p].c_str(),"TopTree::TRootGenJet") || strstr(myArrayClass[p].c_str(),"TopTree::TRootCaloJet") || strstr(myArrayClass[p].c_str(),"TopTree::TRootPFJet") || strstr(myArrayClass[p].c_str(),"TopTree::TRootJPTJet") ){
+	else if (strstr(myArrayClass[p].c_str(),"TopTree::TRootGenJet") || strstr(myArrayClass[p].c_str(),"TopTree::TRootPFJet") ){
 	  
 	  if(o==0) histos[myArrayName[p]+"_size"]->Fill(myArrays[p]->GetEntries());
 	  
@@ -423,7 +411,7 @@ int main(int argc, char *argv[]){
 	//
 	
 	// now putting all met types together, these can be addressed seperately in the future if needed
-	else if (strstr(myArrayClass[p].c_str(),"TopTree::TRootCaloMET") || strstr(myArrayClass[p].c_str(),"TopTree::TRootPFMET") || strstr(myArrayClass[p].c_str(),"TopTree::TRootMET") ){
+	else if ( strstr(myArrayClass[p].c_str(),"TopTree::TRootPFMET") || strstr(myArrayClass[p].c_str(),"TopTree::TRootMET") ){
 	  
 	  if(o==0) histos[myArrayName[p]+"_size"]->Fill(myArrays[p]->GetEntries());
 	  

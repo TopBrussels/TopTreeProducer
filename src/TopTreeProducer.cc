@@ -36,7 +36,7 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
     }
     for(unsigned int s=0; s<vElectronProducer.size(); s++)
     {
-		  velectronToken_.push_back(consumes<pat::ElectronCollection>(edm::InputTag(vElectronProducer[s])));
+		  velectronToken_.push_back(consumes<edm::View<pat::Electron>>(edm::InputTag(vElectronProducer[s])));
     }
     for(unsigned int s=0; s<vPhotonProducer.size(); s++)
     {
@@ -73,10 +73,15 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
     fixedGridRhoFastjetCentralCaloToken_ = consumes<double>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("fixedGridRhoFastjetCentralCalo"));
     fixedGridRhoFastjetCentralChargedPileUpToken_ = consumes<double>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("fixedGridRhoFastjetCentralChargedPileUp"));
     fixedGridRhoFastjetCentralNeutralToken_ = consumes<double>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("fixedGridRhoFastjetCentralNeutral"));
-	genEventInfoProductToken_ = consumes<GenEventInfoProduct>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("genEventInfoProduct"));
+	  genEventInfoProductToken_ = consumes<GenEventInfoProduct>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("genEventInfoProduct"));
     genParticlesToken_ = consumes<std::vector<reco::GenParticle> >(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("prunedGenParticles"));
     lheproductToken_  = consumes<LHEEventProduct>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("lheproduct"));
     offlineBSToken_ = consumes<reco::BeamSpot>(valuesForConsumeCommand.getParameter<edm::InputTag>("offlineBeamSpot"));
+    //eleLooseIdMapToken_ = consumes<edm::ValueMap<bool> >(valuesForConsumeCommand.getParameter<edm::InputTag>("eleLooseIdMap")); // From CMSSW_8_1_X onwards
+    eleMediumIdMapToken_ = consumes<edm::ValueMap<bool> >(valuesForConsumeCommand.getParameter<edm::InputTag>("eleMediumIdMap"));
+    eleTightIdMapToken_ = consumes<edm::ValueMap<bool> >(valuesForConsumeCommand.getParameter<edm::InputTag>("eleTightIdMap"));
+    mvaValuesMapToken_ = consumes<edm::ValueMap<float> >(valuesForConsumeCommand.getParameter<edm::InputTag>("electronMVAvaluesMapNonTrig"));
+    mvaCategoriesMapToken_ = consumes<edm::ValueMap<int> >(valuesForConsumeCommand.getParameter<edm::InputTag>("electronMVACategoriesNonTrig"));
     
 }
 
@@ -635,7 +640,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
         MCAnalyzer* myMCAnalyzer = new MCAnalyzer(myConfig_,verbosity);
         if (drawMCTree) myMCAnalyzer->DrawMCTree(iEvent, iSetup, myConfig_, producersNames_);
         if (doPDFInfo ) myMCAnalyzer->PDFInfo(iEvent, rootEvent, genEventInfoProductToken_);
-        myMCAnalyzer->ProcessMCParticle(iEvent, mcParticles,genParticlesToken_);
+        myMCAnalyzer->ProcessMCParticle(iEvent, mcParticles, genParticlesToken_);
         delete myMCAnalyzer;
     }
 
@@ -722,10 +727,13 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
         for(unsigned int s=0; s<vElectronProducer.size(); s++)
         {
             ElectronAnalyzer* myElectronAnalyzer = new ElectronAnalyzer(myConfig_, verbosity);
-            myElectronAnalyzer->Process(iEvent, velectrons[s], iSetup, offlineBSToken_, velectronToken_[s], vtxToken_);
+            // From CMSSW_8_1_X onwards
+            //myElectronAnalyzer->Process(iEvent, velectrons[s], iSetup, offlineBSToken_, velectronToken_[s], vtxToken_, eleLooseIdMapToken_, eleMediumIdMapToken_, eleTightIdMapToken_, mvaValuesMapToken_, mvaCategoriesMapToken_);
+            myElectronAnalyzer->Process(iEvent, velectrons[s], iSetup, offlineBSToken_, velectronToken_[s], vtxToken_, eleMediumIdMapToken_, eleTightIdMapToken_, mvaValuesMapToken_, mvaCategoriesMapToken_);
             delete myElectronAnalyzer;
         }
     }
+
 
     // Photons
     if(doPhoton)
@@ -760,8 +768,8 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
     // Associate recoParticles to mcParticles
     if(!isRealData_ && doMCAssociation)
     {
-      	    MCAssociator* myMCAssociator = new MCAssociator(verbosity);
-            myMCAssociator->init(iEvent, mcParticles, genParticlesToken_);
+          MCAssociator* myMCAssociator = new MCAssociator(verbosity);
+          myMCAssociator->init(iEvent, mcParticles, genParticlesToken_);
         	if(doPFJet && vpfJets.size() > 0) myMCAssociator->process(vpfJets[0]);
         	if(doMuon && vmuons.size() > 0) myMCAssociator->process(vmuons[0]);
         	if(doElectron && velectrons.size() > 0) myMCAssociator->process(velectrons[0]);

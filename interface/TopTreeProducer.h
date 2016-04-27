@@ -153,7 +153,7 @@ private:
     // good practice is to use these instead of getbylabel. However getbylabel is still supported...
     edm::EDGetTokenT<reco::VertexCollection> vtxToken_;
     std::vector<edm::EDGetTokenT<pat::MuonCollection> > vmuonToken_;
-    std::vector<edm::EDGetTokenT<pat::ElectronCollection> > velectronToken_;
+    std::vector<edm::EDGetTokenT<edm::View<pat::Electron>> > velectronToken_;
     std::vector<edm::EDGetTokenT<pat::PhotonCollection> > vphotonToken_;
     std::vector<edm::EDGetTokenT<pat::JetCollection> > vjetToken_;
     std::vector<edm::EDGetTokenT<pat::JetCollection> > vfatjetToken_;
@@ -178,6 +178,14 @@ private:
 	  edm::EDGetTokenT<LHERunInfoProduct> lheRunInfoproductToken_;
     
     edm::EDGetTokenT<reco::BeamSpot> offlineBSToken_;
+    // ID decisions objects
+    //edm::EDGetTokenT<edm::ValueMap<bool> > eleLooseIdMapToken_;// From CMSSW_8_1_X onwards
+    edm::EDGetTokenT<edm::ValueMap<bool> > eleMediumIdMapToken_;
+    edm::EDGetTokenT<edm::ValueMap<bool> > eleTightIdMapToken_;
+
+    // MVA values and categories (optional)
+    edm::EDGetTokenT<edm::ValueMap<float> > mvaValuesMapToken_;
+    edm::EDGetTokenT<edm::ValueMap<int> > mvaCategoriesMapToken_;
 
 
     
