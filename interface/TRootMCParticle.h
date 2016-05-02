@@ -141,13 +141,13 @@ namespace TopTree
 		Int_t dauTwoId() const {return dauTwoId_;}
 		Int_t dauThreeId() const {return dauThreeId_;}
 		Int_t dauFourId() const {return dauFourId_;}
-		bool isPromptFinalState const {return isPromptFinalState_;}
-		bool isPromptDecayed const {return isPromptDecayed_;}
-		bool isMostLikelyPythia6Status3 const {return isMostlyLikePythia6Status3_;}
-		bool isHardProcess const {return isHardProcess_;}
-		bool fromHardProcessFinalState const {return fromHardProcessFinalState_;}
-		bool fromHardProcessDecayed const {return fromHardProcessDecayed_;}
-		bool isLastCopy const {return isLastCopy_;}
+		bool isPromptFinalState() const {return isPromptFinalState_;}
+		bool isPromptDecayed() const {return isPromptDecayed_;}
+		bool isMostLikelyPythia6Status3() const {return isMostlyLikePythia6Status3_;}
+		bool isHardProcess() const {return isHardProcess_;}
+		bool fromHardProcessFinalState() const {return fromHardProcessFinalState_;}
+		bool fromHardProcessDecayed() const {return fromHardProcessDecayed_;}
+		bool isLastCopy() const {return isLastCopy_;}
 		virtual TString typeName() const { return "TRootMCParticle"; }
 
 
