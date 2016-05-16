@@ -24,20 +24,19 @@ MCAnalyzer::MCAnalyzer():
 
 MCAnalyzer::MCAnalyzer(const edm::ParameterSet& config, int verbosity)
 {
-    verbosity_ = verbosity;
-    doElectronMC_ = config.getUntrackedParameter<bool>("doElectronMC", false);
-    electronMC_etaMax_ = config.getParameter<double>("electronMC_etaMax");
-    electronMC_ptMin_ = config.getParameter<double>("electronMC_ptMin");
-    doMuonMC_ = config.getUntrackedParameter<bool>("doMuonMC", false);
-    muonMC_etaMax_ = config.getParameter<double>("muonMC_etaMax");
-    muonMC_ptMin_ = config.getParameter<double>("muonMC_ptMin");
-    doJetMC_ = config.getUntrackedParameter<bool>("doJetMC", false);
-    jetMC_etaMax_ = config.getParameter<double>("jetMC_etaMax");
-    jetMC_ptMin_ = config.getParameter<double>("jetMC_ptMin");
-    doMETMC_ = config.getUntrackedParameter<bool>("doMETMC", false);
-    doUnstablePartsMC_ = config.getUntrackedParameter<bool>("doUnstablePartsMC", false);
-    if(verbosity_>2) cout << "MC Analyzer Instantiated." << endl;
-
+  verbosity_ = verbosity;
+  doElectronMC_ = config.getUntrackedParameter<bool>("doElectronMC", false);
+  electronMC_etaMax_ = config.getParameter<double>("electronMC_etaMax");
+  electronMC_ptMin_ = config.getParameter<double>("electronMC_ptMin");
+  doMuonMC_ = config.getUntrackedParameter<bool>("doMuonMC", false);
+  muonMC_etaMax_ = config.getParameter<double>("muonMC_etaMax");
+  muonMC_ptMin_ = config.getParameter<double>("muonMC_ptMin");
+  doJetMC_ = config.getUntrackedParameter<bool>("doJetMC", false);
+  jetMC_etaMax_ = config.getParameter<double>("jetMC_etaMax");
+  jetMC_ptMin_ = config.getParameter<double>("jetMC_ptMin");
+  doMETMC_ = config.getUntrackedParameter<bool>("doMETMC", false);
+  doUnstablePartsMC_ = config.getUntrackedParameter<bool>("doUnstablePartsMC", false);
+  if(verbosity_>2) cout << "MC Analyzer Instantiated." << endl;
 }
 
 

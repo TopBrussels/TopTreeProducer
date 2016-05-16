@@ -66,17 +66,20 @@ from Configuration.AlCa.GlobalTag import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, 'PLS170_V6AN1::All', '')
 
 # Path and EndPath definitions
+# for MET filters: https://twiki.cern.ch/twiki/bin/viewauth/CMS/MissingETOptionalFiltersRun2#MiniAOD_76X_v2_produced_with_the
 process.Flag_trackingFailureFilter = cms.Path(process.goodVertices+process.trackingFailureFilter)
 process.Flag_goodVertices = cms.Path(process.goodVertices)
-process.Flag_CSCTightHaloFilter = cms.Path(process.CSCTightHaloFilter)
+process.Flag_CSCTightHalo2015Filter = cms.Path(process.CSCTightHalo2015Filter) # 29/2/2016 added 2015 in the name
 process.Flag_trkPOGFilters = cms.Path(process.trkPOGFilters)
 process.Flag_trkPOG_logErrorTooManyClusters = cms.Path(~process.logErrorTooManyClusters)
 process.Flag_EcalDeadCellTriggerPrimitiveFilter = cms.Path(process.EcalDeadCellTriggerPrimitiveFilter)
 process.Flag_ecalLaserCorrFilter = cms.Path(process.ecalLaserCorrFilter)
 process.Flag_trkPOG_manystripclus53X = cms.Path(~process.manystripclus53X)
 process.Flag_eeBadScFilter = cms.Path(process.eeBadScFilter)
+process.Flag_EcalDeadCellTriggerPrimitiveFilter = cms.path(process.EcalDeadCellTriggerPrimitiveFilter) # added for 76X (29/2/2016)
 process.Flag_METFilters = cms.Path(process.metFilters)
 process.Flag_HBHENoiseFilter = cms.Path(process.HBHENoiseFilter)
+process.Flag_HBHENoiseIsoFilter = cms.Path(process.HBHENoiseIsoFilter)
 process.Flag_trkPOG_toomanystripclus53X = cms.Path(~process.toomanystripclus53X)
 process.Flag_hcalLaserEventFilter = cms.Path(process.hcalLaserEventFilter)
 process.endjob_step = cms.EndPath(process.endOfProcess)

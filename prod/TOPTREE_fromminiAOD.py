@@ -17,19 +17,6 @@ process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 # https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideFrontierConditions
 process.GlobalTag.globaltag = cms.string('76X_mcRun2_asymptotic_v12')
 
-# various cleaning filters. More information:
-# https://twiki.cern.ch/twiki/bin/view/CMS/MissingETOptionalFiltersRun2
-
-process.load('CommonTools.RecoAlgos.HBHENoiseFilterResultProducer_cfi')
-
-process.HBHENoiseFilterResultProducer.minZeros = cms.int32(99999)
-process.HBHENoiseFilterResultProducer.IgnoreTS4TS5ifJetInLowBVRegion=cms.bool(False)
-# for 50 ns data:
-#process.HBHENoiseFilterResultProducer.defaultDecision = cms.string("HBHENoiseFilterResultRun1")
-# for 25 ns data:
-process.HBHENoiseFilterResultProducer.defaultDecision = cms.string("HBHENoiseFilterResultRun2Loose")
-#end of cmssw code for cleaning filters...
-
 
 #
 # Set up electron ID (VID framework)
@@ -216,7 +203,6 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 #process.TFileService = cms.Service("TFileService", fileName = cms.string('TFileTOPTREE.root') )
 
 process.p = cms.Path(
-  process.HBHENoiseFilterResultProducer*  # needs to be re-run (is fast)
   process.egmGsfElectronIDSequence*
   process.analysis
 )

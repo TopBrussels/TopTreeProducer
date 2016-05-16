@@ -3,10 +3,20 @@ TopTreeProducer
 
 Repository for code to produce TopTrees
 
-For developer to check out the CMSSW_74X branch
+For developers: check out the CMSSW_76X branch
 
 ~~~
-git clone https://github.com/TopBrussels/TopTreeProducer TopBrussels/TopTreeProducer
-cd TopBrussels/TopTreeProducer/
-git checkout CMSSW_74X
+git clone -b CMSSW_76X https://github.com/TopBrussels/TopTreeProducer TopBrussels/TopTreeProducer/
 ~~~
+
+To compile TRoot* objects
+~~~
+cd TopBrussels/TopTreeProducer/src/
+make
+~~~
+
+To compile analysers
+~~~
+scram b
+~~~
+
