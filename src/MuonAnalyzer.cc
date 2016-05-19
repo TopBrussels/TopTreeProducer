@@ -116,15 +116,28 @@ unsigned int nMuons = 0;
         }
       }
 
-      //set pf-isolation
+      //set pf-isolation, old wrong(?) Iso
       //default cone size from PAT setup : currently r=0.4
-      if(patMuon->chargedHadronIso() != -1)   localMuon.setIsoR04_ChargedHadronIso(patMuon->chargedHadronIso());
+/*      if(patMuon->chargedHadronIso() != -1)   localMuon.setIsoR04_ChargedHadronIso(patMuon->chargedHadronIso());
       if(patMuon->puChargedHadronIso() != -1) localMuon.setIsoR04_PuChargedHadronIso( patMuon->puChargedHadronIso() );
       if(patMuon->photonIso() != -1)          localMuon.setIsoR04_PhotonIso(patMuon->photonIso());
       if(patMuon->neutralHadronIso() != -1)   localMuon.setIsoR04_NeutralHadronIso(patMuon->neutralHadronIso());
+*/
+      // 19 May 2016, taken from
+      // https://twiki.cern.ch/twiki/bin/viewauth/CMS/SWGuideMuonIdRun2#Muon_Isolation
+      localMuon.setIsoR04_ChargedHadronIso(patMuon->pfIsolationR04().sumChargedHadronPt); 
+      localMuon.setIsoR04_PuChargedHadronIso(patMuon->pfIsolationR04().sumPUPt);
+      localMuon.setIsoR04_PhotonIso(patMuon->pfIsolationR04().sumPhotonEt);
+      localMuon.setIsoR04_NeutralHadronIso(patMuon->pfIsolationR04().sumNeutralHadronEt);
 
 
        //this is for cone size r=0.3
+      localMuon.setIsoR03_ChargedHadronIso(patMuon->pfIsolationR03().sumChargedHadronPt);
+      localMuon.setIsoR03_PuChargedHadronIso(patMuon->pfIsolationR03().sumPUPt);
+      localMuon.setIsoR03_PhotonIso(patMuon->pfIsolationR03().sumPhotonEt);
+      localMuon.setIsoR03_NeutralHadronIso(patMuon->pfIsolationR03().sumNeutralHadronEt);
+       
+
        //following Muon POG isolation definition
        AbsVetos veto_ch;
        AbsVetos veto_nh;
@@ -137,7 +150,14 @@ unsigned int nMuons = 0;
        veto_ph.push_back(new reco::isodeposit::ThresholdVeto( 0.5 ));
 
       new ((*rootMuons)[j]) TRootMuon (localMuon);
-      if (verbosity_ > 2)
+      if (verbosity_ > 2){
         cout << "   [" << setw (3) << j << "] " << localMuon << endl;
-	}
+      }
+      if (verbosity_ > 4){
+        cout << "   [" << setw (3) << j << "] " << "CH: " << patMuon->pfIsolationR04().sumChargedHadronPt << endl;
+        cout << "   [" << setw (3) << j << "] " << "NH: " << patMuon->pfIsolationR04().sumNeutralHadronEt << endl;
+        cout << "   [" << setw (3) << j << "] " << "PU: " << patMuon->pfIsolationR04().sumPUPt << endl;
+        cout << "   [" << setw (3) << j << "] " << "PH: " << patMuon->pfIsolationR04().sumPhotonEt << endl;
+     }
+   }
 }

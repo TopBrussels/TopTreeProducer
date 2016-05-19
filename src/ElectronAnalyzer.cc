@@ -182,12 +182,25 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
 
     //set pf-isolation
     //default cone size from PAT setup : currently r=0.3
-    if(patElectron->chargedHadronIso() != -1) localElectron.setIsoR03_ChargedHadronIso(patElectron->chargedHadronIso());
+/*    if(patElectron->chargedHadronIso() != -1) localElectron.setIsoR03_ChargedHadronIso(patElectron->chargedHadronIso());
     if(patElectron->puChargedHadronIso() != -1) localElectron.setIsoR03_PuChargedHadronIso( patElectron->puChargedHadronIso() );
     if(patElectron->photonIso() != -1) localElectron.setIsoR03_PhotonIso(patElectron->photonIso());
     if(patElectron->neutralHadronIso() != -1) localElectron.setIsoR03_NeutralHadronIso(patElectron->neutralHadronIso());
+*/
 
-    //this is for cone size r=0.4
+    GsfElectron::PflowIsolationVariables pfIso = electron->pfIsolationVariables();
+    localElectron.setIsoR03_ChargedHadronIso(pfIso.sumChargedHadronPt);
+    localElectron.setIsoR03_PuChargedHadronIso(pfIso.sumPUPt);
+    localElectron.setIsoR03_PhotonIso(pfIso.sumPhotonEt);
+    localElectron.setIsoR03_NeutralHadronIso(pfIso.sumNeutralHadronEt);
+    
+
+
+    //this is for cone size r=0.4  // same as for cone 0.3 , is cone independent. TRootElectron object will be cleaned up later
+    localElectron.setIsoR04_ChargedHadronIso(pfIso.sumChargedHadronPt);
+    localElectron.setIsoR04_PuChargedHadronIso(pfIso.sumPUPt);
+    localElectron.setIsoR04_PhotonIso(pfIso.sumPhotonEt);
+    localElectron.setIsoR04_NeutralHadronIso(pfIso.sumNeutralHadronEt);
     //following EGM POG isolation definition
     AbsVetos veto_ch;
     AbsVetos veto_nh;
@@ -225,6 +238,12 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
     
     new( (*rootElectrons)[j] ) TRootElectron(localElectron);
     if(verbosity_>2) cout << "   ["<< setw(3) << j << "] " << localElectron << endl;
+    if(verbosity_>4) cout << "   ["<< setw(3) << j << "] " << "CHIso " << localElectron.chargedHadronIso(3)  << " pat " << patElectron->chargedHadronIso() << endl;
+    if(verbosity_>4) cout << "   ["<< setw(3) << j << "] " << "PHIso " << localElectron.photonIso(3)  << " pat " << patElectron->photonIso()<< endl;
+    if(verbosity_>4) cout << "   ["<< setw(3) << j << "] " << "NHIso " << localElectron.neutralHadronIso(3)  << " pat " << patElectron->neutralHadronIso()<< endl;
+
+    
+    
 }
 
 }
