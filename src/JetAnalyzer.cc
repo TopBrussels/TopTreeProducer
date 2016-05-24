@@ -46,26 +46,10 @@ TRootJet JetAnalyzer::Process(const reco::Jet* jet, const edm::EventSetup& iSetu
 	localJet.setMaxDistance(jet->maxDistance());
 
 	// Variables from pat::Jet (Basic)
-	localJet.setBtag_jetBProbabilityBJetTags(patJet->bDiscriminator("jetBProbabilityBJetTags"));
-	localJet.setBtag_jetProbabilityBJetTags(patJet->bDiscriminator("jetProbabilityBJetTags"));
-	localJet.setBtag_trackCountingHighPurBJetTags(patJet->bDiscriminator("trackCountingHighPurBJetTags"));
-	localJet.setBtag_trackCountingHighEffBJetTags(patJet->bDiscriminator("trackCountingHighEffBJetTags"));
-	localJet.setBtag_simpleSecondaryVertexHighEffBJetTags(patJet->bDiscriminator("simpleSecondaryVertexHighEffBJetTags"));
-	localJet.setBtag_simpleSecondaryVertexHighPurBJetTags(patJet->bDiscriminator("simpleSecondaryVertexHighPurBJetTags"));
-	localJet.setBtag_combinedSecondaryVertexBJetTags(patJet->bDiscriminator("combinedSecondaryVertexBJetTags"));
 	localJet.setBtag_combinedInclusiveSecondaryVertexV2BJetTags(patJet->bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"));
-	localJet.setBtag_combinedSecondaryVertexRetrainedBJetTags(patJet->bDiscriminator("combinedSecondaryVertexRetrainedBJetTags"));
-	localJet.setBtag_combinedSecondaryVertexMVABJetTags(patJet->bDiscriminator("combinedSecondaryVertexMVABJetTags"));
-	localJet.setBtag_softMuonBJetTags(patJet->bDiscriminator("softMuonBJetTags"));
-	localJet.setBtag_softMuonByPtBJetTags(patJet->bDiscriminator("softMuonByPtBJetTags"));
-	localJet.setBtag_softMuonByIP3dBJetTags(patJet->bDiscriminator("softMuonByIP3dBJetTags"));
-	localJet.setBtag_softElectronByPtBJetTags(patJet->bDiscriminator("softElectronByPtBJetTags"));
-	localJet.setBtag_softElectronByIP3dBJetTags(patJet->bDiscriminator("softElectronByIP3dBJetTags"));
-	localJet.setBtag_combinedCSVJPBJetTags(patJet->bDiscriminator("combinedCSVJPBJetTags"));
-	localJet.setBtag_combinedCSVJPSLBJetTags(patJet->bDiscriminator("combinedCSVJPSLBJetTags"));
-	localJet.setBtag_combinedCSVSLBJetTags(patJet->bDiscriminator("combinedCSVSLBJetTags"));
-	localJet.setBtag_softPFElectronRetrainedBJetsTags(patJet->bDiscriminator("softPFElectronBJetTags"));
-	localJet.setBtag_softPFMuonRetrainedBJetsTags(patJet->bDiscriminator("softPFMuonBJetTags"));
+  localJet.setBtag_PFCombinedMVAV2BJetTags(patJet->bDiscriminator("pfCombinedMVAV2BJetTags"));
+	localJet.setBtag_softPFElectronBJetsTags(patJet->bDiscriminator("softPFElectronBJetTags"));
+	localJet.setBtag_softPFMuonBJetsTags(patJet->bDiscriminator("softPFMuonBJetTags"));
 	localJet.setCtag_pfCombinedCvsLJetTags(patJet->bDiscriminator("pfCombinedCvsLJetTags"));
 	localJet.setCtag_pfCombinedCvsBJetTags(patJet->bDiscriminator("pfCombinedCvsBJetTags"));
 	localJet.setpuID(-9999);

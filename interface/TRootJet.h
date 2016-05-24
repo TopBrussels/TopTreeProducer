@@ -28,26 +28,10 @@ namespace TopTree
 			,nConstituents_(-9999)
 			,jetArea_(-9999.)
 			,maxDistance_(-9999.)
-			,btag_jetBProbabilityBJetTags_(-9999.)
-			,btag_jetProbabilityBJetTags_(-9999.)
-			,btag_trackCountingHighPurBJetTags_(-9999.)
-			,btag_trackCountingHighEffBJetTags_(-9999.)
-			,btag_simpleSecondaryVertexHighEffBJetTags_(-9999.)
-			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
-			,btag_combinedSecondaryVertexBJetTags_(-9999.)
 			,btag_combinedInclusiveSecondaryVertexV2BJetTags_(-9999.)
-			,btag_combinedSecondaryVertexRetrainedBJetTags_(-9999.)
-			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
-			,btag_softMuonBJetTags_(-9999.)
-			,btag_softMuonByPtBJetTags_(-9999.)
-			,btag_softMuonByIP3dBJetTags_(-9999.)
-			,btag_softElectronByPtBJetTags_(-9999.)
-			,btag_softElectronByIP3dBJetTags_(-9999.)
-			,btag_combinedCSVJPBJetTags_(-9999.)
-			,btag_combinedCSVJPSLBJetTags_(-9999.)
-			,btag_combinedCSVSLBJetTags_(-9999.)
-			,btag_softPFElectronRetrainedBJetsTags_(-9999.)
-			,btag_softPFMuonRetrainedBJetsTags_(-9999.)
+			,btag_PFCombinedMVAV2BJetTags_(-9999.)
+			,btag_softPFElectronBJetsTags_(-9999.)
+			,btag_softPFMuonBJetsTags_(-9999.)
 			,ctag_pfCombinedCvsLJetTags_(-9999.)
 			,ctag_pfCombinedCvsBJetTags_(-9999.)
 			,partonFlavour_(-999)
@@ -61,26 +45,10 @@ namespace TopTree
 			,nConstituents_(jet.nConstituents_)
 			,jetArea_(jet.jetArea_)
 			,maxDistance_(jet.maxDistance_)
-			,btag_jetBProbabilityBJetTags_(jet.btag_jetBProbabilityBJetTags_)
-			,btag_jetProbabilityBJetTags_(jet.btag_jetProbabilityBJetTags_)
-			,btag_trackCountingHighPurBJetTags_(jet.btag_trackCountingHighPurBJetTags_)
-			,btag_trackCountingHighEffBJetTags_(jet.btag_trackCountingHighEffBJetTags_)
-			,btag_simpleSecondaryVertexHighEffBJetTags_(jet.btag_simpleSecondaryVertexHighEffBJetTags_)
-			,btag_simpleSecondaryVertexHighPurBJetTags_(jet.btag_simpleSecondaryVertexHighPurBJetTags_)
-			,btag_combinedSecondaryVertexBJetTags_(jet.btag_combinedSecondaryVertexBJetTags_)
 			,btag_combinedInclusiveSecondaryVertexV2BJetTags_(jet.btag_combinedInclusiveSecondaryVertexV2BJetTags_)
-			,btag_combinedSecondaryVertexRetrainedBJetTags_(jet.btag_combinedSecondaryVertexRetrainedBJetTags_)
-			,btag_combinedSecondaryVertexMVABJetTags_(jet.btag_combinedSecondaryVertexMVABJetTags_)
-			,btag_softMuonBJetTags_(jet.btag_softMuonBJetTags_)
-			,btag_softMuonByPtBJetTags_(jet.btag_softMuonByPtBJetTags_)
-			,btag_softMuonByIP3dBJetTags_(jet.btag_softMuonByIP3dBJetTags_)
-			,btag_softElectronByPtBJetTags_(jet.btag_softElectronByPtBJetTags_)
-			,btag_softElectronByIP3dBJetTags_(jet.btag_softElectronByIP3dBJetTags_)
-			,btag_combinedCSVJPBJetTags_(jet.btag_combinedCSVJPBJetTags_)
-			,btag_combinedCSVJPSLBJetTags_(jet.btag_combinedCSVJPSLBJetTags_)
-			,btag_combinedCSVSLBJetTags_(jet.btag_combinedCSVSLBJetTags_)
-			,btag_softPFElectronRetrainedBJetsTags_(jet.btag_softPFElectronRetrainedBJetsTags_)
-			,btag_softPFMuonRetrainedBJetsTags_(jet.btag_softPFMuonRetrainedBJetsTags_)
+			,btag_PFCombinedMVAV2BJetTags_(jet.btag_PFCombinedMVAV2BJetTags_)
+			,btag_softPFElectronBJetsTags_(jet.btag_softPFElectronBJetsTags_)
+			,btag_softPFMuonBJetsTags_(jet.btag_softPFMuonBJetsTags_)
 			,ctag_pfCombinedCvsLJetTags_(jet.ctag_pfCombinedCvsLJetTags_)
 			,ctag_pfCombinedCvsBJetTags_(jet.ctag_pfCombinedCvsBJetTags_)
 			,partonFlavour_(jet.partonFlavour_)
@@ -113,26 +81,10 @@ namespace TopTree
 			,nConstituents_(-9999)
 			,jetArea_(-9999.)
 			,maxDistance_(-9999.)
-			,btag_jetBProbabilityBJetTags_(-9999.)
-			,btag_jetProbabilityBJetTags_(-9999.)
-			,btag_trackCountingHighPurBJetTags_(-9999.)
-			,btag_trackCountingHighEffBJetTags_(-9999.)
-			,btag_simpleSecondaryVertexHighEffBJetTags_(-9999.)
-			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
-			,btag_combinedSecondaryVertexBJetTags_(-9999.)
 			,btag_combinedInclusiveSecondaryVertexV2BJetTags_(-9999.)
-			,btag_combinedSecondaryVertexRetrainedBJetTags_(-9999.)
-			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
-			,btag_softMuonBJetTags_(-9999.)
-			,btag_softMuonByPtBJetTags_(-9999.)
-			,btag_softMuonByIP3dBJetTags_(-9999.)
-			,btag_softElectronByPtBJetTags_(-9999.)
-			,btag_softElectronByIP3dBJetTags_(-9999.)
-			,btag_combinedCSVJPBJetTags_(-9999.)
-			,btag_combinedCSVJPSLBJetTags_(-9999.)
-			,btag_combinedCSVSLBJetTags_(-9999.)
-			,btag_softPFElectronRetrainedBJetsTags_(-9999.)
-			,btag_softPFMuonRetrainedBJetsTags_(-9999.)
+			,btag_PFCombinedMVAV2BJetTags_(-9999.)
+			,btag_softPFElectronBJetsTags_(-9999.)
+			,btag_softPFMuonBJetsTags_(-9999.)
 			,ctag_pfCombinedCvsLJetTags_(-9999.)
 			,ctag_pfCombinedCvsBJetTags_(-9999.)
 			,partonFlavour_(-9999)
@@ -146,26 +98,10 @@ namespace TopTree
 			,nConstituents_(-9999)
 			,jetArea_(-9999.)
 			,maxDistance_(-9999.)
-			,btag_jetBProbabilityBJetTags_(-9999.)
-			,btag_jetProbabilityBJetTags_(-9999.)
-			,btag_trackCountingHighPurBJetTags_(-9999.)
-			,btag_trackCountingHighEffBJetTags_(-9999.)
-			,btag_simpleSecondaryVertexHighEffBJetTags_(-9999.)
-			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
-			,btag_combinedSecondaryVertexBJetTags_(-9999.)
 			,btag_combinedInclusiveSecondaryVertexV2BJetTags_(-9999.)
-			,btag_combinedSecondaryVertexRetrainedBJetTags_(-9999.)
-			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
-			,btag_softMuonBJetTags_(-9999.)
-			,btag_softMuonByPtBJetTags_(-9999.)
-			,btag_softMuonByIP3dBJetTags_(-9999.)
-			,btag_softElectronByPtBJetTags_(-9999.)
-			,btag_softElectronByIP3dBJetTags_(-9999.)
-			,btag_combinedCSVJPBJetTags_(-9999.)
-			,btag_combinedCSVJPSLBJetTags_(-9999.)
-			,btag_combinedCSVSLBJetTags_(-9999.)
-			,btag_softPFElectronRetrainedBJetsTags_(-9999.)
-			,btag_softPFMuonRetrainedBJetsTags_(-9999.)
+			,btag_PFCombinedMVAV2BJetTags_(-9999.)
+			,btag_softPFElectronBJetsTags_(-9999.)
+			,btag_softPFMuonBJetsTags_(-9999.)
 			,ctag_pfCombinedCvsLJetTags_(-9999.)
 			,ctag_pfCombinedCvsBJetTags_(-9999.)
 			,partonFlavour_(-9999)
@@ -179,26 +115,10 @@ namespace TopTree
 			,nConstituents_(-9999)
 			,jetArea_(-9999.)
 			,maxDistance_(-9999.)
-			,btag_jetBProbabilityBJetTags_(-9999.)
-			,btag_jetProbabilityBJetTags_(-9999.)
-			,btag_trackCountingHighPurBJetTags_(-9999.)
-			,btag_trackCountingHighEffBJetTags_(-9999.)
-			,btag_simpleSecondaryVertexHighEffBJetTags_(-9999.)
-			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
-			,btag_combinedSecondaryVertexBJetTags_(-9999.)
 			,btag_combinedInclusiveSecondaryVertexV2BJetTags_(-9999.)
-			,btag_combinedSecondaryVertexRetrainedBJetTags_(-9999.)
-			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
-			,btag_softMuonBJetTags_(-9999.)
-			,btag_softMuonByPtBJetTags_(-9999.)
-			,btag_softMuonByIP3dBJetTags_(-9999.)
-			,btag_softElectronByPtBJetTags_(-9999.)
-			,btag_softElectronByIP3dBJetTags_(-9999.)
-			,btag_combinedCSVJPBJetTags_(-9999.)
-			,btag_combinedCSVJPSLBJetTags_(-9999.)
-			,btag_combinedCSVSLBJetTags_(-9999.)
-			,btag_softPFElectronRetrainedBJetsTags_(-9999.)
-			,btag_softPFMuonRetrainedBJetsTags_(-9999.)
+			,btag_PFCombinedMVAV2BJetTags_(-9999.)
+			,btag_softPFElectronBJetsTags_(-9999.)
+			,btag_softPFMuonBJetsTags_(-9999.)
 			,ctag_pfCombinedCvsLJetTags_(-9999.)
 			,ctag_pfCombinedCvsBJetTags_(-9999.)
 			,partonFlavour_(-9999)
@@ -212,26 +132,10 @@ namespace TopTree
 			,nConstituents_(-9999)
 			,jetArea_(-9999.)
 			,maxDistance_(-9999.)
-			,btag_jetBProbabilityBJetTags_(-9999.)
-			,btag_jetProbabilityBJetTags_(-9999.)
-			,btag_trackCountingHighPurBJetTags_(-9999.)
-			,btag_trackCountingHighEffBJetTags_(-9999.)
-			,btag_simpleSecondaryVertexHighEffBJetTags_(-9999.)
-			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
-			,btag_combinedSecondaryVertexBJetTags_(-9999.)
 			,btag_combinedInclusiveSecondaryVertexV2BJetTags_(-9999.)
-			,btag_combinedSecondaryVertexRetrainedBJetTags_(-9999.)
-			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
-			,btag_softMuonBJetTags_(-9999.)
-			,btag_softMuonByPtBJetTags_(-9999.)
-			,btag_softMuonByIP3dBJetTags_(-9999.)
-			,btag_softElectronByPtBJetTags_(-9999.)
-			,btag_softElectronByIP3dBJetTags_(-9999.)
-			,btag_combinedCSVJPBJetTags_(-9999.)
-			,btag_combinedCSVJPSLBJetTags_(-9999.)
-			,btag_combinedCSVSLBJetTags_(-9999.)
-			,btag_softPFElectronRetrainedBJetsTags_(-9999.)
-			,btag_softPFMuonRetrainedBJetsTags_(-9999.)
+			,btag_PFCombinedMVAV2BJetTags_(-9999.)
+			,btag_softPFElectronBJetsTags_(-9999.)
+			,btag_softPFMuonBJetsTags_(-9999.)
 			,ctag_pfCombinedCvsLJetTags_(-9999.)
 			,ctag_pfCombinedCvsBJetTags_(-9999.)
 			,partonFlavour_(-9999)
@@ -245,26 +149,10 @@ namespace TopTree
 			,nConstituents_(-9999)
 			,jetArea_(-9999.)
 			,maxDistance_(-9999.)
-			,btag_jetBProbabilityBJetTags_(-9999.)
-			,btag_jetProbabilityBJetTags_(-9999.)
-			,btag_trackCountingHighPurBJetTags_(-9999.)
-			,btag_trackCountingHighEffBJetTags_(-9999.)
-			,btag_simpleSecondaryVertexHighEffBJetTags_(-9999.)
-			,btag_simpleSecondaryVertexHighPurBJetTags_(-9999.)
-			,btag_combinedSecondaryVertexBJetTags_(-9999.)
 			,btag_combinedInclusiveSecondaryVertexV2BJetTags_(-9999.)
-			,btag_combinedSecondaryVertexRetrainedBJetTags_(-9999.)
-			,btag_combinedSecondaryVertexMVABJetTags_(-9999.)
-			,btag_softMuonBJetTags_(-9999.)
-			,btag_softMuonByPtBJetTags_(-9999.)
-			,btag_softMuonByIP3dBJetTags_(-9999.)
-			,btag_softElectronByPtBJetTags_(-9999.)
-			,btag_softElectronByIP3dBJetTags_(-9999.)
-			,btag_combinedCSVJPBJetTags_(-9999.)
-			,btag_combinedCSVJPSLBJetTags_(-9999.)
-			,btag_combinedCSVSLBJetTags_(-9999.)
-			,btag_softPFElectronRetrainedBJetsTags_(-9999.)
-			,btag_softPFMuonRetrainedBJetsTags_(-9999.)
+			,btag_PFCombinedMVAV2BJetTags_(-9999.)
+			,btag_softPFElectronBJetsTags_(-9999.)
+			,btag_softPFMuonBJetsTags_(-9999.)
 			,ctag_pfCombinedCvsLJetTags_(-9999.)
 			,ctag_pfCombinedCvsBJetTags_(-9999.)
 			,partonFlavour_(-9999)
@@ -278,29 +166,13 @@ namespace TopTree
 		Int_t nConstituents() const { return nConstituents_; }
 		Float_t jetArea() const { return jetArea_; }
 		Float_t maxDistance() const { return maxDistance_; }
-		Float_t btag_jetBProbabilityBJetTags() const { return btag_jetBProbabilityBJetTags_; }
-		Float_t btag_jetProbabilityBJetTags() const { return btag_jetProbabilityBJetTags_; }
-		Float_t btag_trackCountingHighPurBJetTags() const { return btag_trackCountingHighPurBJetTags_; }
-		Float_t btag_trackCountingHighEffBJetTags() const { return btag_trackCountingHighEffBJetTags_; }
-		Float_t btag_simpleSecondaryVertexHighEffBJetTags() const { return btag_simpleSecondaryVertexHighEffBJetTags_; }
-		Float_t btag_simpleSecondaryVertexHighPurBJetTags() const { return btag_simpleSecondaryVertexHighPurBJetTags_; }
-		Float_t btag_combinedSecondaryVertexBJetTags() const { return btag_combinedSecondaryVertexBJetTags_; }
 		Float_t btag_combinedInclusiveSecondaryVertexV2BJetTags() const {return btag_combinedInclusiveSecondaryVertexV2BJetTags_; }
-		Float_t btag_combinedSecondaryVertexRetrainedBJetTags() const { return btag_combinedSecondaryVertexRetrainedBJetTags_; }
-		Float_t btag_combinedSecondaryVertexMVABJetTags() const { return btag_combinedSecondaryVertexMVABJetTags_; }
-		Float_t btag_softMuonBJetTags() const { return btag_softMuonBJetTags_; }
-		Float_t btag_softMuonByPtBJetTags() const { return btag_softMuonByPtBJetTags_; }
-		Float_t	btag_softMuonByIP3dBJetTags() const { return btag_softMuonByIP3dBJetTags_; }
-		Float_t	btag_softElectronByPtBJetTags() const { return btag_softElectronByPtBJetTags_; }
-		Float_t	btag_softElectronByIP3dBJetTags() const { return btag_softElectronByIP3dBJetTags_; }
-		Float_t	btag_combinedCSVJPBJetTags() const { return btag_combinedCSVJPBJetTags_; }
-		Float_t	btag_combinedCSVJPSLBJetTags() const { return btag_combinedCSVJPSLBJetTags_; }
-		Float_t	btag_combinedCSVSLBJetTags() const { return btag_combinedCSVSLBJetTags_; }
-		Float_t	btag_softPFElectronRetrainedBJetsTags() const { return btag_softPFElectronRetrainedBJetsTags_; }
-        Float_t	btag_softPFMuonRetrainedBJetsTags() const { return btag_softPFMuonRetrainedBJetsTags_; }
+		Float_t btag_PFCombinedMVAV2BJetTags() const {return btag_PFCombinedMVAV2BJetTags_; }
+		Float_t	btag_softPFElectronBJetsTags() const { return btag_softPFElectronBJetsTags_; }
+    Float_t	btag_softPFMuonBJetsTags() const { return btag_softPFMuonBJetsTags_; }
 		Float_t ctag_pfCombinedCvsLJetTags() const { return ctag_pfCombinedCvsLJetTags_; }
 		Float_t ctag_pfCombinedCvsBJetTags() const { return ctag_pfCombinedCvsBJetTags_; }
-        Float_t	puID() const { return puID_; }
+    Float_t	puID() const { return puID_; }
 
 		std::map<std::string, float> getMistag_SF() const {
 			std::cout << mistag_SF_.size() << endl;
@@ -346,28 +218,12 @@ namespace TopTree
 		void setJetArea(Float_t jetArea) { jetArea_ = jetArea; }
 		void setMaxDistance(Float_t maxDistance) { maxDistance_ = maxDistance; }
 		// btag
-		void setBtag_jetBProbabilityBJetTags(Float_t btag_jetBProbabilityBJetTags) { btag_jetBProbabilityBJetTags_ = btag_jetBProbabilityBJetTags; }
-		void setBtag_jetProbabilityBJetTags(Float_t btag_jetProbabilityBJetTags) { btag_jetProbabilityBJetTags_ = btag_jetProbabilityBJetTags; }
-		void setBtag_trackCountingHighPurBJetTags(Float_t btag_trackCountingHighPurBJetTags) { btag_trackCountingHighPurBJetTags_ = btag_trackCountingHighPurBJetTags; }
-		void setBtag_trackCountingHighEffBJetTags(Float_t btag_trackCountingHighEffBJetTags) { btag_trackCountingHighEffBJetTags_ = btag_trackCountingHighEffBJetTags; }
-		void setBtag_simpleSecondaryVertexHighEffBJetTags(Float_t btag_simpleSecondaryVertexHighEffBJetTags) { btag_simpleSecondaryVertexHighEffBJetTags_ = btag_simpleSecondaryVertexHighEffBJetTags; }
-		void setBtag_simpleSecondaryVertexHighPurBJetTags(Float_t btag_simpleSecondaryVertexHighPurBJetTags) { btag_simpleSecondaryVertexHighPurBJetTags_ = btag_simpleSecondaryVertexHighPurBJetTags; }
-		void setBtag_combinedSecondaryVertexBJetTags(Float_t btag_combinedSecondaryVertexBJetTags) { btag_combinedSecondaryVertexBJetTags_ = btag_combinedSecondaryVertexBJetTags; }
 		void setBtag_combinedInclusiveSecondaryVertexV2BJetTags(Float_t btag_combinedInclusiveSecondaryVertexV2BJetTags) { btag_combinedInclusiveSecondaryVertexV2BJetTags_ = btag_combinedInclusiveSecondaryVertexV2BJetTags; }
-		void setBtag_combinedSecondaryVertexRetrainedBJetTags(Float_t btag_combinedSecondaryVertexBJetTags) { btag_combinedSecondaryVertexRetrainedBJetTags_ = btag_combinedSecondaryVertexBJetTags; }
-		void setBtag_combinedSecondaryVertexMVABJetTags(Float_t btag_combinedSecondaryVertexMVABJetTags) { btag_combinedSecondaryVertexMVABJetTags_ = btag_combinedSecondaryVertexMVABJetTags; }
-		void setBtag_softMuonBJetTags(Float_t btag_softMuonBJetTags) { btag_softMuonBJetTags_ = btag_softMuonBJetTags; }
-		void setBtag_softMuonByPtBJetTags(Float_t btag_softMuonByPtBJetTags) { btag_softMuonByPtBJetTags_ = btag_softMuonByPtBJetTags; }
-		void setBtag_softMuonByIP3dBJetTags(Float_t btag_softMuonByIP3dBJetTags) { btag_softMuonByIP3dBJetTags_ = btag_softMuonByIP3dBJetTags; }
-		void setBtag_softElectronByPtBJetTags(Float_t btag_softElectronByPtBJetTags) { btag_softElectronByPtBJetTags_ = btag_softElectronByPtBJetTags; }
-		void setBtag_softElectronByIP3dBJetTags(Float_t btag_softElectronByIP3dBJetTags) { btag_softElectronByIP3dBJetTags_ = btag_softElectronByIP3dBJetTags; }
-    void setBtag_combinedCSVJPBJetTags(Float_t btag_combinedCSVJPBJetTags) { btag_combinedCSVJPBJetTags_ = btag_combinedCSVJPBJetTags; }
-    void setBtag_combinedCSVJPSLBJetTags(Float_t btag_combinedCSVJPSLBJetTags) { btag_combinedCSVJPSLBJetTags_ = btag_combinedCSVJPSLBJetTags; }
-    void setBtag_combinedCSVSLBJetTags(Float_t btag_combinedCSVSLBJetTags) { btag_combinedCSVSLBJetTags_ = btag_combinedCSVSLBJetTags; }
-    void setBtag_softPFElectronRetrainedBJetsTags(Float_t btag_softPFElectronRetrainedBJetsTags) { btag_softPFElectronRetrainedBJetsTags_ = btag_softPFElectronRetrainedBJetsTags; }
-    void setBtag_softPFMuonRetrainedBJetsTags(Float_t btag_softPFMuonRetrainedBJetsTags) { btag_softPFMuonRetrainedBJetsTags_ = btag_softPFMuonRetrainedBJetsTags; }
+		void setBtag_PFCombinedMVAV2BJetTags(Float_t btag_PFCombinedMVAV2BJetTags) { btag_PFCombinedMVAV2BJetTags_ = btag_PFCombinedMVAV2BJetTags; }
+    void setBtag_softPFElectronBJetsTags(Float_t btag_softPFElectronBJetsTags) { btag_softPFElectronBJetsTags_ = btag_softPFElectronBJetsTags; }
+    void setBtag_softPFMuonBJetsTags(Float_t btag_softPFMuonBJetsTags) { btag_softPFMuonBJetsTags_ = btag_softPFMuonBJetsTags; }
     void setCtag_pfCombinedCvsLJetTags(Float_t ctag_pfCombinedCvsLJetTags){ ctag_pfCombinedCvsLJetTags_ = ctag_pfCombinedCvsLJetTags; }
-	void setCtag_pfCombinedCvsBJetTags(Float_t ctag_pfCombinedCvsBJetTags){ ctag_pfCombinedCvsBJetTags_ = ctag_pfCombinedCvsBJetTags; }
+	  void setCtag_pfCombinedCvsBJetTags(Float_t ctag_pfCombinedCvsBJetTags){ ctag_pfCombinedCvsBJetTags_ = ctag_pfCombinedCvsBJetTags; }
 
 		void setPartonFlavour(Int_t partonFlavour) { partonFlavour_ = partonFlavour; }
 		void setIsTopJet(Bool_t isTopJet) { isTopJet_ = isTopJet; }
@@ -423,26 +279,10 @@ namespace TopTree
 		float JetCorrValue_[4];
 
 		//btag Info
-		Float_t btag_jetBProbabilityBJetTags_;
-		Float_t btag_jetProbabilityBJetTags_;
-		Float_t btag_trackCountingHighPurBJetTags_;
-		Float_t btag_trackCountingHighEffBJetTags_;
-		Float_t btag_simpleSecondaryVertexHighEffBJetTags_;
-		Float_t btag_simpleSecondaryVertexHighPurBJetTags_;
-		Float_t btag_combinedSecondaryVertexBJetTags_;
 		Float_t btag_combinedInclusiveSecondaryVertexV2BJetTags_;
-		Float_t btag_combinedSecondaryVertexRetrainedBJetTags_;
-		Float_t btag_combinedSecondaryVertexMVABJetTags_;
-		Float_t btag_softMuonBJetTags_;
-		Float_t btag_softMuonByPtBJetTags_;
-		Float_t btag_softMuonByIP3dBJetTags_;
-		Float_t btag_softElectronByPtBJetTags_;
-		Float_t btag_softElectronByIP3dBJetTags_;
-		Float_t btag_combinedCSVJPBJetTags_;
-		Float_t btag_combinedCSVJPSLBJetTags_;
-		Float_t btag_combinedCSVSLBJetTags_;
-		Float_t btag_softPFElectronRetrainedBJetsTags_;
-		Float_t btag_softPFMuonRetrainedBJetsTags_;
+		Float_t btag_PFCombinedMVAV2BJetTags_;
+		Float_t btag_softPFElectronBJetsTags_;
+		Float_t btag_softPFMuonBJetsTags_;
 		Float_t ctag_pfCombinedCvsLJetTags_;
 		Float_t ctag_pfCombinedCvsBJetTags_;
 
