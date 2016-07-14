@@ -74,7 +74,7 @@ class TRootEvent : public TObject
     {
       return nb_;
     }
-    Int_t eventId() const
+    Long64_t eventId() const  // necessary for data
     {
       return eventId_;
     }
@@ -226,7 +226,7 @@ class TRootEvent : public TObject
     {
       nb_ = nb;
     }
-    void setEventId(Int_t eventId)
+    void setEventId(Long64_t eventId)
     {
       eventId_ = eventId;
     }
@@ -357,7 +357,7 @@ class TRootEvent : public TObject
   private:
     
     Int_t nb_;
-    Int_t eventId_;
+    Long64_t eventId_;
     Int_t runId_;
     Int_t lumiBlockId_;
     
