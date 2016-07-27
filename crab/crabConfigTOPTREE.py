@@ -18,7 +18,7 @@ config.Data.inputDataset = '/RelValTTbar_13/CMSSW_7_4_0-PU25ns_MCRUN2_74_V7_gs71
 
 #config.Data.dbsUrl = 'phys03'
 config.Data.splitting = 'FileBased'
-config.Data.unitsPerJob = 5
+config.Data.unitsPerJob = 3
 #config.Data.totalUnits = 90
 config.Data.publication = False
 config.Data.ignoreLocality = True
