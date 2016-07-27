@@ -20,14 +20,21 @@ rm -rf endprintout.txt
 inputfile=$1
 mkdir auto-cmsswconfig
 mkdir auto-crabconfig
+sampleindexerforcrab=0
 while IFS=" "  read samplename version globaltag jsonfile ; do
-#    echo $samplename "  --- " $version " --- " $globaltag --- $jsonfile
+    echo $samplename "  --- " $version " --- " $globaltag --- $jsonfile
+    sampleindexerforcrab=$(( $sampleindexerforcrab + 1 ))
     if [ -z `echo $samplename | grep AOD `  ] ; then 
 	continue
     fi
     cleanedsamplename=`echo $samplename | awk -F"/" '{print $2"-"$3}'`
     totalworkname=$samplename"--"$version"--"$globaltag
     worknamerequest=$cleanedsamplename"-"$globaltag
+
+    if [ -z `echo $totalworkname | grep 13TeV ` ] ; then
+	worknamerequest=$cleanedsamplename
+    fi
+
     cleanedtotalworkname=`echo $totalworkname | sed -e s%"/"%"-"%g -e s%"::"%"-"%g `
     cleanedrequestname=`echo $worknamerequest | sed -e s%"/"%"-"%g -e s%"::All"%""%g -e s%"MINIAODSIM"%""%g -e s%"MINIAOD"%""%g -e s%"RunII"%""%g -e s%"DisplacedSUSY_StopToBL_"%""%g -e s%"ST_"%""%g -e s%"MiniAODv2"%""%g -e s%"QCD_"%""%g -e s%"inclusiveDecays"%""%g -e s%"Asympt"%""%g -e s%"TuneCUETP8M1"%""%g`
     dummyname=`echo $cleanedrequestname | sed -e s%"--"%"-"%g `
@@ -35,7 +42,7 @@ while IFS=" "  read samplename version globaltag jsonfile ; do
     reqlength=${#cleanedrequestname}
 
     # the following code strips the start of the requestname if it is longer than 140 characters. There is a maximum size of request names so this is done to protect against strings that are too long
-    if [ $reqlength -ge 100 ]; then
+    if [ $reqlength -ge 93 ]; then
 	dummyname=`echo $cleanedrequestname | sed -e s%"-"%""%g `
 	cleanedrequestname=$dummyname
 	dummyname=`echo $cleanedrequestname | sed -e s%"_"%""%g `
@@ -44,14 +51,14 @@ while IFS=" "  read samplename version globaltag jsonfile ; do
 	reqlength=${#cleanedrequestname}
 	
 	echo "!!!!!!!!!!!!!! requestname larger than 100: "  $reqlength " "$cleanedrequestname " so shortening by stripping start of name as already present in directory structure! "
-	if [ $reqlength -ge 100 ]; then
-	    dummyname=${cleanedrequestname:$reclength-100}
+	if [ $reqlength -ge 93 ]; then
+	    dummyname=${cleanedrequestname:$reclength-93}
 	    cleanedrequestname=$dummyname
 	    echo "!!!!!!!!!!!!!! new name: "$cleanedrequestname
 	fi
     fi
-
-#    echo $cleanedtotalworkname " ---- " $cleanedrequestname
+    cleanedrequestname=$cleanedrequestname"crab"$sampleindexerforcrab
+    echo $cleanedtotalworkname " ---- " $cleanedrequestname
 
     cmsswfilename="auto-cmsswconfig/TOPTREE_fromminiAOD-"$cleanedtotalworkname".py"
     crabfilename="auto-crabconfig/crabConfigTOPTREE-"$cleanedtotalworkname".py"
