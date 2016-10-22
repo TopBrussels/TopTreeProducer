@@ -163,6 +163,7 @@ private:
     edm::EDGetTokenT<edm::TriggerResults> triggerToken2_;
     edm::EDGetTokenT<edm::TriggerResults> triggerToken3_;
     edm::EDGetTokenT<edm::TriggerResults> triggerToken4_;
+    edm::EDGetTokenT<edm::TriggerResults> triggerToken5_;
     edm::EDGetTokenT<edm::TriggerResults> metfilterToken_;
     edm::EDGetTokenT<HcalNoiseSummary> hcalNoiseSummaryToken_;
     edm::EDGetTokenT<std::vector< PileupSummaryInfo > > pileUpProducerToken_;
