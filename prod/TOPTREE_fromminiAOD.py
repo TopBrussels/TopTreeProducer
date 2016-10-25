@@ -15,7 +15,7 @@ process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 
 # good global tags can be found here. Beware that the default is MC which has to be updated for data!
 # https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideFrontierConditions
-process.GlobalTag.globaltag = cms.string('76X_mcRun2_asymptotic_v12')
+process.GlobalTag.globaltag = cms.string('80X_mcRun2_asymptotic_2016_miniAODv2_v1')
 
 
 #
@@ -38,7 +38,7 @@ for idmod in my_id_modules:
 
 
 process.maxEvents = cms.untracked.PSet(
-  input = cms.untracked.int32(1000)
+  input = cms.untracked.int32(-1)
 )
 
 process.options = cms.untracked.PSet(
@@ -48,7 +48,7 @@ process.options = cms.untracked.PSet(
 #Default Test sample
 #process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/mc/RunIISpring15DR74/TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v2/00000/18E6854B-1809-E511-A405-0025905B8590.root'))
 #process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/relval/CMSSW_7_6_0/RelValTTbarLepton_13/MINIAODSIM/76X_mcRun2_asymptotic_v11-v1/00000/4A44647C-A77F-E511-A26B-002618943960.root'))
-process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://xrootd-cms.infn.it///store/mc/RunIIFall15MiniAODv1/QCD_Pt-15to20_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/MINIAODSIM/PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1/00000/04C4FE54-95A8-E511-AD4D-0CC47A4D7686.root'))
+process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://xrootd-cms.infn.it///store/mc/RunIISpring16MiniAODv2/TT_TuneCUETP8M1_13TeV-powheg-pythia8/MINIAODSIM/PUSpring16RAWAODSIM_reHLT_80X_mcRun2_asymptotic_v14_ext3-v1/00000/0064B539-803A-E611-BDEA-002590D0B060.root'))
 
 #process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/mc/RunIISpring15DR74/TTJets_DiLept_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v2/20000/5E2A0DB9-E52F-E511-A294-782BCB407B74.root'))
 
@@ -151,13 +151,6 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
     jetMC_ptMin = cms.double(15.0), #checking effect on filesize by tightening cuts here 5.0 -> 15.0
   ),
   
-  producersNames = cms.PSet(
-    hltProducer1st = cms.InputTag("TriggerResults","","HLT"),
-    hltProducer2nd = cms.InputTag("TriggerResults","","RECO"),
-    hltProducer3rd = cms.InputTag("TriggerResults","","MINIAOD"),
-    hltProducer4th = cms.InputTag("TriggerResults","","PAT"),
-    pileUpProducer = cms.InputTag("addPileupInfo","","HLT"),
-  ),
   
   #new for CMSSW76X and higher: all classes that are read from the event need to be registered in the constructor!
   #supposedly this is necessary in the case that the code is run on machines that use multi-threading.
@@ -187,9 +180,10 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
     primaryVertexProducer = cms.untracked.InputTag("offlineSlimmedPrimaryVertices"),
     offlineBeamSpot = cms.InputTag("offlineBeamSpot"),
     hltProducer1st = cms.InputTag("TriggerResults","","HLT"),
-    hltProducer2nd = cms.InputTag("TriggerResults","","RECO"),
-    hltProducer3rd = cms.InputTag("TriggerResults","","MINIAOD"),
-    hltProducer4th = cms.InputTag("TriggerResults","","PAT"),
+    hltProducer2nd = cms.InputTag("TriggerResults","","HLT2"),
+    hltProducer3rd = cms.InputTag("TriggerResults","","RECO"),
+    hltProducer4th = cms.InputTag("TriggerResults","","MINIAOD"),
+    hltProducer5th = cms.InputTag("TriggerResults","","PAT"),
     electronMVAvaluesMapNonTrig = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Spring15NonTrig25nsV1Values"), #https://twiki.cern.ch/twiki/bin/view/CMS/MultivariateElectronIdentificationRun2
     electronMVACategoriesNonTrig = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Spring15NonTrig25nsV1Categories"),
     #eleLooseIdMap = cms.InputTag("egmGsfElectronIDs:mvaEleID-Spring15-25ns-nonTrig-V1-wpLoose"), #Will only be available from CMSSW_8_1_X

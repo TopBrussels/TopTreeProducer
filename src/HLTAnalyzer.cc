@@ -19,7 +19,7 @@ int getIndexForRun ( const edm::Event& iEvent, vector<TopTree::TRootHLTInfo> inf
 
 }
 
-HLTAnalyzer::HLTAnalyzer(edm::EDGetTokenT<edm::TriggerResults> triggerToken1, edm::EDGetTokenT<edm::TriggerResults> triggerToken2, edm::EDGetTokenT<edm::TriggerResults> triggerToken3, edm::EDGetTokenT<edm::TriggerResults> triggerToken4, const edm::ParameterSet& myConfig, int verbosity) :
+HLTAnalyzer::HLTAnalyzer(edm::EDGetTokenT<edm::TriggerResults> triggerToken1, edm::EDGetTokenT<edm::TriggerResults> triggerToken2,edm::EDGetTokenT<edm::TriggerResults> triggerToken3, edm::EDGetTokenT<edm::TriggerResults> triggerToken4, edm::EDGetTokenT<edm::TriggerResults> triggerToken5, const edm::ParameterSet& myConfig, int verbosity) :
 		verbosity_(verbosity)
   		,triggerNames_()
 		,doHLT_(myConfig.getUntrackedParameter<bool>("doHLT",false))
@@ -36,6 +36,7 @@ HLTAnalyzer::HLTAnalyzer(edm::EDGetTokenT<edm::TriggerResults> triggerToken1, ed
 		triggerResultsToken2nd_=triggerToken2;
 		triggerResultsToken3rd_=triggerToken3;
 		triggerResultsToken4th_=triggerToken4;
+		triggerResultsToken5th_=triggerToken5;
 		}
 
 void HLTAnalyzer::process(const edm::Event& iEvent, TRootEvent* rootEvent, edm::ParameterSet valuesForConsumeCommand)
@@ -52,11 +53,12 @@ void HLTAnalyzer::process(const edm::Event& iEvent, TRootEvent* rootEvent, edm::
 
 	  if ( index == -1 || index < (int)hltInfos_.size()-1 ) {// no info for this run yet -> create a new entry
 
-	    edm::Handle<edm::TriggerResults> trigResults, trigResults1st, trigResults2nd, trigResults3rd, trigResults4th;
+	    edm::Handle<edm::TriggerResults> trigResults, trigResults1st, trigResults2nd, trigResults3rd, trigResults4th, trigResults5th;
 	    try {iEvent.getByToken(triggerResultsToken1st_,trigResults1st);} catch (...) {;}
 	    try {iEvent.getByToken(triggerResultsToken2nd_,trigResults2nd);} catch (...) {;}
 	    try {iEvent.getByToken(triggerResultsToken3rd_,trigResults3rd);} catch (...) {;}
 	    try {iEvent.getByToken(triggerResultsToken4th_,trigResults4th);} catch (...) {;}
+	    try {iEvent.getByToken(triggerResultsToken5th_,trigResults5th);} catch (...) {;}
 	    if(trigResults1st.isValid())
 	      {
 				trigResults = trigResults1st;
@@ -79,7 +81,13 @@ void HLTAnalyzer::process(const edm::Event& iEvent, TRootEvent* rootEvent, edm::
 	    {
 	      trigResults = trigResults4th;
 	      triggerResultsToken_ = triggerResultsToken4th_;
-		  triggerResultsTag_ = valuesForConsumeCommand.getParameter<edm::InputTag>("hltProducer4th");
+		    triggerResultsTag_ = valuesForConsumeCommand.getParameter<edm::InputTag>("hltProducer4th");
+			}
+	    else if(trigResults5th.isValid())
+	    {
+	      trigResults = trigResults5th;
+	      triggerResultsToken_ = triggerResultsToken5th_;
+		    triggerResultsTag_ = valuesForConsumeCommand.getParameter<edm::InputTag>("hltProducer5th");
 			}
 
 	    triggerNames_=iEvent.triggerNames(*trigResults);

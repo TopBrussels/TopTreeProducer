@@ -26,7 +26,7 @@ class HLTAnalyzer
 	
 public:
 	
-	HLTAnalyzer(edm::EDGetTokenT<edm::TriggerResults> triggerToken1, edm::EDGetTokenT<edm::TriggerResults> triggerToken2,edm::EDGetTokenT<edm::TriggerResults> triggerToken3,edm::EDGetTokenT<edm::TriggerResults> triggerToken4, const edm::ParameterSet& myConfig, int verbosity);
+	HLTAnalyzer(edm::EDGetTokenT<edm::TriggerResults> triggerToken1, edm::EDGetTokenT<edm::TriggerResults> triggerToken2,edm::EDGetTokenT<edm::TriggerResults> triggerToken3, edm::EDGetTokenT<edm::TriggerResults> triggerToken4, edm::EDGetTokenT<edm::TriggerResults> triggerToken5, const edm::ParameterSet& myConfig, int verbosity);
 	
 	~HLTAnalyzer() {;}
 	
@@ -62,6 +62,7 @@ private:
 	edm::EDGetTokenT<edm::TriggerResults> triggerResultsToken2nd_;	// Input Token for TriggerResults, 2nd choice
 	edm::EDGetTokenT<edm::TriggerResults> triggerResultsToken3rd_;	// Input Token for TriggerResults, 3rd choice
 	edm::EDGetTokenT<edm::TriggerResults> triggerResultsToken4th_;	// Input Token for TriggerResults, 4th choice
+	edm::EDGetTokenT<edm::TriggerResults> triggerResultsToken5th_;	// Input Token for TriggerResults, 4th choice
 
 	edm::TriggerNames triggerNames_;			// TriggerNames class
 
