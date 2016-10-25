@@ -37,6 +37,7 @@ public:
 private:
 	int verbosity_;
 	bool useMC_;
+  double muon_ptMin_;
 };
 
 #endif
