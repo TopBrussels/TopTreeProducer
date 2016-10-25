@@ -47,6 +47,7 @@ private:
 	bool runSuperCluster_;
 	bool doPrimaryVertex_;
 	bool isData_;
+  double electron_ptMin_;
 
 };
 
