@@ -12,6 +12,7 @@ ElectronAnalyzer::ElectronAnalyzer(const edm::ParameterSet& myConfig, int verbos
   isData_ = myConfig.getUntrackedParameter<bool>("isData");
   runSuperCluster_ = myConfig.getUntrackedParameter<bool>("runSuperCluster",false);
   doPrimaryVertex_ = myConfig.getUntrackedParameter<bool>("doPrimaryVertex");
+  electron_ptMin_ = myConfig.getParameter<double>("electron_ptMin");
 }
 
 ElectronAnalyzer::~ElectronAnalyzer()
@@ -57,6 +58,9 @@ void ElectronAnalyzer::Process(const edm::Event& iEvent, TClonesArray* rootElect
     const pat::Electron*  patElectron = &((*patElectrons)[j]);//dynamic_cast<const pat::Electron*>(&*electron);
     const reco::GsfElectron* electron = (const reco::GsfElectron*) patElectron;//( & ((*patElectrons)[j]) );
     const auto el = patElectrons->ptrAt(j);
+    
+    if (electron->pt() < electron_ptMin_) continue;
+    
      
     TRootElectron localElectron(
                                 electron->px()

@@ -10,6 +10,7 @@ MuonAnalyzer::MuonAnalyzer (const edm::ParameterSet & myConfig, int verbosity):
 verbosity_ (verbosity)
 {
 	useMC_ = myConfig.getUntrackedParameter < bool > ("doMuonMC");
+  muon_ptMin_ = myConfig.getParameter<double>("muon_ptMin");
 }
 
 
@@ -39,6 +40,8 @@ unsigned int nMuons = 0;
     {
       const pat::Muon*  patMuon = &((*patMuons)[j]);
       const reco::Muon* muon = (const reco::Muon *) patMuon;
+      
+      if (muon->pt() < muon_ptMin_) continue;
 
       TRootMuon localMuon (muon->px (), muon->py (), muon->pz (), muon->energy (), muon->vx (), muon->vy (), muon->vz (), muon->pdgId (), muon->charge ());
 
