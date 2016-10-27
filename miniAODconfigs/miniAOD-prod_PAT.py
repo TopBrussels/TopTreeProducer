@@ -20,7 +20,7 @@ process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(100)
+    input = cms.untracked.int32(-1)@
 )
 
 # Input source
@@ -69,7 +69,8 @@ process.GlobalTag = GlobalTag(process.GlobalTag, 'PLS170_V6AN1::All', '')
 # for MET filters: https://twiki.cern.ch/twiki/bin/viewauth/CMS/MissingETOptionalFiltersRun2#MiniAOD_76X_v2_produced_with_the
 process.Flag_trackingFailureFilter = cms.Path(process.goodVertices+process.trackingFailureFilter)
 process.Flag_goodVertices = cms.Path(process.goodVertices)
-process.Flag_CSCTightHalo2015Filter = cms.Path(process.CSCTightHalo2015Filter) # 29/2/2016 added 2015 in the name
+#process.Flag_CSCTightHalo2015Filter = cms.Path(process.CSCTightHalo2015Filter) # 29/2/2016 added 2015 in the namei
+process.Flag_globalTightHalo2016Filter = cms.Path(process.globalTightHalo2016Filter)  #80X version 27/10/2016
 process.Flag_trkPOGFilters = cms.Path(process.trkPOGFilters)
 process.Flag_trkPOG_logErrorTooManyClusters = cms.Path(~process.logErrorTooManyClusters)
 process.Flag_EcalDeadCellTriggerPrimitiveFilter = cms.Path(process.EcalDeadCellTriggerPrimitiveFilter)

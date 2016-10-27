@@ -57,7 +57,8 @@ class TRootEvent : public TObject
         ,HBHENoiseFilter_(true)
         ,HBHENoiseIsoFilter_(true)
         ,eeBadScFilter_(true)
-        ,CSCTightHalo2015Filter_(true) // use 2015 for 76X
+//        ,CSCTightHalo2015Filter_(true) // use 2015 for 76X
+	,globalTightHalo2016Filter_(true) // 80X version 
         ,EcalDeadCellTriggerPrimitiveFilter_(true) // added for 76X
     {
       ;
@@ -348,8 +349,11 @@ class TRootEvent : public TObject
     Bool_t getHBHENoiseIsoFilter(void) const { return HBHENoiseIsoFilter_;} // false = reject event
     void setEEBadScFilter(Bool_t res) { eeBadScFilter_ = res;} // false = reject event
     Bool_t getEEBadScFilter(void) const { return eeBadScFilter_; } // false = reject event
-    void setCSCTightHalo2015Filter(Bool_t res) { CSCTightHalo2015Filter_ = res;} // false = reject event
-    Bool_t getCSCTightHalo2015Filter(void) const { return CSCTightHalo2015Filter_; } // false = reject event
+//    void setCSCTightHalo2015Filter(Bool_t res) { CSCTightHalo2015Filter_ = res;} // false = reject event
+//    Bool_t getCSCTightHalo2015Filter(void) const { return CSCTightHalo2015Filter_; } // false = reject event
+    //80X version
+    void setglobalTightHalo2016Filter(Bool_t res) { globalTightHalo2016Filter_ = res;} // false = reject event
+    Bool_t getglobalTightHalo2016Filter(void) const { return globalTightHalo2016Filter_; } // false = reject event
     void setEcalDeadCellTriggerPrimitiveFilter(Bool_t res) { EcalDeadCellTriggerPrimitiveFilter_ = res;} // false = reject event
     Bool_t getEcalDeadCellTriggerPrimitiveFilter(void) {return EcalDeadCellTriggerPrimitiveFilter_; } // false = reject event
     
@@ -396,7 +400,8 @@ class TRootEvent : public TObject
     Bool_t HBHENoiseFilter_;
     Bool_t HBHENoiseIsoFilter_;
     Bool_t eeBadScFilter_;
-    Bool_t CSCTightHalo2015Filter_;
+//    Bool_t CSCTightHalo2015Filter_;
+    Bool_t globalTightHalo2016Filter_; 
     Bool_t EcalDeadCellTriggerPrimitiveFilter_;
 
     ClassDef (TRootEvent,6);

@@ -417,8 +417,11 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 		Bool_t theresult=true;
 		if(metTrigResults.isValid()){
 			const edm::TriggerNames& metTrigNames = iEvent.triggerNames(*metTrigResults);
-			theresult=metTrigResults->accept(metTrigNames.triggerIndex("Flag_CSCTightHalo2015Filter")); // 29/2/2016 put 2015 in the name
-			rootEvent->setCSCTightHalo2015Filter(theresult);
+//			theresult=metTrigResults->accept(metTrigNames.triggerIndex("Flag_CSCTightHalo2015Filter")); // 29/2/2016 put 2015 in the name
+//			// 27/10/2016     add 2016 version, only works for 80X miniADOv2
+			theresult=metTrigResults->accept(metTrigNames.triggerIndex("Flag_globalTightHalo2016Filter"));
+//			rootEvent->setCSCTightHalo2015Filter(theresult);
+			rootEvent->setglobalTightHalo2016Filter(theresult);
 			theresult=true;
 			theresult=metTrigResults->accept(metTrigNames.triggerIndex("Flag_eeBadScFilter"));
 			rootEvent->setEEBadScFilter(theresult);
@@ -432,6 +435,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
       theresult = true; 
       theresult = metTrigResults->accept(metTrigNames.triggerIndex("Flag_HBHENoiseIsoFilter"));
       rootEvent->setHBHENoiseIsoFilter(theresult);
+      // add (27/10/2016) 
 		}
 		
 		
@@ -441,7 +445,10 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 
 			cout << " HCAL Isolation noise filter value: " << rootEvent->getHBHENoiseIsoFilter() << endl;
 			cout << " HBHE noise filter value: " << rootEvent->getHBHENoiseFilter() << endl;
-			cout << " CSC halo filter value: " << rootEvent->getCSCTightHalo2015Filter() << endl;
+//			cout << " CSC halo filter value: " << rootEvent->getCSCTightHalo2015Filter() << endl;
+			cout << " CSC halo filter value: " << rootEvent->getglobalTightHalo2016Filter() << endl;
+
+//
 			cout << " EcalDeadCellTriggerPrimitive filter value: " << rootEvent->getEcalDeadCellTriggerPrimitiveFilter() << endl;
 			cout << " EE bad SuperCluster filter value: " << rootEvent->getEEBadScFilter() << endl;
 			cout << "************************************" << endl;
