@@ -28,15 +28,18 @@ while IFS=" "  read samplename version globaltag jsonfile ; do
 	continue
     fi
     cleanedsamplename=`echo $samplename | awk -F"/" '{print $2"-"$3}'`
-    totalworkname=$samplename"--"$version"--"$globaltag
-    worknamerequest=$cleanedsamplename"-"$globaltag
+    echo $cleanedsamplename
+    totalworkname=$samplename
+    totalworkdir="TTP-"$version"--GT-"$globaltag
+    worknamerequest=$cleanedsamplename
 
     if [ -z `echo $totalworkname | grep 13TeV ` ] ; then
 	worknamerequest=$cleanedsamplename
     fi
 
     cleanedtotalworkname=`echo $totalworkname | sed -e s%"/"%"-"%g -e s%"::"%"-"%g `
-    cleanedrequestname=`echo $worknamerequest | sed -e s%"/"%"-"%g -e s%"::All"%""%g -e s%"MINIAODSIM"%""%g -e s%"MINIAOD"%""%g -e s%"RunII"%""%g -e s%"DisplacedSUSY_StopToBL_"%""%g -e s%"ST_"%""%g -e s%"MiniAODv2"%""%g -e s%"QCD_"%""%g -e s%"inclusiveDecays"%""%g -e s%"Asympt"%""%g -e s%"TuneCUETP8M1"%""%g`
+#    cleanedrequestname=`echo $worknamerequest | sed -e s%"/"%"-"%g -e s%"::All"%""%g -e s%"MINIAODSIM"%""%g -e s%"MINIAOD"%""%g -e s%"RunII"%""%g -e s%"DisplacedSUSY_StopToBL_"%""%g -e s%"ST_"%""%g -e s%"MiniAODv2"%""%g -e s%"QCD_"%""%g -e s%"inclusiveDecays"%""%g -e s%"Asympt"%""%g -e s%"TuneCUETP8M1"%""%g`
+    cleanedrequestname=`echo $worknamerequest | sed -e s%"/"%"-"%g -e s%"::All"%""%g -e s%"MINIAODSIM"%""%g -e s%"MINIAOD"%""%g`
     dummyname=`echo $cleanedrequestname | sed -e s%"--"%"-"%g `
     cleanedrequestname=$dummyname
     reqlength=${#cleanedrequestname}
@@ -73,7 +76,7 @@ while IFS=" "  read samplename version globaltag jsonfile ; do
     echo "config.User.voGroup = 'becms'" >> bla
     grep -v "config.Data.inputDataset" bla > bla2; mv bla2 bla
     echo "config.Data.inputDataset = '"$samplename"'" >> bla 
-    echo "config.Data.outLFNDirBase = '/store/user/"`whoami`"/TopTree/"$version"'" >> bla
+    echo "config.Data.outLFNDirBase = '/store/user/"`whoami`"/TopTree/"$version"/"$totalworkdir"'" >> bla
     if [[ $samplename == *"Run2015"* ]] 
     then
 	grep -v "config.Data.splitting = 'FileBased'" bla > bla2; mv bla2 bla
