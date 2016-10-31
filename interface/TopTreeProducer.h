@@ -34,7 +34,6 @@
 
 #include "../interface/HLTAnalyzer.h"
 #include "../interface/MCAnalyzer.h"
-#include "../interface/MCAssociator.h"
 #include "../interface/VertexAnalyzer.h"
 #include "../interface/JetAnalyzer.h"
 #include "../interface/GenJetAnalyzer.h"
@@ -99,7 +98,6 @@ private:
   TH1F* tmp_;
 	bool doHLT;
 	bool doMC;
-	bool doMCAssociation;
 	bool doPDFInfo;
 	bool doSignalMuMuGamma;
 	bool doSignalTopTop;
