@@ -77,15 +77,15 @@ while IFS=" "  read samplename version globaltag jsonfile ; do
     grep -v "config.Data.inputDataset" bla > bla2; mv bla2 bla
     echo "config.Data.inputDataset = '"$samplename"'" >> bla 
     echo "config.Data.outLFNDirBase = '/store/user/"`whoami`"/TopTree/"$version"/"$totalworkdir"'" >> bla
-    if [[ $samplename == *"Run2015"* ]] 
+    if [[ $samplename == *"Run2016"* ]] 
     then
 	grep -v "config.Data.splitting = 'FileBased'" bla > bla2; mv bla2 bla
 	echo "config.Data.splitting = 'LumiBased'" >> bla
-	echo "config.Data.unitsPerJob = 20" >> bla
+	echo "config.Data.unitsPerJob = 10" >> bla
 	if [[ $jsonfile == *"13TeV"* ]]
 	then
+	    echo "now adding jsonfile "$jsonfile
 	    echo "config.Data.lumiMask = '"$jsonfile"'">> bla
-#	echo "config.Data.lumiMask = 'myJSONFILE.txt" >> bla
 	fi
 
     fi
