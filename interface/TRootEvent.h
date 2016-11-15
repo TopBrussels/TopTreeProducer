@@ -60,6 +60,8 @@ class TRootEvent : public TObject
 //        ,CSCTightHalo2015Filter_(true) // use 2015 for 76X
 	,globalTightHalo2016Filter_(true) // 80X version 
         ,EcalDeadCellTriggerPrimitiveFilter_(true) // added for 76X
+	,BadChCandFilter_(true) //80X
+	,BadPFMuonFilter_(true) // 80X
     {
       ;
     }
@@ -356,7 +358,11 @@ class TRootEvent : public TObject
     Bool_t getglobalTightHalo2016Filter(void) const { return globalTightHalo2016Filter_; } // false = reject event
     void setEcalDeadCellTriggerPrimitiveFilter(Bool_t res) { EcalDeadCellTriggerPrimitiveFilter_ = res;} // false = reject event
     Bool_t getEcalDeadCellTriggerPrimitiveFilter(void) {return EcalDeadCellTriggerPrimitiveFilter_; } // false = reject event
-    
+      // added for 80X
+     void setBadChCandFilter(Bool_t res) { BadChCandFilter_ = res; } // false = reject event
+     Bool_t getBadChCandFilter(void) const{ return BadChCandFilter_;}
+      void setBadPFMuonFilter(Bool_t res) { BadPFMuonFilter_ = res; } // false = reject event
+     Bool_t getBadPFMuonFilter(void) const {return BadPFMuonFilter_; }
     
   private:
     
@@ -403,8 +409,10 @@ class TRootEvent : public TObject
 //    Bool_t CSCTightHalo2015Filter_;
     Bool_t globalTightHalo2016Filter_; 
     Bool_t EcalDeadCellTriggerPrimitiveFilter_;
+    Bool_t BadChCandFilter_; 
+    Bool_t BadPFMuonFilter_;
 
-    ClassDef (TRootEvent,6);
+    ClassDef (TRootEvent,7);
 };
 }
 

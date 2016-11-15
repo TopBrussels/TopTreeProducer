@@ -81,6 +81,11 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
     eleTightIdMapToken_ = consumes<edm::ValueMap<bool> >(valuesForConsumeCommand.getParameter<edm::InputTag>("eleTightIdMap"));
     mvaValuesMapToken_ = consumes<edm::ValueMap<float> >(valuesForConsumeCommand.getParameter<edm::InputTag>("electronMVAvaluesMapNonTrig"));
     mvaCategoriesMapToken_ = consumes<edm::ValueMap<int> >(valuesForConsumeCommand.getParameter<edm::InputTag>("electronMVACategoriesNonTrig"));
+
+
+   // 80X filter
+   BadChCandFilterToken_ = consumes<bool>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("BadChargedCandidateFilter"));
+   BadPFMuonFilterToken_ = consumes<bool>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("BadMuonFilter"));
     
 }
 
@@ -425,19 +430,43 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 			theresult=metTrigResults->accept(metTrigNames.triggerIndex("Flag_eeBadScFilter"));
 			rootEvent->setEEBadScFilter(theresult);
       // add EcalDeadCellTriggerPrimitive for 76X (29/2/2016)
-      theresult=true; 
-      theresult = metTrigResults->accept(metTrigNames.triggerIndex("Flag_EcalDeadCellTriggerPrimitiveFilter")); 
-      rootEvent->setEcalDeadCellTriggerPrimitiveFilter(theresult); 
-      theresult = true; 
-      theresult = metTrigResults->accept(metTrigNames.triggerIndex("Flag_HBHENoiseFilter")); 
-      rootEvent->setHBHENoiseFilter(theresult); 
-      theresult = true; 
-      theresult = metTrigResults->accept(metTrigNames.triggerIndex("Flag_HBHENoiseIsoFilter"));
-      rootEvent->setHBHENoiseIsoFilter(theresult);
-      // add (27/10/2016) 
+   		   	theresult=true; 
+      			theresult = metTrigResults->accept(metTrigNames.triggerIndex("Flag_EcalDeadCellTriggerPrimitiveFilter")); 
+      			rootEvent->setEcalDeadCellTriggerPrimitiveFilter(theresult); 
+      			theresult = true; 
+      			theresult = metTrigResults->accept(metTrigNames.triggerIndex("Flag_HBHENoiseFilter")); 
+      			rootEvent->setHBHENoiseFilter(theresult); 
+      			theresult = true; 
+      			theresult = metTrigResults->accept(metTrigNames.triggerIndex("Flag_HBHENoiseIsoFilter"));
+      			rootEvent->setHBHENoiseIsoFilter(theresult);
+		}}
+ 	     catch (...){
+                       std::cerr << "tried to retrieve MET noise filter information and failed! " << std::endl;
+             }
+	       try{
+                   edm::Handle<bool> ifilterbadChCand;
+                   iEvent.getByToken(BadChCandFilterToken_, ifilterbadChCand);
+		   if(ifilterbadChCand.isValid()){
+			bool theresult = true; 
+			theresult = *ifilterbadChCand;
+			rootEvent->setBadChCandFilter(theresult); 
+		    }
+                }
+		catch (...){
+                       std::cerr << "tried to retrieve BadChCand  filter information and failed! " << std::endl;
+                }	
+	       try{
+                   edm::Handle<bool> ifilterbadPFMuon;
+                   iEvent.getByToken(BadPFMuonFilterToken_, ifilterbadPFMuon);
+  		   if(ifilterbadPFMuon.isValid()){
+                        bool theresult = true;
+                        theresult = *ifilterbadPFMuon;
+                        rootEvent->setBadPFMuonFilter(theresult);
+		    }
 		}
-		
-		
+                catch (...){ 
+                      std::cerr << "tried to retrieve BadPFmuon  filter information and failed! " << std::endl;
+                }		
 		if (verbosity > 2){
 			cout << "************************************" << endl;
 			cout << "Filling event cleaning information: " << endl;
@@ -450,13 +479,13 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 //
 			cout << " EcalDeadCellTriggerPrimitive filter value: " << rootEvent->getEcalDeadCellTriggerPrimitiveFilter() << endl;
 			cout << " EE bad SuperCluster filter value: " << rootEvent->getEEBadScFilter() << endl;
+			cout << " bad PF muon filter value: " << rootEvent->getBadPFMuonFilter() << endl; 
+
+		//	cout << " bad charged candidate filter value: " << rootEvent->getBadChCandFilter() << endl; 
 			cout << "************************************" << endl;
 
 		}
-	  }  
-	  catch (...){
-	    std::cerr << "tried to retrieve MET noise filter information and failed! " << std::endl;
-	  }
+	    
 	}
 	// end of event cleaning code
 

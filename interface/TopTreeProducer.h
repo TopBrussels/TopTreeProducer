@@ -186,7 +186,9 @@ private:
     edm::EDGetTokenT<edm::ValueMap<float> > mvaValuesMapToken_;
     edm::EDGetTokenT<edm::ValueMap<int> > mvaCategoriesMapToken_;
 
-
+     // filters for 80X
+     edm::EDGetTokenT<bool> BadChCandFilterToken_;
+     edm::EDGetTokenT<bool> BadPFMuonFilterToken_;
     
 };
 
