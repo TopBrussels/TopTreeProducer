@@ -35,11 +35,11 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
     }
     for(unsigned int s=0; s<vElectronProducer.size(); s++)
     {
-		  velectronToken_.push_back(consumes<edm::View<pat::Electron>>(edm::InputTag(vElectronProducer[s])));
+		  velectronToken_.push_back(consumes<edm::View<reco::GsfElectron>>(edm::InputTag(vElectronProducer[s])));
     }
     for(unsigned int s=0; s<vElectronProducer_calibrated.size(); s++)
     {
-		  velectronToken_calibrated_.push_back(consumes<edm::View<pat::Electron>>(edm::InputTag(vElectronProducer_calibrated[s])));
+		  velectronToken_calibrated_.push_back(consumes<pat::ElectronCollection>(edm::InputTag(vElectronProducer_calibrated[s])));
     }
     for(unsigned int s=0; s<vPhotonProducer.size(); s++)
     {

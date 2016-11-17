@@ -9,13 +9,13 @@ process.load("TrackingTools/TransientTrack/TransientTrackBuilder_cfi")
 process.load("SimGeneral.HepPDTESSource.pythiapdt_cfi")
 
 # Global geometry
-process.load("Configuration.Geometry.GeometryIdeal_cff")
-process.load("Configuration.StandardSequences.MagneticField_cff")
+process.load("Configuration.Geometry.GeometryRecoDB_cff")
+process.load("Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cff")
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff")
 
 # good global tags can be found here. Beware that the default is MC which has to be updated for data!
 # https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideFrontierConditions
-process.GlobalTag.globaltag = cms.string('80X_mcRun2_asymptotic_2016_miniAODv2')
+process.GlobalTag.globaltag = cms.string('80X_mcRun2_asymptotic_2016_miniAODv2_v1')
 
 process.load('RecoMET.METFilters.BadPFMuonFilter_cfi')
 process.BadPFMuonFilter.muons = cms.InputTag("slimmedMuons")
@@ -28,8 +28,17 @@ process.BadChargedCandidateFilter.PFCandidates = cms.InputTag("packedPFCandidate
 #################################################
 # Applying EGM smearing for ICHEP dataset: https://twiki.cern.ch/twiki/bin/viewauth/CMS/EGMSmearer#How_to_apply_corrections_directl
 #################################################
-process.load('Configuration.StandardSequences.Services_cff')
 process.load('EgammaAnalysis.ElectronTools.calibratedElectronsRun2_cfi')
+
+process.load('Configuration.StandardSequences.Services_cff')
+process.RandomNumberGeneratorService = cms.Service("RandomNumberGeneratorService",
+                                       calibratedPatElectrons  = cms.PSet( initialSeed = cms.untracked.uint32(81),
+                                       engineName = cms.untracked.string('TRandom3'),
+                                       ),
+                                       calibratedPatPhotons  = cms.PSet( initialSeed = cms.untracked.uint32(81),
+                                       engineName = cms.untracked.string('TRandom3'),
+                                       ),
+)
 
 #
 # Set up electron ID (VID framework)
@@ -63,7 +72,7 @@ from RecoMET.METProducers.testInputFiles_cff import recoMETtestInputFiles
 
 
 process.maxEvents = cms.untracked.PSet(
-  input = cms.untracked.int32(100)
+  input = cms.untracked.int32(-1)
 )
 
 process.options = cms.untracked.PSet(
@@ -207,8 +216,8 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 
 process.p = cms.Path(
   process.calibratedPatElectrons *
-  process.egmGsfElectronIDSequence*
   process.electronMVAValueMapProducer*
+  process.egmGsfElectronIDSequence*
   process.METSignificance*
   process.BadPFMuonFilter *
   process.BadChargedCandidateFilter *

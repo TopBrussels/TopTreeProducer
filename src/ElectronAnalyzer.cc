@@ -23,8 +23,8 @@ void ElectronAnalyzer::Process(
 	  const edm::Event& iEvent, TClonesArray* rootElectrons, 
 	  const edm::EventSetup& iSetup, 
 	  edm::EDGetTokenT<reco::BeamSpot> offlineBSToken, 
-	  edm::EDGetTokenT<edm::View<pat::Electron>> electronToken_calibrated, 
-	  edm::EDGetTokenT<edm::View<pat::Electron>> electronToken, 
+	  edm::EDGetTokenT<pat::ElectronCollection> electronToken_calibrated, 
+	  edm::EDGetTokenT<edm::View<reco::GsfElectron>> electronToken, 
 	  edm::EDGetTokenT<reco::VertexCollection> vtxToken, 
     edm::EDGetTokenT<edm::ValueMap<bool>> eleMediumMVAIdMapToken,
     edm::EDGetTokenT<edm::ValueMap<bool>> eleTightMVAIdMapToken,
@@ -39,12 +39,12 @@ void ElectronAnalyzer::Process(
 {
   unsigned int nElectrons=0;
 
-  edm::Handle < edm::View<pat::Electron> > patElectrons_calibrated;
+  edm::Handle < pat::ElectronCollection > patElectrons_calibrated;
   iEvent.getByToken(electronToken_calibrated, patElectrons_calibrated);
-  nElectrons = patElectrons_calibrated->size();
 
-  edm::Handle < edm::View<pat::Electron> > patElectrons;
-  iEvent.getByToken(electronToken, patElectrons);
+  edm::Handle < edm::View<reco::GsfElectron> > gsfElectrons;
+  iEvent.getByToken(electronToken, gsfElectrons);
+  nElectrons = gsfElectrons->size();
 
   edm::Handle< reco::VertexCollection > pvHandle;
   iEvent.getByToken(vtxToken, pvHandle);
@@ -82,55 +82,53 @@ void ElectronAnalyzer::Process(
   //std::vector <reco::GsfElectron> electrons = (std::vector <reco::GsfElectron>) patElectrons_calibrated;
   for (unsigned int j=0; j<nElectrons; j++)
   {
-    const pat::Electron*  patElectron_calibrated = &((*patElectrons_calibrated)[j]);//dynamic_cast<const pat::Electron*>(&*electron_calibrated);
-    const reco::GsfElectron* electron_calibrated = (const reco::GsfElectron*) patElectron_calibrated;//( & ((*patElectrons_calibrated)[j]) );
-    const auto el_calibrated = patElectrons_calibrated->ptrAt(j);
+    const pat::Electron&  patElectron_calibrated = patElectrons_calibrated->at(j);//dynamic_cast<const pat::Electron*>(&*patElectron_calibrated);
     
-    if (electron_calibrated->pt() < electron_ptMin_) continue;
+    if (patElectron_calibrated.pt() < electron_ptMin_) continue;
     
      
     TRootElectron localElectron(
-                                electron_calibrated->px()
-                                ,electron_calibrated->py()
-                                ,electron_calibrated->pz()
-                                ,electron_calibrated->energy()
-                                ,electron_calibrated->vx()
-                                ,electron_calibrated->vy()
-                                ,electron_calibrated->vz()
-                                ,electron_calibrated->pdgId()
-                                ,electron_calibrated->charge()
+                                patElectron_calibrated.px()
+                                ,patElectron_calibrated.py()
+                                ,patElectron_calibrated.pz()
+                                ,patElectron_calibrated.energy()
+                                ,patElectron_calibrated.vx()
+                                ,patElectron_calibrated.vy()
+                                ,patElectron_calibrated.vz()
+                                ,patElectron_calibrated.pdgId()
+                                ,patElectron_calibrated.charge()
                                 );
 
     //cout<<"in electronAnalyzer...1"<<endl;
     //=======================================
-    localElectron.setEcalSeeding(electron_calibrated->ecalDrivenSeed());
-    localElectron.setTrackerSeeding(electron_calibrated->trackerDrivenSeed());
-    localElectron.setEnergySuperClusterOverP(electron_calibrated->eSuperClusterOverP());
-    localElectron.setEnergyEleClusterOverPout(electron_calibrated->eEleClusterOverPout());
-    localElectron.setEnergySeedClusterOverPout(electron_calibrated->eSeedClusterOverPout());
+    localElectron.setEcalSeeding(patElectron_calibrated.ecalDrivenSeed());
+    localElectron.setTrackerSeeding(patElectron_calibrated.trackerDrivenSeed());
+    localElectron.setEnergySuperClusterOverP(patElectron_calibrated.eSuperClusterOverP());
+    localElectron.setEnergyEleClusterOverPout(patElectron_calibrated.eEleClusterOverPout());
+    localElectron.setEnergySeedClusterOverPout(patElectron_calibrated.eSeedClusterOverPout());
 
-    localElectron.setDeltaEtaIn(electron_calibrated->deltaEtaSuperClusterTrackAtVtx());
-    localElectron.setDeltaEtaOut(electron_calibrated->deltaEtaSeedClusterTrackAtCalo());
-    localElectron.setDeltaPhiIn(electron_calibrated->deltaPhiSuperClusterTrackAtVtx());
-    localElectron.setDeltaPhiOut(electron_calibrated->deltaPhiSeedClusterTrackAtCalo());
-    localElectron.setDeltaPhiSuperClusterTrackAtCalo(electron_calibrated->deltaPhiEleClusterTrackAtCalo());
-    localElectron.setDeltaEtaSuperClusterTrackAtCalo(electron_calibrated->deltaEtaEleClusterTrackAtCalo());
-    localElectron.setIsEBEEGap(electron_calibrated->isEBEEGap());
+    localElectron.setDeltaEtaIn(patElectron_calibrated.deltaEtaSuperClusterTrackAtVtx());
+    localElectron.setDeltaEtaOut(patElectron_calibrated.deltaEtaSeedClusterTrackAtCalo());
+    localElectron.setDeltaPhiIn(patElectron_calibrated.deltaPhiSuperClusterTrackAtVtx());
+    localElectron.setDeltaPhiOut(patElectron_calibrated.deltaPhiSeedClusterTrackAtCalo());
+    localElectron.setDeltaPhiSuperClusterTrackAtCalo(patElectron_calibrated.deltaPhiEleClusterTrackAtCalo());
+    localElectron.setDeltaEtaSuperClusterTrackAtCalo(patElectron_calibrated.deltaEtaEleClusterTrackAtCalo());
+    localElectron.setIsEBEEGap(patElectron_calibrated.isEBEEGap());
 
-    localElectron.setFbrem(electron_calibrated->fbrem());
-    localElectron.setNBrems(electron_calibrated->numberOfBrems());
+    localElectron.setFbrem(patElectron_calibrated.fbrem());
+    localElectron.setNBrems(patElectron_calibrated.numberOfBrems());
 
     //setShowerShape
-    localElectron.setE1x5( electron_calibrated->e1x5() );
-    localElectron.setE5x5( electron_calibrated->e5x5() );
-    localElectron.setHoverEDepth1( electron_calibrated->hcalDepth1OverEcal() );
-    localElectron.setHoverEDepth2( electron_calibrated->hcalDepth2OverEcal() );
-    localElectron.setSigmaIetaIeta_full5x5( electron_calibrated->full5x5_sigmaIetaIeta() );
-    localElectron.setSigmaIetaIeta( electron_calibrated->sigmaIetaIeta() );
+    localElectron.setE1x5( patElectron_calibrated.e1x5() );
+    localElectron.setE5x5( patElectron_calibrated.e5x5() );
+    localElectron.setHoverEDepth1( patElectron_calibrated.hcalDepth1OverEcal() );
+    localElectron.setHoverEDepth2( patElectron_calibrated.hcalDepth2OverEcal() );
+    localElectron.setSigmaIetaIeta_full5x5( patElectron_calibrated.full5x5_sigmaIetaIeta() );
+    localElectron.setSigmaIetaIeta( patElectron_calibrated.sigmaIetaIeta() );
 
     // switching to gsf track for miniAOD, seems this is the correct thing for
     //now
-    reco::GsfTrackRef myTrackRef = electron_calibrated->gsfTrack();
+    reco::GsfTrackRef myTrackRef = patElectron_calibrated.gsfTrack();
 
    if ( myTrackRef.isNonnull() )
     {
@@ -141,7 +139,7 @@ void ElectronAnalyzer::Process(
         localElectron.setNValidHits(myTrackRef->numberOfValidHits());
     }
 
-    reco::GsfTrackRef gsfTrack = electron_calibrated->gsfTrack();
+    reco::GsfTrackRef gsfTrack = patElectron_calibrated.gsfTrack();
 
     if ( gsfTrack.isNonnull() )
     {
@@ -160,12 +158,12 @@ void ElectronAnalyzer::Process(
 
 	// get the beam spot and use that to get relative position. Used in displaced lepton analysis 
 	const reco::BeamSpot &mybeamspot = *beamSpotHandle.product();
-	localElectron.setD0BeamSpot(patElectron_calibrated->gsfTrack()->dxy(mybeamspot.position()));
-	localElectron.setD0BeamSpotError( sqrt( pow(patElectron_calibrated->gsfTrack()->dxyError(),2) + pow(mybeamspot.x0Error(),2) + pow(mybeamspot.y0Error(),2) ) );
-	localElectron.setDzBeamSpot(patElectron_calibrated->gsfTrack()->dz(mybeamspot.position()));
-	localElectron.setDzBeamSpotError( sqrt( pow(patElectron_calibrated->gsfTrack()->dzError(),2) + pow(mybeamspot.x0Error(),2) + pow(mybeamspot.y0Error(),2) ) );
+	localElectron.setD0BeamSpot(patElectron_calibrated.gsfTrack()->dxy(mybeamspot.position()));
+	localElectron.setD0BeamSpotError( sqrt( pow(patElectron_calibrated.gsfTrack()->dxyError(),2) + pow(mybeamspot.x0Error(),2) + pow(mybeamspot.y0Error(),2) ) );
+	localElectron.setDzBeamSpot(patElectron_calibrated.gsfTrack()->dz(mybeamspot.position()));
+	localElectron.setDzBeamSpotError( sqrt( pow(patElectron_calibrated.gsfTrack()->dzError(),2) + pow(mybeamspot.x0Error(),2) + pow(mybeamspot.y0Error(),2) ) );
 
-	localElectron.setIp3d( patElectron_calibrated->ip3d() );
+	localElectron.setIp3d( patElectron_calibrated.ip3d() );
 
       }
     }
@@ -181,7 +179,7 @@ void ElectronAnalyzer::Process(
       }
     }
 
-    reco::SuperClusterRef superCluster = electron_calibrated->superCluster();
+    reco::SuperClusterRef superCluster = patElectron_calibrated.superCluster();
     if ( superCluster.isNonnull() && runSuperCluster_ )
 	  {
 	    localElectron.setSuperClusterRawEnergy(superCluster->rawEnergy());
@@ -192,34 +190,34 @@ void ElectronAnalyzer::Process(
       localElectron.setPhiWidth( superCluster->phiWidth() );
 	  }
 
-      if( patElectron_calibrated->ecalEnergy() > 0.0)  //electron_calibrated cut based ID variable
+      if( patElectron_calibrated.ecalEnergy() > 0.0)  //patElectron_calibrated cut based ID variable
       {
-          float elESCP = patElectron_calibrated->eSuperClusterOverP();
-          float elinv_ecal_e = 1.0/(patElectron_calibrated->ecalEnergy());
+          float elESCP = patElectron_calibrated.eSuperClusterOverP();
+          float elinv_ecal_e = 1.0/(patElectron_calibrated.ecalEnergy());
           float elIoEmIoP = abs(1.0 - elESCP)*elinv_ecal_e;
           localElectron.setIoEmIoP(elIoEmIoP);
       }
 
     // Some specific methods to pat::Electron
-    TLorentzVector ecalDrivenMomentum(patElectron_calibrated->ecalDrivenMomentum().px(),patElectron_calibrated->ecalDrivenMomentum().py(),patElectron_calibrated->ecalDrivenMomentum().pz(),patElectron_calibrated->ecalDrivenMomentum().energy());
+    TLorentzVector ecalDrivenMomentum(patElectron_calibrated.ecalDrivenMomentum().px(),patElectron_calibrated.ecalDrivenMomentum().py(),patElectron_calibrated.ecalDrivenMomentum().pz(),patElectron_calibrated.ecalDrivenMomentum().energy());
     localElectron.setEcalDrivenMomentum(ecalDrivenMomentum);
 
     // Matched genParticle
     if(useMC_)
 	  {
-	    if ((patElectron_calibrated->genParticleRef()).isNonnull()) localElectron.setGenParticleIndex((patElectron_calibrated->genParticleRef()).index());
+	    if ((patElectron_calibrated.genParticleRef()).isNonnull()) localElectron.setGenParticleIndex((patElectron_calibrated.genParticleRef()).index());
 	    else localElectron.setGenParticleIndex(-1);
 	  }
 
     //set pf-isolation
     //default cone size from PAT setup : currently r=0.3
-/*    if(patElectron_calibrated->chargedHadronIso() != -1) localElectron.setIsoR03_ChargedHadronIso(patElectron_calibrated->chargedHadronIso());
-    if(patElectron_calibrated->puChargedHadronIso() != -1) localElectron.setIsoR03_PuChargedHadronIso( patElectron_calibrated->puChargedHadronIso() );
-    if(patElectron_calibrated->photonIso() != -1) localElectron.setIsoR03_PhotonIso(patElectron_calibrated->photonIso());
-    if(patElectron_calibrated->neutralHadronIso() != -1) localElectron.setIsoR03_NeutralHadronIso(patElectron_calibrated->neutralHadronIso());
+/*    if(patElectron_calibrated.chargedHadronIso() != -1) localElectron.setIsoR03_ChargedHadronIso(patElectron_calibrated.chargedHadronIso());
+    if(patElectron_calibrated.puChargedHadronIso() != -1) localElectron.setIsoR03_PuChargedHadronIso( patElectron_calibrated.puChargedHadronIso() );
+    if(patElectron_calibrated.photonIso() != -1) localElectron.setIsoR03_PhotonIso(patElectron_calibrated.photonIso());
+    if(patElectron_calibrated.neutralHadronIso() != -1) localElectron.setIsoR03_NeutralHadronIso(patElectron_calibrated.neutralHadronIso());
 */
 
-    GsfElectron::PflowIsolationVariables pfIso = electron_calibrated->pfIsolationVariables();
+    GsfElectron::PflowIsolationVariables pfIso = patElectron_calibrated.pfIsolationVariables();
     localElectron.setIsoR03_ChargedHadronIso(pfIso.sumChargedHadronPt);
     localElectron.setIsoR03_PuChargedHadronIso(pfIso.sumPUPt);
     localElectron.setIsoR03_PhotonIso(pfIso.sumPhotonEt);
@@ -236,28 +234,28 @@ void ElectronAnalyzer::Process(
     AbsVetos veto_ch;
     AbsVetos veto_nh;
     AbsVetos veto_ph;
-    Direction Dir = Direction(patElectron_calibrated->superCluster()->eta(), patElectron_calibrated->superCluster()->phi());
-    if( fabs( patElectron_calibrated->superCluster()->eta() ) > 1.479 ){
+    Direction Dir = Direction(patElectron_calibrated.superCluster()->eta(), patElectron_calibrated.superCluster()->phi());
+    if( fabs( patElectron_calibrated.superCluster()->eta() ) > 1.479 ){
       veto_ch.push_back(new reco::isodeposit::ConeVeto( Dir, 0.015 ));
       veto_ph.push_back(new reco::isodeposit::ConeVeto( Dir, 0.08 ));
     }
 
-    localElectron.setPassConversion(patElectron_calibrated->passConversionVeto());
-    localElectron.setSigmaIphiIphi( patElectron_calibrated->sigmaIphiIphi() );
-    localElectron.setSigmaIetaIphi( patElectron_calibrated->sigmaIetaIphi() );
-    localElectron.setR9( patElectron_calibrated->r9() );
+    localElectron.setPassConversion(patElectron_calibrated.passConversionVeto());
+    localElectron.setSigmaIphiIphi( patElectron_calibrated.sigmaIphiIphi() );
+    localElectron.setSigmaIetaIphi( patElectron_calibrated.sigmaIetaIphi() );
+    localElectron.setR9( patElectron_calibrated.r9() );
 
-    // verbose printout of electron_calibrated IDs available:
+    // verbose printout of patElectron_calibrated IDs available:
     if(verbosity_>2){
-      std::vector<std::pair<std::string, float> > eleIds = patElectron_calibrated->electronIDs();
-      std::cout << "electron_calibrated ID summary: " << std::endl;
+      std::vector<std::pair<std::string, float> > eleIds = patElectron_calibrated.electronIDs();
+      std::cout << "patElectron_calibrated ID summary: " << std::endl;
       for(UInt_t ii=0; ii<eleIds.size(); ii++){
 	  std::cout << eleIds[ii].first << " " << eleIds[ii].second << std::endl;
       }
     }
 
     //Adding mvaValues (need to use the un-calibrated electrons for this)
-    const auto el = patElectrons->ptrAt(j);
+    const auto el = gsfElectrons->ptrAt(j);
 
 
     bool isPassMVAMedium = (*MVA_medium_id_decisions)[el];
@@ -283,9 +281,9 @@ void ElectronAnalyzer::Process(
     
     new( (*rootElectrons)[j] ) TRootElectron(localElectron);
     if(verbosity_>2) cout << "   ["<< setw(3) << j << "] " << localElectron << endl;
-    if(verbosity_>4) cout << "   ["<< setw(3) << j << "] " << "CHIso " << localElectron.chargedHadronIso(3)  << " pat " << patElectron_calibrated->chargedHadronIso() << endl;
-    if(verbosity_>4) cout << "   ["<< setw(3) << j << "] " << "PHIso " << localElectron.photonIso(3)  << " pat " << patElectron_calibrated->photonIso()<< endl;
-    if(verbosity_>4) cout << "   ["<< setw(3) << j << "] " << "NHIso " << localElectron.neutralHadronIso(3)  << " pat " << patElectron_calibrated->neutralHadronIso()<< endl;
+    if(verbosity_>4) cout << "   ["<< setw(3) << j << "] " << "CHIso " << localElectron.chargedHadronIso(3)  << " pat " << patElectron_calibrated.chargedHadronIso() << endl;
+    if(verbosity_>4) cout << "   ["<< setw(3) << j << "] " << "PHIso " << localElectron.photonIso(3)  << " pat " << patElectron_calibrated.photonIso()<< endl;
+    if(verbosity_>4) cout << "   ["<< setw(3) << j << "] " << "NHIso " << localElectron.neutralHadronIso(3)  << " pat " << patElectron_calibrated.neutralHadronIso()<< endl;
 
     
     

@@ -152,8 +152,8 @@ private:
     // good practice is to use these instead of getbylabel. However getbylabel is still supported...
     edm::EDGetTokenT<reco::VertexCollection> vtxToken_;
     std::vector<edm::EDGetTokenT<pat::MuonCollection> > vmuonToken_;
-    std::vector<edm::EDGetTokenT<edm::View<pat::Electron>> > velectronToken_;
-    std::vector<edm::EDGetTokenT<edm::View<pat::Electron>> > velectronToken_calibrated_;
+    std::vector<edm::EDGetTokenT<edm::View<reco::GsfElectron>> > velectronToken_;
+    std::vector<edm::EDGetTokenT<pat::ElectronCollection> > velectronToken_calibrated_;
     std::vector<edm::EDGetTokenT<pat::PhotonCollection> > vphotonToken_;
     std::vector<edm::EDGetTokenT<pat::JetCollection> > vjetToken_;
     std::vector<edm::EDGetTokenT<pat::JetCollection> > vfatjetToken_;

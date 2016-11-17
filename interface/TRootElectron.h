@@ -853,7 +853,7 @@ class TRootElectron : public TRootLepton {
         Float_t MVA_category_; // Catefory of MVA electrons. Newly implemented in 2016, according to https://twiki.cern.ch/twiki/bin/view/CMS/MultivariateElectronIdentificationRun2
 
 
-        ClassDef (TRootElectron,14);
+        ClassDef (TRootElectron,15);
     };
 }
 
