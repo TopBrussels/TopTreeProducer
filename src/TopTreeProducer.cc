@@ -22,6 +22,7 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
 	  vector<string> defaultVec;
     vMuonProducer = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("vmuonProducer",defaultVec);
     vElectronProducer = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("velectronProducer",defaultVec);
+    vElectronProducer_calibrated = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("velectronProducer_calibrated",defaultVec);
     vPhotonProducer = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("vphotonProducer",defaultVec);
     vPFJetProducer = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("vpfJetProducer",defaultVec);
     vPFmetProducer = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("vpfmetProducer",defaultVec);
@@ -34,7 +35,11 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
     }
     for(unsigned int s=0; s<vElectronProducer.size(); s++)
     {
-		  velectronToken_.push_back(consumes<edm::View<pat::Electron>>(edm::InputTag(vElectronProducer[s])));
+		  velectronToken_.push_back(consumes<edm::View<reco::GsfElectron>>(edm::InputTag(vElectronProducer[s])));
+    }
+    for(unsigned int s=0; s<vElectronProducer_calibrated.size(); s++)
+    {
+		  velectronToken_calibrated_.push_back(consumes<pat::ElectronCollection>(edm::InputTag(vElectronProducer_calibrated[s])));
     }
     for(unsigned int s=0; s<vPhotonProducer.size(); s++)
     {
@@ -76,11 +81,22 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
     genParticlesToken_ = consumes<std::vector<reco::GenParticle> >(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("prunedGenParticles"));
     lheproductToken_  = consumes<LHEEventProduct>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("lheproduct"));
     offlineBSToken_ = consumes<reco::BeamSpot>(valuesForConsumeCommand.getParameter<edm::InputTag>("offlineBeamSpot"));
-    //eleLooseIdMapToken_ = consumes<edm::ValueMap<bool> >(valuesForConsumeCommand.getParameter<edm::InputTag>("eleLooseIdMap")); // From CMSSW_8_1_X onwards
-    eleMediumIdMapToken_ = consumes<edm::ValueMap<bool> >(valuesForConsumeCommand.getParameter<edm::InputTag>("eleMediumIdMap"));
-    eleTightIdMapToken_ = consumes<edm::ValueMap<bool> >(valuesForConsumeCommand.getParameter<edm::InputTag>("eleTightIdMap"));
-    mvaValuesMapToken_ = consumes<edm::ValueMap<float> >(valuesForConsumeCommand.getParameter<edm::InputTag>("electronMVAvaluesMapNonTrig"));
-    mvaCategoriesMapToken_ = consumes<edm::ValueMap<int> >(valuesForConsumeCommand.getParameter<edm::InputTag>("electronMVACategoriesNonTrig"));
+
+    eleMediumMVAIdMapToken_ = consumes<edm::ValueMap<bool> >(valuesForConsumeCommand.getParameter<edm::InputTag>("eleMediumMVAIdMap"));
+    eleTightMVAIdMapToken_ = consumes<edm::ValueMap<bool> >(valuesForConsumeCommand.getParameter<edm::InputTag>("eleTightMVAIdMap"));
+    mvaValuesMapToken_ = consumes<edm::ValueMap<float> >(valuesForConsumeCommand.getParameter<edm::InputTag>("mvaValuesMap"));
+    mvaCategoriesMapToken_ = consumes<edm::ValueMap<int> >(valuesForConsumeCommand.getParameter<edm::InputTag>("mvaCategoriesMap"));
+
+    eleVetoCBIdMapToken_ = consumes<edm::ValueMap<bool> >(valuesForConsumeCommand.getParameter<edm::InputTag>("eleVetoCBIdMap"));
+    eleLooseCBIdMapToken_ = consumes<edm::ValueMap<bool> >(valuesForConsumeCommand.getParameter<edm::InputTag>("eleLooseCBIdMap"));
+    eleMediumCBIdMapToken_ = consumes<edm::ValueMap<bool> >(valuesForConsumeCommand.getParameter<edm::InputTag>("eleMediumCBIdMap"));
+    eleTightCBIdMapToken_ = consumes<edm::ValueMap<bool> >(valuesForConsumeCommand.getParameter<edm::InputTag>("eleTightCBIdMap"));
+    eleHEEPCBIdMapToken_ = consumes<edm::ValueMap<bool> >(valuesForConsumeCommand.getParameter<edm::InputTag>("eleHEEPCBIdMap"));
+
+
+   // 80X extra filters
+   BadChCandFilterToken_ = consumes<bool>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("BadChargedCandidateFilter"));
+   BadPFMuonFilterToken_ = consumes<bool>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("BadMuonFilter"));
     
 }
 
@@ -141,10 +157,10 @@ void TopTreeProducer::beginJob()
         vmuons.push_back(a);
     }
 
-    for(unsigned int s=0; s<vElectronProducer.size(); s++)
+    for(unsigned int s=0; s<vElectronProducer_calibrated.size(); s++)
     {
         TClonesArray* a;
-        velectrons.push_back(a);
+        velectrons_calibrated.push_back(a);
     }
 
     for(unsigned int s=0; s<vPhotonProducer.size(); s++)
@@ -267,12 +283,12 @@ void TopTreeProducer::beginJob()
     if(doElectron)
     {
         if(verbosity>0) cout << "Electrons info will be added to rootuple" << endl;
-        for(unsigned int s=0; s<vElectronProducer.size(); s++)
+        for(unsigned int s=0; s<vElectronProducer_calibrated.size(); s++)
         {
-            velectrons[s] = new TClonesArray("TopTree::TRootElectron", 1000);
+            velectrons_calibrated[s] = new TClonesArray("TopTree::TRootElectron", 1000);
             char name[100];
-            sprintf(name,"Electrons_%s",vElectronProducer[s].c_str());
-            eventTree_->Branch (name, "TClonesArray", &velectrons[s]);
+            sprintf(name,"Electrons_%s",vElectronProducer_calibrated[s].c_str());
+            eventTree_->Branch (name, "TClonesArray", &velectrons_calibrated[s]);
         }
     }
 
@@ -425,19 +441,43 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 			theresult=metTrigResults->accept(metTrigNames.triggerIndex("Flag_eeBadScFilter"));
 			rootEvent->setEEBadScFilter(theresult);
       // add EcalDeadCellTriggerPrimitive for 76X (29/2/2016)
-      theresult=true; 
-      theresult = metTrigResults->accept(metTrigNames.triggerIndex("Flag_EcalDeadCellTriggerPrimitiveFilter")); 
-      rootEvent->setEcalDeadCellTriggerPrimitiveFilter(theresult); 
-      theresult = true; 
-      theresult = metTrigResults->accept(metTrigNames.triggerIndex("Flag_HBHENoiseFilter")); 
-      rootEvent->setHBHENoiseFilter(theresult); 
-      theresult = true; 
-      theresult = metTrigResults->accept(metTrigNames.triggerIndex("Flag_HBHENoiseIsoFilter"));
-      rootEvent->setHBHENoiseIsoFilter(theresult);
-      // add (27/10/2016) 
+   		   	theresult=true; 
+      			theresult = metTrigResults->accept(metTrigNames.triggerIndex("Flag_EcalDeadCellTriggerPrimitiveFilter")); 
+      			rootEvent->setEcalDeadCellTriggerPrimitiveFilter(theresult); 
+      			theresult = true; 
+      			theresult = metTrigResults->accept(metTrigNames.triggerIndex("Flag_HBHENoiseFilter")); 
+      			rootEvent->setHBHENoiseFilter(theresult); 
+      			theresult = true; 
+      			theresult = metTrigResults->accept(metTrigNames.triggerIndex("Flag_HBHENoiseIsoFilter"));
+      			rootEvent->setHBHENoiseIsoFilter(theresult);
+		}}
+ 	     catch (...){
+                       std::cerr << "tried to retrieve MET noise filter information and failed! " << std::endl;
+             }
+	       try{
+                   edm::Handle<bool> ifilterbadChCand;
+                   iEvent.getByToken(BadChCandFilterToken_, ifilterbadChCand);
+		   if(ifilterbadChCand.isValid()){
+			bool theresult = true; 
+			theresult = *ifilterbadChCand;
+			rootEvent->setBadChCandFilter(theresult); 
+		    }
+                }
+		catch (...){
+                       std::cerr << "tried to retrieve BadChCand  filter information and failed! " << std::endl;
+                }	
+	       try{
+                   edm::Handle<bool> ifilterbadPFMuon;
+                   iEvent.getByToken(BadPFMuonFilterToken_, ifilterbadPFMuon);
+  		   if(ifilterbadPFMuon.isValid()){
+                        bool theresult = true;
+                        theresult = *ifilterbadPFMuon;
+                        rootEvent->setBadPFMuonFilter(theresult);
+		    }
 		}
-		
-		
+                catch (...){ 
+                      std::cerr << "tried to retrieve BadPFmuon  filter information and failed! " << std::endl;
+                }		
 		if (verbosity > 2){
 			cout << "************************************" << endl;
 			cout << "Filling event cleaning information: " << endl;
@@ -450,13 +490,13 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 //
 			cout << " EcalDeadCellTriggerPrimitive filter value: " << rootEvent->getEcalDeadCellTriggerPrimitiveFilter() << endl;
 			cout << " EE bad SuperCluster filter value: " << rootEvent->getEEBadScFilter() << endl;
+			cout << " bad PF muon filter value: " << rootEvent->getBadPFMuonFilter() << endl; 
+
+		//	cout << " bad charged candidate filter value: " << rootEvent->getBadChCandFilter() << endl; 
 			cout << "************************************" << endl;
 
 		}
-	  }  
-	  catch (...){
-	    std::cerr << "tried to retrieve MET noise filter information and failed! " << std::endl;
-	  }
+	    
 	}
 	// end of event cleaning code
 
@@ -642,13 +682,13 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
         for(unsigned int s=0; s<vElectronProducer.size(); s++)
         {
             ElectronAnalyzer* myElectronAnalyzer = new ElectronAnalyzer(myConfig_, verbosity);
-            // From CMSSW_8_1_X onwards
-            //myElectronAnalyzer->Process(iEvent, velectrons[s], iSetup, offlineBSToken_, velectronToken_[s], vtxToken_, eleLooseIdMapToken_, eleMediumIdMapToken_, eleTightIdMapToken_, mvaValuesMapToken_, mvaCategoriesMapToken_);
-            myElectronAnalyzer->Process(iEvent, velectrons[s], iSetup, offlineBSToken_, velectronToken_[s], vtxToken_, eleMediumIdMapToken_, eleTightIdMapToken_, mvaValuesMapToken_, mvaCategoriesMapToken_);
+
+            myElectronAnalyzer->Process(iEvent, velectrons_calibrated[s], iSetup, offlineBSToken_, velectronToken_calibrated_[s], velectronToken_[s]
+                         , vtxToken_, eleMediumMVAIdMapToken_, eleTightMVAIdMapToken_, mvaValuesMapToken_, mvaCategoriesMapToken_, eleVetoCBIdMapToken_
+                         , eleLooseCBIdMapToken_, eleMediumCBIdMapToken_, eleTightCBIdMapToken_, eleHEEPCBIdMapToken_);
             delete myElectronAnalyzer;
         }
     }
-
 
     // Photons
     if(doPhoton)
@@ -723,7 +763,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
     {
         for(unsigned int s=0; s<vElectronProducer.size(); s++)
         {
-            (*velectrons[s]).Delete();
+            (*velectrons_calibrated[s]).Delete();
         }
     }
     if(doPhoton)

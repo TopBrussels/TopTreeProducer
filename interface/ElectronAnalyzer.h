@@ -36,9 +36,23 @@ class ElectronAnalyzer{
 public:
 	ElectronAnalyzer(const edm::ParameterSet& myConfig, int verbosity);
 	~ElectronAnalyzer();
-	// From CMSSW_8_1_X onwards
-	//void Process(const edm::Event& iEvent, TClonesArray* rootElectrons, const edm::EventSetup& iSetup, edm::EDGetTokenT<reco::BeamSpot> offlineBSToken, edm::EDGetTokenT<edm::View<pat::Electron>> electronToken, edm::EDGetTokenT<reco::VertexCollection> vtxToken, edm::EDGetTokenT<edm::ValueMap<bool> > eleLooseIdMapToken, edm::EDGetTokenT<edm::ValueMap<bool> > eleMediumIdMapToken, edm::EDGetTokenT<edm::ValueMap<bool> > eleTightIdMapToken, edm::EDGetTokenT<edm::ValueMap<float> > EleMVAValuesMapToken, edm::EDGetTokenT<edm::ValueMap<int> > EleMVACategoriesMapToken);
-	void Process(const edm::Event& iEvent, TClonesArray* rootElectrons, const edm::EventSetup& iSetup, edm::EDGetTokenT<reco::BeamSpot> offlineBSToken, edm::EDGetTokenT<edm::View<pat::Electron>> electronToken, edm::EDGetTokenT<reco::VertexCollection> vtxToken, edm::EDGetTokenT<edm::ValueMap<bool> > eleMediumIdMapToken, edm::EDGetTokenT<edm::ValueMap<bool> > eleTightIdMapToken, edm::EDGetTokenT<edm::ValueMap<float> > EleMVAValuesMapToken, edm::EDGetTokenT<edm::ValueMap<int> > EleMVACategoriesMapToken);
+	void Process(
+	  const edm::Event& iEvent, TClonesArray* rootElectrons, 
+	  const edm::EventSetup& iSetup, 
+	  edm::EDGetTokenT<reco::BeamSpot> offlineBSToken, 
+	  edm::EDGetTokenT<pat::ElectronCollection> electronToken_calibrated, 
+	  edm::EDGetTokenT<edm::View<reco::GsfElectron>> electronToken, 
+	  edm::EDGetTokenT<reco::VertexCollection> vtxToken, 
+    edm::EDGetTokenT<edm::ValueMap<bool>> eleMediumMVAIdMapToken,
+    edm::EDGetTokenT<edm::ValueMap<bool>> eleTightMVAIdMapToken,
+    edm::EDGetTokenT<edm::ValueMap<float>> mvaValuesMapToken,
+    edm::EDGetTokenT<edm::ValueMap<int>> mvaCategoriesMapToken,
+    edm::EDGetTokenT<edm::ValueMap<bool>> eleVetoCBIdMapToken,
+    edm::EDGetTokenT<edm::ValueMap<bool>> eleLooseCBIdMapToken,
+    edm::EDGetTokenT<edm::ValueMap<bool>> eleMediumCBIdMapToken,
+    edm::EDGetTokenT<edm::ValueMap<bool>> eleTightCBIdMapToken,
+    edm::EDGetTokenT<edm::ValueMap<bool>> eleHEEPCBIdMapToken
+	);
   typedef std::vector< edm::Handle< edm::ValueMap<double> > > IsoDepositVals;
 
 private:

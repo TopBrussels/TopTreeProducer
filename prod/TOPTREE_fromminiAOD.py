@@ -9,36 +9,70 @@ process.load("TrackingTools/TransientTrack/TransientTrackBuilder_cfi")
 process.load("SimGeneral.HepPDTESSource.pythiapdt_cfi")
 
 # Global geometry
-process.load("Configuration.Geometry.GeometryIdeal_cff")
-process.load("Configuration.StandardSequences.MagneticField_cff")
+process.load("Configuration.Geometry.GeometryRecoDB_cff")
+process.load("Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cff")
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff")
 
 # good global tags can be found here. Beware that the default is MC which has to be updated for data!
 # https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideFrontierConditions
 process.GlobalTag.globaltag = cms.string('80X_mcRun2_asymptotic_2016_miniAODv2_v1')
 
+process.load('RecoMET.METFilters.BadPFMuonFilter_cfi')
+process.BadPFMuonFilter.muons = cms.InputTag("slimmedMuons")
+process.BadPFMuonFilter.PFCandidates = cms.InputTag("packedPFCandidates")
+
+process.load('RecoMET.METFilters.BadChargedCandidateFilter_cfi')
+process.BadChargedCandidateFilter.muons = cms.InputTag("slimmedMuons")
+process.BadChargedCandidateFilter.PFCandidates = cms.InputTag("packedPFCandidates")
+
+#################################################
+# Applying EGM smearing for ICHEP dataset: https://twiki.cern.ch/twiki/bin/viewauth/CMS/EGMSmearer#How_to_apply_corrections_directl
+#################################################
+process.load('EgammaAnalysis.ElectronTools.calibratedElectronsRun2_cfi')
+
+process.load('Configuration.StandardSequences.Services_cff')
+process.RandomNumberGeneratorService = cms.Service("RandomNumberGeneratorService",
+                                       calibratedPatElectrons  = cms.PSet( initialSeed = cms.untracked.uint32(81),
+                                       engineName = cms.untracked.string('TRandom3'),
+                                       ),
+                                       calibratedPatPhotons  = cms.PSet( initialSeed = cms.untracked.uint32(81),
+                                       engineName = cms.untracked.string('TRandom3'),
+                                       ),
+)
 
 #
 # Set up electron ID (VID framework)
 #
 
+# egamma
 from PhysicsTools.SelectorUtils.tools.vid_id_tools import *
-# turn on VID producer, indicate data format  to be
-# DataFormat.AOD or DataFormat.MiniAOD, as appropriate 
-dataFormat = DataFormat.MiniAOD
+switchOnVIDElectronIdProducer(process,DataFormat.MiniAOD)
 
-switchOnVIDElectronIdProducer(process, dataFormat)
+# https://twiki.cern.ch/twiki/bin/view/CMS/CutBasedElectronIdentificationRun2
+# https://twiki.cern.ch/twiki/bin/view/CMS/MultivariateElectronIdentificationRun2
 
-# define which IDs we want to produce
-my_id_modules = ['RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Spring15_25ns_nonTrig_V1_cff']
+my_id_modules = [
+'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Summer16_80X_V1_cff',
+'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV60_cff',
+'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Spring15_25ns_nonTrig_V1_cff'
+]
 
-#add them to the VID producer
 for idmod in my_id_modules:
-  setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
+    setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
+
+process.load("RecoEgamma.ElectronIdentification.ElectronMVAValueMapProducer_cfi")
+
+
+#####################
+# MET Significance  #
+#####################
+process.load("RecoMET/METProducers.METSignificance_cfi")
+process.load("RecoMET/METProducers.METSignificanceParams_cfi")
+from RecoMET.METProducers.testInputFiles_cff import recoMETtestInputFiles
 
 
 process.maxEvents = cms.untracked.PSet(
-  input = cms.untracked.int32(1000)
+  input = cms.untracked.int32(-1)
 )
 
 process.options = cms.untracked.PSet(
@@ -46,39 +80,7 @@ process.options = cms.untracked.PSet(
 )
 
 #Default Test sample
-#process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/mc/RunIISpring15DR74/TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v2/00000/18E6854B-1809-E511-A405-0025905B8590.root'))
-#process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/relval/CMSSW_7_6_0/RelValTTbarLepton_13/MINIAODSIM/76X_mcRun2_asymptotic_v11-v1/00000/4A44647C-A77F-E511-A26B-002618943960.root'))
-#process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://xrootd-cms.infn.it///store/mc/RunIISpring16MiniAODv2/TT_TuneCUETP8M1_13TeV-powheg-pythia8/MINIAODSIM/PUSpring16RAWAODSIM_reHLT_80X_mcRun2_asymptotic_v14_ext3-v1/00000/0064B539-803A-E611-BDEA-002590D0B060.root'))
-
-#process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/mc/RunIISpring15DR74/TTJets_DiLept_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v2/20000/5E2A0DB9-E52F-E511-A294-782BCB407B74.root'))
-process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://xrootd-cms.infn.it///store/data/Run2016B/SingleElectron/MINIAOD/PromptReco-v2/000/273/158/00000/0A7BD549-131A-E611-8287-02163E0134FC.root'))
-
-
-
-#TTTT Test file for testing LHE weights
-#process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/mc/RunIISpring15DR74/TTTT_TuneCUETP8M1_13TeV-amcatnlo-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9_ext1-v1/00000/0C216A04-5C5D-E511-AD98-D4AE529D9537.root'))
-
-# data test file from 2015D:
-#process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/data/Run2015D/SingleMuon/MINIAOD/PromptReco-v3/000/256/629/00000/8EA4C10E-F35E-E511-ABF9-02163E014108.root'))
-
-
-# skipEvents=cms.untracked.uint32(1000))
-
-#Python Fragment containing all PU20bx25 filenames through xrootd
-#process.load("TopBrussels.TopTreeProducer.miniAODTTbar_PU20bx25_files_cfi")
-
-#Python Fragment containing all PU40bx50 filenames through xrootd
-#process.load("TopBrussels.TopTreeProducer.miniAODTTbar_PU40bx50_files_cfi")
-
-
-#Python Fragment containing TTTT NLO 13TeV miniAOD files (Produced by Jesse)
-#process.load("TopBrussels.TopTreeProducer.FOURTOP_NLO_13TeV_miniAOD_Files_cfi")
-
-#Python Fragment containing TTTT LO 13TeV miniAOD files (Produced by Jesse)
-#process.load("TopBrussels.TopTreeProducer.FOURTOP_LO_13TeV_miniAOD_Files_cfi")
-
-#Python Fragment containing TTJets NLO 13TeV miniAOD files (Produced by Jesse)
-#process.load("TopBrussels.TopTreeProducer.TTJets_NLO_aMCNLO_PYTHIA8_13TeV_miniAOD_Files_cfi")
+process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://xrootd-cms.infn.it///store/mc/RunIISpring16MiniAODv2/TT_TuneCUETP8M1_13TeV-powheg-pythia8/MINIAODSIM/PUSpring16RAWAODSIM_reHLT_80X_mcRun2_asymptotic_v14_ext3-v1/00000/0064B539-803A-E611-BDEA-002590D0B060.root'))
 
 
 
@@ -161,13 +163,14 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
   #new for CMSSW76X and higher: all classes that are read from the event need to be registered in the constructor!
   #supposedly this is necessary in the case that the code is run on machines that use multi-threading.
   #It also allows the CMSSW compiler to optimise/speed up the code (or so the documentation says), by accessing collections that are used a lot or rarely with the consumesOften() and mayConsume() fuctions but consumes() will always work.
-  #in the TopTreeProducer .py file these are all stored in the producersNames parameter set, so please add new objects there if you need them.
+  #in the TopTreeProducer .py file these are all stored in the producersNames parameter set, so please add new objects there if you need them.
   producerNamesBookkeepingThreads = cms.PSet(
     vpfJetProducer = cms.untracked.vstring("slimmedJets"),
     vpfmetProducer = cms.untracked.vstring("slimmedMETs"),
     vmuonProducer = cms.untracked.vstring("slimmedMuons"),
     velectronProducer = cms.untracked.vstring("slimmedElectrons"),
-    vphotonProducer = cms.untracked.vstring("slimmedPhotons"),#PhotonAnalyzer still has some getByLabels... (Kevin 14/01/2015)
+    velectronProducer_calibrated = cms.untracked.vstring("calibratedPatElectrons"),#This is implemented to apply 80X EGM calibration corrections to the electrons. Change to slimmedElectrons if those corrections are not necessary.
+    vphotonProducer = cms.untracked.vstring("slimmedPhotons"),#PhotonAnalyzer still has some getByLabels... (Kevin 14/01/2016)
     vfatJetProducer = cms.untracked.vstring("slimmedJetsAK8"),
     vgenJetProducer = cms.untracked.vstring("slimmedGenJets"),
     metfilterProducer = cms.untracked.InputTag("TriggerResults","","PAT"), # can also be RECO, depends on MiniAOD version!
@@ -190,11 +193,20 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
     hltProducer3rd = cms.InputTag("TriggerResults","","RECO"),
     hltProducer4th = cms.InputTag("TriggerResults","","MINIAOD"),
     hltProducer5th = cms.InputTag("TriggerResults","","PAT"),
-    electronMVAvaluesMapNonTrig = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Spring15NonTrig25nsV1Values"), #https://twiki.cern.ch/twiki/bin/view/CMS/MultivariateElectronIdentificationRun2
-    electronMVACategoriesNonTrig = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Spring15NonTrig25nsV1Categories"),
-    #eleLooseIdMap = cms.InputTag("egmGsfElectronIDs:mvaEleID-Spring15-25ns-nonTrig-V1-wpLoose"), #Will only be available from CMSSW_8_1_X
-    eleMediumIdMap = cms.InputTag("egmGsfElectronIDs:mvaEleID-Spring15-25ns-nonTrig-V1-wp90"),
-    eleTightIdMap = cms.InputTag("egmGsfElectronIDs:mvaEleID-Spring15-25ns-nonTrig-V1-wp80")
+
+    eleMediumMVAIdMap        = cms.InputTag("egmGsfElectronIDs:mvaEleID-Spring15-25ns-nonTrig-V1-wp90"),
+    eleTightMVAIdMap         = cms.InputTag("egmGsfElectronIDs:mvaEleID-Spring15-25ns-nonTrig-V1-wp80"),
+    mvaValuesMap             = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Spring15NonTrig25nsV1Values"),
+    mvaCategoriesMap         = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Spring15NonTrig25nsV1Categories"),
+
+    eleVetoCBIdMap           = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-veto"),
+    eleLooseCBIdMap          = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-loose"),
+    eleMediumCBIdMap         = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-medium"),
+    eleTightCBIdMap          = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-tight"),
+    eleHEEPCBIdMap           = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV60"),
+
+    BadMuonFilter              = cms.untracked.InputTag("BadPFMuonFilter"),
+    BadChargedCandidateFilter  = cms.untracked.InputTag("BadChargedCandidateFilter"),
     
   )
                                 
@@ -203,7 +215,12 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 #process.TFileService = cms.Service("TFileService", fileName = cms.string('TFileTOPTREE.root') )
 
 process.p = cms.Path(
+  process.calibratedPatElectrons *
+  process.electronMVAValueMapProducer*
   process.egmGsfElectronIDSequence*
+  process.METSignificance*
+  process.BadPFMuonFilter *
+  process.BadChargedCandidateFilter *
   process.analysis
 )
 temp = process.dumpPython()

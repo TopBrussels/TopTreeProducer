@@ -59,6 +59,11 @@ class TRootElectron : public TRootLepton {
             isMVA_TightID_(false),
             isMVA_MediumID_(false),
             isMVA_LooseID_(false),
+            isCB_HeepID_(false),
+            isCB_TightID_(false),
+            isCB_MediumID_(false),
+            isCB_LooseID_(false),
+            isCB_VetoID_(false),
             MVA_value_(-9999.),
             MVA_category_(-9999){
             ;
@@ -108,6 +113,11 @@ class TRootElectron : public TRootLepton {
             isMVA_TightID_(false),
             isMVA_MediumID_(false),
             isMVA_LooseID_(false),
+            isCB_HeepID_(false),
+            isCB_TightID_(false),
+            isCB_MediumID_(false),
+            isCB_LooseID_(false),
+            isCB_VetoID_(false),
             MVA_value_(-9999.),
             MVA_category_(-9999){
             ;
@@ -157,6 +167,11 @@ class TRootElectron : public TRootLepton {
             isMVA_TightID_(e.isMVA_TightID_),
             isMVA_MediumID_(e.isMVA_MediumID_),
             isMVA_LooseID_(e.isMVA_LooseID_),
+            isCB_HeepID_(e.isCB_HeepID_),
+            isCB_TightID_(e.isCB_TightID_),
+            isCB_MediumID_(e.isCB_MediumID_),
+            isCB_LooseID_(e.isCB_LooseID_),
+            isCB_VetoID_(e.isCB_VetoID_),
             MVA_value_(e.MVA_value_),
             MVA_category_(e.MVA_category_){
             ;
@@ -207,6 +222,11 @@ class TRootElectron : public TRootLepton {
             isMVA_TightID_(false),
             isMVA_MediumID_(false),
             isMVA_LooseID_(false),
+            isCB_HeepID_(false),
+            isCB_TightID_(false),
+            isCB_MediumID_(false),
+            isCB_LooseID_(false),
+            isCB_VetoID_(false),
             MVA_value_(-9999.),
             MVA_category_(-9999){
             ;
@@ -257,6 +277,11 @@ class TRootElectron : public TRootLepton {
             isMVA_TightID_(false),
             isMVA_MediumID_(false),
             isMVA_LooseID_(false),
+            isCB_HeepID_(false),
+            isCB_TightID_(false),
+            isCB_MediumID_(false),
+            isCB_LooseID_(false),
+            isCB_VetoID_(false),
             MVA_value_(-9999.),
             MVA_category_(-9999){
             ;
@@ -307,6 +332,11 @@ class TRootElectron : public TRootLepton {
             isMVA_TightID_(false),
             isMVA_MediumID_(false),
             isMVA_LooseID_(false),
+            isCB_HeepID_(false),
+            isCB_TightID_(false),
+            isCB_MediumID_(false),
+            isCB_LooseID_(false),
+            isCB_VetoID_(false),
             MVA_value_(-9999.),
             MVA_category_(-9999){
             ;
@@ -357,6 +387,11 @@ class TRootElectron : public TRootLepton {
             isMVA_TightID_(false),
             isMVA_MediumID_(false),
             isMVA_LooseID_(false),
+            isCB_HeepID_(false),
+            isCB_TightID_(false),
+            isCB_MediumID_(false),
+            isCB_LooseID_(false),
+            isCB_VetoID_(false),
             MVA_value_(-9999.),
             MVA_category_(-9999){
             ;
@@ -407,6 +442,11 @@ class TRootElectron : public TRootLepton {
             isMVA_TightID_(false),
             isMVA_MediumID_(false),
             isMVA_LooseID_(false),
+            isCB_HeepID_(false),
+            isCB_TightID_(false),
+            isCB_MediumID_(false),
+            isCB_LooseID_(false),
+            isCB_VetoID_(false),
             MVA_value_(-9999.),
             MVA_category_(-9999){
             ;
@@ -561,6 +601,21 @@ class TRootElectron : public TRootLepton {
         Bool_t isMVA_LooseID() const {
             return isMVA_LooseID_;
             }
+        Bool_t isCB_HeepID() const {
+            return isCB_HeepID_;
+            }
+        Bool_t isCB_TightID() const {
+            return isCB_TightID_;
+            }
+        Bool_t isCB_MediumID() const {
+            return isCB_MediumID_;
+            }
+        Bool_t isCB_LooseID() const {
+            return isCB_LooseID_;
+            }
+        Bool_t isCB_VetoID() const {
+            return isCB_VetoID_;
+            }
         Float_t MVA_value() const {
             return MVA_value_;
             }
@@ -702,6 +757,21 @@ class TRootElectron : public TRootLepton {
         void setisMVA_LooseID(Bool_t pass) {
             isMVA_LooseID_ = pass;
             }
+        void setisCB_HeepID(Bool_t pass) {
+            isCB_HeepID_ = pass;
+            }
+        void setisCB_TightID(Bool_t pass) {
+            isCB_TightID_ = pass;
+            }
+        void setisCB_MediumID(Bool_t pass) {
+            isCB_MediumID_ = pass;
+            }
+        void setisCB_LooseID(Bool_t pass) {
+            isCB_LooseID_ = pass;
+            }
+        void setisCB_VetoID(Bool_t pass) {
+            isCB_VetoID_ = pass;
+            }
         void setMVA_value(Float_t value) {
             MVA_value_ = value;
             }
@@ -773,11 +843,17 @@ class TRootElectron : public TRootLepton {
 	      Bool_t isMVA_TightID_; // Tight ID from MVA electrons. Newly implemented in 2016, according to https://twiki.cern.ch/twiki/bin/view/CMS/MultivariateElectronIdentificationRun2
         Bool_t isMVA_MediumID_;// Medium ID from MVA electrons. Newly implemented in 2016, according to https://twiki.cern.ch/twiki/bin/view/CMS/MultivariateElectronIdentificationRun2
         Bool_t isMVA_LooseID_;// Loose ID from MVA electrons. Newly implemented in 2016, according to https://twiki.cern.ch/twiki/bin/view/CMS/MultivariateElectronIdentificationRun2
+        Bool_t isCB_HeepID_;
+        Bool_t isCB_TightID_;
+        Bool_t isCB_MediumID_;
+        Bool_t isCB_LooseID_;
+        Bool_t isCB_VetoID_;
+
         Float_t MVA_value_; // MVA value of MVA electrons. Newly implemented in 2016, according to https://twiki.cern.ch/twiki/bin/view/CMS/MultivariateElectronIdentificationRun2
         Float_t MVA_category_; // Catefory of MVA electrons. Newly implemented in 2016, according to https://twiki.cern.ch/twiki/bin/view/CMS/MultivariateElectronIdentificationRun2
 
 
-        ClassDef (TRootElectron,14);
+        ClassDef (TRootElectron,15);
     };
 }
 

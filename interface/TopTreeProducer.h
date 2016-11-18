@@ -119,6 +119,7 @@ private:
 	std::vector<std::string> vFatJetProducer;
 	std::vector<std::string> vMuonProducer;
 	std::vector<std::string> vElectronProducer;
+	std::vector<std::string> vElectronProducer_calibrated;
 	std::vector<std::string> vPhotonProducer;
         std::vector<std::string> vPFmetProducer;
 	int nTotEvt_;
@@ -133,7 +134,7 @@ private:
 	std::vector<TClonesArray*> vpfJets;
 	std::vector<TClonesArray*> vfatJets;
 	std::vector<TClonesArray*> vmuons;
-	std::vector<TClonesArray*> velectrons;
+	std::vector<TClonesArray*> velectrons_calibrated;
 	std::vector<TClonesArray*> vphotons;
 	std::vector<TClonesArray*> vPFmets;
 	//	TClonesArray* lheEventProduct;
@@ -151,7 +152,8 @@ private:
     // good practice is to use these instead of getbylabel. However getbylabel is still supported...
     edm::EDGetTokenT<reco::VertexCollection> vtxToken_;
     std::vector<edm::EDGetTokenT<pat::MuonCollection> > vmuonToken_;
-    std::vector<edm::EDGetTokenT<edm::View<pat::Electron>> > velectronToken_;
+    std::vector<edm::EDGetTokenT<edm::View<reco::GsfElectron>> > velectronToken_;
+    std::vector<edm::EDGetTokenT<pat::ElectronCollection> > velectronToken_calibrated_;
     std::vector<edm::EDGetTokenT<pat::PhotonCollection> > vphotonToken_;
     std::vector<edm::EDGetTokenT<pat::JetCollection> > vjetToken_;
     std::vector<edm::EDGetTokenT<pat::JetCollection> > vfatjetToken_;
@@ -178,15 +180,20 @@ private:
     
     edm::EDGetTokenT<reco::BeamSpot> offlineBSToken_;
     // ID decisions objects
-    //edm::EDGetTokenT<edm::ValueMap<bool> > eleLooseIdMapToken_;// From CMSSW_8_1_X onwards
-    edm::EDGetTokenT<edm::ValueMap<bool> > eleMediumIdMapToken_;
-    edm::EDGetTokenT<edm::ValueMap<bool> > eleTightIdMapToken_;
-
-    // MVA values and categories (optional)
+    edm::EDGetTokenT<edm::ValueMap<bool> > eleVetoCBIdMapToken_;
+    edm::EDGetTokenT<edm::ValueMap<bool> > eleLooseCBIdMapToken_;
+    edm::EDGetTokenT<edm::ValueMap<bool> > eleMediumCBIdMapToken_;
+    edm::EDGetTokenT<edm::ValueMap<bool> > eleTightCBIdMapToken_;
+    edm::EDGetTokenT<edm::ValueMap<bool> > eleHEEPCBIdMapToken_;
+   
+    edm::EDGetTokenT<edm::ValueMap<bool> > eleMediumMVAIdMapToken_;
+    edm::EDGetTokenT<edm::ValueMap<bool> > eleTightMVAIdMapToken_;
     edm::EDGetTokenT<edm::ValueMap<float> > mvaValuesMapToken_;
     edm::EDGetTokenT<edm::ValueMap<int> > mvaCategoriesMapToken_;
 
-
+    // filters for 80X
+    edm::EDGetTokenT<bool> BadChCandFilterToken_;
+    edm::EDGetTokenT<bool> BadPFMuonFilterToken_;
     
 };
 
