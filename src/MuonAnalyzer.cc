@@ -22,6 +22,7 @@ void
 MuonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootMuons,edm::EDGetTokenT<reco::BeamSpot> offlineBSToken, edm::EDGetTokenT<pat::MuonCollection> muonToken, edm::EDGetTokenT<reco::VertexCollection> vtxToken)
 {
 unsigned int nMuons = 0;
+unsigned int nMuons_passedSkimming = 0;
 
 	edm::Handle < std::vector < pat::Muon > >patMuons;
 	iEvent.getByToken (muonToken, patMuons);
@@ -152,7 +153,8 @@ unsigned int nMuons = 0;
        veto_ph.push_back(new reco::isodeposit::ConeVeto( Dir, 0.01 ));
        veto_ph.push_back(new reco::isodeposit::ThresholdVeto( 0.5 ));
 
-      new ((*rootMuons)[j]) TRootMuon (localMuon);
+      new ((*rootMuons)[nMuons_passedSkimming]) TRootMuon (localMuon);
+      nMuons_passedSkimming++;
       if (verbosity_ > 2){
         cout << "   [" << setw (3) << j << "] " << localMuon << endl;
       }

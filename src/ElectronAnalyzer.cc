@@ -38,6 +38,7 @@ void ElectronAnalyzer::Process(
 )
 {
   unsigned int nElectrons=0;
+  unsigned int nElectrons_passedSkimming = 0;
 
   edm::Handle < pat::ElectronCollection > patElectrons_calibrated;
   iEvent.getByToken(electronToken_calibrated, patElectrons_calibrated);
@@ -79,10 +80,9 @@ void ElectronAnalyzer::Process(
 
   if(verbosity_>1) std::cout << "   Number of electrons = " << nElectrons << std::endl;
 
-  //std::vector <reco::GsfElectron> electrons = (std::vector <reco::GsfElectron>) patElectrons_calibrated;
   for (unsigned int j=0; j<nElectrons; j++)
   {
-    const pat::Electron&  patElectron_calibrated = patElectrons_calibrated->at(j);//dynamic_cast<const pat::Electron*>(&*patElectron_calibrated);
+    const pat::Electron&  patElectron_calibrated = patElectrons_calibrated->at(j);
     
     if (patElectron_calibrated.pt() < electron_ptMin_) continue;
     
@@ -279,13 +279,13 @@ void ElectronAnalyzer::Process(
     localElectron.setMVA_value( mvaValue );
     localElectron.setMVA_category( mvaCategory );
     
-    new( (*rootElectrons)[j] ) TRootElectron(localElectron);
+    new( (*rootElectrons)[nElectrons_passedSkimming] ) TRootElectron(localElectron);
     if(verbosity_>2) cout << "   ["<< setw(3) << j << "] " << localElectron << endl;
     if(verbosity_>4) cout << "   ["<< setw(3) << j << "] " << "CHIso " << localElectron.chargedHadronIso(3)  << " pat " << patElectron_calibrated.chargedHadronIso() << endl;
     if(verbosity_>4) cout << "   ["<< setw(3) << j << "] " << "PHIso " << localElectron.photonIso(3)  << " pat " << patElectron_calibrated.photonIso()<< endl;
     if(verbosity_>4) cout << "   ["<< setw(3) << j << "] " << "NHIso " << localElectron.neutralHadronIso(3)  << " pat " << patElectron_calibrated.neutralHadronIso()<< endl;
+    nElectrons_passedSkimming++;
 
-    
     
 }
 
