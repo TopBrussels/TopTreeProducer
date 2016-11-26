@@ -396,6 +396,8 @@ void TopTreeProducer::endRun(const edm::Run& iRun, const edm::EventSetup& iSetup
 	RunlheEventProductAnalyzer_ = new LHEEventProductAnalyzer(verbosity);
     RunlheEventProductAnalyzer_->CopyWeightNames(iRun, runInfos_,lheRunInfoproductToken_);
     if(verbosity > 1 ) RunlheEventProductAnalyzer_->PrintWeightNamesList(iRun,lheRunInfoproductToken_);
+    
+    delete RunlheEventProductAnalyzer_;
 }
 // ------------ method called to for each event  ------------
 void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
@@ -420,7 +422,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
     rootEvent->setEventId(iEvent.id().event());
     rootEvent->setRunId(iEvent.id().run());
     rootEvent->setLumiBlockId(iEvent.luminosityBlock());
-	
+
 	// event cleaning. Particularly important for analyses using MET!
 	// Information is stored in TRootEvent as bool flags. false = bad events.
 	if (doEventCleaningInfo){
@@ -450,6 +452,9 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
       			theresult = true; 
       			theresult = metTrigResults->accept(metTrigNames.triggerIndex("Flag_HBHENoiseIsoFilter"));
       			rootEvent->setHBHENoiseIsoFilter(theresult);
+      			theresult = true; 
+      			theresult = metTrigResults->accept(metTrigNames.triggerIndex("Flag_goodVertices"));
+      			rootEvent->setPVFilter(theresult);
 		}}
  	     catch (...){
                        std::cerr << "tried to retrieve MET noise filter information and failed! " << std::endl;
@@ -492,7 +497,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 			cout << " EE bad SuperCluster filter value: " << rootEvent->getEEBadScFilter() << endl;
 			cout << " bad PF muon filter value: " << rootEvent->getBadPFMuonFilter() << endl; 
 
-		//	cout << " bad charged candidate filter value: " << rootEvent->getBadChCandFilter() << endl; 
+			cout << " bad charged candidate filter value: " << rootEvent->getBadChCandFilter() << endl; 
 			cout << "************************************" << endl;
 
 		}
@@ -721,6 +726,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 
 
     if(verbosity>1) cout << endl << "Filling rootuple..." << endl;
+//    eventTree_->Print();
     eventTree_->Fill();
 
 
