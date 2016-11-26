@@ -54,7 +54,7 @@ switchOnVIDElectronIdProducer(process,DataFormat.MiniAOD)
 my_id_modules = [
 'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Summer16_80X_V1_cff',
 'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV60_cff',
-'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Spring15_25ns_nonTrig_V1_cff'
+'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Spring16_GeneralPurpose_V1_cff'
 ]
 
 for idmod in my_id_modules:
@@ -79,10 +79,20 @@ process.options = cms.untracked.PSet(
   SkipEvent = cms.untracked.vstring('ProductNotFound')
 )
 
-#Default Test sample
-process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://xrootd-cms.infn.it///store/mc/RunIISpring16MiniAODv2/TT_TuneCUETP8M1_13TeV-powheg-pythia8/MINIAODSIM/PUSpring16RAWAODSIM_reHLT_80X_mcRun2_asymptotic_v14_ext3-v1/00000/0064B539-803A-E611-BDEA-002590D0B060.root'))
+#Test sample MC (synch ex)
+#process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://xrootd-cms.infn.it///store/mc/RunIISpring16MiniAODv2/TT_TuneCUETP8M1_13TeV-powheg-pythia8/MINIAODSIM/PUSpring16RAWAODSIM_reHLT_80X_mcRun2_asymptotic_v14_ext3-v1/00000/0064B539-803A-E611-BDEA-002590D0B060.root'))
+#Test sample Data singleElectron - ReReco (synch ex)
+#process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://xrootd-cms.infn.it///store/data/Run2016D/SingleElectron/MINIAOD/23Sep2016-v1/70000/04E8F72C-AF89-E611-9D2F-FA163E1D7951.root'))
+#Test sample Data singleMuon - ReReco (synch ex)
+#process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://xrootd-cms.infn.it///store/data/Run2016D/SingleMuon/MINIAOD/23Sep2016-v1/010000/249B6517-C79B-E611-A51E-7845C4F91621.root'))
 
-
+#Test sample Data singleElectron - PromptReco (synch ex)
+process.source = cms.Source("PoolSource",
+      fileNames = cms.untracked.vstring('root://xrootd-cms.infn.it///store/data/Run2016D/SingleElectron/MINIAOD/PromptReco-v2/000/276/315/00000/10BB1858-0045-E611-83A5-02163E01456D.root')#,
+#      eventsToProcess = cms.untracked.VEventRange('276315:158227401-276315:158227403','2:100-3:max')
+)
+#Test sample Data singleMuon - PromptReco (synch ex)
+#process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://xrootd-cms.infn.it///store/data/Run2016D/SingleMuon/MINIAOD/PromptReco-v2/000/276/315/00000/168C3DE5-F444-E611-A012-02163E014230.root'))
 
 # reduce verbosity
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(1000)
@@ -116,7 +126,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
     doMuonMC = cms.untracked.bool(True),
     doJetMC = cms.untracked.bool(True),
     doMETMC = cms.untracked.bool(True),
-    doPhotonMC = cms.untracked.bool(True),
+    doPhotonMC = cms.untracked.bool(False),
     doUnstablePartsMC = cms.untracked.bool(True),
     
     doPrimaryVertex = cms.untracked.bool(True),
@@ -132,7 +142,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
     doLHEEventProd = cms.untracked.bool(True),
     doEventCleaningInfo = cms.untracked.bool(True), # only useful for data but protected for MC. Stores HBHE, HCalIso etc filter outputs as bools in TRootEvent
     
-    conversionLikelihoodWeightsFile = cms.untracked.string('RecoEgamma/EgammaTools/data/TMVAnalysis_Likelihood.weights.txt'),
+   # conversionLikelihoodWeightsFile = cms.untracked.string('RecoEgamma/EgammaTools/data/TMVAnalysis_Likelihood.weights.txt'),
     
     
     # The PaticleTreeDrawer is not yet adapted to 76X TTP. Not sure if we still need this (Kevin and Seth, 13th jan 2016)
@@ -194,10 +204,10 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
     hltProducer4th = cms.InputTag("TriggerResults","","MINIAOD"),
     hltProducer5th = cms.InputTag("TriggerResults","","PAT"),
 
-    eleMediumMVAIdMap        = cms.InputTag("egmGsfElectronIDs:mvaEleID-Spring15-25ns-nonTrig-V1-wp90"),
-    eleTightMVAIdMap         = cms.InputTag("egmGsfElectronIDs:mvaEleID-Spring15-25ns-nonTrig-V1-wp80"),
-    mvaValuesMap             = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Spring15NonTrig25nsV1Values"),
-    mvaCategoriesMap         = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Spring15NonTrig25nsV1Categories"),
+    eleMediumMVAIdMap        = cms.InputTag("egmGsfElectronIDs:mvaEleID-Spring16-GeneralPurpose-V1-wp90"),
+    eleTightMVAIdMap         = cms.InputTag("egmGsfElectronIDs:mvaEleID-Spring16-GeneralPurpose-V1-wp80"),
+    mvaValuesMap             = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Spring16GeneralPurposeV1Values"),
+    mvaCategoriesMap         = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Spring16GeneralPurposeV1Categories"),
 
     eleVetoCBIdMap           = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-veto"),
     eleLooseCBIdMap          = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-loose"),
