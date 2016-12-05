@@ -7,6 +7,7 @@ config.General.workArea = 'crab_projects'
 
 config.section_("JobType")
 config.JobType.pluginName = 'Analysis'
+config.JobType.sendExternalFolder = True
 #config.JobType.psetName = 'Hadronizer_Tune4C_13TeV_aMCatNLO_LHE_pythia8_cff_py_GEN_SIM_RECO_HLT_PU.py'
 config.JobType.psetName = 'TOPTREE_fromminiAOD.py'
 #config.JobType.inputFiles = ['root://cms-xrd-global.cern.ch//store/user/heilman/LHEstore/FOURTOP_NLO_100k_v2.lhe']
