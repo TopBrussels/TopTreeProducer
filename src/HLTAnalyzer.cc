@@ -128,7 +128,15 @@ void HLTAnalyzer::process(const edm::Event& iEvent, TRootEvent* rootEvent, edm::
 	    }
 
 	  // decision for each HLT algorithm
-	  const unsigned int n(hltNames_.size());
+    edm::TriggerNames triggerNames_test=iEvent.triggerNames(*trigResults);
+    std::vector<std::string> hltNames_test=triggerNames_test.triggerNames();
+	  unsigned int n(hltNames_.size());
+    if(n != hltNames_test.size())
+    {
+        cout << " BUG found in HLTAnalyzer. HLTNames.size() is different for this run"  << endl;
+        cout << "                                            Applying brute-force fix..."  << endl;
+        n = hltNames_test.size();
+    }
 	  std::vector<Bool_t> hltDecision(n, false);
 	  for (unsigned int i=0; i!=n; ++i)
 	    {
@@ -221,3 +229,4 @@ void HLTAnalyzer::copySummary(TRootRun* runInfos)
 	}
 
 }
+
