@@ -63,6 +63,7 @@ class TRootEvent : public TObject
         ,PVFilter_(true)
 	,BadChCandFilter_(true) //80X
 	,BadPFMuonFilter_(true) // 80X
+	,genTTX_id_(-666)
     {
       ;
     }
@@ -365,6 +366,8 @@ class TRootEvent : public TObject
      Bool_t getBadChCandFilter(void) const{ return BadChCandFilter_;}
       void setBadPFMuonFilter(Bool_t res) { BadPFMuonFilter_ = res; } // false = reject event
      Bool_t getBadPFMuonFilter(void) const {return BadPFMuonFilter_; }
+      void setgenTTX_id(Int_t res) { genTTX_id_ = res; } // false = reject event
+     Int_t getgenTTX_id(void) const {return genTTX_id_; }
     
   private:
     
@@ -377,7 +380,6 @@ class TRootEvent : public TObject
     Int_t flavHistPath_; // flavor history path, see https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideFlavorHistory
     Float_t fixedGridRhoAll_, fixedGridRhoFastjetAll_, fixedGridRhoFastjetAllCalo_, fixedGridRhoFastjetCentralCalo_, fixedGridRhoFastjetCentralChargedPileUp_, fixedGridRhoFastjetCentralNeutral_;
     Float_t kt6PFJetsForIsolation_rho_;
-
     // generalTracks infos (for cleaning of the scraping events)
     Int_t nTracks_;
     Int_t nHighPurityTracks_;
@@ -415,7 +417,9 @@ class TRootEvent : public TObject
     Bool_t BadChCandFilter_; 
     Bool_t BadPFMuonFilter_;
 
-    ClassDef (TRootEvent,8);
+    Int_t genTTX_id_;
+
+    ClassDef (TRootEvent,9);
 };
 }
 

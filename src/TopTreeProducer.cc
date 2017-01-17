@@ -94,10 +94,25 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
     eleHEEPCBIdMapToken_ = consumes<edm::ValueMap<bool> >(valuesForConsumeCommand.getParameter<edm::InputTag>("eleHEEPCBIdMap"));
 
 
-   // 80X extra filters
-   BadChCandFilterToken_ = consumes<bool>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("BadChargedCandidateFilter"));
-   BadPFMuonFilterToken_ = consumes<bool>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("BadMuonFilter"));
-    
+    // 80X extra filters
+    BadChCandFilterToken_ = consumes<bool>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("BadChargedCandidateFilter"));
+    BadPFMuonFilterToken_ = consumes<bool>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("BadMuonFilter"));
+     
+    //Extra tool for splitting ttbar samples into ttbb,ttcc,ttll: https://twiki.cern.ch/twiki/bin/view/CMSPublic/GenHFHadronMatcher
+    genTTXJetsToken_                    = consumes<reco::GenJetCollection>(myConfig_.getParameter<edm::InputTag>("genJets"));
+    genTTXBHadJetIndexToken_            = consumes<std::vector<int> >(myConfig_.getParameter<edm::InputTag>("genBHadJetIndex"));
+    genTTXBHadFlavourToken_             = consumes<std::vector<int> >(myConfig_.getParameter<edm::InputTag>("genBHadFlavour"));
+    genTTXBHadFromTopWeakDecayToken_    = consumes<std::vector<int> >(myConfig_.getParameter<edm::InputTag>("genBHadFromTopWeakDecay"));
+    genTTXBHadPlusMothersToken_         = consumes<std::vector<reco::GenParticle> >(myConfig_.getParameter<edm::InputTag>("genBHadPlusMothers"));
+    genTTXBHadPlusMothersIndicesToken_  = consumes<std::vector<std::vector<int> > >(myConfig_.getParameter<edm::InputTag>("genBHadPlusMothersIndices"));
+    genTTXBHadIndexToken_               = consumes<std::vector<int> >(myConfig_.getParameter<edm::InputTag>("genBHadIndex"));
+    genTTXBHadLeptonHadronIndexToken_   = consumes<std::vector<int> >(myConfig_.getParameter<edm::InputTag>("genBHadLeptonHadronIndex"));
+    genTTXBHadLeptonViaTauToken_        = consumes<std::vector<int> >(myConfig_.getParameter<edm::InputTag>("genBHadLeptonViaTau"));
+    genTTXCHadJetIndexToken_            = consumes<std::vector<int> >(myConfig_.getParameter<edm::InputTag>("genCHadJetIndex"));
+    genTTXCHadFlavourToken_             = consumes<std::vector<int> >(myConfig_.getParameter<edm::InputTag>("genCHadFlavour"));
+    genTTXCHadFromTopWeakDecayToken_    = consumes<std::vector<int> >(myConfig_.getParameter<edm::InputTag>("genCHadFromTopWeakDecay"));
+    genTTXCHadBHadronIdToken_           = consumes<std::vector<int> >(myConfig_.getParameter<edm::InputTag>("genCHadBHadronId"));
+
 }
 
 
@@ -126,6 +141,7 @@ void TopTreeProducer::beginJob()
     doPFMET = myConfig_.getUntrackedParameter<bool>("doPFMET",false);
     drawMCTree = myConfig_.getUntrackedParameter<bool>("drawMCTree",false);
     doNPGenEvent = myConfig_.getUntrackedParameter<bool>("doNPGenEvent",false);
+    doGenTTXGenerator = myConfig_.getUntrackedParameter<bool>("doGenTTXGenerator",false);
     doLHEEventProd  = myConfig_.getUntrackedParameter<bool>("doLHEEventProd",true);
     doEventCleaningInfo  = myConfig_.getUntrackedParameter<bool>("doEventCleaningInfo",true);
     useEventCounter_ = myConfig_.getUntrackedParameter<bool>("useEventCounter",true);
@@ -621,6 +637,69 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
         delete myVertexAnalyzer;
     }
 
+    if(!isRealData_ && doGenTTXGenerator)
+    {
+         GenTTXCategorizer* genTTX = new GenTTXCategorizer();
+         // HadronMatcher
+         edm::Handle<reco::GenJetCollection> genTTXJets;
+         iEvent.getByToken(genTTXJetsToken_,genTTXJets);
+         
+         edm::Handle<std::vector<int> >genTTXBHadFlavour;
+         iEvent.getByToken(genTTXBHadFlavourToken_,genTTXBHadFlavour);
+         
+         edm::Handle<std::vector<int> > genTTXBHadJetIndex;
+         iEvent.getByToken(genTTXBHadJetIndexToken_,genTTXBHadJetIndex);
+         
+         edm::Handle<std::vector<int> > genTTXBHadFromTopWeakDecay;
+         iEvent.getByToken(genTTXBHadFromTopWeakDecayToken_,genTTXBHadFromTopWeakDecay);
+         
+         edm::Handle<std::vector<reco::GenParticle> > genTTXBHadPlusMothers;
+         iEvent.getByToken(genTTXBHadPlusMothersToken_,genTTXBHadPlusMothers);
+         
+         edm::Handle<std::vector<std::vector<int> > > genTTXBHadPlusMothersIndices;
+         iEvent.getByToken(genTTXBHadPlusMothersIndicesToken_,genTTXBHadPlusMothersIndices);
+         
+         edm::Handle<std::vector<int> > genTTXBHadIndex;
+         iEvent.getByToken(genTTXBHadIndexToken_,genTTXBHadIndex);
+         
+         edm::Handle<std::vector<int> > genTTXBHadLeptonHadronIndex;
+         iEvent.getByToken(genTTXBHadLeptonHadronIndexToken_,genTTXBHadLeptonHadronIndex);
+         
+         edm::Handle<std::vector<int> > genTTXBHadLeptonViaTau;
+         iEvent.getByToken(genTTXBHadLeptonViaTauToken_, genTTXBHadLeptonViaTau);
+         
+         edm::Handle<std::vector<int> > genTTXCHadFlavour;
+         iEvent.getByToken(genTTXCHadFlavourToken_,genTTXCHadFlavour);
+         
+         edm::Handle<std::vector<int> > genTTXCHadJetIndex;
+         iEvent.getByToken(genTTXCHadJetIndexToken_,genTTXCHadJetIndex);
+         
+         edm::Handle<std::vector<int> > genTTXCHadFromTopWeakDecay;
+         iEvent.getByToken(genTTXCHadFromTopWeakDecayToken_,genTTXCHadFromTopWeakDecay);
+         
+         edm::Handle<std::vector<int> > genTTXCHadBHadronId;
+         iEvent.getByToken(genTTXCHadBHadronIdToken_,genTTXCHadBHadronId);
+
+          Int_t TTX_id = genTTX->Run(
+            genTTXJets,
+		        genTTXBHadFlavour,
+		        genTTXBHadJetIndex,
+		        genTTXBHadFromTopWeakDecay,
+		        genTTXBHadPlusMothers,
+		        genTTXBHadPlusMothersIndices,
+		        genTTXBHadIndex,
+		        genTTXBHadLeptonHadronIndex,
+		        genTTXBHadLeptonViaTau,
+		        genTTXCHadFlavour,
+		        genTTXCHadJetIndex,
+		        genTTXCHadFromTopWeakDecay,
+		        genTTXCHadBHadronId);
+		        
+		        rootEvent->setgenTTX_id(TTX_id);
+		        
+    }
+
+
     // GenJet
     if(!isRealData_ && doGenJet)
     {
@@ -632,6 +711,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
             delete myGenJetAnalyzer;
         }
     }
+    
 
     // PFJet
     if(doPFJet)
@@ -794,4 +874,13 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
     if(doNPGenEvent) (*NPgenEvent).Delete();
     if(doPrimaryVertex) (*primaryVertex).Delete();
 //    if(verbosity>0) cout << endl;
+}
+
+void TopTreeProducer::fillDescriptions(edm::ConfigurationDescriptions& descriptions)
+{
+   //The following says we do not know what parameters are allowed so do no validation
+   // Please change this to state exactly what you do use, even if it is no parameters
+   edm::ParameterSetDescription desc;
+   desc.setUnknown();
+   descriptions.addDefault(desc);
 }

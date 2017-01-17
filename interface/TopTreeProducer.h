@@ -8,7 +8,6 @@
 
 // user include files
 
-#include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/Utilities/interface/InputTag.h"
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
@@ -29,6 +28,13 @@
 #include "DataFormats/Common/interface/TriggerResults.h"
 #include "DataFormats/Common/interface/MergeableCounter.h"
 #include "DataFormats/METReco/interface/HcalNoiseSummary.h"
+
+//Added for GenHFHadronMatcher
+#include "SimDataFormats/JetMatching/interface/JetFlavourMatching.h"
+#include "SimDataFormats/GeneratorProducts/interface/HepMCProduct.h"
+#include "DataFormats/HepMCCandidate/interface/GenParticle.h"
+#include "DataFormats/JetReco/interface/GenJetCollection.h"
+#include "DataFormats/JetReco/interface/Jet.h"
 
 #include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h"
 
@@ -64,6 +70,7 @@
 #include "../interface/TRootPFMET.h"
 #include "../interface/TRootNPGenEvent.h"
 #include "../interface/TRootVertex.h"
+#include "../interface/GenTTXCategorizer.h"
 
 #include "TFile.h"
 #include "TTree.h"
@@ -78,13 +85,15 @@ public:
 	~TopTreeProducer();
 
 
+  static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
+
 private:
-	virtual void beginJob() ;
-	virtual void beginRun(const edm::Run&, const edm::EventSetup&) ;
-	virtual void endRun(const edm::Run&, const edm::EventSetup&, const edm::ParameterSet&) ;
-	virtual void analyze(const edm::Event&, const edm::EventSetup&);
-  virtual void endLuminosityBlock(const edm::LuminosityBlock&, const EventSetup&);
-	virtual void endJob() ;
+	virtual void beginJob() override;
+	virtual void beginRun(const edm::Run&, const edm::EventSetup&) override;
+	virtual void endRun(const edm::Run&, const edm::EventSetup&, const edm::ParameterSet&);
+	virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
+  virtual void endLuminosityBlock(const edm::LuminosityBlock&, const EventSetup&) override;
+	virtual void endJob() override;
 
 	edm::ParameterSet myConfig_;
 	edm::ParameterSet producersNames_;
@@ -111,6 +120,7 @@ private:
 	bool doPhotonMC;
 	bool doPFMET;
 	bool doNPGenEvent;
+	bool doGenTTXGenerator;
 	bool doLHEEventProd;
 	bool drawMCTree;
 	bool doEventCleaningInfo;
@@ -195,6 +205,23 @@ private:
     edm::EDGetTokenT<bool> BadChCandFilterToken_;
     edm::EDGetTokenT<bool> BadPFMuonFilterToken_;
     
+    //Extra tool for splitting ttbar samples into ttbb,ttcc,ttll: https://twiki.cern.ch/twiki/bin/view/CMSPublic/GenHFHadronMatcher
+    edm::EDGetTokenT<reco::GenJetCollection> genTTXJetsToken_;
+    
+    edm::EDGetTokenT<std::vector<int> > genTTXBHadJetIndexToken_;
+    edm::EDGetTokenT<std::vector<int> > genTTXBHadFlavourToken_;
+    edm::EDGetTokenT<std::vector<int> > genTTXBHadFromTopWeakDecayToken_;
+    edm::EDGetTokenT<std::vector<reco::GenParticle> > genTTXBHadPlusMothersToken_;
+    edm::EDGetTokenT<std::vector<std::vector<int> > > genTTXBHadPlusMothersIndicesToken_;
+    edm::EDGetTokenT<std::vector<int> > genTTXBHadIndexToken_;
+    edm::EDGetTokenT<std::vector<int> > genTTXBHadLeptonHadronIndexToken_;
+    edm::EDGetTokenT<std::vector<int> > genTTXBHadLeptonViaTauToken_;
+     
+    edm::EDGetTokenT<std::vector<int> > genTTXCHadJetIndexToken_;
+    edm::EDGetTokenT<std::vector<int> > genTTXCHadFlavourToken_;
+    edm::EDGetTokenT<std::vector<int> > genTTXCHadFromTopWeakDecayToken_;
+    edm::EDGetTokenT<std::vector<int> > genTTXCHadBHadronIdToken_;
+
 };
 
 
