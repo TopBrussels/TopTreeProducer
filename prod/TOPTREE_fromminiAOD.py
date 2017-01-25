@@ -17,7 +17,7 @@ process.options   = cms.untracked.PSet(
     wantSummary = cms.untracked.bool(False),
     allowUnscheduled = cms.untracked.bool(True)	 # needed for ak10 computation (JMEAnalysis/JetToolbox)
 )
-process.MessageLogger.suppressWarning = cms.untracked.vstring(["JetPtMismatchAtLowPt","NullTransverseMomentum"])
+process.MessageLogger.suppressWarning = cms.untracked.vstring(["JetPtMismatchAtLowPt","NullTransverseMomentum","MissingJetConstituent","MissingJetConstituent","JetMatchingFailed","JetPtMismatch"])
 genParticleCollection = 'prunedGenParticles'
 genJetCollection = 'slimmedGenJets'
 
@@ -59,7 +59,7 @@ process.matchGenCHadron = matchGenCHadron.clone(
 
 # good global tags can be found here. Beware that the default is MC which has to be updated for data!
 # https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideFrontierConditions
-process.GlobalTag.globaltag = cms.string('80X_mcRun2_asymptotic_2016_miniAODv2_v1')
+process.GlobalTag.globaltag = cms.string('80X_mcRun2_asymptotic_2016_TrancheIV_v7')
 
 process.load('RecoMET.METFilters.BadPFMuonFilter_cfi')
 process.BadPFMuonFilter.muons = cms.InputTag("slimmedMuons")
@@ -68,6 +68,20 @@ process.BadPFMuonFilter.PFCandidates = cms.InputTag("packedPFCandidates")
 process.load('RecoMET.METFilters.BadChargedCandidateFilter_cfi')
 process.BadChargedCandidateFilter.muons = cms.InputTag("slimmedMuons")
 process.BadChargedCandidateFilter.PFCandidates = cms.InputTag("packedPFCandidates")
+
+#################################################
+# Apply the regression from a remote database: https://twiki.cern.ch/twiki/bin/viewauth/CMS/EGMRegression
+# -> Later this regression is will be directly introduced in the global tag -> KEEP POSTED ABOUT THIS CHANGE!!!!
+#################################################
+from EgammaAnalysis.ElectronTools.regressionWeights_cfi import regressionWeights
+process = regressionWeights(process)
+
+process.load('EgammaAnalysis.ElectronTools.regressionApplication_cff')
+
+process.load("RecoEgamma.ElectronIdentification.ElectronMVAValueMapProducer_cfi")
+process.electronMVAValueMapProducer.srcMiniAOD = cms.InputTag('slimmedElectrons')
+process.load("RecoEgamma.ElectronIdentification.ElectronIDValueMapProducer_cfi")
+process.electronIDValueMapProducer.srcMiniAOD = cms.InputTag('slimmedElectrons')
 
 #################################################
 # Applying EGM smearing for ICHEP dataset: https://twiki.cern.ch/twiki/bin/viewauth/CMS/EGMSmearer#How_to_apply_corrections_directl
@@ -104,8 +118,6 @@ my_id_modules = [
 for idmod in my_id_modules:
     setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
 
-process.load("RecoEgamma.ElectronIdentification.ElectronMVAValueMapProducer_cfi")
-
 
 #####################
 # MET Significance  #
@@ -116,7 +128,7 @@ from RecoMET.METProducers.testInputFiles_cff import recoMETtestInputFiles
 
 
 process.maxEvents = cms.untracked.PSet(
-  input = cms.untracked.int32(100)
+  input = cms.untracked.int32(1000)
 )
 
 process.options = cms.untracked.PSet(
@@ -294,13 +306,16 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
                                 
 )
 
-#process.TFileService = cms.Service("TFileService", fileName = cms.string('TFileTOPTREE.root') )
+
+
 
 process.p = cms.Path(
+  process.regressionApplication *
   process.calibratedPatElectrons *
-  process.electronMVAValueMapProducer*
-  process.egmGsfElectronIDSequence*
-  process.METSignificance*
+  process.electronIDValueMapProducer *
+  process.electronMVAValueMapProducer *
+  process.egmGsfElectronIDSequence *
+  process.METSignificance *
   process.BadPFMuonFilter *
   process.BadChargedCandidateFilter *
   process.selectedHadronsAndPartons *

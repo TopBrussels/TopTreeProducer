@@ -19,8 +19,9 @@ cd -
 
 git cms-merge-topic ikrav:egm_id_80X_v2
 git cms-merge-topic -u cms-met:CMSSW_8_0_X-METFilterUpdate
+git cms-merge-topic rafaellopesdesa:Regression80XEgammaAnalysis_v2
 
-scram b -j6
+scram b -j8
 
 
 # Add the area containing the MVA weights (from cms-data, to appear in “external”).
