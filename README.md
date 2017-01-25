@@ -6,8 +6,8 @@ Repository for code to produce TopTrees
 For developers: check out the CMSSW_80X branch
 
 ~~~
-cmsrel CMSSW_8_0_24
-cd CMSSW_8_0_24/src
+cmsrel CMSSW_8_0_24_patch1
+cd CMSSW_8_0_24_patch1/src 
 cmsenv
 
 git cms-init
