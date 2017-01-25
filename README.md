@@ -12,9 +12,12 @@ cmsenv
 
 git cms-init
 
-git cms-merge-topic emanueledimarco:ecal_smear_fix_80X
+#add the repository with the updated Egamma package
+git cms-merge-topic shervin86:Moriond2017_JEC_energyScales
+
 cd EgammaAnalysis/ElectronTools/data
-git clone -b ICHEP2016_v2 https://github.com/ECALELFS/ScalesSmearings.git
+# download the txt files with the corrections
+git clone git@github.com:ECALELFS/ScalesSmearings.git
 cd -
 
 git cms-merge-topic ikrav:egm_id_80X_v2
