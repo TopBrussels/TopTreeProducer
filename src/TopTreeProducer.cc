@@ -97,7 +97,12 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
     // 80X extra filters
     BadChCandFilterToken_ = consumes<bool>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("BadChargedCandidateFilter"));
     BadPFMuonFilterToken_ = consumes<bool>(valuesForConsumeCommand.getUntrackedParameter<edm::InputTag>("BadMuonFilter"));
-     
+    // 80X bad (duplicate) global muon filter (see https://hypernews.cern.ch/HyperNews/CMS/get/physics-validation/2786.html)
+    if ( myConfig_.getUntrackedParameter < bool > ("doBadMuonTagging") )
+    	BadGlobalMuonFilterToken_ = consumes<edm::PtrVector<reco::Muon>>(valuesForConsumeCommand.getParameter<edm::InputTag>("BadGlobalMuonTagger"));
+    if ( myConfig_.getUntrackedParameter < bool > ("doCloneMuonTagging") )
+    	CloneGlobalMuonFilterToken_ = consumes<edm::PtrVector<reco::Muon>>(valuesForConsumeCommand.getParameter<edm::InputTag>("CloneGlobalMuonTagger"));
+
     //Extra tool for splitting ttbar samples into ttbb,ttcc,ttll: https://twiki.cern.ch/twiki/bin/view/CMSPublic/GenHFHadronMatcher
     genTTXJetsToken_                    = consumes<reco::GenJetCollection>(myConfig_.getParameter<edm::InputTag>("genJets"));
     genTTXBHadJetIndexToken_            = consumes<std::vector<int> >(myConfig_.getParameter<edm::InputTag>("genBHadJetIndex"));
@@ -754,6 +759,10 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
         for(unsigned int s=0; s<vMuonProducer.size(); s++)
         {
             MuonAnalyzer* myMuonAnalyzer = new MuonAnalyzer(myConfig_,verbosity);
+	    // 80X bad and clone muons https://hypernews.cern.ch/HyperNews/CMS/get/physics-validation/2786.html
+	    if ( myConfig_.getUntrackedParameter < bool > ("doBadMuonTagging") ) myMuonAnalyzer->TagBadMuons(BadGlobalMuonFilterToken_);
+	    if ( myConfig_.getUntrackedParameter < bool > ("doCloneMuonTagging") ) myMuonAnalyzer->TagCloneMuons(CloneGlobalMuonFilterToken_);
+
             myMuonAnalyzer->Process(iEvent, vmuons[s], offlineBSToken_, vmuonToken_[s], vtxToken_);
             delete myMuonAnalyzer;
 

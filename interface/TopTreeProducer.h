@@ -204,6 +204,10 @@ private:
     // filters for 80X
     edm::EDGetTokenT<bool> BadChCandFilterToken_;
     edm::EDGetTokenT<bool> BadPFMuonFilterToken_;
+
+    //80X bad (duplicate) global muon filter 
+    edm::EDGetTokenT<edm::PtrVector<reco::Muon>> BadGlobalMuonFilterToken_;
+    edm::EDGetTokenT<edm::PtrVector<reco::Muon>> CloneGlobalMuonFilterToken_;
     
     //Extra tool for splitting ttbar samples into ttbb,ttcc,ttll: https://twiki.cern.ch/twiki/bin/view/CMSPublic/GenHFHadronMatcher
     edm::EDGetTokenT<reco::GenJetCollection> genTTXJetsToken_;

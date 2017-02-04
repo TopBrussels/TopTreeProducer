@@ -251,6 +251,11 @@ namespace TopTree
 		void setTrkKink(Int_t x){trkKink_ = x;}
 		void setValidFraction(Float_t x){validFraction_ = x;}
 
+		void setBad80X() { badFlag80X_ = true; }
+		Bool_t isBad80X() { return badFlag80X_; }
+		void setClone80X() { cloneFlag80X_ = true; }
+		Bool_t isClone80X() { return cloneFlag80X_; }
+
 
 		friend std::ostream& operator<< (std::ostream& stream, const TRootMuon& muon)
 		{
@@ -282,11 +287,13 @@ namespace TopTree
 		Float_t segmentCompatibility_; //
 		Float_t validFraction_;     // innerTrack()->validFraction()
 		
-
+		//80X https://hypernews.cern.ch/HyperNews/CMS/get/physics-validation/2786.html
+		Bool_t badFlag80X_ = false;
+		Bool_t cloneFlag80X_ = false;
 		
 
 
-		ClassDef (TRootMuon,4);
+		ClassDef (TRootMuon,5);
 	};
 }
 

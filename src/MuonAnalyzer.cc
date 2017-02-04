@@ -1,4 +1,5 @@
 #include "../interface/MuonAnalyzer.h"
+#include "DataFormats/Candidate/interface/OverlapChecker.h"
 
 using namespace std;
 using namespace TopTree;
@@ -9,13 +10,23 @@ using namespace isodeposit;
 MuonAnalyzer::MuonAnalyzer (const edm::ParameterSet & myConfig, int verbosity):
 verbosity_ (verbosity)
 {
-	useMC_ = myConfig.getUntrackedParameter < bool > ("doMuonMC");
-  muon_ptMin_ = myConfig.getParameter<double>("muon_ptMin");
+	useMC_       = myConfig.getUntrackedParameter < bool > ("doMuonMC");
+   muon_ptMin_       = myConfig.getParameter<double>("muon_ptMin");
+ applyBadMuonTagger_ = myConfig.getUntrackedParameter < bool > ("doBadMuonTagging");
+ applyCloneMuonTagger_ = myConfig.getUntrackedParameter < bool > ("doCloneMuonTagging");
 }
 
 
 MuonAnalyzer::~MuonAnalyzer ()
 {
+}
+
+void MuonAnalyzer::TagBadMuons(edm::EDGetTokenT<edm::PtrVector<reco::Muon>> token) {
+	badMuonsToken_	= token;
+}
+
+void MuonAnalyzer::TagCloneMuons(edm::EDGetTokenT<edm::PtrVector<reco::Muon>> token) {
+	cloneMuonsToken_	= token;
 }
 
 void
@@ -37,6 +48,25 @@ unsigned int nMuons_passedSkimming = 0;
 	if (verbosity_ > 1)
 		std::cout << "   Number of muons = " << nMuons << std::endl;
 
+	// 80X bad and clone muons https://hypernews.cern.ch/HyperNews/CMS/get/physics-validation/2786.html
+	edm::Handle<edm::PtrVector<reco::Muon>> badMuons;
+	if (applyBadMuonTagger_) {
+		try{
+			iEvent.getByToken(badMuonsToken_, badMuons);
+		} catch (...) {
+			std::cerr << "tried to retrieve BadGlobalmuon  filter information and failed! " << std::endl;
+		}
+	}
+
+	edm::Handle<edm::PtrVector<reco::Muon>> cloneMuons;
+	if (applyCloneMuonTagger_) {
+		try{
+                        iEvent.getByToken(cloneMuonsToken_, cloneMuons);
+                } catch (...) {
+                        std::cerr << "tried to retrieve CloneGlobalmuon  filter information and failed! " << std::endl;
+                }
+	}
+	
     for (unsigned int j = 0; j < nMuons; j++)
     {
       const pat::Muon*  patMuon = &((*patMuons)[j]);
@@ -152,6 +182,19 @@ unsigned int nMuons_passedSkimming = 0;
        veto_nh.push_back(new reco::isodeposit::ThresholdVeto( 0.5 ));
        veto_ph.push_back(new reco::isodeposit::ConeVeto( Dir, 0.01 ));
        veto_ph.push_back(new reco::isodeposit::ThresholdVeto( 0.5 ));
+
+       //80X https://hypernews.cern.ch/HyperNews/CMS/get/physics-validation/2786.html
+       OverlapChecker overlap;
+       if (badMuons.isValid()) {
+	       for ( auto badMuon : (*badMuons) ) {
+			if ( overlap( *badMuon, *muon )) localMuon.setBad80X();
+	       }
+       }
+       if (cloneMuons.isValid()) {
+	       for ( auto cloneMuon : (*cloneMuons) ) {
+			if ( overlap( *cloneMuon, *muon )) localMuon.setClone80X();
+	       }
+       }
 
       new ((*rootMuons)[nMuons_passedSkimming]) TRootMuon (localMuon);
       nMuons_passedSkimming++;

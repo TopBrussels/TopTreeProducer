@@ -70,6 +70,12 @@ process.BadChargedCandidateFilter.muons = cms.InputTag("slimmedMuons")
 process.BadChargedCandidateFilter.PFCandidates = cms.InputTag("packedPFCandidates")
 
 #################################################
+# Duplicate muon filter
+#################################################
+#see https://hypernews.cern.ch/HyperNews/CMS/get/physics-validation/2786.html
+process.load('RecoMET.METFilters.badGlobalMuonTaggersMiniAOD_cff')
+
+#################################################
 # Apply the regression from a remote database: https://twiki.cern.ch/twiki/bin/viewauth/CMS/EGMRegression
 # -> Later this regression is will be directly introduced in the global tag -> KEEP POSTED ABOUT THIS CHANGE!!!!
 #################################################
@@ -250,6 +256,11 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
     genCHadFromTopWeakDecay = cms.InputTag("matchGenCHadron", "genCHadFromTopWeakDecay"),
     genCHadBHadronId = cms.InputTag("matchGenCHadron", "genCHadBHadronId"),      
 
+    # 80X bad (duplicate) global muon filter (see https://hypernews.cern.ch/HyperNews/CMS/get/physics-validation/2786.html)
+    doBadMuonTagging = cms.untracked.bool(True),
+    doCloneMuonTagging = cms.untracked.bool(True),
+
+
   ),
   
   
@@ -301,11 +312,11 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
     BadMuonFilter              = cms.untracked.InputTag("BadPFMuonFilter"),
     BadChargedCandidateFilter  = cms.untracked.InputTag("BadChargedCandidateFilter"),
 
-
+    BadGlobalMuonTagger        = cms.InputTag("badGlobalMuonTagger","bad","NewProcess"),
+    CloneGlobalMuonTagger        = cms.InputTag("cloneGlobalMuonTagger","bad","NewProcess"),
   )
                                 
 )
-
 
 
 
@@ -322,6 +333,8 @@ process.p = cms.Path(
   process.genJetFlavourInfos *
   process.matchGenBHadron *
   process.matchGenCHadron *
+  cms.ignore(process.badGlobalMuonTagger) * 
+  cms.ignore(process.cloneGlobalMuonTagger) *
   process.analysis
 )
 temp = process.dumpPython()

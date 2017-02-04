@@ -34,10 +34,20 @@ public:
 	~MuonAnalyzer();
 	void Process(const edm::Event& iEvent, TClonesArray* rootMuons, edm::EDGetTokenT<reco::BeamSpot> offlineBSToken, edm::EDGetTokenT<pat::MuonCollection> muonToken, edm::EDGetTokenT<reco::VertexCollection> vtxToken);
 
+	//80X 2016 https://hypernews.cern.ch/HyperNews/CMS/get/physics-validation/2786.html
+	void TagBadMuons(edm::EDGetTokenT<edm::PtrVector<reco::Muon>> badMuonsToken);
+	void TagCloneMuons(edm::EDGetTokenT<edm::PtrVector<reco::Muon>> cloneMuonsToken);
+
 private:
 	int verbosity_;
 	bool useMC_;
-  double muon_ptMin_;
+	double muon_ptMin_;
+
+	//80X 2016 https://hypernews.cern.ch/HyperNews/CMS/get/physics-validation/2786.html
+	bool applyBadMuonTagger_;
+	edm::EDGetTokenT<edm::PtrVector<reco::Muon>> badMuonsToken_;
+	bool applyCloneMuonTagger_;
+	edm::EDGetTokenT<edm::PtrVector<reco::Muon>> cloneMuonsToken_;
 };
 
 #endif

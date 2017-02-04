@@ -6,8 +6,8 @@ Repository for code to produce TopTrees
 For developers: check out the CMSSW_80X branch
 
 ~~~
-cmsrel CMSSW_8_0_24_patch1
-cd CMSSW_8_0_24_patch1/src 
+cmsrel CMSSW_8_0_25
+cd CMSSW_8_0_25/src 
 cmsenv
 
 git cms-init
@@ -23,6 +23,7 @@ cd -
 git cms-merge-topic ikrav:egm_id_80X_v2
 git cms-merge-topic -u cms-met:CMSSW_8_0_X-METFilterUpdate
 git cms-merge-topic rafaellopesdesa:Regression80XEgammaAnalysis_v2
+git cms-merge-topic gpetruc:badMuonFilters_80X
 
 scram b -j8
 
