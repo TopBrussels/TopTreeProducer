@@ -1,6 +1,5 @@
 
 /DoubleMuon/Run2016B-23Sep2016-v3/MINIAOD
-/DoubleMuon/Run2016D-23Sep2016-v1/MINIAOD 
 /DoubleMuon/Run2016H-PromptReco-v2/MINIAOD
 /DoubleMuon/Run2016H-PromptReco-v3/MINIAOD
 
@@ -21,6 +20,7 @@
 /SingleMuon/Run2016H-PromptReco-v3/MINIAOD
 
 /DoubleMuon/Run2016C-03Feb2017-v1/MINIAOD
+/DoubleMuon/Run2016D-03Feb2017-v1/MINIAOD
 /DoubleMuon/Run2016E-03Feb2017-v1/MINIAOD
 /DoubleMuon/Run2016F-03Feb2017-v1/MINIAOD
 /DoubleMuon/Run2016G-03Feb2017-v1/MINIAOD
