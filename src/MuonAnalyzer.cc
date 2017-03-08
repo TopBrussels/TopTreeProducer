@@ -195,6 +195,13 @@ unsigned int nMuons_passedSkimming = 0;
 			if ( overlap( *cloneMuon, *muon )) localMuon.setClone80X();
 	       }
        }
+      //80X ReReco data (see https://twiki.cern.ch/twiki/bin/view/CMSPublic/ReMiniAOD03Feb2017Notes#Muons)
+      //In ReReco data bad muons have isPFMuon() flag removed, therefore TRootMuon is marked both 'bad' and 'clone' if isPFMuon() is not set
+      //in both data and MC for consistency
+      if ( !muon->isPFMuon() ) {
+	localMuon.setBad80X();
+        localMuon.setClone80X();
+      }
 
       new ((*rootMuons)[nMuons_passedSkimming]) TRootMuon (localMuon);
       nMuons_passedSkimming++;
