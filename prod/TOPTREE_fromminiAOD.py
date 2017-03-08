@@ -312,8 +312,8 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
     BadMuonFilter              = cms.untracked.InputTag("BadPFMuonFilter"),
     BadChargedCandidateFilter  = cms.untracked.InputTag("BadChargedCandidateFilter"),
 
-    BadGlobalMuonTagger        = cms.InputTag("badGlobalMuonTagger","bad","NewProcess"),
-    CloneGlobalMuonTagger        = cms.InputTag("cloneGlobalMuonTagger","bad","NewProcess"),
+    BadGlobalMuonTagger        = cms.InputTag("badGlobalMuonTaggerMAOD","bad","NewProcess"),
+    CloneGlobalMuonTagger        = cms.InputTag("cloneGlobalMuonTaggerMAOD","bad","NewProcess"),
   )
                                 
 )
@@ -333,8 +333,8 @@ process.p = cms.Path(
   process.genJetFlavourInfos *
   process.matchGenBHadron *
   process.matchGenCHadron *
-  cms.ignore(process.badGlobalMuonTagger) * 
-  cms.ignore(process.cloneGlobalMuonTagger) *
+  cms.ignore(process.badGlobalMuonTaggerMAOD) * 
+  cms.ignore(process.cloneGlobalMuonTaggerMAOD) *
   process.analysis
 )
 temp = process.dumpPython()

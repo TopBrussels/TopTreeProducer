@@ -6,8 +6,8 @@ Repository for code to produce TopTrees
 For developers: check out the CMSSW_80X branch
 
 ~~~
-cmsrel CMSSW_8_0_25
-cd CMSSW_8_0_25/src 
+cmsrel CMSSW_8_0_26
+cd CMSSW_8_0_26/src 
 cmsenv
 
 git cms-init
@@ -24,6 +24,11 @@ git cms-merge-topic ikrav:egm_id_80X_v2
 git cms-merge-topic -u cms-met:CMSSW_8_0_X-METFilterUpdate
 git cms-merge-topic rafaellopesdesa:Regression80XEgammaAnalysis_v2
 git cms-merge-topic gpetruc:badMuonFilters_80X
+
+# Replace the following line in CMSSW_8_0_26/src/RecoMET/METFilters/python/badGlobalMuonTaggersMiniAOD_cff.py
+`cloneGlobalMuonTaggerMAOD = badGlobalMuonTagger.clone(`
+by
+`cloneGlobalMuonTaggerMAOD = badGlobalMuonTaggerMAOD.clone(`
 
 scram b -j8
 
