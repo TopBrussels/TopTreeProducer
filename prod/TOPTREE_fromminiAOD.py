@@ -1,4 +1,21 @@
 import FWCore.ParameterSet.Config as cms
+from FWCore.ParameterSet.VarParsing import VarParsing
+import copy
+
+##############################
+###### Parameters ############
+##############################
+
+options = VarParsing ('python')
+
+options.register('runOnData', False,
+    VarParsing.multiplicity.singleton,
+    VarParsing.varType.bool,
+    "Run this on real data"
+)
+
+options.parseArguments()
+
 import sys
 
 
@@ -59,7 +76,7 @@ process.matchGenCHadron = matchGenCHadron.clone(
 
 # good global tags can be found here. Beware that the default is MC which has to be updated for data!
 # https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideFrontierConditions
-process.GlobalTag.globaltag = cms.string('80X_mcRun2_asymptotic_2016_TrancheIV_v7')
+process.GlobalTag.globaltag = cms.string('80X_mcRun2_asymptotic_2016_TrancheIV_v8')
 
 process.load('RecoMET.METFilters.BadPFMuonFilter_cfi')
 process.BadPFMuonFilter.muons = cms.InputTag("slimmedMuons")
@@ -77,17 +94,10 @@ process.load('RecoMET.METFilters.badGlobalMuonTaggersMiniAOD_cff')
 
 #################################################
 # Apply the regression from a remote database: https://twiki.cern.ch/twiki/bin/viewauth/CMS/EGMRegression
-# -> Later this regression is will be directly introduced in the global tag -> KEEP POSTED ABOUT THIS CHANGE!!!!
+# -> Later this regression will be directly introduced in the global tag -> KEEP POSTED ABOUT THIS CHANGE!!!!
 #################################################
 from EgammaAnalysis.ElectronTools.regressionWeights_cfi import regressionWeights
 process = regressionWeights(process)
-
-process.load('EgammaAnalysis.ElectronTools.regressionApplication_cff')
-
-process.load("RecoEgamma.ElectronIdentification.ElectronMVAValueMapProducer_cfi")
-process.electronMVAValueMapProducer.srcMiniAOD = cms.InputTag('slimmedElectrons')
-process.load("RecoEgamma.ElectronIdentification.ElectronIDValueMapProducer_cfi")
-process.electronIDValueMapProducer.srcMiniAOD = cms.InputTag('slimmedElectrons')
 
 #################################################
 # Applying EGM smearing for ICHEP dataset: https://twiki.cern.ch/twiki/bin/viewauth/CMS/EGMSmearer#How_to_apply_corrections_directl
@@ -96,13 +106,24 @@ process.load('EgammaAnalysis.ElectronTools.calibratedElectronsRun2_cfi')
 
 process.load('Configuration.StandardSequences.Services_cff')
 process.RandomNumberGeneratorService = cms.Service("RandomNumberGeneratorService",
-                                       calibratedPatElectrons  = cms.PSet( initialSeed = cms.untracked.uint32(81),
-                                       engineName = cms.untracked.string('TRandom3'),
-                                       ),
-                                       calibratedPatPhotons  = cms.PSet( initialSeed = cms.untracked.uint32(81),
-                                       engineName = cms.untracked.string('TRandom3'),
-                                       ),
+                  calibratedPatElectrons  = cms.PSet( initialSeed = cms.untracked.uint32(8675389),
+                                                      engineName = cms.untracked.string('TRandom3'),
+                                                      ),
+                  calibratedPatPhotons    = cms.PSet( initialSeed = cms.untracked.uint32(8675389),
+                                                      engineName = cms.untracked.string('TRandom3'),
+                                                      ),
 )
+
+
+
+process.load('EgammaAnalysis.ElectronTools.regressionApplication_cff')
+process.load('EgammaAnalysis.ElectronTools.calibratedPatElectronsRun2_cfi')
+
+# Set the lines below to True or False depending if you are correcting the scale (data) or smearing the resolution (MC) 
+process.calibratedPatElectrons.isMC = cms.bool(not options.runOnData)
+
+
+
 
 #
 # Set up electron ID (VID framework)
@@ -124,6 +145,18 @@ my_id_modules = [
 for idmod in my_id_modules:
     setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
 
+process.load("RecoEgamma.ElectronIdentification.ElectronMVAValueMapProducer_cfi")
+process.load("RecoEgamma.ElectronIdentification.ElectronIDValueMapProducer_cfi")
+
+process.selectedElectrons = cms.EDFilter("PATElectronSelector",
+    src = cms.InputTag("calibratedPatElectrons"),
+    cut = cms.string("pt>5 && abs(eta)")
+)
+process.egmGsfElectronIDs.physicsObjectSrc = cms.InputTag('selectedElectrons')
+process.electronIDValueMapProducer.srcMiniAOD = cms.InputTag('selectedElectrons')
+process.electronRegressionValueMapProducer.srcMiniAOD = cms.InputTag('selectedElectrons')
+process.electronMVAValueMapProducer.srcMiniAOD = cms.InputTag('selectedElectrons')
+
 
 #####################
 # MET Significance  #
@@ -141,30 +174,13 @@ process.options = cms.untracked.PSet(
   SkipEvent = cms.untracked.vstring('ProductNotFound')
 )
 
+if options.runOnData:
+  process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://xrootd-cms.infn.it///store/data/Run2016C/SingleElectron/MINIAOD/03Feb2017-v1/100000/02169BE7-81EB-E611-BB99-02163E0137CD.root'))
+else:
 #Test sample MC (synch ex)
-process.source = cms.Source("PoolSource",
-fileNames = cms.untracked.vstring('root://xrootd-cms.infn.it///store/mc/RunIISummer16MiniAODv2/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/0693E0E7-97BE-E611-B32F-0CC47A78A3D8.root'),
-#fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/data/Run2016G/DoubleMuon/MINIAOD/03Feb2017-v1/100000/00182C13-EEEA-E611-8897-001E675A6C2A.root'),
-skipEvents = cms.untracked.uint32(0)
-)
-
-#process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://xrootd-cms.infn.it///store/mc/RunIISpring16MiniAODv2/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/MINIAODSIM/premix_withHLT_80X_mcRun2_asymptotic_v14-v1/00000/042D62D1-C597-E611-8FA4-549F3525B9A0.root'))
-#Test sample Data singleElectron - ReReco (synch ex)
-#process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://xrootd-cms.infn.it///store/data/Run2016D/SingleElectron/MINIAOD/23Sep2016-v1/70000/04E8F72C-AF89-E611-9D2F-FA163E1D7951.root'))
-#Test sample Data singleMuon - ReReco (synch ex)
-#process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://xrootd-cms.infn.it///store/data/Run2016D/SingleMuon/MINIAOD/23Sep2016-v1/010000/249B6517-C79B-E611-A51E-7845C4F91621.root'))
-
-#Test sample Data singleElectron - PromptReco (synch ex)
-#process.source = cms.Source("PoolSource",
-#      fileNames = cms.untracked.vstring('root://xrootd-cms.infn.it///store/data/Run2016D/SingleElectron/MINIAOD/PromptReco-v2/000/276/315/00000/10BB1858-0045-E611-83A5-02163E01456D.root')#,
-##      eventsToProcess = cms.untracked.VEventRange('276315:158227401-276315:158227403','2:100-3:max')
-#)
-#Test sample Data singleMuon - PromptReco (synch ex)
-#process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://xrootd-cms.infn.it///store/data/Run2016D/SingleMuon/MINIAOD/PromptReco-v2/000/276/315/00000/168C3DE5-F444-E611-A012-02163E014230.root'))
-#process.source = cms.Source("PoolSource",
-#      fileNames = cms.untracked.vstring('root://xrootd-cms.infn.it//store/data/Run2016D/SingleElectron/MINIAOD/23Sep2016-v1/70000/06705011-968B-E611-BAA9-FA163E066046.root','root://xrootd-cms.infn.it//store/data/Run2016D/SingleElectron/MINIAOD/23Sep2016-v1/70000/065DF836-3B8B-E611-9191-00266CF9AB88.root')
-#      fileNames = cms.untracked.vstring('file:///user/kderoove/FCNC/TopTreeFramework_Run2/CMSSW_8_0_24/src/TopBrussels/TopTreeProducer/prod/crashingEventsOutOfVectorRange/06705011-968B-E611-BAA9-FA163E066046.root','file:///user/kderoove/FCNC/TopTreeFramework_Run2/CMSSW_8_0_24/src/TopBrussels/TopTreeProducer/prod/crashingEventsOutOfVectorRange/065DF836-3B8B-E611-9191-00266CF9AB88.root')
-#)
+  process.source = cms.Source("PoolSource",
+  fileNames = cms.untracked.vstring('root://xrootd-cms.infn.it///store/mc/RunIISummer16MiniAODv2/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/0693E0E7-97BE-E611-B32F-0CC47A78A3D8.root'),
+  )
 
 
 # reduce verbosity
@@ -209,7 +225,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
     doFatJet = cms.untracked.bool(True),
     doMuon = cms.untracked.bool(True),
     doElectron = cms.untracked.bool(True),
-    doPhoton = cms.untracked.bool(True),
+    doPhoton = cms.untracked.bool(False),
     doPFMET = cms.untracked.bool(True),
     runSuperCluster = cms.untracked.bool(True),#True only if SuperCluster are stored
     doNPGenEvent = cms.untracked.bool(False),#put on True when running New Physics sample
@@ -273,8 +289,8 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
     vpfJetProducer = cms.untracked.vstring("slimmedJets"),
     vpfmetProducer = cms.untracked.vstring("slimmedMETs"),
     vmuonProducer = cms.untracked.vstring("slimmedMuons"),
-    velectronProducer = cms.untracked.vstring("slimmedElectrons"),
-    velectronProducer_calibrated = cms.untracked.vstring("calibratedPatElectrons"),#This is implemented to apply 80X EGM calibration corrections to the electrons. Change to slimmedElectrons if those corrections are not necessary.
+    velectronProducer_uncalibrated = cms.untracked.vstring("slimmedElectrons"),
+    velectronProducer_calibrated = cms.untracked.vstring("selectedElectrons"),#This is implemented to apply 80X EGM calibration corrections to the electrons. Change to slimmedElectrons if those corrections are not necessary.
     vphotonProducer = cms.untracked.vstring("slimmedPhotons"),#PhotonAnalyzer still has some getByLabels... (Kevin 14/01/2016)
     vfatJetProducer = cms.untracked.vstring("slimmedJetsAK8"),
     vgenJetProducer = cms.untracked.vstring("slimmedGenJets"),
@@ -320,24 +336,41 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
 )
 
 
+if not options.runOnData:
+  process.p = cms.Path(
+    process.regressionApplication *
+    process.calibratedPatElectrons *
+    process.selectedElectrons *
+    process.egmGsfElectronIDSequence *
+    process.electronIDValueMapProducer *
+    process.electronMVAValueMapProducer *
+    process.METSignificance *
+    process.BadPFMuonFilter *
+    process.BadChargedCandidateFilter *
+    process.selectedHadronsAndPartons *
+    process.genJetFlavourInfos *
+    process.matchGenBHadron *
+    process.matchGenCHadron *
+    cms.ignore(process.badGlobalMuonTaggerMAOD) * 
+    cms.ignore(process.cloneGlobalMuonTaggerMAOD) *
+    process.analysis
+  )
+else:
+  process.p = cms.Path(
+    process.regressionApplication *
+    process.calibratedPatElectrons *
+    process.selectedElectrons *
+    process.egmGsfElectronIDSequence *
+    process.electronIDValueMapProducer *
+    process.electronMVAValueMapProducer *
+    process.METSignificance *
+    process.BadPFMuonFilter *
+    process.BadChargedCandidateFilter *
+    cms.ignore(process.badGlobalMuonTaggerMAOD) * 
+    cms.ignore(process.cloneGlobalMuonTaggerMAOD) *
+    process.analysis
+  )
 
-process.p = cms.Path(
-  process.regressionApplication *
-  process.calibratedPatElectrons *
-  process.electronIDValueMapProducer *
-  process.electronMVAValueMapProducer *
-  process.egmGsfElectronIDSequence *
-  process.METSignificance *
-  process.BadPFMuonFilter *
-  process.BadChargedCandidateFilter *
-  process.selectedHadronsAndPartons *
-  process.genJetFlavourInfos *
-  process.matchGenBHadron *
-  process.matchGenCHadron *
-  cms.ignore(process.badGlobalMuonTaggerMAOD) * 
-  cms.ignore(process.cloneGlobalMuonTaggerMAOD) *
-  process.analysis
-)
 temp = process.dumpPython()
 outputfile = file("expanded.py",'w')
 outputfile.write(temp)

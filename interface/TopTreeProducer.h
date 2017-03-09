@@ -128,8 +128,9 @@ private:
 	std::vector<std::string> vPFJetProducer;
 	std::vector<std::string> vFatJetProducer;
 	std::vector<std::string> vMuonProducer;
-	std::vector<std::string> vElectronProducer;
+	std::vector<std::string> vGsfElectronProducer;
 	std::vector<std::string> vElectronProducer_calibrated;
+	std::vector<std::string> vElectronProducer_uncalibrated;
 	std::vector<std::string> vPhotonProducer;
         std::vector<std::string> vPFmetProducer;
 	int nTotEvt_;
@@ -162,8 +163,9 @@ private:
     // good practice is to use these instead of getbylabel. However getbylabel is still supported...
     edm::EDGetTokenT<reco::VertexCollection> vtxToken_;
     std::vector<edm::EDGetTokenT<pat::MuonCollection> > vmuonToken_;
-    std::vector<edm::EDGetTokenT<edm::View<reco::GsfElectron>> > velectronToken_;
+    std::vector<edm::EDGetTokenT<edm::View<reco::GsfElectron>> > vGsfelectronToken_;
     std::vector<edm::EDGetTokenT<pat::ElectronCollection> > velectronToken_calibrated_;
+    std::vector<edm::EDGetTokenT<pat::ElectronCollection> > velectronToken_uncalibrated_;
     std::vector<edm::EDGetTokenT<pat::PhotonCollection> > vphotonToken_;
     std::vector<edm::EDGetTokenT<pat::JetCollection> > vjetToken_;
     std::vector<edm::EDGetTokenT<pat::JetCollection> > vfatjetToken_;

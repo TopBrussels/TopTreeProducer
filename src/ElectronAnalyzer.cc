@@ -24,7 +24,8 @@ void ElectronAnalyzer::Process(
 	  const edm::EventSetup& iSetup, 
 	  edm::EDGetTokenT<reco::BeamSpot> offlineBSToken, 
 	  edm::EDGetTokenT<pat::ElectronCollection> electronToken_calibrated, 
-	  edm::EDGetTokenT<edm::View<reco::GsfElectron>> electronToken, 
+	  edm::EDGetTokenT<pat::ElectronCollection> electronToken_uncalibrated, 
+	  edm::EDGetTokenT<edm::View<reco::GsfElectron>> GsfelectronToken, 
 	  edm::EDGetTokenT<reco::VertexCollection> vtxToken, 
     edm::EDGetTokenT<edm::ValueMap<bool>> eleMediumMVAIdMapToken,
     edm::EDGetTokenT<edm::ValueMap<bool>> eleTightMVAIdMapToken,
@@ -43,8 +44,11 @@ void ElectronAnalyzer::Process(
   edm::Handle < pat::ElectronCollection > patElectrons_calibrated;
   iEvent.getByToken(electronToken_calibrated, patElectrons_calibrated);
 
+  edm::Handle < pat::ElectronCollection > patElectrons_uncalibrated;
+  iEvent.getByToken(electronToken_uncalibrated, patElectrons_uncalibrated);
+
   edm::Handle < edm::View<reco::GsfElectron> > gsfElectrons;
-  iEvent.getByToken(electronToken, gsfElectrons);
+  iEvent.getByToken(GsfelectronToken, gsfElectrons);
   nElectrons = gsfElectrons->size();
 
   edm::Handle< reco::VertexCollection > pvHandle;
@@ -98,6 +102,13 @@ void ElectronAnalyzer::Process(
                                 ,patElectron_calibrated.pdgId()
                                 ,patElectron_calibrated.charge()
                                 );
+
+    if(j <= patElectrons_uncalibrated->size())
+    {
+        const pat::Electron&  patElectron_uncalibrated = patElectrons_uncalibrated->at(j);
+        
+        localElectron.setunCalibratedPt(patElectron_uncalibrated.pt());
+    }
 
     //cout<<"in electronAnalyzer...1"<<endl;
     //=======================================

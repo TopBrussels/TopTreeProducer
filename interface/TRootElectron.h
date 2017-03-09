@@ -52,6 +52,7 @@ class TRootElectron : public TRootLepton {
             hcalDepth2OverEcal_(-9999.),
             etaWidth_(-9999.),
             phiWidth_(-9999.),
+            unCalibratedPt_(-9999.),
             r9_(9999.),
             fBrem_(-9999.),
             nBrems_(-9999),
@@ -106,6 +107,7 @@ class TRootElectron : public TRootLepton {
             hcalDepth2OverEcal_(-9999.),
             etaWidth_(-9999.),
             phiWidth_(-9999.),
+            unCalibratedPt_(-9999.),
             r9_(9999.),
             fBrem_(-9999.),
             nBrems_(-9999),
@@ -160,6 +162,7 @@ class TRootElectron : public TRootLepton {
             hcalDepth2OverEcal_(e.hcalDepth2OverEcal_),
             etaWidth_(e.etaWidth_),
             phiWidth_(e.phiWidth_),
+            unCalibratedPt_(e.unCalibratedPt_),
             r9_(e.r9_),
             fBrem_(e.fBrem_),
             nBrems_(e.nBrems_),
@@ -215,6 +218,7 @@ class TRootElectron : public TRootLepton {
             hcalDepth2OverEcal_(-9999.),
             etaWidth_(-9999.),
             phiWidth_(-9999.),
+            unCalibratedPt_(-9999.),
             r9_(-9999.),
             fBrem_(-9999.),
             nBrems_(-9999),
@@ -270,6 +274,7 @@ class TRootElectron : public TRootLepton {
             hcalDepth2OverEcal_(-9999.),
             etaWidth_(-9999.),
             phiWidth_(-9999.),
+            unCalibratedPt_(-9999.),
             r9_(-9999.),
             fBrem_(-9999.),
             nBrems_(-9999),
@@ -325,6 +330,7 @@ class TRootElectron : public TRootLepton {
             hcalDepth2OverEcal_(-9999.),
             etaWidth_(-9999.),
             phiWidth_(-9999.),
+            unCalibratedPt_(-9999.),
             r9_(-9999.),
             fBrem_(-9999.),
             nBrems_(-9999),
@@ -380,6 +386,7 @@ class TRootElectron : public TRootLepton {
             hcalDepth2OverEcal_(-9999.),
             etaWidth_(-9999.),
             phiWidth_(-9999.),
+            unCalibratedPt_(-9999.),
             r9_(-9999.),
             fBrem_(-9999.),
             nBrems_(9999),
@@ -435,6 +442,7 @@ class TRootElectron : public TRootLepton {
             hcalDepth2OverEcal_(-9999.),
             etaWidth_(-9999.),
             phiWidth_(-9999.),
+            unCalibratedPt_(-9999.),
             r9_(-9999.),
             fBrem_(-9999.),
             nBrems_(9999),
@@ -578,6 +586,9 @@ class TRootElectron : public TRootLepton {
             }
         Float_t phiWidth() const {
             return phiWidth_;
+            }
+        Float_t unCalibratedPt() const {
+            return unCalibratedPt_;
             }
         Float_t r9() const {
             return r9_;
@@ -735,6 +746,9 @@ class TRootElectron : public TRootLepton {
         void setPhiWidth(Float_t phiWidth) {
             phiWidth_ = phiWidth;
             }
+        void setunCalibratedPt(Float_t unCalibratedPt) {
+            unCalibratedPt_ = unCalibratedPt;
+            }
         void setR9(Float_t r9) {
             r9_ = r9;
             }
@@ -833,6 +847,7 @@ class TRootElectron : public TRootLepton {
         Float_t hcalDepth2OverEcal_ ;              // hcal over ecal seed cluster energy using 2nd hcal depth (hcal is energy of towers within dR=015)
         Float_t etaWidth_;
         Float_t phiWidth_;
+        Float_t unCalibratedPt_;
         Float_t r9_;
 
         // Electron classification && fBrem ====================
@@ -853,7 +868,7 @@ class TRootElectron : public TRootLepton {
         Float_t MVA_category_; // Catefory of MVA electrons. Newly implemented in 2016, according to https://twiki.cern.ch/twiki/bin/view/CMS/MultivariateElectronIdentificationRun2
 
 
-        ClassDef (TRootElectron,15);
+        ClassDef (TRootElectron,16);
     };
 }
 

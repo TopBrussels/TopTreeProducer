@@ -12,26 +12,23 @@ cmsenv
 
 git cms-init
 
-#add the repository with the updated Egamma package
-git cms-merge-topic shervin86:Moriond2017_JEC_energyScales
-
+git cms-merge-topic rafaellopesdesa:EgammaAnalysis80_EGMSmearer_Moriond17_23Jan
 cd EgammaAnalysis/ElectronTools/data
-# download the txt files with the corrections
-git clone git@github.com:ECALELFS/ScalesSmearings.git
-cd -
+git clone https://github.com/ECALELFS/ScalesSmearings.git
+cd $CMSSW_BASE/src
 
-git cms-merge-topic ikrav:egm_id_80X_v2
-git cms-merge-topic -u cms-met:CMSSW_8_0_X-METFilterUpdate
-git cms-merge-topic rafaellopesdesa:Regression80XEgammaAnalysis_v2
+git cms-merge-topic ikrav:egm_id_80X_v2 #https://twiki.cern.ch/twiki/bin/view/CMS/CutBasedElectronIdentificationRun2#User_recipes_general_remarks
+git cms-merge-topic -u cms-met:fromCMSSW_8_0_20_postICHEPfilter #https://twiki.cern.ch/twiki/bin/viewauth/CMS/MissingETOptionalFiltersRun2#How_to_run_the_Bad_Charged_Hadro
+git cms-merge-topic rafaellopesdesa:RegressionCheckNegEnergy
 git cms-merge-topic gpetruc:badMuonFilters_80X
 
 # Replace the following line in CMSSW_8_0_26/src/RecoMET/METFilters/python/badGlobalMuonTaggersMiniAOD_cff.py
-`cloneGlobalMuonTaggerMAOD = badGlobalMuonTagger.clone(`
-by
-`cloneGlobalMuonTaggerMAOD = badGlobalMuonTaggerMAOD.clone(`
+#`cloneGlobalMuonTaggerMAOD = badGlobalMuonTagger.clone(`
+#by
+#`cloneGlobalMuonTaggerMAOD = badGlobalMuonTaggerMAOD.clone(`
+
 
 scram b -j8
-
 
 # Add the area containing the MVA weights (from cms-data, to appear in “external”).
 # Note: the “external” area appears after “scram build” is run at least once, as above
@@ -45,8 +42,8 @@ git checkout egm_id_80X_v1
 # Go back to the src/
 cd $CMSSW_BASE/src
 
-
 git clone -b CMSSW_80X https://github.com/TopBrussels/TopTreeProducer TopBrussels/TopTreeProducer
+
 ~~~
 
 To compile TRoot* objects

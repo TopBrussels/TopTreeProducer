@@ -21,8 +21,9 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
     
 	  vector<string> defaultVec;
     vMuonProducer = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("vmuonProducer",defaultVec);
-    vElectronProducer = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("velectronProducer",defaultVec);
+    vGsfElectronProducer = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("velectronProducer_calibrated",defaultVec);
     vElectronProducer_calibrated = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("velectronProducer_calibrated",defaultVec);
+    vElectronProducer_uncalibrated = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("velectronProducer_uncalibrated",defaultVec);
     vPhotonProducer = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("vphotonProducer",defaultVec);
     vPFJetProducer = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("vpfJetProducer",defaultVec);
     vPFmetProducer = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("vpfmetProducer",defaultVec);
@@ -33,13 +34,17 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
     {
 		  vmuonToken_.push_back(consumes<pat::MuonCollection>(edm::InputTag(vMuonProducer[s])));
     }
-    for(unsigned int s=0; s<vElectronProducer.size(); s++)
+    for(unsigned int s=0; s<vGsfElectronProducer.size(); s++)
     {
-		  velectronToken_.push_back(consumes<edm::View<reco::GsfElectron>>(edm::InputTag(vElectronProducer[s])));
+		  vGsfelectronToken_.push_back(consumes<edm::View<reco::GsfElectron>>(edm::InputTag(vGsfElectronProducer[s])));
     }
     for(unsigned int s=0; s<vElectronProducer_calibrated.size(); s++)
     {
 		  velectronToken_calibrated_.push_back(consumes<pat::ElectronCollection>(edm::InputTag(vElectronProducer_calibrated[s])));
+    }
+    for(unsigned int s=0; s<vElectronProducer_uncalibrated.size(); s++)
+    {
+		  velectronToken_uncalibrated_.push_back(consumes<pat::ElectronCollection>(edm::InputTag(vElectronProducer_uncalibrated[s])));
     }
     for(unsigned int s=0; s<vPhotonProducer.size(); s++)
     {
@@ -773,11 +778,11 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
     if(doElectron)
     {
         if(verbosity>1) cout << endl << "Analysing electrons collection..." << endl;
-        for(unsigned int s=0; s<vElectronProducer.size(); s++)
+        for(unsigned int s=0; s<vElectronProducer_calibrated.size(); s++)
         {
             ElectronAnalyzer* myElectronAnalyzer = new ElectronAnalyzer(myConfig_, verbosity);
 
-            myElectronAnalyzer->Process(iEvent, velectrons_calibrated[s], iSetup, offlineBSToken_, velectronToken_calibrated_[s], velectronToken_[s]
+            myElectronAnalyzer->Process(iEvent, velectrons_calibrated[s], iSetup, offlineBSToken_, velectronToken_calibrated_[s], velectronToken_uncalibrated_[s], vGsfelectronToken_[s]
                          , vtxToken_, eleMediumMVAIdMapToken_, eleTightMVAIdMapToken_, mvaValuesMapToken_, mvaCategoriesMapToken_, eleVetoCBIdMapToken_
                          , eleLooseCBIdMapToken_, eleMediumCBIdMapToken_, eleTightCBIdMapToken_, eleHEEPCBIdMapToken_);
             delete myElectronAnalyzer;
@@ -856,7 +861,7 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
     }
     if(doElectron)
     {
-        for(unsigned int s=0; s<vElectronProducer.size(); s++)
+        for(unsigned int s=0; s<vElectronProducer_calibrated.size(); s++)
         {
             (*velectrons_calibrated[s]).Delete();
         }
