@@ -6,15 +6,15 @@ Repository for code to produce TopTrees
 For developers: check out the CMSSW_80X branch
 
 ~~~
-cmsrel CMSSW 8_0_26_patch1
-cd CMSSW 8_0_26_patch1/src 
+cmsrel CMSSW_8_0_26_patch1
+cd CMSSW_8_0_26_patch1/src
 cmsenv
 
 git cms-init
 
-git cms-merge-topic rafaellopesdesa:EgammaAnalysis80_EGMSmearer_Moriond17_23Jan
+git cms-merge-topic cms-egamma:EGM_gain_v1
 cd EgammaAnalysis/ElectronTools/data
-git clone https://github.com/ECALELFS/ScalesSmearings.git
+git clone -b Moriond17_gainSwitch_unc https://github.com/ECALELFS/ScalesSmearings.git
 cd $CMSSW_BASE/src
 
 git cms-merge-topic ikrav:egm_id_80X_v2 #https://twiki.cern.ch/twiki/bin/view/CMS/CutBasedElectronIdentificationRun2#User_recipes_general_remarks
