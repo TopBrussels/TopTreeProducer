@@ -82,6 +82,7 @@ while IFS=" "  read samplename version globaltag jsonfile ; do
 	grep -v "config.Data.splitting = 'FileBased'" bla > bla2; mv bla2 bla
 	echo "config.Data.splitting = 'LumiBased'" >> bla
 	echo "config.Data.unitsPerJob = 10" >> bla
+	echo "config.JobType.pyCfgParams  = ['runOnData=True']" >> bla
 	if [[ $jsonfile == *"13TeV"* ]]
 	then
 	    echo "now adding jsonfile "$jsonfile
