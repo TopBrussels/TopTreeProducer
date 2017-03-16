@@ -133,6 +133,7 @@ private:
 	std::vector<std::string> vElectronProducer_uncalibrated;
 	std::vector<std::string> vPhotonProducer;
         std::vector<std::string> vPFmetProducer;
+	std::vector<std::string> vPFmetProducerMuEGClean;
 	int nTotEvt_;
 	HLTAnalyzer* hltAnalyzer_;
     LHEEventProductAnalyzer* lheEventProductAnalyzer_;
@@ -148,6 +149,7 @@ private:
 	std::vector<TClonesArray*> velectrons_calibrated;
 	std::vector<TClonesArray*> vphotons;
 	std::vector<TClonesArray*> vPFmets;
+        std::vector<TClonesArray*> vPFmetsMuEGClean;
 	//	TClonesArray* lheEventProduct;
 	TClonesArray* NPgenEvent;
 	TClonesArray* primaryVertex;
@@ -170,6 +172,7 @@ private:
     std::vector<edm::EDGetTokenT<pat::JetCollection> > vjetToken_;
     std::vector<edm::EDGetTokenT<pat::JetCollection> > vfatjetToken_;
     std::vector<edm::EDGetTokenT<pat::METCollection> > vmetToken_;
+    std::vector<edm::EDGetTokenT<pat::METCollection> > vmetTokenMuEGClean_;
     std::vector<edm::EDGetTokenT<std::vector<reco::GenJet> > >vgenjetToken_;
     edm::EDGetTokenT<edm::TriggerResults> triggerToken1_;
     edm::EDGetTokenT<edm::TriggerResults> triggerToken2_;

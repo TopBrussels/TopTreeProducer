@@ -27,6 +27,7 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
     vPhotonProducer = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("vphotonProducer",defaultVec);
     vPFJetProducer = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("vpfJetProducer",defaultVec);
     vPFmetProducer = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("vpfmetProducer",defaultVec);
+    if(isRealData_) vPFmetProducerMuEGClean = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("vpfmetProducerMuEGClean",defaultVec);
     vFatJetProducer = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("vfatJetProducer",defaultVec);
     vGenJetProducer = valuesForConsumeCommand.getUntrackedParameter<vector<string> >("vgenJetProducer",defaultVec);
 	
@@ -57,6 +58,12 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
     for(unsigned int s=0; s<vPFmetProducer.size(); s++)
     {
 		  vmetToken_.push_back(consumes<pat::METCollection>(edm::InputTag(vPFmetProducer[s])));
+    }
+    if(isRealData_){    
+      for(unsigned int s=0; s<vPFmetProducerMuEGClean.size(); s++)
+      {
+                  vmetTokenMuEGClean_.push_back(consumes<pat::METCollection>(edm::InputTag(vPFmetProducerMuEGClean[s])));
+       }
     }
     for(unsigned int s=0; s<vFatJetProducer.size(); s++)
     {
@@ -200,7 +207,13 @@ void TopTreeProducer::beginJob()
         TClonesArray* a;
         vPFmets.push_back(a);
     }
-
+    if(isRealData_){
+	for(unsigned int s=0; s<vPFmetProducerMuEGClean.size(); s++)
+    	{
+		TClonesArray* a;
+        	vPFmetsMuEGClean.push_back(a);
+	}
+    }
 
     nTotEvt_ = 0;
 
@@ -340,6 +353,16 @@ void TopTreeProducer::beginJob()
             sprintf(name,"PFMET_%s",vPFmetProducer[s].c_str());
             eventTree_->Branch (name, "TClonesArray", &vPFmets[s]);
         }
+	if(isRealData_){
+		for(unsigned int s=0; s<vPFmetProducer.size(); s++)
+        	{
+            		vPFmetsMuEGClean[s] = new TClonesArray("TopTree::TRootPFMET", 1000);
+            		char name[100];
+            		sprintf(name,"PFMET_%s",vPFmetProducerMuEGClean[s].c_str());
+            		eventTree_->Branch (name, "TClonesArray", &vPFmetsMuEGClean[s]);
+        	}
+
+	}
     }
 
 
@@ -814,6 +837,16 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
             delete myPFMETAnalyzer;
 
         }
+	if(isRealData_){
+	 for(unsigned int s=0; s<vPFmetProducerMuEGClean.size(); s++)
+         {
+            PFMETAnalyzer* myPFMETAnalyzer = new PFMETAnalyzer(myConfig_, verbosity);
+            myPFMETAnalyzer->Process(iEvent, vPFmetsMuEGClean[s], vmetTokenMuEGClean_[s]);
+            delete myPFMETAnalyzer;
+
+          }
+   
+	}
     }
 
 
@@ -879,6 +912,12 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
         {
             (*vPFmets[s]).Delete();
         }
+	if(isRealData_){
+	  for(unsigned int s=0; s<vPFmetProducerMuEGClean.size(); s++)
+           {
+            (*vPFmetsMuEGClean[s]).Delete();
+           }
+	}
     }
 
 
