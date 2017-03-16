@@ -175,7 +175,8 @@ process.options = cms.untracked.PSet(
 )
 
 if options.runOnData:
-  process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://xrootd-cms.infn.it///store/data/Run2016C/SingleElectron/MINIAOD/03Feb2017-v1/100000/02169BE7-81EB-E611-BB99-02163E0137CD.root'))
+#  process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://xrootd-cms.infn.it///store/data/Run2016C/SingleElectron/MINIAOD/03Feb2017-v1/100000/02169BE7-81EB-E611-BB99-02163E0137CD.root'))
+   process.source = cms.Source("PoolSource",fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch///store/data/Run2016C/SingleElectron/MINIAOD/03Feb2017-v1/100000/02169BE7-81EB-E611-BB99-02163E0137CD.root'))
 else:
 #Test sample MC (synch ex)
   process.source = cms.Source("PoolSource",
@@ -288,6 +289,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
   producerNamesBookkeepingThreads = cms.PSet(
     vpfJetProducer = cms.untracked.vstring("slimmedJets"),
     vpfmetProducer = cms.untracked.vstring("slimmedMETs"),
+    vpfmetProducerMuEGClean = cms.untracked.vstring("slimmedMETsMuEGClean"),
     vmuonProducer = cms.untracked.vstring("slimmedMuons"),
     velectronProducer_uncalibrated = cms.untracked.vstring("slimmedElectrons"),
     velectronProducer_calibrated = cms.untracked.vstring("selectedElectrons"),#This is implemented to apply 80X EGM calibration corrections to the electrons. Change to slimmedElectrons if those corrections are not necessary.
