@@ -22,7 +22,7 @@ git cms-merge-topic -u cms-met:fromCMSSW_8_0_20_postICHEPfilter #https://twiki.c
 git cms-merge-topic rafaellopesdesa:RegressionCheckNegEnergy
 git cms-merge-topic gpetruc:badMuonFilters_80X
 
-# Replace the following line in CMSSW_8_0_26/src/RecoMET/METFilters/python/badGlobalMuonTaggersMiniAOD_cff.py
+# Replace the following line in $CMSSW_BASE/src/RecoMET/METFilters/python/badGlobalMuonTaggersMiniAOD_cff.py
 #`cloneGlobalMuonTaggerMAOD = badGlobalMuonTagger.clone(`
 #by
 #`cloneGlobalMuonTaggerMAOD = badGlobalMuonTaggerMAOD.clone(`
