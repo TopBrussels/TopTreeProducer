@@ -21,11 +21,8 @@ git cms-merge-topic ikrav:egm_id_80X_v2 #https://twiki.cern.ch/twiki/bin/view/CM
 git cms-merge-topic -u cms-met:fromCMSSW_8_0_20_postICHEPfilter #https://twiki.cern.ch/twiki/bin/viewauth/CMS/MissingETOptionalFiltersRun2#How_to_run_the_Bad_Charged_Hadro
 git cms-merge-topic rafaellopesdesa:RegressionCheckNegEnergy
 git cms-merge-topic gpetruc:badMuonFilters_80X
-
-# Replace the following line in CMSSW_8_0_26/src/RecoMET/METFilters/python/badGlobalMuonTaggersMiniAOD_cff.py
-#`cloneGlobalMuonTaggerMAOD = badGlobalMuonTagger.clone(`
-#by
-#`cloneGlobalMuonTaggerMAOD = badGlobalMuonTaggerMAOD.clone(`
+git cms-merge-topic cms-met:METRecipe_8020 -u
+git cms-merge-topic cms-met:METRecipe_80X_part2 -u
 
 
 scram b -j8

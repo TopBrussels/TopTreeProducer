@@ -93,6 +93,29 @@ process.BadChargedCandidateFilter.PFCandidates = cms.InputTag("packedPFCandidate
 process.load('RecoMET.METFilters.badGlobalMuonTaggersMiniAOD_cff')
 
 #################################################
+# MET recalcualtion
+#################################################
+# see https://twiki.cern.ch/twiki/bin/viewauth/CMS/MissingETUncertaintyPrescription#Instructions_for_8_0_X_X_26_patc
+from PhysicsTools.PatUtils.tools.runMETCorrectionsAndUncertainties import runMetCorAndUncFromMiniAOD
+#runMetCorAndUncFromMiniAOD(process,
+#                           isData=options.runOnData,
+#                           )
+# If you would like to re-cluster and get the proper uncertainties
+runMetCorAndUncFromMiniAOD(process,
+                           isData=options.runOnData,
+                           pfCandColl=cms.InputTag("packedPFCandidates"),
+                           recoMetFromPFCs=True,
+                           )
+# If you would like to re-cluster both jets and met and get the proper uncertainties
+#runMetCorAndUncFromMiniAOD(process,
+#                           isData=options.runOnData,
+#                           pfCandColl=cms.InputTag("packedPFCandidates"),
+#                           recoMetFromPFCs=True,
+#                           CHS = True, #This is an important step and determines what type of jets to be reclustered
+#                           reclusterJets = True
+#                           )
+
+#################################################
 # Apply the regression from a remote database: https://twiki.cern.ch/twiki/bin/viewauth/CMS/EGMRegression
 # -> Later this regression will be directly introduced in the global tag -> KEEP POSTED ABOUT THIS CHANGE!!!!
 #################################################
@@ -353,6 +376,7 @@ if not options.runOnData:
     process.genJetFlavourInfos *
     process.matchGenBHadron *
     process.matchGenCHadron *
+    process.fullPatMetSequence *
     cms.ignore(process.badGlobalMuonTaggerMAOD) * 
     cms.ignore(process.cloneGlobalMuonTaggerMAOD) *
     process.analysis
@@ -368,6 +392,7 @@ else:
     process.METSignificance *
     process.BadPFMuonFilter *
     process.BadChargedCandidateFilter *
+    process.fullPatMetSequence *
     cms.ignore(process.badGlobalMuonTaggerMAOD) * 
     cms.ignore(process.cloneGlobalMuonTaggerMAOD) *
     process.analysis
