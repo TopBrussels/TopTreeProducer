@@ -18,7 +18,8 @@ config.Data.inputDataset = '/ST_s-channel_4f_leptonDecays_13TeV-amcatnlo-pythia8
 
 #config.Data.dbsUrl = 'phys03'
 config.Data.splitting = 'FileBased'
-config.Data.unitsPerJob = 2
+# default: 100, was asked by crab team to use default
+#config.Data.unitsPerJob = 2
 #config.Data.totalUnits = 90
 config.Data.publication = False
 config.Data.ignoreLocality = True

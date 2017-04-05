@@ -69,6 +69,12 @@ while IFS=" "  read samplename version globaltag jsonfile ; do
 #   create crab config file:
 #   some file manipulations, replace the request name by new name, change datasets, first for the crab config:
     grep -v "config.General.requestName" crabConfigTOPTREE.py > bla
+
+    # different crab file for data?
+    if [[ $samplename == *"Run2016"* ]]
+    then
+	grep -v "config.General.requestName" crabConfigTOPTREE_Data.py > bla
+    fi
     echo "config.General.requestName = '"$cleanedrequestname"'" >> bla
     grep -v "config.JobType.psetName" bla > bla2; mv bla2 bla
     echo "config.JobType.psetName = '"$cmsswfilename"'" >> bla
@@ -80,8 +86,8 @@ while IFS=" "  read samplename version globaltag jsonfile ; do
     if [[ $samplename == *"Run2016"* ]] 
     then
 	grep -v "config.Data.splitting = 'FileBased'" bla > bla2; mv bla2 bla
-	echo "config.Data.splitting = 'LumiBased'" >> bla
-	echo "config.Data.unitsPerJob = 10" >> bla
+	echo "config.Data.splitting = 'EventAwareLumiBased'" >> bla
+	echo "config.Data.unitsPerJob = 150" >> bla
 	echo "config.JobType.pyCfgParams  = ['runOnData=True']" >> bla
 	if [[ $jsonfile == *"13TeV"* ]]
 	then
