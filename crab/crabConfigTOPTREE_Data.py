@@ -19,7 +19,8 @@ config.Data.inputDataset = '/SingleElectron/Run2016C-03Feb2017-v1/MINIAOD'
 
 #config.Data.dbsUrl = 'phys03'
 config.Data.splitting = 'FileBased'
-config.Data.unitsPerJob = 2
+# default=100, was asked by crab team to use default
+#config.Data.unitsPerJob = 2
 #config.Data.totalUnits = 90
 config.Data.publication = False
 config.Data.ignoreLocality = True
