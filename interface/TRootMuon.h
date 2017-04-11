@@ -70,6 +70,8 @@ namespace TopTree
 			,chi2LocalPosition_(muon.chi2LocalPosition_)
 			,segmentCompatibility_(muon.segmentCompatibility_)
 			,validFraction_(muon.validFraction_)
+			,badFlag80X_(muon.badFlag80X_)
+			,cloneFlag80X_(muon.cloneFlag80X_)
 			{;}
 
 		TRootMuon(Double_t px, Double_t py, Double_t pz, Double_t e) :
