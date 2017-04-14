@@ -354,7 +354,7 @@ void TopTreeProducer::beginJob()
             eventTree_->Branch (name, "TClonesArray", &vPFmets[s]);
         }
 	if(isRealData_){
-		for(unsigned int s=0; s<vPFmetProducer.size(); s++)
+		for(unsigned int s=0; s<vPFmetProducerMuEGClean.size(); s++)
         	{
             		vPFmetsMuEGClean[s] = new TClonesArray("TopTree::TRootPFMET", 1000);
             		char name[100];
