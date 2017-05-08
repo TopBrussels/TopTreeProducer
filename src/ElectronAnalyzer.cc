@@ -128,6 +128,8 @@ void ElectronAnalyzer::Process(
 
     localElectron.setFbrem(patElectron_calibrated.fbrem());
     localElectron.setNBrems(patElectron_calibrated.numberOfBrems());
+    // charge Info
+    localElectron.setIsGsfCtfScPixChargeConsistent(patElectron_calibrated.isGsfCtfScPixChargeConsistent());
 
     //setShowerShape
     localElectron.setE1x5( patElectron_calibrated.e1x5() );
@@ -289,7 +291,7 @@ void ElectronAnalyzer::Process(
 
     localElectron.setMVA_value( mvaValue );
     localElectron.setMVA_category( mvaCategory );
-    
+     
     new( (*rootElectrons)[nElectrons_passedSkimming] ) TRootElectron(localElectron);
     if(verbosity_>2) cout << "   ["<< setw(3) << j << "] " << localElectron << endl;
     if(verbosity_>4) cout << "   ["<< setw(3) << j << "] " << "CHIso " << localElectron.chargedHadronIso(3)  << " pat " << patElectron_calibrated.chargedHadronIso() << endl;

@@ -57,6 +57,7 @@ class TRootElectron : public TRootLepton {
             fBrem_(-9999.),
             nBrems_(-9999),
             passConversion_(false),
+	    isGsfCtfScPixChargeConsistent_(false),
             isMVA_TightID_(false),
             isMVA_MediumID_(false),
             isMVA_LooseID_(false),
@@ -112,6 +113,7 @@ class TRootElectron : public TRootLepton {
             fBrem_(-9999.),
             nBrems_(-9999),
             passConversion_(false),
+	    isGsfCtfScPixChargeConsistent_(false),
             isMVA_TightID_(false),
             isMVA_MediumID_(false),
             isMVA_LooseID_(false),
@@ -167,6 +169,7 @@ class TRootElectron : public TRootLepton {
             fBrem_(e.fBrem_),
             nBrems_(e.nBrems_),
             passConversion_(e.passConversion_),
+	    isGsfCtfScPixChargeConsistent_(e.isGsfCtfScPixChargeConsistent_),
             isMVA_TightID_(e.isMVA_TightID_),
             isMVA_MediumID_(e.isMVA_MediumID_),
             isMVA_LooseID_(e.isMVA_LooseID_),
@@ -176,7 +179,8 @@ class TRootElectron : public TRootLepton {
             isCB_LooseID_(e.isCB_LooseID_),
             isCB_VetoID_(e.isCB_VetoID_),
             MVA_value_(e.MVA_value_),
-            MVA_category_(e.MVA_category_){
+            MVA_category_(e.MVA_category_)
+	    {
             ;
             }
 
@@ -223,6 +227,7 @@ class TRootElectron : public TRootLepton {
             fBrem_(-9999.),
             nBrems_(-9999),
             passConversion_(false),
+	    isGsfCtfScPixChargeConsistent_(false),
             isMVA_TightID_(false),
             isMVA_MediumID_(false),
             isMVA_LooseID_(false),
@@ -279,6 +284,7 @@ class TRootElectron : public TRootLepton {
             fBrem_(-9999.),
             nBrems_(-9999),
             passConversion_(false),
+	    isGsfCtfScPixChargeConsistent_(false),
             isMVA_TightID_(false),
             isMVA_MediumID_(false),
             isMVA_LooseID_(false),
@@ -288,7 +294,8 @@ class TRootElectron : public TRootLepton {
             isCB_LooseID_(false),
             isCB_VetoID_(false),
             MVA_value_(-9999.),
-            MVA_category_(-9999){
+            MVA_category_(-9999)
+	    {
             ;
             }
 
@@ -335,6 +342,7 @@ class TRootElectron : public TRootLepton {
             fBrem_(-9999.),
             nBrems_(-9999),
             passConversion_(false),
+	    isGsfCtfScPixChargeConsistent_(false),
             isMVA_TightID_(false),
             isMVA_MediumID_(false),
             isMVA_LooseID_(false),
@@ -391,6 +399,7 @@ class TRootElectron : public TRootLepton {
             fBrem_(-9999.),
             nBrems_(9999),
             passConversion_(false),
+	    isGsfCtfScPixChargeConsistent_(false),
             isMVA_TightID_(false),
             isMVA_MediumID_(false),
             isMVA_LooseID_(false),
@@ -447,6 +456,7 @@ class TRootElectron : public TRootLepton {
             fBrem_(-9999.),
             nBrems_(9999),
             passConversion_(false),
+	    isGsfCtfScPixChargeConsistent_(false),
             isMVA_TightID_(false),
             isMVA_MediumID_(false),
             isMVA_LooseID_(false),
@@ -603,6 +613,9 @@ class TRootElectron : public TRootLepton {
         Bool_t passConversion() const {
             return passConversion_;
             }
+	Bool_t isGsfCtfScPixChargeConsistent() const {
+            return isGsfCtfScPixChargeConsistent_;
+            }
         Bool_t isMVA_TightID() const {
             return isMVA_TightID_;
             }
@@ -633,6 +646,7 @@ class TRootElectron : public TRootLepton {
         Int_t MVA_category() const {
             return MVA_category_;
             }
+	
 
         //setters
         void setEcalSeeding(Bool_t isEcal) {
@@ -762,6 +776,9 @@ class TRootElectron : public TRootLepton {
         void setPassConversion(Bool_t pass) {
             passConversion_ = pass;
             }
+	void setIsGsfCtfScPixChargeConsistent(Bool_t x) {
+            isGsfCtfScPixChargeConsistent_ = x;
+            }
         void setisMVA_TightID(Bool_t pass) {
             isMVA_TightID_ = pass;
             }
@@ -792,6 +809,7 @@ class TRootElectron : public TRootLepton {
         void setMVA_category(Int_t category) {
             MVA_category_ = category;
             }
+	
         friend std::ostream& operator<< (std::ostream& stream, const TRootElectron& electron) {
             stream << "TRootElectron - Charge=" << electron.charge() << " (Et,eta,phi)=("<< electron.Et() <<","<< electron.Eta() <<","<< electron.Phi() << ")"
             << " vertex(x,y,z)=("<< electron.vx() <<","<< electron.vy() <<","<< electron.vz() << ")";
@@ -815,7 +833,7 @@ class TRootElectron : public TRootLepton {
         Bool_t isEBEEGap_;                         // electron in ecal crack region
         Float_t ioEmIoP_;                          // (1.0/(ele.superCluster()->energy())) - (1.0 / ele.p())
         Float_t ioEmIoPgsf_;                       // (1.0/(ele.superCluster()->energy())) - (1.0 / ele.gsfTrack()->p())
-
+	
         //TrackProperties=====================================
         Int_t pixelLayersWithMeasurement_;         // number of pixel layers with at least one valid hit
         Int_t stripLayersWithMeasurement_;         // number of strip layers with at least one valid hit
@@ -854,6 +872,10 @@ class TRootElectron : public TRootLepton {
         Float_t fBrem_;                            // brem fraction from gsf fit: (track momentum in - track momentum out) / track momentum in
         Int_t   nBrems_;                           // number of basic clusters inside the supercluster - 1
         Bool_t  passConversion_;                   // boolean to flag converted candidates
+	
+	//// Charge info ===================
+	Bool_t isGsfCtfScPixChargeConsistent_;     //boolean to match 3 charge agreement cut - select the selective method of charge measurements and it should be true in the analysis  same sign electrons 
+	
         
 	      Bool_t isMVA_TightID_; // Tight ID from MVA electrons. Newly implemented in 2016, according to https://twiki.cern.ch/twiki/bin/view/CMS/MultivariateElectronIdentificationRun2
         Bool_t isMVA_MediumID_;// Medium ID from MVA electrons. Newly implemented in 2016, according to https://twiki.cern.ch/twiki/bin/view/CMS/MultivariateElectronIdentificationRun2
@@ -866,7 +888,7 @@ class TRootElectron : public TRootLepton {
 
         Float_t MVA_value_; // MVA value of MVA electrons. Newly implemented in 2016, according to https://twiki.cern.ch/twiki/bin/view/CMS/MultivariateElectronIdentificationRun2
         Float_t MVA_category_; // Catefory of MVA electrons. Newly implemented in 2016, according to https://twiki.cern.ch/twiki/bin/view/CMS/MultivariateElectronIdentificationRun2
-
+	
 
         ClassDef (TRootElectron,16);
     };
