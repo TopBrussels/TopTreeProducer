@@ -1,5 +1,7 @@
 #include "../interface/PhotonAnalyzer.h"
 #include "RecoEgamma/EgammaTools/interface/ConversionTools.h"
+#include "../interface/ElectronAnalyzer.h"
+
 
 using namespace std;
 using namespace TopTree;
@@ -7,24 +9,9 @@ using namespace reco;
 using namespace edm;
 using namespace isodeposit;
 
-PhotonAnalyzer::PhotonAnalyzer (const edm::ParameterSet & producersNames):
-verbosity_(0),
-useMC_(false)
-{
-  photonProducer_ = producersNames.getParameter < edm::InputTag > ("photonProducer");
-}
-
-PhotonAnalyzer::PhotonAnalyzer (const edm::ParameterSet & producersNames, const edm::ParameterSet & myConfig, int verbosity):
+PhotonAnalyzer::PhotonAnalyzer (const edm::ParameterSet & myConfig, int verbosity):
 verbosity_ (verbosity)
 {
-  photonProducer_ = producersNames.getParameter < edm::InputTag > ("photonProducer");
-  useMC_ = myConfig.getUntrackedParameter < bool > ("doPhotonMC");
-}
-PhotonAnalyzer::PhotonAnalyzer (const edm::ParameterSet & producersNames, int iter, const edm::ParameterSet & myConfig, int verbosity):
-verbosity_ (verbosity)
-{
-  vPhotonProducer = producersNames.getUntrackedParameter<std::vector<std::string> >("vphotonProducer");
-  photonProducer_ =	edm::InputTag(vPhotonProducer[iter]);
   useMC_ = myConfig.getUntrackedParameter < bool > ("doPhotonMC");
 }
 
@@ -33,7 +20,7 @@ PhotonAnalyzer::~PhotonAnalyzer ()
 }
 
 void
-PhotonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootPhotons, const edm::EventSetup& iSetup)
+PhotonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootPhotons, const edm::EventSetup& iSetup, edm::EDGetTokenT<pat::PhotonCollection> photonToken)
 {
   unsigned int nPhotons = 0;
 
@@ -41,16 +28,17 @@ PhotonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootPhotons, 
   ///currently these are hardcoded
   ///we need to create corresponding member function in PAT photon object
   ///otherwise, we need to keep these collections in our PAT output collections in order to produce TOPTREE from PAT (Taejeong)  
-  edm::Handle<reco::BeamSpot> bsHandle;
-  iEvent.getByLabel("offlineBeamSpot", bsHandle);
-  const reco::BeamSpot &beamspot = *bsHandle.product();
 
   edm::Handle<reco::ConversionCollection> hConversions;
   iEvent.getByLabel("allConversions", hConversions);
 
-  edm::Handle<reco::GsfElectronCollection> hElectrons;
-  iEvent.getByLabel("gsfElectrons", hElectrons);
 
+  // ****  As the GSF electrons are not available in the 7_0_X miniAOD
+  //I will not try to access them, and the conversion info will not
+  // be available in the TOPTREE. This should be fixable with an offical
+  // recommendation in 7_1_X
+
+  
   // get the iso deposits. 4 (charged hadrons, pileup charged hadrons, photons, neutral hadrons)
   // currently it is hardcoded ---> need to make it configurable for the future
   inputTagIsoDepPhotons_.push_back( edm::InputTag("phPFIsoDepositChargedPFIso") );
@@ -58,11 +46,16 @@ PhotonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootPhotons, 
   inputTagIsoDepPhotons_.push_back( edm::InputTag("phPFIsoDepositNeutralPFIso") );
   inputTagIsoDepPhotons_.push_back( edm::InputTag("phPFIsoDepositPUPFIso") );
   // there is no difference between PFId and NoPFId so just take PFId iso-value
-  inputTagIsoValPhotons_.push_back( edm::InputTag("phPFIsoValueCharged03PFIdPFIso") );
-  inputTagIsoValPhotons_.push_back( edm::InputTag("phPFIsoValueGamma03PFIdPFIso") );
-  inputTagIsoValPhotons_.push_back( edm::InputTag("phPFIsoValueNeutral03PFIdPFIso") );
-  inputTagIsoValPhotons_.push_back( edm::InputTag("phPFIsoValuePU03PFIdPFIso") );
+  // inputTagIsoValPhotons_.push_back( edm::InputTag("phPFIsoValueCharged03PFIdPFIso") );
+  //inputTagIsoValPhotons_.push_back( edm::InputTag("phPFIsoValueGamma03PFIdPFIso") );
+  //inputTagIsoValPhotons_.push_back( edm::InputTag("phPFIsoValueNeutral03PFIdPFIso") );
+  //inputTagIsoValPhotons_.push_back( edm::InputTag("phPFIsoValuePU03PFIdPFIso") );
   
+  //These "phPFIsoValueCharged03PFIdPFIso" objects are not present in miniAOD 
+  //so commented, TODO: write the standard ISO variables the TRootPhoton in the TOPTREE
+
+
+
   unsigned nTypes=4;
   IsoDepositMaps photonIsoDep(nTypes);
   for (size_t j = 0; j<inputTagIsoDepPhotons_.size(); ++j) {
@@ -72,10 +65,12 @@ PhotonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootPhotons, 
   for (size_t j = 0; j<inputTagIsoValPhotons_.size(); ++j) {
     iEvent.getByLabel(inputTagIsoValPhotons_[j], photonIsoValPFId[j]);
   }
-  const IsoDepositVals * photonIsoVals = &photonIsoValPFId;
+
+
+  //  const IsoDepositVals * photonIsoVals = &photonIsoValPFId;
 
   edm::Handle < std::vector < pat::Photon > >patPhotons;
-  iEvent.getByLabel (photonProducer_, patPhotons);
+  iEvent.getByToken (photonToken, patPhotons);
   nPhotons = patPhotons->size ();
 
   if (verbosity_ > 1)
@@ -88,26 +83,31 @@ PhotonAnalyzer::Process (const edm::Event & iEvent, TClonesArray * rootPhotons, 
 
       TRootPhoton localPhoton (photon->px (), photon->py (), photon->pz (), photon->energy ());
 
+      //      cout <<"PHOTON kinematics :  "<< photon->px ()<<"  "<< photon->py ()<<"  "<< photon->pz ()<<"  "<< photon->energy ()<<endl;
+
+      //      cout <<"PHOTON kinematics 1 :"<< endl; 
       localPhoton.setSigmaIetaIeta( photon->sigmaIetaIeta() );
+      //cout <<"PHOTON kinematics 2 :"<< endl; 
       localPhoton.setHadronicOverEm( photon->hadronicOverEm() );
+      //cout <<"PHOTON kinematics 3 :"<< endl; 
       localPhoton.setHasPixelSeed( photon->hasPixelSeed() );
 
-      //prompt electron veto
-      bool passelectronveto = !ConversionTools::hasMatchedPromptElectron(photon->superCluster(), hElectrons, hConversions, beamspot.position());
-      localPhoton.setPasselectronveto(passelectronveto);
+      //prompt electron veto, commenting out for now, see **** above
+      //      bool passelectronveto = !ConversionTools::hasMatchedPromptElectron(photon->superCluster(), hElectrons, hConversions, beamspot.position());
+      //localPhoton.setPasselectronveto(passelectronveto);
 
       //currently PF isolation is directly from RECO, which is empty. need to change it (Taejeong) 
       pat::PhotonRef myPhotonRef(patPhotons,j);
       
-      double chIso =  (*(*photonIsoVals)[0])[myPhotonRef];
-      double phIso = (*(*photonIsoVals)[1])[myPhotonRef];
-      double nhIso = (*(*photonIsoVals)[2])[myPhotonRef];
-      double puChIso = (*(*photonIsoVals)[3])[myPhotonRef];
+      //    double chIso =  (*(*photonIsoVals)[0])[myPhotonRef];
+      //double phIso = (*(*photonIsoVals)[1])[myPhotonRef];
+      //double nhIso = (*(*photonIsoVals)[2])[myPhotonRef];
+      //double puChIso = (*(*photonIsoVals)[3])[myPhotonRef];
 
-      localPhoton.setIsoR03_ChargedHadronIso( chIso );
-      localPhoton.setIsoR03_PhotonIso( phIso );
-      localPhoton.setIsoR03_NeutralHadronIso( nhIso );
-      localPhoton.setIsoR03_PuChargedHadronIso( puChIso );
+      //      localPhoton.setIsoR03_ChargedHadronIso( chIso );
+      //localPhoton.setIsoR03_PhotonIso( phIso );
+      //localPhoton.setIsoR03_NeutralHadronIso( nhIso );
+      //localPhoton.setIsoR03_PuChargedHadronIso( puChIso );
 
       if (useMC_)
       {

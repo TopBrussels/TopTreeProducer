@@ -23,15 +23,12 @@ class PhotonAnalyzer
 {
 	
 public:
-	PhotonAnalyzer(const edm::ParameterSet& producersNames);
-	PhotonAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity);
-	PhotonAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity);
+	PhotonAnalyzer(const edm::ParameterSet& myConfig, int verbosity);
 	~PhotonAnalyzer();
-	void SetVerbosity(int verbosity) { verbosity_ = verbosity; };
-	void Process(const edm::Event& iEvent, TClonesArray* rootMuons, const edm::EventSetup& iSetup);
+	void Process(const edm::Event& iEvent, TClonesArray* rootPhotons, const edm::EventSetup& iSetup, edm::EDGetTokenT<pat::PhotonCollection> photonToken);
 
-        typedef std::vector< edm::Handle< edm::ValueMap<reco::IsoDeposit> > > IsoDepositMaps;
-        typedef std::vector< edm::Handle< edm::ValueMap<double> > > IsoDepositVals;
+    typedef std::vector< edm::Handle< edm::ValueMap<reco::IsoDeposit> > > IsoDepositMaps;
+    typedef std::vector< edm::Handle< edm::ValueMap<double> > > IsoDepositVals;
 
 private:
 	int verbosity_;
@@ -39,9 +36,9 @@ private:
 	std::vector<std::string> vPhotonProducer;
 	bool useMC_;
  
-        //photon isolation
-        std::vector<edm::InputTag> inputTagIsoDepPhotons_;
-        std::vector<edm::InputTag> inputTagIsoValPhotons_; 
+    //photon isolation
+    std::vector<edm::InputTag> inputTagIsoDepPhotons_;
+    std::vector<edm::InputTag> inputTagIsoValPhotons_; 
 };
 
 #endif

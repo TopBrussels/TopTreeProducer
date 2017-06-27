@@ -11,8 +11,6 @@
 
 //#include "DataFormats/METReco/interface/MET.h"
 //#include "DataFormats/METReco/interface/METFwd.h"
-#include "DataFormats/METReco/interface/CaloMET.h"
-#include "DataFormats/METReco/interface/CaloMETCollection.h"
 #include "DataFormats/METReco/interface/PFMET.h"
 #include "DataFormats/METReco/interface/PFMETCollection.h"
 #include "DataFormats/PatCandidates/interface/MET.h"
@@ -26,8 +24,8 @@
 class METAnalyzer{
 	
 public:
-	METAnalyzer(const edm::ParameterSet& producersNames);
-	METAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity);
+	METAnalyzer();
+	METAnalyzer(const edm::ParameterSet& myConfig, int verbosity);
 	~METAnalyzer();
 	void SetVerbosity(int verbosity) {verbosity_ = verbosity; };
 	TopTree::TRootMET Process(const reco::Candidate* met);

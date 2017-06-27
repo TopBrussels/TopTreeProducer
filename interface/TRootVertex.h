@@ -27,7 +27,7 @@ namespace TopTree
 			,yError_(-9999.)
 			,zError_(-9999.)
 			{;}
-	
+
 		TRootVertex(const TRootVertex& vertex) :
 			TVector3(vertex)
 			,isValid_(vertex.isValid_)
@@ -39,7 +39,7 @@ namespace TopTree
 			,yError_(vertex.yError_)
 			,zError_(vertex.zError_)
 			{;}
-	
+
 		TRootVertex(Float_t x, Float_t y, Float_t z) :
 			TVector3(x,y,z)
 			,isValid_(false)
@@ -53,7 +53,7 @@ namespace TopTree
 			{;}
 
 		~TRootVertex() {;}
-	
+
 		Bool_t isValid() const { return isValid_; }
 		Bool_t isFake() const { return isFake_; }
 		Float_t chi2() const { return chi2_; }
@@ -81,13 +81,13 @@ namespace TopTree
 		void setZError(Float_t zError) { zError_ = zError; }
 
 	private:
-	
+
 		Bool_t isValid_;
 		Bool_t isFake_;
 		Float_t chi2_;			//	Not divided by ndof
 		Float_t ndof_;
 		Int_t tracksSize_;
-		
+
 		Float_t xError_;
 		Float_t yError_;
 		Float_t zError_;

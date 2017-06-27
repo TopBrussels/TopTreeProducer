@@ -14,7 +14,7 @@ namespace TopTree
 	{
 
 	public:
-	
+
 		TRootMCParticle() :
 			TRootParticle()
 			,status_(0)
@@ -37,6 +37,13 @@ namespace TopTree
 			,dauTwoId_(particle.dauTwoId_)
 			,dauThreeId_(particle.dauThreeId_)
 			,dauFourId_(particle.dauFourId_)
+			,isPromptFinalState_(particle.isPromptFinalState_)
+			,isPromptDecayed_(particle.isPromptDecayed_)
+			,isMostlyLikePythia6Status3_(particle.isMostlyLikePythia6Status3_)
+			,isHardProcess_(particle.isHardProcess_)
+			,fromHardProcessFinalState_(particle.fromHardProcessFinalState_)
+			,fromHardProcessDecayed_(particle.fromHardProcessDecayed_)
+      ,isLastCopy_(particle.isLastCopy_)
 			{;}
 
 		TRootMCParticle(Double_t px, Double_t py, Double_t pz, Double_t e) :
@@ -134,6 +141,13 @@ namespace TopTree
 		Int_t dauTwoId() const {return dauTwoId_;}
 		Int_t dauThreeId() const {return dauThreeId_;}
 		Int_t dauFourId() const {return dauFourId_;}
+		bool isPromptFinalState() const {return isPromptFinalState_;}
+		bool isPromptDecayed() const {return isPromptDecayed_;}
+		bool isMostLikelyPythia6Status3() const {return isMostlyLikePythia6Status3_;}
+		bool isHardProcess() const {return isHardProcess_;}
+		bool fromHardProcessFinalState() const {return fromHardProcessFinalState_;}
+		bool fromHardProcessDecayed() const {return fromHardProcessDecayed_;}
+		bool isLastCopy() const {return isLastCopy_;}
 		virtual TString typeName() const { return "TRootMCParticle"; }
 
 
@@ -145,6 +159,23 @@ namespace TopTree
 		void setDauTwoId (Int_t dauTwoId) { dauTwoId_ = dauTwoId; }
 		void setDauThreeId (Int_t dauThreeId) { dauThreeId_ = dauThreeId; }
 		void setDauFourId (Int_t dauFourId) { dauFourId_ = dauFourId; }
+		void setIsPromptFinalState (bool isPromptFinalState) { isPromptFinalState_ = isPromptFinalState; }
+		void setIsPromptDecayed (bool isPromptDecayed) { isPromptDecayed_ = isPromptDecayed; }
+		void setIsMostLikelyPythia6Status3 (bool isMostlyLikePythia6Status3) { isMostlyLikePythia6Status3_ = isMostlyLikePythia6Status3; }
+		void setIsHardProcess (bool isHardProcess) { isHardProcess_ = isHardProcess; }
+		void setFromHardProcessFinalState (bool fromHardProcessFinalState) { fromHardProcessFinalState_ = fromHardProcessFinalState; }
+		void setFromHardProcessDecayed (bool fromHardProcessDecayed) { fromHardProcessDecayed_ = fromHardProcessDecayed; }
+                void setIsLastCopy (bool isLastCopy) { isLastCopy_ = isLastCopy; }
+		void setStateFlags (bool iPFS, bool iPD, bool iMLP6S3, bool iHP, bool fHPFS, bool fHPD, bool iLC)
+		{
+		    isPromptFinalState_ = iPFS;
+		    isPromptDecayed_ = iPD;
+		    isMostlyLikePythia6Status3_ = iMLP6S3;
+		    isHardProcess_ = iHP;
+		    fromHardProcessFinalState_ = fHPFS;
+		    fromHardProcessDecayed_ = fHPD;
+        isLastCopy_ = iLC;
+		}
 
 
 		friend std::ostream& operator<< (std::ostream& stream, const TRootMCParticle& part)
@@ -154,10 +185,10 @@ namespace TopTree
 				<< " vertex(x,y,z)=("<< part.vx() <<","<< part.vy() <<","<< part.vz() << ")";
 			return stream;
 		};
-	
-		
+
+
 	protected:
-	
+
 		Int_t status_;
 		Int_t nDau_;
 		Int_t motherType_;
@@ -166,6 +197,11 @@ namespace TopTree
 		Int_t dauTwoId_;
 		Int_t dauThreeId_;
 		Int_t dauFourId_;
+
+		bool isPromptFinalState_ = false, isPromptDecayed_ = false;
+		bool isMostlyLikePythia6Status3_ = false;
+		bool isHardProcess_ = false, fromHardProcessFinalState_ = false, fromHardProcessDecayed_ = false;
+    bool isLastCopy_ = false;
 
 		ClassDef (TRootMCParticle,3);
 	};

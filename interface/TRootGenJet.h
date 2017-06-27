@@ -32,7 +32,7 @@ namespace TopTree
                         ,BHadron_ (TRootMCParticle())
                         ,CHadron_ (TRootMCParticle())
 			{;}
-			
+
 		TRootGenJet(const TRootGenJet& genJet) :
 			TRootParticle(genJet)
 			,etaetaMoment_(genJet.etaetaMoment_)
@@ -44,10 +44,10 @@ namespace TopTree
 			,n60_(genJet.n60_)
 			,nConstituents_(genJet.nConstituents_)
 			,maxDistance_(genJet.maxDistance_)
-                        ,BHadron_(genJet.BHadron_)
-                        ,CHadron_(genJet.CHadron_)
+            ,BHadron_(genJet.BHadron_)
+            ,CHadron_(genJet.CHadron_)
 			{;}
-	
+
 		TRootGenJet(Double_t px, Double_t py, Double_t pz, Double_t e) :
 			TRootParticle(px,py,px,e)
 			,etaetaMoment_(-9999.)
@@ -62,7 +62,7 @@ namespace TopTree
                         ,BHadron_ (TRootMCParticle())
                         ,CHadron_ (TRootMCParticle())
 			{;}
-	
+
 		TRootGenJet(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z) :
 			TRootParticle(px,py,pz,e,vtx_x,vtx_y,vtx_z)
 			,etaetaMoment_(-9999.)
@@ -77,7 +77,7 @@ namespace TopTree
                         ,BHadron_ (TRootMCParticle())
                         ,CHadron_ (TRootMCParticle())
 			{;}
-	
+
 		TRootGenJet(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t vtx_x, Double_t vtx_y, Double_t vtx_z, Int_t type, Float_t charge) :
 			TRootParticle(px,py,pz,e,vtx_x,vtx_y,vtx_z,type,charge)
 			,etaetaMoment_(-9999.)
@@ -92,7 +92,7 @@ namespace TopTree
                         ,BHadron_ (TRootMCParticle())
                         ,CHadron_ (TRootMCParticle())
 			{;}
-	
+
 		TRootGenJet(const TLorentzVector &momentum) :
 			TRootParticle(momentum)
 			,etaetaMoment_(-9999.)
@@ -107,7 +107,7 @@ namespace TopTree
                         ,BHadron_ (TRootMCParticle())
                         ,CHadron_ (TRootMCParticle())
 			{;}
-	
+
 		TRootGenJet(const TLorentzVector &momentum, const TVector3 &vertex, Int_t type, Float_t charge) :
 			TRootParticle(momentum, vertex, type, charge)
 			,etaetaMoment_(-9999.)
@@ -122,7 +122,7 @@ namespace TopTree
                         ,BHadron_ (TRootMCParticle())
                         ,CHadron_ (TRootMCParticle())
 			{;}
-		
+
 		~TRootGenJet() {;}
 
 
@@ -139,7 +139,7 @@ namespace TopTree
                 const TRootMCParticle CHadron() const {return CHadron_; }
 
 		virtual TString typeName() const { return "TRootGenJet"; }
-		
+
 		void setetaetaMoment(Float_t etaetaMoment) { etaetaMoment_ = etaetaMoment; }
 		void setphiphiMoment(Float_t phiphiMoment) { phiphiMoment_ = phiphiMoment; }
 		void setEMEnergy(Float_t emEnergy) { emEnergy_ = emEnergy; }
@@ -149,8 +149,8 @@ namespace TopTree
 		void setN60(Int_t n60) { n60_ = n60; }
 		void setNConstituents(Int_t nConstituents) { nConstituents_ = nConstituents; }
 		void setMaxDistance(Float_t maxDistance) { maxDistance_ = maxDistance; }
-                void setBHadron( TRootMCParticle BHad ) { BHadron_ = BHad; }		
-                void setCHadron( TRootMCParticle CHad ) { CHadron_ = CHad; }		
+                void setBHadron( TRootMCParticle BHad ) { BHadron_ = BHad; }
+                void setCHadron( TRootMCParticle CHad ) { CHadron_ = CHad; }
 
 		friend std::ostream& operator<< (std::ostream& stream, const TRootGenJet& genJet) {
 			stream << "TRootGenJet - Charge=" << setw(2) << genJet.charge() << " (Et,eta,phi)=("<< setw(10) << genJet.Et() <<","<< setw(10) << genJet.Eta() <<","<< setw(10) << genJet.Phi() << ")"
@@ -161,15 +161,15 @@ namespace TopTree
 	private:
 		Float_t etaetaMoment_;					// Added to CaloJet since they seem to be empty for PF
 		Float_t phiphiMoment_;					// Added to CaloJet since they seem to be empty for PF
-		Float_t emEnergy_;						// EM Energy 
+		Float_t emEnergy_;						// EM Energy
 		Float_t hadEnergy_;						// Hadronic Energy
 		Float_t invisibleEnergy_;				// Invisible Energy
 		Int_t n90_;                         // Number of constituents of the genJet carrying 90% of tje genJet energy
 		Int_t n60_;                         // Number of constituents of the genJet carrying 60% of tje genJet energy
 		Int_t nConstituents_;               // Number of constituents of the jet
 		Float_t maxDistance_;					// Maximum distance from jet to constituent
-                TRootMCParticle BHadron_;
-                TRootMCParticle CHadron_;
+        TRootMCParticle BHadron_;
+        TRootMCParticle CHadron_;
 		ClassDef (TRootGenJet,5);
 	};
 }

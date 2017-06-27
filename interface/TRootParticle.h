@@ -17,7 +17,7 @@ namespace TopTree
 	{
 
 	public:
-	
+
 		TRootParticle() :
 			TLorentzVector()
 			,vertex_()
@@ -112,7 +112,7 @@ namespace TopTree
 
 
 	protected:
-	
+
 		TVector3 vertex_;
 		Int_t type_;
 		Float_t charge_;

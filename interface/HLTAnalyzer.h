@@ -26,29 +26,12 @@ class HLTAnalyzer
 	
 public:
 	
-	HLTAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig) :
-		verbosity_(0)
-		,triggerResultsTag1st_(producersNames.getParameter<edm::InputTag> ("hltProducer1st"))
-		,triggerResultsTag2nd_(producersNames.getParameter<edm::InputTag> ("hltProducer2nd"))
-		,triggerResultsTag3rd_(producersNames.getParameter<edm::InputTag> ("hltProducer3rd"))
-		,triggerResultsTag4th_(producersNames.getParameter<edm::InputTag> ("hltProducer4th"))
-  		,triggerNames_()
-		,doHLT_(myConfig.getUntrackedParameter<bool>("doHLT",false))
-  		,nEvents_(0)
-  		,nWasRun_(0)
-  		,nAccept_(0)
-  		,nErrors_(0)
-  		,hltWasRun_(0)
-  		,hltAccept_(0)
-  		,hltErrors_(0)
-  		,hltNames_(0)
-		{;}
+	HLTAnalyzer(edm::EDGetTokenT<edm::TriggerResults> triggerToken1, edm::EDGetTokenT<edm::TriggerResults> triggerToken2,edm::EDGetTokenT<edm::TriggerResults> triggerToken3, edm::EDGetTokenT<edm::TriggerResults> triggerToken4, edm::EDGetTokenT<edm::TriggerResults> triggerToken5, const edm::ParameterSet& myConfig, int verbosity);
 	
 	~HLTAnalyzer() {;}
 	
-	void setVerbosity(int verbosity) {verbosity_ = verbosity; };
 	void init(const edm::Event& iEvent, TRootEvent* rootEvent);
-	void process(const edm::Event& iEvent, TRootEvent* rootEvent);
+	void process(const edm::Event& iEvent, TRootEvent* rootEvent, edm::ParameterSet valuesForConsumeCommand);
 	void printStats();
 	void copySummary(TRootRun* runInfos);
 	
@@ -73,11 +56,13 @@ public:
 private:
 	int verbosity_;
 	
-	edm::InputTag triggerResultsTag_;		// Input tag for TriggerResults, final choice
-	edm::InputTag triggerResultsTag1st_;	// Input tag for TriggerResults, 1st choice
-	edm::InputTag triggerResultsTag2nd_;	// Input tag for TriggerResults, 2nd choice
-	edm::InputTag triggerResultsTag3rd_;	// Input tag for TriggerResults, 3rd choice
-	edm::InputTag triggerResultsTag4th_;	// Input tag for TriggerResults, 4th choice
+	edm::InputTag triggerResultsTag_; // InputTag to store the tag of the final choice
+	edm::EDGetTokenT<edm::TriggerResults> triggerResultsToken_;		// Input Token for TriggerResults, final choice
+	edm::EDGetTokenT<edm::TriggerResults> triggerResultsToken1st_;	// Input Token for TriggerResults, 1st choice
+	edm::EDGetTokenT<edm::TriggerResults> triggerResultsToken2nd_;	// Input Token for TriggerResults, 2nd choice
+	edm::EDGetTokenT<edm::TriggerResults> triggerResultsToken3rd_;	// Input Token for TriggerResults, 3rd choice
+	edm::EDGetTokenT<edm::TriggerResults> triggerResultsToken4th_;	// Input Token for TriggerResults, 4th choice
+	edm::EDGetTokenT<edm::TriggerResults> triggerResultsToken5th_;	// Input Token for TriggerResults, 4th choice
 
 	edm::TriggerNames triggerNames_;			// TriggerNames class
 

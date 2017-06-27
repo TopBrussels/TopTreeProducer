@@ -4,11 +4,8 @@
 #include "../interface/TRootElectron.h"
 #include "../interface/TRootPhoton.h"
 #include "../interface/TRootJet.h"
-#include "../interface/TRootCaloJet.h"
 #include "../interface/TRootPFJet.h"
 #include "../interface/TRootMET.h"
-#include "../interface/TRootTrackMET.h"
-#include "../interface/TRootGenEvent.h"
 #include "../interface/TRootEvent.h"
 #include "../interface/TRootRun.h"
 #include "../interface/TRootParticle.h"
@@ -112,36 +109,26 @@ int main(int argc, char** argv){
 	
 	std::string className = "";
 	
-	if (strstr(ObjName.c_str(),"CaloJet"))
-	  className="TopTree::TRootCaloJet";
-	else if (strstr(ObjName.c_str(),"PFJet"))
+	if (strstr(ObjName.c_str(),"PFJet"))
 	  className="TopTree::TRootPFJet";
-	else if (strstr(ObjName.c_str(),"JPTJet"))
-	  className="TopTree::TRootJPTJet";
 	else if (strstr(ObjName.c_str(),"GenJet"))
 	  className="TopTree::TRootGenJet";
 	else if (strstr(ObjName.c_str(),"MCParticles"))
 	  className="TopTree::TRootMCParticle";
 	else if (strstr(ObjName.c_str(),"NPGenEvent"))
 	  className="TopTree::TRootNPGenEvent";
-	else if (strstr(ObjName.c_str(),"GenEvent"))
-	  className="TopTree::TRootGenEvent";
 	else if (strstr(ObjName.c_str(),"Muon"))
 	  className="TopTree::TRootMuon";
 	else if (strstr(ObjName.c_str(),"Electron"))
 	  className="TopTree::TRootElectron";
-        else if (strstr(ObjName.c_str(),"Photon"))
-          className="TopTree::TRootPhoton";
+  else if (strstr(ObjName.c_str(),"Photon"))
+    className="TopTree::TRootPhoton";
 	else if (strstr(ObjName.c_str(),"TCMET"))
 	  className="TopTree::TRootMET";
-	else if (strstr(ObjName.c_str(),"CaloMET"))
-	  className="TopTree::TRootCaloMET";
 	else if (strstr(ObjName.c_str(),"PFMET"))
 	  className="TopTree::TRootPFMET";
 	else if (strstr(ObjName.c_str(),"MET"))
-	  className="TopTree::TRootMET";
-	else if (strstr(ObjName.c_str(), "TrackMET"))
-	  className="TopTree::TRootTrackMET";  
+	  className="TopTree::TRootMET"; 
 	else if (strstr(ObjName.c_str(),"MHT"))
 	  className="TopTree::TRootMHT";
 	else if (strstr(ObjName.c_str(),"PrimaryVertex"))

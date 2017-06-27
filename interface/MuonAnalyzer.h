@@ -30,19 +30,24 @@ class MuonAnalyzer
 {
 	
 public:
-	MuonAnalyzer(const edm::ParameterSet& producersNames);
-	MuonAnalyzer(const edm::ParameterSet& producersNames, const edm::ParameterSet& myConfig, int verbosity);
-	MuonAnalyzer(const edm::ParameterSet& producersNames, int iter, const edm::ParameterSet& myConfig, int verbosity);
+	MuonAnalyzer(const edm::ParameterSet& myConfig, int verbosity);
 	~MuonAnalyzer();
-	void SetVerbosity(int verbosity) { verbosity_ = verbosity; };
-	void Process(const edm::Event& iEvent, TClonesArray* rootMuons);
+	void Process(const edm::Event& iEvent, TClonesArray* rootMuons, edm::EDGetTokenT<reco::BeamSpot> offlineBSToken, edm::EDGetTokenT<pat::MuonCollection> muonToken, edm::EDGetTokenT<reco::VertexCollection> vtxToken);
+
+	//80X 2016 https://hypernews.cern.ch/HyperNews/CMS/get/physics-validation/2786.html
+	void TagBadMuons(edm::EDGetTokenT<edm::PtrVector<reco::Muon>> badMuonsToken);
+	void TagCloneMuons(edm::EDGetTokenT<edm::PtrVector<reco::Muon>> cloneMuonsToken);
 
 private:
 	int verbosity_;
-	edm::InputTag muonProducer_;
-	edm::InputTag primaryVertexProducer_;
-	std::vector<std::string> vMuonProducer;
 	bool useMC_;
+	double muon_ptMin_;
+
+	//80X 2016 https://hypernews.cern.ch/HyperNews/CMS/get/physics-validation/2786.html
+	bool applyBadMuonTagger_;
+	edm::EDGetTokenT<edm::PtrVector<reco::Muon>> badMuonsToken_;
+	bool applyCloneMuonTagger_;
+	edm::EDGetTokenT<edm::PtrVector<reco::Muon>> cloneMuonsToken_;
 };
 
 #endif

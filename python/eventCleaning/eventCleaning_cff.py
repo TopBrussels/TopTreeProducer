@@ -7,8 +7,8 @@ from TopBrussels.TopTreeProducer.eventCleaning.scrapingFilter_cfi import *
 from TopBrussels.TopTreeProducer.eventCleaning.primaryVertexFilter_cfi import *
  
 # CSC Beam Halo Filter
-# Is this really required?
-# from RecoMET.METAnalyzers.CSCHaloFilter_cfi import *
+#from RecoMET.METAnalyzers.CSCTightHalo2015Filter_cfi import *
+from RecoMET.METAnalyzers.globalTightHalo2016Filter_cfi import * #27/10/2016 update to 80
 
 # HB + HE noise filter
 from CommonTools.RecoAlgos.HBHENoiseFilter_cfi import *
@@ -20,7 +20,7 @@ hcalLaserEventFilter.vetoByHBHEOccupancy=cms.untracked.bool(True)
 
 # ECAL dead cell filter
 from RecoMET.METFilters.EcalDeadCellTriggerPrimitiveFilter_cfi import *
-EcalDeadCellTriggerPrimitiveFilter.tpDigiCollection = cms.InputTag("ecalTPSkimNA")
+#EcalDeadCellTriggerPrimitiveFilter.tpDigiCollection = cms.InputTag("ecalTPSkimNA")
 
 # Tracking failure filter
 from RecoMET.METFilters.trackingFailureFilter_cfi import *
@@ -30,12 +30,13 @@ trackingFailureFilter.VertexSource = cms.InputTag("goodOfflinePrimaryVertices", 
 from RecoMET.METFilters.eeBadScFilter_cfi import *
 
 eventCleaning = cms.Sequence(
-#		CSCTightHaloFilter*
-                HBHENoiseFilter*
-                scrapingFilter*
-                hcalLaserEventFilter*
-                EcalDeadCellTriggerPrimitiveFilter*
-#                primaryVertexFilter * # this will be applied before this sequence. do we need to apply this only for data?
-                trackingFailureFilter*
-                eeBadScFilter
+#    CSCTightHalo2015Filter* #29/2/2016
+    globalTightHalo2016Filter* #27/10/2016
+    HBHENoiseFilter*
+    scrapingFilter*
+    hcalLaserEventFilter*
+    EcalDeadCellTriggerPrimitiveFilter*
+#    primaryVertexFilter * # this will be applied before this sequence. do we need to apply this only for data? --> applied in the analysis
+    trackingFailureFilter*
+    eeBadScFilter
 )
