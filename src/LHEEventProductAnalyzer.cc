@@ -23,7 +23,7 @@ void LHEEventProductAnalyzer::Process(const edm::Event& iEvent, TRootEvent* root
 {
 
 
-	if(verbosity_ > 1) cout << "Analysing LHEEventProduct collection ... = "<<  lheEventProductProducer_.label()  << endl;
+	if(verbosity_ > 1) cout << endl << "Analysing LHEEventProduct collection ... = "<<  lheEventProductProducer_.label()  << endl;
 
 	edm::Handle<LHEEventProduct> lheEventProduct;
 
@@ -40,12 +40,12 @@ void LHEEventProductAnalyzer::Process(const edm::Event& iEvent, TRootEvent* root
 		{
 
 			int weight_id = std::stoi(weights[w].id);
-			if(verbosity_ > 2) cout << "Analysing LHEEventProduct, Weight name extracted"<<endl;
+			if(verbosity_ > 3) cout << "Analysing LHEEventProduct, Weight name extracted"<<endl;
 			float weight_val = weights[w].wgt;
-			if(verbosity_ > 2) cout << "Analysing LHEEventProduct, Weight value extracted"<<endl;
+			if(verbosity_ > 3) cout << "Analysing LHEEventProduct, Weight value extracted"<<endl;
 			rootEvent->setWeight(weight_id, weight_val);
 
-			if(verbosity_ > 2) cout <<"id  "<< weight_id  <<"  weight = " << rootEvent->getWeight(weight_id) << " set successfully" << endl;
+			if(verbosity_ > 3) cout <<"id  "<< weight_id  <<"  weight = " << rootEvent->getWeight(weight_id) << " set successfully" << endl;
 
 		}
 	}
@@ -115,10 +115,10 @@ void LHEEventProductAnalyzer::Process(const edm::Event& iEvent, TRootEvent* root
                 weightId = theLine.substr(idStart, idLen);
 
                 weightName = weightGroup + std::to_string(groupMember);
-                if (verbosity_ > 2) cout << "WeightName " << weightName << " ID: " << weightId << endl;
+                if (verbosity_ > 3) cout << "WeightName " << weightName << " ID: " << weightId << endl;
 
                 weights_d[weightName] = std::stoi(weightId);
-                if (verbosity_ > 2) cout << "WeightName " << weightName << " set to ID: " << weights_d[weightName] << endl;
+                if (verbosity_ > 3) cout << "WeightName " << weightName << " set to ID: " << weights_d[weightName] << endl;
 
                 groupMember++;
             }
