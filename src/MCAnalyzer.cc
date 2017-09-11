@@ -144,12 +144,17 @@ void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootM
       if (p.numberOfDaughters() > 3) daug3Id = p.daughter( 3 )->pdgId();
     }
     
+    //keep all copies that are 'stable particle' or originate from hard-scattering process (before radiation)
+    Int_t keepStatus = false;
+    if ( p.status() == 1 || (p.status() > 20 && p.status() < 30) ) keepStatus = true;
+    
     
     if ( doElectronMC_ && abs(p.pdgId()) == 11 )
     {
       iElectron++;
       
-      if ( abs(p.eta())>electronMC_etaMax_ || p.pt()<electronMC_ptMin_ ) continue;
+      if ( !keepStatus && (fabs(p.eta())>electronMC_etaMax_ || p.pt()<electronMC_ptMin_) ) continue;
+      else if ( fabs(p.eta())>1000 || fabs(p.pt())<0.0001 ) continue;
       iElectronSel++;
       
       TRootMCParticle localMCElectron( p.px(), p.py(), p.pz(), p.energy(), p.vx(), p.vy(), p.vz(), p.pdgId(), p.charge(), p.status(), p.numberOfDaughters(), motherID, grannyID, daug0Id, daug1Id, daug2Id, daug3Id, j );
@@ -168,7 +173,8 @@ void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootM
     {
       iMuon++;
       
-      if ( abs(p.eta())>muonMC_etaMax_ || p.pt()<muonMC_ptMin_ ) continue;
+      if ( !keepStatus && (fabs(p.eta())>muonMC_etaMax_ || p.pt()<muonMC_ptMin_) ) continue;
+      else if ( fabs(p.eta())>1000 || fabs(p.pt())<0.0001 ) continue;
       iMuonSel++;
       
       TRootMCParticle localMCMuon( p.px(), p.py(), p.pz(), p.energy(), p.vx(), p.vy(), p.vz(), p.pdgId(), p.charge(), p.status(), p.numberOfDaughters(), motherID, grannyID, daug0Id, daug1Id, daug2Id, daug3Id, j );
@@ -188,7 +194,9 @@ void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootM
     {
       iJet++;
       
-      if ( abs(p.eta())>jetMC_etaMax_ || p.pt()<jetMC_ptMin_ ) continue;
+      //keep all copies of top quark (some of these are needed for systematics)
+      if ( !keepStatus && abs(p.pdgId()) != 6 && (fabs(p.eta())>jetMC_etaMax_ || p.pt()<jetMC_ptMin_) ) continue;
+      else if ( fabs(p.eta())>1000 || fabs(p.pt())<0.0001 ) continue;
       iJetSel++;
       
       TRootMCParticle localMCParton( p.px(), p.py(), p.pz(), p.energy(), p.vx(), p.vy(), p.vz(), p.pdgId(), p.charge(), p.status(), p.numberOfDaughters(), motherID, grannyID, daug0Id, daug1Id, daug2Id, daug3Id, j );
@@ -218,7 +226,7 @@ void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootM
     {
       iMET++;
       
-      if ( abs(p.eta())>1000 || p.pt()<0.0001 ) continue;
+      if ( fabs(p.eta())>1000 || p.pt()<0.0001 ) continue;
       iMETSel++;
       
       TRootMCParticle  localMCNeutrino( p.px(), p.py(), p.pz(), p.energy(), p.vx(), p.vy(), p.vz(), p.pdgId() , p.charge(), p.status(), p.numberOfDaughters(), motherID, grannyID, daug0Id, daug1Id, daug2Id, daug3Id, j );
@@ -244,7 +252,7 @@ void MCAnalyzer::ProcessMCParticle(const edm::Event& iEvent, TClonesArray* rootM
         continue;
       }
       
-      if ( abs(p.eta())>1000 || p.pt()<0.0001 ) continue;
+      if ( fabs(p.eta())>1000 || p.pt()<0.0001 ) continue;
       iUnstableParticle++;
       
       TRootMCParticle   localMCUnstable( p.px(), p.py(), p.pz(), p.energy(), p.vx(), p.vy(),p.vz(), p.pdgId(), p.charge(), p.status(), p.numberOfDaughters(), motherID, grannyID, daug0Id, daug1Id, daug2Id, daug3Id, j );

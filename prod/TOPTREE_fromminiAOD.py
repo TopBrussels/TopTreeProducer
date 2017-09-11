@@ -212,12 +212,12 @@ process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(1000)
 
 process.analysis = cms.EDAnalyzer("TopTreeProducer",
   myConfig = cms.PSet(
-    # Verbosite
+    # Verbosity
     # 		0 = muet
     # 		1 = Number of evt every 100 evts
-    # 		2 = Give the functions executed & nof objects build per event
-    # 		3 = Liste of high level objects (jetss, muons, ...)
-    # 		4 = List of all  objects
+    # 		2 = Give the functions executed & nof objects built per event
+    # 		3 = List of high level objects (jets, muons, ...)
+    # 		4 = List of all objects
     # 		5 = Debug
     verbosity = cms.untracked.int32(1),
     
