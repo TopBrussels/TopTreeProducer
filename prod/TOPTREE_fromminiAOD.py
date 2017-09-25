@@ -189,6 +189,18 @@ process.load("RecoMET/METProducers.METSignificanceParams_cfi")
 from RecoMET.METProducers.testInputFiles_cff import recoMETtestInputFiles
 
 
+#####################
+# TOP Producer      #
+#####################
+process.mergedGenParticles = cms.EDProducer("MergedGenParticleProducer",
+                    inputPruned = cms.InputTag("prunedGenParticles"),
+                        inputPacked = cms.InputTag("packedGenParticles"),
+)
+from GeneratorInterface.RivetInterface.genParticles2HepMC_cfi import genParticles2HepMC
+process.genParticles2HepMC = genParticles2HepMC.clone( genParticles = cms.InputTag("mergedGenParticles") )
+process.load("TopQuarkAnalysis.TopEventProducers.producers.pseudoTop_cfi")
+process.load('TopQuarkAnalysis.BFragmentationAnalyzer.bfragWgtProducer_cfi')
+
 process.maxEvents = cms.untracked.PSet(
   input = cms.untracked.int32(1000)
 )
@@ -379,6 +391,7 @@ if not options.runOnData:
     process.fullPatMetSequence *
     cms.ignore(process.badGlobalMuonTaggerMAOD) * 
     cms.ignore(process.cloneGlobalMuonTaggerMAOD) *
+    process.mergedGenParticles*process.genParticles2HepMC*process.pseudoTop*process.bfragWgtProducer*
     process.analysis
   )
 else:

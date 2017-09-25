@@ -130,8 +130,17 @@ TopTreeProducer::TopTreeProducer(const edm::ParameterSet& iConfig)
     genTTXCHadFromTopWeakDecayToken_    = consumes<std::vector<int> >(myConfig_.getParameter<edm::InputTag>("genCHadFromTopWeakDecay"));
     genTTXCHadBHadronIdToken_           = consumes<std::vector<int> >(myConfig_.getParameter<edm::InputTag>("genCHadBHadronId"));
 
-}
 
+    // BFragmentation function reweighting (following https://gitlab.cern.ch/CMS-TOPPAG/BFragmentationAnalyzer)
+    genJetsFromPseudoTopToken_ = consumes<std::vector<reco::GenJet> >(edm::InputTag("pseudoTop:jets"));
+    petersonFragToken_ = consumes<edm::ValueMap<float> >(edm::InputTag("bfragWgtProducer:PetersonFrag"));
+    upFragToken_ = consumes<edm::ValueMap<float> >(edm::InputTag("bfragWgtProducer:upFrag"));
+    centralFragToken_ = consumes<edm::ValueMap<float> >(edm::InputTag("bfragWgtProducer:centralFrag"));
+    downFragToken_ = consumes<edm::ValueMap<float> >(edm::InputTag("bfragWgtProducer:downFrag"));
+    semilepBRUpToken_ = consumes<edm::ValueMap<float> >(edm::InputTag("bfragWgtProducer:semilepbrUp"));
+    semilepBRDownToken_ = consumes<edm::ValueMap<float> >(edm::InputTag("bfragWgtProducer:semilepbrDown"));
+
+}
 
 TopTreeProducer::~TopTreeProducer()
 {
@@ -657,7 +666,14 @@ void TopTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
     if(doLHEEventProd)
     {
 
-        lheEventProductAnalyzer_->Process(iEvent,  rootEvent, lheproductToken_);
+        lheEventProductAnalyzer_->Process(iEvent,  rootEvent, lheproductToken_,
+					  genJetsFromPseudoTopToken_,
+                                          upFragToken_,
+                                          centralFragToken_,
+                                          downFragToken_,
+                                          petersonFragToken_,
+                                          semilepBRUpToken_,
+                                          semilepBRDownToken_);
 
     }
 

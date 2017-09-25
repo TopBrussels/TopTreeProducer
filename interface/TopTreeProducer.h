@@ -213,6 +213,15 @@ private:
     //80X bad (duplicate) global muon filter 
     edm::EDGetTokenT<edm::PtrVector<reco::Muon>> BadGlobalMuonFilterToken_;
     edm::EDGetTokenT<edm::PtrVector<reco::Muon>> CloneGlobalMuonFilterToken_;
+
+    //BFragmentation reweighting (see https://gitlab.cern.ch/CMS-TOPPAG/BFragmentationAnalyzer) 
+    edm::EDGetTokenT<std::vector<reco::GenJet> > genJetsFromPseudoTopToken_;
+    edm::EDGetTokenT<edm::ValueMap<float> > upFragToken_;
+    edm::EDGetTokenT<edm::ValueMap<float> > centralFragToken_;
+    edm::EDGetTokenT<edm::ValueMap<float> > downFragToken_;
+    edm::EDGetTokenT<edm::ValueMap<float> > petersonFragToken_;
+    edm::EDGetTokenT<edm::ValueMap<float> > semilepBRUpToken_;
+    edm::EDGetTokenT<edm::ValueMap<float> > semilepBRDownToken_;
     
     //Extra tool for splitting ttbar samples into ttbb,ttcc,ttll: https://twiki.cern.ch/twiki/bin/view/CMSPublic/GenHFHadronMatcher
     edm::EDGetTokenT<reco::GenJetCollection> genTTXJetsToken_;

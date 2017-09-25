@@ -368,6 +368,9 @@ class TRootEvent : public TObject
      Bool_t getBadPFMuonFilter(void) const {return BadPFMuonFilter_; }
       void setgenTTX_id(Int_t res) { genTTX_id_ = res; } // false = reject event
      Int_t getgenTTX_id(void) const {return genTTX_id_; }
+
+    void setBFragmentationWeights( const std::map<std::string,double> weights ) { bFragWeights_ = weights; }
+    std::map<std::string,double> getBFragmentationWeights() const {return bFragWeights_;}
     
   private:
     
@@ -419,7 +422,9 @@ class TRootEvent : public TObject
 
     Int_t genTTX_id_;
 
-    ClassDef (TRootEvent,9);
+    map<string,double> bFragWeights_; //BFragmentation weights from pseudotop and BFragmentationWeights producers
+
+    ClassDef (TRootEvent,10);
 };
 }
 

@@ -19,7 +19,15 @@ LHEEventProductAnalyzer::~LHEEventProductAnalyzer()
 
 
 
-void LHEEventProductAnalyzer::Process(const edm::Event& iEvent, TRootEvent* rootEvent,edm::EDGetTokenT<LHEEventProduct> lheproductToken)
+void LHEEventProductAnalyzer::Process(const edm::Event& iEvent, TRootEvent* rootEvent,edm::EDGetTokenT<LHEEventProduct> lheproductToken,
+					edm::EDGetTokenT<std::vector<reco::GenJet> >& genJetsFromPseudoTopToken,
+					const edm::EDGetTokenT<edm::ValueMap<float> >& upFragToken,
+					const edm::EDGetTokenT<edm::ValueMap<float> >& centralFragToken,
+					const edm::EDGetTokenT<edm::ValueMap<float> >& downFragToken,
+					const edm::EDGetTokenT<edm::ValueMap<float> >& petersonFragToken,
+					const edm::EDGetTokenT<edm::ValueMap<float> >& semilepbrUpToken,
+					const edm::EDGetTokenT<edm::ValueMap<float> >& semilepbrDownToken
+)
 {
 
 
@@ -49,6 +57,57 @@ void LHEEventProductAnalyzer::Process(const edm::Event& iEvent, TRootEvent* root
 
 		}
 	}
+
+	// BFragmentation weights (https://gitlab.cern.ch/CMS-TOPPAG/BFragmentationAnalyzer/tree/master)
+	edm::Handle<edm::ValueMap<float> > upFrag;
+	edm::Handle<edm::ValueMap<float> > centralFrag;
+	edm::Handle<edm::ValueMap<float> > downFrag;
+	edm::Handle<edm::ValueMap<float> > petersonFrag;
+	edm::Handle<edm::ValueMap<float> > semilepbrUp;
+	edm::Handle<edm::ValueMap<float> > semilepbrDown;
+	iEvent.getByToken(upFragToken,upFrag); 
+	iEvent.getByToken(centralFragToken,centralFrag); 
+	iEvent.getByToken(downFragToken,downFrag); 
+	iEvent.getByToken(petersonFragToken,petersonFrag); 
+	iEvent.getByToken(semilepbrUpToken,semilepbrUp); 
+	iEvent.getByToken(semilepbrDownToken,semilepbrDown); 
+
+	edm::Handle<std::vector<reco::GenJet> > genJetsFromPseudoTop;
+	iEvent.getByToken(genJetsFromPseudoTopToken,genJetsFromPseudoTop);
+
+	std::map<string,double> bfragwgt;
+	double eventupFragWeight = 1.;
+	double eventcentralFragWeight= 1.;
+	double eventdownFragWeight = 1.;
+	double eventpetersonFragWeight = 1.;
+	double eventsemilepbrUp= 1.;
+	double eventsemilepbrDown= 1.;
+	for(auto genJet=genJetsFromPseudoTop->begin(); genJet!=genJetsFromPseudoTop->end(); ++genJet)
+	{
+		edm::Ref<std::vector<reco::GenJet> > genJetRef(genJetsFromPseudoTop,genJet-genJetsFromPseudoTop->begin());
+		//cout << "pt=" << genJet->pt() << " id=" << genJet->pdgId() << " upFragWeight=" << (*upFrag)[genJetRef] << endl;
+		//cout << "pt=" << genJet->pt() << " id=" << genJet->pdgId() << " centralFragWeight=" << (*centralFrag)[genJetRef] << endl;
+		//cout << "pt=" << genJet->pt() << " id=" << genJet->pdgId() << " downFragWeight=" << (*downFrag)[genJetRef] << endl;
+		//cout << "pt=" << genJet->pt() << " id=" << genJet->pdgId() << " petersonFragWeight=" << (*petersonFrag)[genJetRef] << endl;
+		//cout << "pt=" << genJet->pt() << " id=" << genJet->pdgId() << " semilepbrUp=" << (*semilepbrUp)[genJetRef] << endl;
+		//cout << "pt=" << genJet->pt() << " id=" << genJet->pdgId() << " semilepbrDown=" << (*semilepbrDown)[genJetRef] << endl;
+		//std::map<std::string,double> wgts =  {{"upFragWeight", (*upFrag)[genJetRef]}, {"centralFragWeight", (*centralFrag)[genJetRef]}, 
+		//				      {"downFragWeight", (*downFrag)[genJetRef]}, {"petersonFragWeight", (*petersonFrag)[genJetRef]},
+		//				      {"semilepbrUp", (*semilepbrUp)[genJetRef]}, {"semilepbrDown", (*semilepbrDown)[genJetRef]}};
+		//
+		eventupFragWeight 		*= (*upFrag)[genJetRef];
+		eventcentralFragWeight		*= (*centralFrag)[genJetRef];
+		eventdownFragWeight 		*= (*downFrag)[genJetRef];
+		eventpetersonFragWeight 	*= (*petersonFrag)[genJetRef];
+		eventsemilepbrUp		*= (*semilepbrUp)[genJetRef];
+		eventsemilepbrDown		*= (*semilepbrDown)[genJetRef];
+	}
+	bfragwgt["upFragWeight"]  			= eventupFragWeight;
+	bfragwgt["centralFragWeight"] 			= eventcentralFragWeight;
+	bfragwgt["downFragWeight"] 			= eventdownFragWeight;
+	bfragwgt["petersonFragWeight"] 			= eventpetersonFragWeight;
+	bfragwgt["semilepbrUp"] 			= eventsemilepbrUp;
+	bfragwgt["semilepbrDown"] 			= eventsemilepbrDown;
 }
 
  void LHEEventProductAnalyzer::PrintWeightNamesList(const edm::Run& iRun,edm::EDGetTokenT<LHERunInfoProduct> lheRunInfoproductToken) //To know which integer XXX corresponds to which weight

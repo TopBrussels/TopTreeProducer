@@ -24,6 +24,11 @@ git cms-merge-topic gpetruc:badMuonFilters_80X
 git cms-merge-topic cms-met:METRecipe_8020 -u
 git cms-merge-topic cms-met:METRecipe_80X_part2 -u
 
+git cms-merge-topic -u intrepid42:pseudotoprivet_80x
+cd TopQuarkAnalysis
+git clone ssh://git@gitlab.cern.ch:7999/CMS-TOPPAG/BFragmentationAnalyzer.git
+cd -
+
 
 scram b -j8
 

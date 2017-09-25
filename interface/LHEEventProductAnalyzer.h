@@ -42,7 +42,15 @@ class LHEEventProductAnalyzer {
 public:
   LHEEventProductAnalyzer(int verbosity);
 	~LHEEventProductAnalyzer();
-	void Process(const edm::Event& iEvent, TRootEvent* rootEvent,edm::EDGetTokenT<LHEEventProduct> lheproductToken);
+	void Process(const edm::Event& iEvent, TRootEvent* rootEvent,edm::EDGetTokenT<LHEEventProduct> lheproductToken,
+					edm::EDGetTokenT<std::vector<reco::GenJet> >& genJetsFromPseudoTopToken,
+                                        const edm::EDGetTokenT<edm::ValueMap<float> >& upFragToken,
+                                        const edm::EDGetTokenT<edm::ValueMap<float> >& centralFragToken,
+                                        const edm::EDGetTokenT<edm::ValueMap<float> >& downFragToken,
+                                        const edm::EDGetTokenT<edm::ValueMap<float> >& petersonFragToken,
+                                        const edm::EDGetTokenT<edm::ValueMap<float> >& semilepbrUpToken,
+                                        const edm::EDGetTokenT<edm::ValueMap<float> >& semilepbrDownToken);
+
 	void PrintWeightNamesList(const edm::Run& iRun,edm::EDGetTokenT<LHERunInfoProduct> lheRunInfoproductToken);
 	void CopyWeightNames(const edm::Run& iRun, TRootRun* runInfos, edm::EDGetTokenT<LHERunInfoProduct> lheRunInfoproductToken);
 
