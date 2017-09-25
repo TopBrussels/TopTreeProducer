@@ -108,6 +108,7 @@ void LHEEventProductAnalyzer::Process(const edm::Event& iEvent, TRootEvent* root
 	bfragwgt["petersonFragWeight"] 			= eventpetersonFragWeight;
 	bfragwgt["semilepbrUp"] 			= eventsemilepbrUp;
 	bfragwgt["semilepbrDown"] 			= eventsemilepbrDown;
+	rootEvent->setBFragmentationWeights(bfragwgt);	
 }
 
  void LHEEventProductAnalyzer::PrintWeightNamesList(const edm::Run& iRun,edm::EDGetTokenT<LHERunInfoProduct> lheRunInfoproductToken) //To know which integer XXX corresponds to which weight
