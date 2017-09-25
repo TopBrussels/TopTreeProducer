@@ -26,7 +26,7 @@ git cms-merge-topic cms-met:METRecipe_80X_part2 -u
 
 git cms-merge-topic -u intrepid42:pseudotoprivet_80x
 cd TopQuarkAnalysis
-git clone ssh://git@gitlab.cern.ch:7999/CMS-TOPPAG/BFragmentationAnalyzer.git
+git clone https://gitlab.cern.ch/CMS-TOPPAG/BFragmentationAnalyzer.git
 cd -
 
 
