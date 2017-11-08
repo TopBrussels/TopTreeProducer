@@ -265,7 +265,7 @@ process.analysis = cms.EDAnalyzer("TopTreeProducer",
     doPFMET = cms.untracked.bool(True),
     runSuperCluster = cms.untracked.bool(True),#True only if SuperCluster are stored
     doNPGenEvent = cms.untracked.bool(False),#put on True when running New Physics sample
-    doLHEEventProd = cms.untracked.bool(True),
+    doLHEEventProd = cms.untracked.bool(not options.runOnData),
     doEventCleaningInfo = cms.untracked.bool(True), # only useful for data but protected for MC. Stores HBHE, HCalIso etc filter outputs as bools in TRootEvent
     
    # conversionLikelihoodWeightsFile = cms.untracked.string('RecoEgamma/EgammaTools/data/TMVAnalysis_Likelihood.weights.txt'),
